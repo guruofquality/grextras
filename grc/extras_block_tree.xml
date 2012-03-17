@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!--
- Copyright 2011 Free Software Foundation, Inc_
+ Copyright 2011-2012 Free Software Foundation, Inc_
  
  This file is part of GNU Radio
  
@@ -23,13 +23,13 @@
 
 <!--
 ###################################################
-##Block Tree for GR Blocks gr_extras_
+##Block Tree for GR Extras
 ###################################################
  -->
 <cat>
     <name></name> <!-- Blank for Root Name -->
     <cat>
-        <name>Blocks</name>
+        <name>Extras</name>
         <block>gr_extras_signal_source</block>
         <block>gr_extras_noise_source</block>
         <block>gr_extras_stream_selector</block>

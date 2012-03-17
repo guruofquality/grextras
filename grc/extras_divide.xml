@@ -6,7 +6,7 @@
 ###################################################
  -->
 <block>
-    <name>Divide</name>
+    <name>Extras: Divide</name>
     <key>gr_extras_divide</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.divide_$(type)($vlen)</make>

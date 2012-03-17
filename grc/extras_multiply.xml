@@ -6,7 +6,7 @@
 ###################################################
  -->
 <block>
-    <name>Multiply</name>
+    <name>Extras: Multiply</name>
     <key>gr_extras_multiply</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.multiply_$(type)($vlen)</make>

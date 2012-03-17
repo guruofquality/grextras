@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Multiply Const</name>
+    <name>Extras: Multiply Const</name>
     <key>gr_extras_multiply_const</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.multiply_const_v_$(type)($value)</make>
