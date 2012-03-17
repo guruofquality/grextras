@@ -118,6 +118,8 @@ link_directories(
     ${GNURADIO_CORE_LIBRARY_DIRS}
 )
 
+set(GR_EXTRAS_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include)
+
 ########################################################################
 # Create uninstall target
 ########################################################################
@@ -135,8 +137,8 @@ add_custom_target(uninstall
 ########################################################################
 add_subdirectory(include/gnuradio/extras)
 add_subdirectory(lib)
-#add_subdirectory(swig)
-#add_subdirectory(python)
+add_subdirectory(swig)
+add_subdirectory(python)
 #add_subdirectory(grc)
 #add_subdirectory(apps)
 #add_subdirectory(docs)

@@ -1,4 +1,4 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011-212 Free Software Foundation, Inc.
 #
 # This file is part of GNU Radio
 #
@@ -31,27 +31,37 @@ include(GrPython)
 ########################################################################
 # Setup swig generation
 ########################################################################
+set(GR_SWIG_INCLUDE_DIRS
+    ${GR_EXTRAS_INCLUDE_DIRS}
+)
+
 foreach(incdir ${GNURADIO_CORE_INCLUDE_DIRS})
     list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/swig)
 endforeach(incdir)
 
-set(GR_SWIG_LIBRARIES gnuradio-howto)
-set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/howto_swig_doc.i)
-set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+set(GR_SWIG_LIBRARIES gnuradio-extras)
 
-GR_SWIG_MAKE(howto_swig howto_swig.i)
+GR_SWIG_MAKE(extras_swig extras_swig.i)
 
 ########################################################################
-# Install the build swig module
+# Install the built swig module
 ########################################################################
-GR_SWIG_INSTALL(TARGETS howto_swig DESTINATION ${GR_PYTHON_DIR}/howto)
+GR_SWIG_INSTALL(
+    TARGETS extras_swig
+    DESTINATION ${GR_PYTHON_DIR}/gnuradio/extras
+    COMPONENT "extras_python"
+)
 
 ########################################################################
 # Install swig .i files for development
 ########################################################################
 install(
     FILES
-    howto_swig.i
-    ${CMAKE_CURRENT_BINARY_DIR}/howto_swig_doc.i
-    DESTINATION ${GR_INCLUDE_DIR}/howto/swig
+    extras_swig.i
+    extras_delay.i
+    extras_sources.i
+    extras_stream_selector.i
+    extras_ops.i
+    DESTINATION ${GR_INCLUDE_DIR}/gnuradio/swig
+    COMPONENT "extras_swig"
 )
