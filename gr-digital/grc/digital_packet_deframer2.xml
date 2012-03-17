@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Packet Decoder
+###################################################
+ -->
+<block>
+	<name>Packet Deframer v2</name>
+	<key>digital_packet_deframer2</key>
+	<import>from gnuradio import digital</import>
+	<make>digital.demod_pkts2(
+	access_code=$access_code,
+	threshold=$threshold,
+)</make>
+	<param>
+		<name>Access Code</name>
+		<key>access_code</key>
+		<value></value>
+		<type>string</type>
+	</param>
+	<param>
+		<name>Threshold</name>
+		<key>threshold</key>
+		<value>-1</value>
+		<type>int</type>
+	</param>
+	<sink>
+		<name>in</name>
+		<type>byte</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<key>blob</key>
+		<type>msg</type>
+	</source>
+	<doc>
+Packet decoder block, for use with the gnuradio demodulator blocks: gmsk, psk, qam.
+
+Access Code: string of 1's and 0's, leave blank for automatic.
+
+Threshold: -1 for automatic.
+	</doc>
+</block>
