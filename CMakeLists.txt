@@ -1,4 +1,4 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011-2012 Free Software Foundation, Inc.
 # 
 # This file is part of GNU Radio
 # 
@@ -22,7 +22,7 @@
 # Project setup
 ########################################################################
 cmake_minimum_required(VERSION 2.6)
-project(gr-howto-write-a-block CXX)
+project(gr-extras CXX)
 enable_testing()
 
 #select the release build type by default to get optimization flags
@@ -40,6 +40,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 if(CMAKE_COMPILER_IS_GNUCXX AND NOT WIN32)
     #http://gcc.gnu.org/wiki/Visibility
     add_definitions(-fvisibility=hidden)
+    add_definitions(-fvisibility-inlines-hidden)
 endif()
 
 ########################################################################
@@ -83,15 +84,20 @@ set(GRC_BLOCKS_DIR      ${GR_PKG_DATA_DIR}/grc/blocks)
 ########################################################################
 # Find gnuradio build dependencies
 ########################################################################
+find_package(Volk)
 find_package(Gruel)
 find_package(GnuradioCore)
 
+if(NOT VOLK_FOUND)
+    message(FATAL_ERROR "VOLK required to compile extras")
+endif()
+
 if(NOT GRUEL_FOUND)
-    message(FATAL_ERROR "Gruel required to compile howto")
+    message(FATAL_ERROR "Gruel required to compile extras")
 endif()
 
 if(NOT GNURADIO_CORE_FOUND)
-    message(FATAL_ERROR "GnuRadio Core required to compile howto")
+    message(FATAL_ERROR "GnuRadio Core required to compile extras")
 endif()
 
 ########################################################################
@@ -100,19 +106,17 @@ endif()
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIRS}
+    ${VOLK_INCLUDE_DIRS}
     ${GRUEL_INCLUDE_DIRS}
     ${GNURADIO_CORE_INCLUDE_DIRS}
 )
 
 link_directories(
     ${Boost_LIBRARY_DIRS}
+    ${VOLK_LIBRARY_DIRS}
     ${GRUEL_LIBRARY_DIRS}
     ${GNURADIO_CORE_LIBRARY_DIRS}
 )
-
-# Set component parameters
-set(GR_HOWTO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "" FORCE)
-set(GR_HOWTO_SWIG_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/swig CACHE INTERNAL "" FORCE)
 
 ########################################################################
 # Create uninstall target
@@ -129,10 +133,10 @@ add_custom_target(uninstall
 ########################################################################
 # Add subdirectories
 ########################################################################
-add_subdirectory(include)
+add_subdirectory(include/gnuradio/extras)
 add_subdirectory(lib)
-add_subdirectory(swig)
-add_subdirectory(python)
-add_subdirectory(grc)
-add_subdirectory(apps)
-add_subdirectory(docs)
+#add_subdirectory(swig)
+#add_subdirectory(python)
+#add_subdirectory(grc)
+#add_subdirectory(apps)
+#add_subdirectory(docs)

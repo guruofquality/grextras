@@ -1,4 +1,4 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011-2012 Free Software Foundation, Inc.
 #
 # This file is part of GNU Radio
 #
@@ -21,8 +21,17 @@
 # Install public header files
 ########################################################################
 install(FILES
-    howto_api.h
-    howto_square_ff.h
-    howto_square2_ff.h
-    DESTINATION include/howto
+    api.h
+    add.h
+    add_const.h
+    delay.h
+    divide.h
+    multiply.h
+    multiply_const.h
+    noise_source.h
+    signal_source.h
+    stream_selector.h
+    subtract.h
+    DESTINATION ${GR_INCLUDE_DIR}/gnuradio/extras
+    COMPONENT "extras_devel"
 )
