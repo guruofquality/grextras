@@ -48,6 +48,9 @@ available in python.
 Blocks coding guide (both python and c++ examples):
 http://gnuradio.org/redmine/projects/gnuradio/wiki/BlocksCodingGuide
 
+Add the following import to ensure that the API is available:
+import gnuradio.extras
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Basic blocks list
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

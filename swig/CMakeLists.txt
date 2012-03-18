@@ -85,7 +85,7 @@ list(APPEND swig_sources
     extras_ops.i
     extras_block_gateway.i
     extras_fir.i
-    extras_swig_doc.i
+    ${CMAKE_CURRENT_BINARY_DIR}/extras_swig_doc.i
 )
 
 install(

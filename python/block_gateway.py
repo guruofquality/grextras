@@ -211,3 +211,9 @@ class interp_block(gateway_block):
             work_type=extras_swig.GR_BLOCK_GW_WORK_INTERP,
             factor=interp,
         )
+
+#inject into gr namespace
+gr.basic_block = basic_block
+gr.sync_block = sync_block
+gr.decim_block = decim_block
+gr.interp_block = interp_block

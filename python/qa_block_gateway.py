@@ -20,14 +20,14 @@
 # Boston, MA 02110-1301, USA.
 # 
 
-from block_gateway import basic_block, sync_block, decim_block, interp_block
 from gnuradio import gr, gr_unittest
 from gruel import pmt
 import numpy
+import block_gateway #needed to inject into gr
 
-class add_2_f32_1_f32(sync_block):
+class add_2_f32_1_f32(gr.sync_block):
     def __init__(self):
-        sync_block.__init__(
+        gr.sync_block.__init__(
             self,
             name = "add 2 f32",
             in_sig = [numpy.float32, numpy.float32],
@@ -38,9 +38,9 @@ class add_2_f32_1_f32(sync_block):
         output_items[0][:] = input_items[0] + input_items[1]
         return len(output_items[0])
 
-class add_2_fc32_1_fc32(sync_block):
+class add_2_fc32_1_fc32(gr.sync_block):
     def __init__(self):
-        sync_block.__init__(
+        gr.sync_block.__init__(
             self,
             name = "add 2 fc32",
             in_sig = [numpy.complex64, numpy.complex64],
@@ -51,12 +51,12 @@ class add_2_fc32_1_fc32(sync_block):
         output_items[0][:] = input_items[0] + input_items[1]
         return len(output_items[0])
 
-class convolve(sync_block):
+class convolve(gr.sync_block):
     """
     A demonstration using block history to properly perform a convolution.
     """
     def __init__(self):
-        sync_block.__init__(
+        gr.sync_block.__init__(
             self,
             name = "convolve",
             in_sig = [numpy.float32],
@@ -69,9 +69,9 @@ class convolve(sync_block):
         output_items[0][:] = numpy.convolve(input_items[0], self._taps, mode='valid')
         return len(output_items[0])
 
-class decim2x(decim_block):
+class decim2x(gr.decim_block):
     def __init__(self):
-        decim_block.__init__(
+        gr.decim_block.__init__(
             self,
             name = "decim2x",
             in_sig = [numpy.float32],
@@ -83,9 +83,9 @@ class decim2x(decim_block):
         output_items[0][:] = input_items[0][::2]
         return len(output_items[0])
 
-class interp2x(interp_block):
+class interp2x(gr.interp_block):
     def __init__(self):
-        interp_block.__init__(
+        gr.interp_block.__init__(
             self,
             name = "interp2x",
             in_sig = [numpy.float32],
@@ -98,9 +98,9 @@ class interp2x(interp_block):
         output_items[0][::2] = input_items[0]
         return len(output_items[0])
 
-class tag_source(sync_block):
+class tag_source(gr.sync_block):
     def __init__(self):
-        sync_block.__init__(
+        gr.sync_block.__init__(
             self,
             name = "tag source",
             in_sig = None,
@@ -120,9 +120,9 @@ class tag_source(sync_block):
 
         return num_output_items
 
-class tag_sink(sync_block):
+class tag_sink(gr.sync_block):
     def __init__(self):
-        sync_block.__init__(
+        gr.sync_block.__init__(
             self,
             name = "tag sink",
             in_sig = [numpy.float32],
@@ -146,9 +146,9 @@ class tag_sink(sync_block):
 
         return num_input_items
 
-class fc32_to_f32_2(sync_block):
+class fc32_to_f32_2(gr.sync_block):
     def __init__(self):
-        sync_block.__init__(
+        gr.sync_block.__init__(
             self,
             name = "fc32_to_f32_2",
             in_sig = [numpy.complex64],

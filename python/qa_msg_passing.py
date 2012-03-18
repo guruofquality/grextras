@@ -20,13 +20,13 @@
 # Boston, MA 02110-1301, USA.
 # 
 
-from block_gateway import basic_block, sync_block, decim_block, interp_block
 from gruel import pmt
 from gnuradio import gr, gr_unittest
+import block_gateway #needed to inject into gr
 
-class demo_msg_src(sync_block):
+class demo_msg_src(gr.sync_block):
     def __init__(self, name, msgs):
-        sync_block.__init__(
+        gr.sync_block.__init__(
             self,
             name = "demo msg src",
             in_sig = None,
@@ -45,9 +45,9 @@ class demo_msg_src(sync_block):
             )
         return -1
 
-class demo_msg_sink(sync_block):
+class demo_msg_sink(gr.sync_block):
     def __init__(self, name, num):
-        sync_block.__init__(
+        gr.sync_block.__init__(
             self,
             name = "demo msg sink",
             in_sig = None,
