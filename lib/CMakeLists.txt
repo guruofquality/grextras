@@ -22,6 +22,15 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
+if(UHD_FOUND AND HAVE_MSG_PASSING)
+    list(APPEND gr_extras_sources
+        uhd_amsg_source.cc
+    )
+    list(APPEND gr_extras_libs
+        ${UHD_LIBRARIES}
+    )
+endif()
+
 if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
     list(APPEND gr_extras_sources
         blob_to_filedes.cc

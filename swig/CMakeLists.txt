@@ -35,8 +35,12 @@ set(GR_SWIG_INCLUDE_DIRS
     ${GR_EXTRAS_INCLUDE_DIRS}
 )
 
+if(UHD_FOUND AND HAVE_MSG_PASSING)
+    list(APPEND GR_SWIG_FLAGS "-DHAVE_UHD_AND_MSG_PASSING")
+endif()
+
 if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
-    set(GR_SWIG_FLAGS "-DHAVE_PMT_EXTENSIONS_AND_MSG_PASSING")
+    list(APPEND GR_SWIG_FLAGS "-DHAVE_PMT_EXTENSIONS_AND_MSG_PASSING")
 endif()
 
 foreach(incdir ${GNURADIO_CORE_INCLUDE_DIRS})
@@ -59,6 +63,12 @@ GR_SWIG_INSTALL(
 ########################################################################
 # Install swig .i files for development
 ########################################################################
+if(UHD_FOUND AND HAVE_MSG_PASSING)
+    list(APPEND swig_sources
+        extras_uhd_amsg_source.i
+    )
+endif()
+
 if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
     list(APPEND swig_sources
         extras_blobs.i

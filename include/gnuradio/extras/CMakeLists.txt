@@ -21,6 +21,12 @@
 # Install public header files
 ########################################################################
 
+if(UHD_FOUND AND HAVE_MSG_PASSING)
+    list(APPEND include_sources
+        uhd_amsg_source.h
+    )
+endif()
+
 if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
     list(APPEND include_sources
         blob_to_filedes.h

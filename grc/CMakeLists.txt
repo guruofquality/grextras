@@ -20,6 +20,12 @@
 ########################################################################
 # Install GRC xml files
 ########################################################################
+if(UHD_FOUND AND HAVE_MSG_PASSING)
+    list(APPEND grc_sources
+        extras_uhd_amsg_source.xml
+    )
+endif()
+
 if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
     list(APPEND grc_sources
         extras_blob_to_socket.xml

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -62,3 +62,6 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 %include <extras_blobs.i>
 #endif
 %include <extras_block_gateway.i>
+#ifdef HAVE_UHD_AND_MSG_PASSING
+%include <extras_uhd_amsg_source.i>
+#endif

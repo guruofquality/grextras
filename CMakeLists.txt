@@ -117,6 +117,16 @@ if(WIN32)
 endif()
 
 ########################################################################
+# Optional req UHD
+########################################################################
+find_package(UHD)
+
+if(UHD_FOUND AND HAVE_MSG_PASSING)
+    include_directories(${UHD_INCLUDE_DIRS})
+    link_directories(${UHD_LIBRARY_DIRS})
+endif()
+
+########################################################################
 # Setup the include and linker paths
 ########################################################################
 include_directories(
