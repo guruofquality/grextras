@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##TUN TAP!!!
+###################################################
+ -->
+<block>
+    <name>Extras: TUN/TAP</name>
+    <key>gr_extras_tuntap</key>
+    <throttle>1</throttle>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.tuntap($dev)</make>
+    <param>
+        <name>Device</name>
+        <key>dev</key>
+        <value></value>
+        <type>string</type>
+        <option><name>Automatic</name><key></key></option>
+    </param>
+    <sink>
+        <name>in</name>
+        <key></key>
+        <type>msg</type>
+    </sink>
+    <source>
+        <name>out</name>
+        <key>blob</key>
+        <type>msg</type>
+    </source>
+</block>

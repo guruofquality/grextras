@@ -40,5 +40,10 @@
         <block>gr_extras_multiply</block>
         <block>gr_extras_multiply_const</block>
         <block>gr_extras_divide</block>
+        <block>gr_extras_blob_to_socket</block>
+        <block>gr_extras_blob_to_stream</block>
+        <block>gr_extras_socket_to_blob</block>
+        <block>gr_extras_stream_to_blob</block>
+        <block>gr_extras_tuntap</block>
     </cat>
 </cat>

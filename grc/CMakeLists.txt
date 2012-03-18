@@ -20,10 +20,32 @@
 ########################################################################
 # Install GRC xml files
 ########################################################################
-file(GLOB xml_files ${CMAKE_CURRENT_SOURCE_DIR}/*.xml)
+if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+    list(APPEND grc_sources
+        extras_blob_to_socket.xml
+        extras_blob_to_stream.xml
+        extras_socket_to_blob.xml
+        extras_stream_to_blob.xml
+        extras_tuntap.xml
+    )
+endif()
 
-install(FILES
-    ${xml_files}
+list(APPEND grc_sources
+    extras_add_const.xml
+    extras_block_tree.xml
+    extras_divide.xml
+    extras_multiply.xml
+    extras_signal_source.xml
+    extras_subtract.xml
+    extras_add.xml
+    extras_delay.xml
+    extras_multiply_const.xml
+    extras_noise_source.xml
+    extras_stream_selector.xml
+)
+
+install(
+    FILES ${grc_sources}
     DESTINATION ${GRC_BLOCKS_DIR}
     COMPONENT "extras_python"
 )

@@ -101,6 +101,18 @@ if(NOT GNURADIO_CORE_FOUND)
 endif()
 
 ########################################################################
+# TODO feature check
+########################################################################
+
+set(HAVE_PMT_EXTENSIONS TRUE)
+set(HAVE_MSG_PASSING TRUE)
+
+#todo real check
+if(WIN32)
+    add_definitions(-DHAVE_IO_H)
+endif()
+
+########################################################################
 # Setup the include and linker paths
 ########################################################################
 include_directories(

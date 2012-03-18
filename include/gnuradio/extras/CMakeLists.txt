@@ -20,7 +20,20 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
+
+if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+    list(APPEND include_sources
+        blob_to_filedes.h
+        blob_to_socket.h
+        blob_to_stream.h
+        filedes_to_blob.h
+        socket_to_blob.h
+        stream_to_blob.h
+        tuntap.h
+    )
+endif()
+
+list(APPEND include_sources
     api.h
     add.h
     add_const.h
@@ -32,6 +45,10 @@ install(FILES
     signal_source.h
     stream_selector.h
     subtract.h
+)
+
+install(
+    FILES ${include_sources}
     DESTINATION ${GR_INCLUDE_DIR}/gnuradio/extras
     COMPONENT "extras_devel"
 )

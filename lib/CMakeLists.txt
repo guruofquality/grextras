@@ -1,4 +1,4 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011-2012 Free Software Foundation, Inc.
 #
 # This file is part of GNU Radio
 #
@@ -21,6 +21,18 @@
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
+
+if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+    list(APPEND gr_extras_sources
+        blob_to_filedes.cc
+        blob_to_socket.cc
+        blob_to_stream.cc
+        filedes_to_blob.cc
+        socket_to_blob.cc
+        stream_to_blob.cc
+        tuntap.cc
+    )
+endif()
 
 list(APPEND gr_extras_sources
     add.cc

@@ -35,6 +35,10 @@ set(GR_SWIG_INCLUDE_DIRS
     ${GR_EXTRAS_INCLUDE_DIRS}
 )
 
+if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+    set(GR_SWIG_FLAGS "-DHAVE_PMT_EXTENSIONS_AND_MSG_PASSING")
+endif()
+
 foreach(incdir ${GNURADIO_CORE_INCLUDE_DIRS})
     list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/swig)
 endforeach(incdir)
@@ -55,13 +59,22 @@ GR_SWIG_INSTALL(
 ########################################################################
 # Install swig .i files for development
 ########################################################################
-install(
-    FILES
+if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+    list(APPEND swig_sources
+        extras_blobs.i
+    )
+endif()
+
+list(APPEND swig_sources
     extras_swig.i
     extras_delay.i
     extras_sources.i
     extras_stream_selector.i
     extras_ops.i
+)
+
+install(
+    FILES ${swig_sources}
     DESTINATION ${GR_INCLUDE_DIR}/gnuradio/swig
     COMPONENT "extras_swig"
 )
