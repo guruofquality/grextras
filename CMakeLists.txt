@@ -107,6 +107,10 @@ endif()
 set(HAVE_PMT_EXTENSIONS TRUE)
 set(HAVE_MSG_PASSING TRUE)
 
+if(HAVE_MSG_PASSING)
+    add_definitions(-DHAVE_MSG_PASSING)
+endif()
+
 #todo real check
 if(WIN32)
     add_definitions(-DHAVE_IO_H)
@@ -117,6 +121,7 @@ endif()
 ########################################################################
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/lib
     ${Boost_INCLUDE_DIRS}
     ${VOLK_INCLUDE_DIRS}
     ${GRUEL_INCLUDE_DIRS}

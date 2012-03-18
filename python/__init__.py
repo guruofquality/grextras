@@ -82,3 +82,5 @@ add_const_ii  = lambda k: _inject_k(add_const_s32_s32, int, k)
 add_const_vii = lambda k: _inject_k(add_const_v_s32_s32, int, k)
 add_const_ss  = lambda k: _inject_k(add_const_s16_s16, int, k)
 add_const_vss = lambda k: _inject_k(add_const_v_s16_s16, int, k)
+
+from block_gateway import basic_block, sync_block, decim_block, interp_block

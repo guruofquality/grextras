@@ -47,6 +47,7 @@ list(APPEND gr_extras_sources
     signal_source.cc
     stream_selector.cc
     subtract.cc
+    block_gateway.cc
 )
 
 list(APPEND gr_extras_libs

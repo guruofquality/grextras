@@ -25,6 +25,7 @@ include(GrPython)
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
+    block_gateway.py
     DESTINATION ${GR_PYTHON_DIR}/gnuradio/extras
     COMPONENT "extras_python"
 )
@@ -33,13 +34,27 @@ GR_PYTHON_INSTALL(
 # Handle the unit tests
 ########################################################################
 include(GrTest)
-file(GLOB py_qa_test_files "qa_*.py")
-foreach(py_qa_test_file ${py_qa_test_files})
+
+if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+    list(APPEND extras_qa_sources
+        qa_msg_passing.py
+    )
+endif()
+
+list(APPEND extras_qa_sources
+    qa_add_and_friends.py
+    qa_block_gateway.py
+    qa_delay.py
+    qa_noise_source.py
+    qa_signal_source.py
+)
+
+foreach(py_qa_test_file ${extras_qa_sources})
+    set(py_qa_test_file ${CMAKE_CURRENT_SOURCE_DIR}/${py_qa_test_file})
     get_filename_component(py_qa_test_name ${py_qa_test_file} NAME_WE)
     set(GR_TEST_PYTHON_DIRS
-        ${CMAKE_BINARY_DIR}/python
         ${CMAKE_BINARY_DIR}/swig
     )
-    set(GR_TEST_TARGET_DEPS gruel gnuradio-core gnuradio-extras)
+    set(GR_TEST_TARGET_DEPS gnuradio-extras)
     GR_ADD_TEST(${py_qa_test_name} ${PYTHON_EXECUTABLE} ${PYTHON_DASH_B} ${py_qa_test_file})
 endforeach(py_qa_test_file)

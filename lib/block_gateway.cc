@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <gr_block_gateway.h>
+#include "block_gateway.h"
 #include <gr_io_signature.h>
 #include <iostream>
 #include <boost/bind.hpp>
@@ -36,31 +36,12 @@ void copy_pointers(OutType &out, const InType &in){
 }
 
 /***********************************************************************
- * The gr_block handler internals
- **********************************************************************/
-gr_block_gw_handler::gr_block_gw_handler(void){
-    //NOP
-}
-
-gr_block_gw_handler::~gr_block_gw_handler(void){
-    //NOP
-}
-
-void gr_block_gw_handler::call_handle(void){
-    handle();
-}
-
-void gr_block_gw_handler::handle(void){
-    throw std::runtime_error("called default gateway handler -> swig directors must be busted");
-}
-
-/***********************************************************************
  * The gr_block gateway implementation class
  **********************************************************************/
-class gr_block_gateway_impl : public gr_block_gateway{
+class block_gateway_impl : public block_gateway{
 public:
-    gr_block_gateway_impl(
-        gr_block_gw_handler *handler,
+    block_gateway_impl(
+        gr_feval_ll *handler,
         const std::string &name,
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
@@ -108,7 +89,7 @@ public:
             _message.action = gr_block_gw_message_type::ACTION_FORECAST;
             _message.forecast_args_noutput_items = noutput_items;
             _message.forecast_args_ninput_items_required = ninput_items_required;
-            _handler->call_handle();
+            _handler->calleval(0);
             ninput_items_required = _message.forecast_args_ninput_items_required;
             return;
 
@@ -133,7 +114,7 @@ public:
             _message.general_work_args_ninput_items = ninput_items;
             copy_pointers(_message.general_work_args_input_items, input_items);
             _message.general_work_args_output_items = output_items;
-            _handler->call_handle();
+            _handler->calleval(0);
             return _message.general_work_args_return_value;
 
         default:
@@ -154,7 +135,7 @@ public:
         _message.work_args_noutput_items = noutput_items;
         copy_pointers(_message.work_args_input_items, input_items);
         _message.work_args_output_items = output_items;
-        _handler->call_handle();
+        _handler->calleval(0);
         return _message.work_args_return_value;
     }
 
@@ -168,13 +149,13 @@ public:
 
     bool start(void){
         _message.action = gr_block_gw_message_type::ACTION_START;
-        _handler->call_handle();
+        _handler->calleval(0);
         return _message.start_args_return_value;
     }
 
     bool stop(void){
         _message.action = gr_block_gw_message_type::ACTION_STOP;
-        _handler->call_handle();
+        _handler->calleval(0);
         return _message.stop_args_return_value;
     }
 
@@ -183,21 +164,21 @@ public:
     }
 
 private:
-    gr_block_gw_handler *_handler;
+    gr_feval_ll *_handler;
     gr_block_gw_message_type _message;
     const gr_block_gw_work_type _work_type;
     unsigned _decim, _interp;
 };
 
-boost::shared_ptr<gr_block_gateway> gr_make_block_gateway(
-    gr_block_gw_handler *handler,
+block_gateway::sptr block_gateway::make(
+    gr_feval_ll *handler,
     const std::string &name,
     gr_io_signature_sptr in_sig,
     gr_io_signature_sptr out_sig,
     const gr_block_gw_work_type work_type,
     const unsigned factor
 ){
-    return boost::shared_ptr<gr_block_gateway>(
-        new gr_block_gateway_impl(handler, name, in_sig, out_sig, work_type, factor)
+    return block_gateway::sptr(
+        new block_gateway_impl(handler, name, in_sig, out_sig, work_type, factor)
     );
 }

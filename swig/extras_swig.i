@@ -61,3 +61,4 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 #ifdef HAVE_PMT_EXTENSIONS_AND_MSG_PASSING
 %include <extras_blobs.i>
 #endif
+%include <extras_block_gateway.i>

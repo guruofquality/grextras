@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -22,15 +22,19 @@
 ////////////////////////////////////////////////////////////////////////
 // standard includes
 ////////////////////////////////////////////////////////////////////////
+%include <gruel_common.i>
 %include <gnuradio.i>
 %include <gr_tags.i>
+%include <gr_feval.h>
 
 ////////////////////////////////////////////////////////////////////////
 // block headers
 ////////////////////////////////////////////////////////////////////////
 %{
-#include <gr_block_gateway.h>
+#include <block_gateway.h>
 %}
+
+%include <block_gateway.h>
 
 ////////////////////////////////////////////////////////////////////////
 // data type support
@@ -41,50 +45,14 @@
 ////////////////////////////////////////////////////////////////////////
 // block magic
 ////////////////////////////////////////////////////////////////////////
-GR_SWIG_BLOCK_MAGIC(gr,block_gateway);
-%include <gr_block_gateway.h>
+GR_SWIG_BLOCK_MAGIC1(block_gateway);
 
 ////////////////////////////////////////////////////////////////////////
-// director stuff for handler
+// safe foo
 ////////////////////////////////////////////////////////////////////////
-%module(directors="1") gr_block_gw_swig;
-%feature("director") gr_block_gw_handler_safe;
-%feature("nodirector") gr_block_gw_handler_safe::call_handler;
-
-%feature("director:except") {
-    if ($error != NULL) {
-        throw Swig::DirectorMethodException();
-    }
-}
-
-%{
-
-// class that ensures we acquire and release the Python GIL
-/* commented out because its defined somewhere else in core swig
-class ensure_py_gil_state {
-  PyGILState_STATE	d_gstate;
-public:
-  ensure_py_gil_state()  { d_gstate = PyGILState_Ensure(); }
-  ~ensure_py_gil_state() { PyGILState_Release(d_gstate); }
-};
-*/
-%}
-
 %inline %{
 
-class gr_block_gw_handler_safe : public gr_block_gw_handler{
-public:
-    void call_handle(void){
-        ensure_py_gil_state _lock;
-        return handle();
-    }
-};
-
-%}
-
-%inline %{
-
-gr_tag_t gr_block_gw_pop_msg_queue_safe(boost::shared_ptr<gr_block_gateway> block_gw){
+gr_tag_t gr_block_gw_pop_msg_queue_safe(boost::shared_ptr<block_gateway> block_gw){
     gr_tag_t msg;
     GR_PYTHON_BLOCKING_CODE(
         msg = block_gw->gr_block__pop_msg_queue();
