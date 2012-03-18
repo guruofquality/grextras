@@ -22,10 +22,19 @@
 ########################################################################
 include(GrPython)
 
-GR_PYTHON_INSTALL(
-    FILES
+if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+    list(APPEND python_sources
+        pkt2.py
+    )
+endif()
+
+list(APPEND python_sources
     __init__.py
     block_gateway.py
+)
+
+GR_PYTHON_INSTALL(
+    FILES ${python_sources}
     DESTINATION ${GR_PYTHON_DIR}/gnuradio/extras
     COMPONENT "extras_python"
 )

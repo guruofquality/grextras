@@ -71,7 +71,7 @@ list(APPEND swig_sources
     extras_sources.i
     extras_stream_selector.i
     extras_ops.i
-    extras_block_gateway
+    extras_block_gateway.i
 )
 
 install(

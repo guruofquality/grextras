@@ -27,6 +27,8 @@ if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
         extras_socket_to_blob.xml
         extras_stream_to_blob.xml
         extras_tuntap.xml
+        digital_packet_framer2.xml
+        digital_packet_deframer2.xml
     )
 endif()
 
