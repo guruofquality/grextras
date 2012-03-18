@@ -45,6 +45,7 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 %ignore gr_block;
 %ignore gr_sync_block;
 %ignore gr_hier_block2;
+%ignore gr_sync_decimator;
 
 ////////////////////////////////////////////////////////////////////////
 // standard includes
@@ -58,6 +59,7 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 %include <extras_delay.i>
 %include <extras_sources.i>
 %include <extras_stream_selector.i>
+%include <extras_fir.i>
 #ifdef HAVE_PMT_EXTENSIONS_AND_MSG_PASSING
 %include <extras_blobs.i>
 #endif

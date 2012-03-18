@@ -57,6 +57,7 @@ list(APPEND gr_extras_sources
     stream_selector.cc
     subtract.cc
     block_gateway.cc
+    decim_fir.cc
 )
 
 list(APPEND gr_extras_libs

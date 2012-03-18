@@ -50,6 +50,7 @@ list(APPEND grc_sources
     extras_multiply_const.xml
     extras_noise_source.xml
     extras_stream_selector.xml
+    filter_decim_fir.xml
 )
 
 install(

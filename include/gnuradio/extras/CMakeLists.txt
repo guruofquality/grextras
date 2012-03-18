@@ -51,6 +51,7 @@ list(APPEND include_sources
     signal_source.h
     stream_selector.h
     subtract.h
+    decim_fir.h
 )
 
 install(
