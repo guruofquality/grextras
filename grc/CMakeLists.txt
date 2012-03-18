@@ -35,6 +35,7 @@ if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
         extras_tuntap.xml
         digital_packet_framer2.xml
         digital_packet_deframer2.xml
+        extras_stream_selector.xml
     )
 endif()
 
@@ -49,7 +50,6 @@ list(APPEND grc_sources
     extras_delay.xml
     extras_multiply_const.xml
     extras_noise_source.xml
-    extras_stream_selector.xml
     filter_decim_fir.xml
 )
 

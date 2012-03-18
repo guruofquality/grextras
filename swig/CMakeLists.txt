@@ -48,6 +48,8 @@ foreach(incdir ${GNURADIO_CORE_INCLUDE_DIRS})
 endforeach(incdir)
 
 set(GR_SWIG_LIBRARIES gnuradio-extras)
+set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/extras_swig_doc.i)
+set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include/gnuradio/extras)
 
 GR_SWIG_MAKE(extras_swig extras_swig.i)
 
@@ -72,6 +74,7 @@ endif()
 if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
     list(APPEND swig_sources
         extras_blobs.i
+        extras_stream_selector.i
     )
 endif()
 
@@ -79,10 +82,10 @@ list(APPEND swig_sources
     extras_swig.i
     extras_delay.i
     extras_sources.i
-    extras_stream_selector.i
     extras_ops.i
     extras_block_gateway.i
     extras_fir.i
+    extras_swig_doc.i
 )
 
 install(

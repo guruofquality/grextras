@@ -101,11 +101,35 @@ if(NOT GNURADIO_CORE_FOUND)
 endif()
 
 ########################################################################
-# TODO feature check
+# feature check
 ########################################################################
+include(GrPython)
 
-set(HAVE_PMT_EXTENSIONS TRUE)
-set(HAVE_MSG_PASSING TRUE)
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} -c "from gruel import pmt; exit(hasattr(pmt, 'pmt_make_mgr'))"
+    RESULT_VARIABLE HAVE_PMT_EXTENSIONS_TEST_OUT
+)
+
+if (HAVE_PMT_EXTENSIONS_TEST_OUT EQUAL 1)
+    message(STATUS "PMT extensions feature detected...")
+    set(HAVE_PMT_EXTENSIONS TRUE)
+else()
+    message(STATUS "PMT extensions feature missing...")
+    set(HAVE_PMT_EXTENSIONS FALSE)
+endif()
+
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} -c "from gnuradio import gr; exit(hasattr(gr.top_block, 'msg_connect'))"
+    RESULT_VARIABLE HAVE_MSG_PASSING_TEST_OUT
+)
+
+if (HAVE_MSG_PASSING_TEST_OUT EQUAL 1)
+    message(STATUS "Message passing feature detected...")
+    set(HAVE_MSG_PASSING TRUE)
+else()
+    message(STATUS "Message passing feature missing...")
+    set(HAVE_MSG_PASSING FALSE)
+endif()
 
 if(HAVE_MSG_PASSING)
     add_definitions(-DHAVE_MSG_PASSING)
