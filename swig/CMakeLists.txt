@@ -83,7 +83,6 @@ endif()
 if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
     list(APPEND swig_sources
         extras_blobs.i
-        extras_stream_selector.i
     )
 endif()
 
@@ -92,6 +91,7 @@ list(APPEND swig_sources
     extras_delay.i
     extras_sources.i
     extras_ops.i
+    extras_stream_selector.i
     extras_block_gateway.i
     extras_fir.i
     ${CMAKE_CURRENT_BINARY_DIR}/extras_swig_doc.i

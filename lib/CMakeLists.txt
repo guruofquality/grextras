@@ -40,7 +40,6 @@ if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
         socket_to_blob.cc
         stream_to_blob.cc
         tuntap.cc
-        stream_selector.cc
     )
 endif()
 
@@ -56,6 +55,7 @@ list(APPEND gr_extras_sources
     noise_source.cc
     signal_source.cc
     subtract.cc
+    stream_selector.cc
     block_gateway.cc
     decim_fir.cc
 )

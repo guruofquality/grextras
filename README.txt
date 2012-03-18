@@ -5,7 +5,7 @@ GR Extras - Misc GNU Radio Blocks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Prerequisites
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-A gnuradio install 9ebc2052 or newer.
+A gnuradio install c138b94f or newer.
 
 Other prerequisites are optional,
 depending upon what blocks the user needs.

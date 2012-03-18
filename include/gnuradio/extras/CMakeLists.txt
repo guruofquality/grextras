@@ -36,7 +36,6 @@ if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
         socket_to_blob.h
         stream_to_blob.h
         tuntap.h
-        stream_selector.h
     )
 endif()
 
@@ -51,6 +50,7 @@ list(APPEND include_sources
     noise_source.h
     signal_source.h
     subtract.h
+    stream_selector.h
     decim_fir.h
 )
 

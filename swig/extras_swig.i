@@ -61,9 +61,9 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 %include <extras_delay.i>
 %include <extras_sources.i>
 %include <extras_fir.i>
+%include <extras_stream_selector.i>
 #ifdef HAVE_PMT_EXTENSIONS_AND_MSG_PASSING
 %include <extras_blobs.i>
-%include <extras_stream_selector.i>
 #endif
 %include <extras_block_gateway.i>
 #ifdef HAVE_UHD_AND_MSG_PASSING
