@@ -35,6 +35,15 @@ set(GR_SWIG_INCLUDE_DIRS
     ${GR_EXTRAS_INCLUDE_DIRS}
 )
 
+#assume super tree
+if(ENABLE_EXTRAS)
+    list(APPEND GR_SWIG_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/gruel/src/swig)
+    list(APPEND GR_SWIG_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/gruel/src/swig)
+    list(APPEND GR_SWIG_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/gnuradio-core/src/lib/swig)
+    list(APPEND GR_SWIG_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/gnuradio-core/src/lib/swig)
+    list(APPEND GR_SWIG_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/gr-uhd/swig)
+endif()
+
 if(UHD_FOUND AND HAVE_MSG_PASSING)
     list(APPEND GR_SWIG_FLAGS "-DHAVE_UHD_AND_MSG_PASSING")
 endif()

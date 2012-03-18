@@ -58,12 +58,21 @@ list(APPEND extras_qa_sources
     qa_signal_source.py
 )
 
+set(GR_TEST_PYTHON_DIRS
+    ${CMAKE_CURRENT_BINARY_DIR}/../swig
+)
+
+#assume super tree
+if(ENABLE_EXTRAS)
+    list(APPEND GR_TEST_PYTHON_DIRS ${CMAKE_SOURCE_DIR}/gruel/src/python)
+    list(APPEND GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/gruel/src/swig)
+    list(APPEND GR_TEST_PYTHON_DIRS ${CMAKE_SOURCE_DIR}/gnuradio-core/src/python)
+    list(APPEND GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/gnuradio-core/src/lib/swig)
+endif()
+
 foreach(py_qa_test_file ${extras_qa_sources})
     set(py_qa_test_file ${CMAKE_CURRENT_SOURCE_DIR}/${py_qa_test_file})
     get_filename_component(py_qa_test_name ${py_qa_test_file} NAME_WE)
-    set(GR_TEST_PYTHON_DIRS
-        ${CMAKE_BINARY_DIR}/swig
-    )
     set(GR_TEST_TARGET_DEPS gnuradio-extras)
     GR_ADD_TEST(${py_qa_test_name} ${PYTHON_EXECUTABLE} ${PYTHON_DASH_B} ${py_qa_test_file})
 endforeach(py_qa_test_file)

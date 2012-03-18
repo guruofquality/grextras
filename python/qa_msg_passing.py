@@ -20,7 +20,10 @@
 # Boston, MA 02110-1301, USA.
 # 
 
-from gruel import pmt
+#import pmt, first from local super tree if possible
+try: import pmt
+except ImportError: from gruel import pmt
+
 from gnuradio import gr, gr_unittest
 import block_gateway #needed to inject into gr
 

@@ -32,7 +32,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
 ########################################################################
 # Compiler specific setup
@@ -84,20 +84,32 @@ set(GRC_BLOCKS_DIR      ${GR_PKG_DATA_DIR}/grc/blocks)
 ########################################################################
 # Find gnuradio build dependencies
 ########################################################################
-find_package(Volk)
-find_package(Gruel)
-find_package(GnuradioCore)
+if (ENABLE_EXTRAS)
 
-if(NOT VOLK_FOUND)
-    message(FATAL_ERROR "VOLK required to compile extras")
-endif()
+    set(VOLK_LIBRARIES volk)
 
-if(NOT GRUEL_FOUND)
-    message(FATAL_ERROR "Gruel required to compile extras")
-endif()
+    set(GRUEL_LIBRARIES gruel)
 
-if(NOT GNURADIO_CORE_FOUND)
-    message(FATAL_ERROR "GnuRadio Core required to compile extras")
+    set(GNURADIO_CORE_LIBRARIES gnuradio-core)
+
+else(ENABLE_EXTRAS)
+
+    find_package(Volk)
+    find_package(Gruel)
+    find_package(GnuradioCore)
+
+    if(NOT VOLK_FOUND)
+        message(FATAL_ERROR "VOLK required to compile extras")
+    endif()
+
+    if(NOT GRUEL_FOUND)
+        message(FATAL_ERROR "Gruel required to compile extras")
+    endif()
+
+    if(NOT GNURADIO_CORE_FOUND)
+        message(FATAL_ERROR "GnuRadio Core required to compile extras")
+    endif()
+
 endif()
 
 ########################################################################
@@ -105,12 +117,17 @@ endif()
 ########################################################################
 include(GrPython)
 
-execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} -c "from gruel import pmt; exit(hasattr(pmt, 'pmt_make_mgr'))"
-    RESULT_VARIABLE HAVE_PMT_EXTENSIONS_TEST_OUT
-)
+if(NOT ENABLE_EXTRAS)
+    execute_process(
+        COMMAND ${PYTHON_EXECUTABLE} -c "from gruel import pmt; exit(hasattr(pmt, 'pmt_make_mgr'))"
+        RESULT_VARIABLE HAVE_PMT_EXTENSIONS_TEST_OUT
+    )
+endif()
 
-if (HAVE_PMT_EXTENSIONS_TEST_OUT EQUAL 1)
+if(ENABLE_EXTRAS)
+    message(STATUS "PMT extensions present in supertree...")
+    set(HAVE_PMT_EXTENSIONS TRUE)
+elseif(HAVE_PMT_EXTENSIONS_TEST_OUT EQUAL 1)
     message(STATUS "PMT extensions feature detected...")
     set(HAVE_PMT_EXTENSIONS TRUE)
 else()
@@ -118,12 +135,17 @@ else()
     set(HAVE_PMT_EXTENSIONS FALSE)
 endif()
 
-execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} -c "from gnuradio import gr; exit(hasattr(gr.top_block, 'msg_connect'))"
-    RESULT_VARIABLE HAVE_MSG_PASSING_TEST_OUT
-)
+if(NOT ENABLE_EXTRAS)
+    execute_process(
+        COMMAND ${PYTHON_EXECUTABLE} -c "from gnuradio import gr; exit(hasattr(gr.top_block, 'msg_connect'))"
+        RESULT_VARIABLE HAVE_MSG_PASSING_TEST_OUT
+    )
+endif()
 
-if (HAVE_MSG_PASSING_TEST_OUT EQUAL 1)
+if(ENABLE_EXTRAS)
+    message(STATUS "Message passing present in supertree...")
+    set(HAVE_MSG_PASSING TRUE)
+elseif (HAVE_MSG_PASSING_TEST_OUT EQUAL 1)
     message(STATUS "Message passing feature detected...")
     set(HAVE_MSG_PASSING TRUE)
 else()
@@ -154,8 +176,8 @@ endif()
 # Setup the include and linker paths
 ########################################################################
 include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${Boost_INCLUDE_DIRS}
     ${VOLK_INCLUDE_DIRS}
     ${GRUEL_INCLUDE_DIRS}
@@ -174,14 +196,16 @@ set(GR_EXTRAS_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include)
 ########################################################################
 # Create uninstall target
 ########################################################################
-configure_file(
-    ${CMAKE_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-@ONLY)
+if (NOT ENABLE_EXTRAS)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+    @ONLY)
 
-add_custom_target(uninstall
-    ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-)
+    add_custom_target(uninstall
+        ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+    )
+endif()
 
 ########################################################################
 # Add subdirectories
