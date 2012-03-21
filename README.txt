@@ -3,7 +3,18 @@ GR Extras - Misc GNU Radio Blocks
 ########################################################################
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Prerequisites
+Easy way to get Gr Extras
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This package can be included as a gnuradio submodule.
+
+Simply checkout the jblum/next gnuradio branch,
+or merge the jblum/next branch into your own branch.
+
+Repository:
+git://gnuradio.org/jblum.git
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Otherwise, satify these prerequisites
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 A gnuradio install c138b94f or newer.
 
