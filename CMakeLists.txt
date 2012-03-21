@@ -163,6 +163,14 @@ if(WIN32)
 endif()
 
 ########################################################################
+# Local includes first
+########################################################################
+include_directories(
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/lib
+)
+
+########################################################################
 # Optional req UHD
 ########################################################################
 find_package(UHD)
@@ -176,8 +184,6 @@ endif()
 # Setup the include and linker paths
 ########################################################################
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${Boost_INCLUDE_DIRS}
     ${VOLK_INCLUDE_DIRS}
     ${GRUEL_INCLUDE_DIRS}
