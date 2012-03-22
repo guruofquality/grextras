@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -25,6 +25,10 @@
 #include <complex>
 #include <cmath>
 #include <boost/math/special_functions/round.hpp>
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 using namespace gnuradio::extras;
 

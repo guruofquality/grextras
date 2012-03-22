@@ -129,8 +129,8 @@ public:
 
 private:
     gr_block_sptr _source, _sink;
-    const std::string _dev_name;
     const int _fd;
+    const std::string _dev_name;
 };
 
 /***********************************************************************

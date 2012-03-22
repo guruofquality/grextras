@@ -104,8 +104,8 @@ public:
 
 private:
     const int _fd;
-    const bool _close;
     const size_t _mtu;
+    const bool _close;
     pmt::pmt_t _id, _mgr;
 };
 

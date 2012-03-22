@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -109,15 +109,15 @@ add::sptr add::make_fc32_fc32(const size_t vlen){
 }
 
 add::sptr add::make_sc32_sc32(const size_t vlen){
-    return sptr(new add_generic<uint32_t>(2*vlen));
+    return sptr(new add_generic<int32_t>(2*vlen));
 }
 
 add::sptr add::make_sc16_sc16(const size_t vlen){
-    return sptr(new add_generic<uint16_t>(2*vlen));
+    return sptr(new add_generic<int16_t>(2*vlen));
 }
 
 add::sptr add::make_sc8_sc8(const size_t vlen){
-    return sptr(new add_generic<uint8_t>(2*vlen));
+    return sptr(new add_generic<int8_t>(2*vlen));
 }
 
 add::sptr add::make_f32_f32(const size_t vlen){
@@ -125,13 +125,13 @@ add::sptr add::make_f32_f32(const size_t vlen){
 }
 
 add::sptr add::make_s32_s32(const size_t vlen){
-    return sptr(new add_generic<uint32_t>(vlen));
+    return sptr(new add_generic<int32_t>(vlen));
 }
 
 add::sptr add::make_s16_s16(const size_t vlen){
-    return sptr(new add_generic<uint16_t>(vlen));
+    return sptr(new add_generic<int16_t>(vlen));
 }
 
 add::sptr add::make_s8_s8(const size_t vlen){
-    return sptr(new add_generic<uint8_t>(vlen));
+    return sptr(new add_generic<int8_t>(vlen));
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -129,15 +129,15 @@ multiply::sptr multiply::make_fc32_fc32(const size_t vlen){
 }
 
 multiply::sptr multiply::make_sc32_sc32(const size_t vlen){
-    return sptr(new multiply_generic<uint32_t>(2*vlen));
+    return sptr(new multiply_generic<int32_t>(2*vlen));
 }
 
 multiply::sptr multiply::make_sc16_sc16(const size_t vlen){
-    return sptr(new multiply_generic<uint16_t>(2*vlen));
+    return sptr(new multiply_generic<int16_t>(2*vlen));
 }
 
 multiply::sptr multiply::make_sc8_sc8(const size_t vlen){
-    return sptr(new multiply_generic<uint8_t>(2*vlen));
+    return sptr(new multiply_generic<int8_t>(2*vlen));
 }
 
 multiply::sptr multiply::make_f32_f32(const size_t vlen){
@@ -145,13 +145,13 @@ multiply::sptr multiply::make_f32_f32(const size_t vlen){
 }
 
 multiply::sptr multiply::make_s32_s32(const size_t vlen){
-    return sptr(new multiply_generic<uint32_t>(vlen));
+    return sptr(new multiply_generic<int32_t>(vlen));
 }
 
 multiply::sptr multiply::make_s16_s16(const size_t vlen){
-    return sptr(new multiply_generic<uint16_t>(vlen));
+    return sptr(new multiply_generic<int16_t>(vlen));
 }
 
 multiply::sptr multiply::make_s8_s8(const size_t vlen){
-    return sptr(new multiply_generic<uint8_t>(vlen));
+    return sptr(new multiply_generic<int8_t>(vlen));
 }
