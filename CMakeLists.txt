@@ -186,8 +186,8 @@ endif()
 # Local includes first
 ########################################################################
 include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
 )
 
 ########################################################################
@@ -217,7 +217,7 @@ link_directories(
     ${GNURADIO_CORE_LIBRARY_DIRS}
 )
 
-set(GR_EXTRAS_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include)
+set(GR_EXTRAS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 ########################################################################
 # Create uninstall target
