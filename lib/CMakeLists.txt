@@ -74,8 +74,12 @@ set_target_properties(gnuradio-extras PROPERTIES DEFINE_SYMBOL "gnuradio_extras_
 ########################################################################
 # Install built library files
 ########################################################################
-install(TARGETS gnuradio-extras
-    LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
-    ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
-    RUNTIME DESTINATION bin              # .dll file
-)
+if (ENABLE_EXTRAS)
+    GR_LIBRARY_FOO(gnuradio-extras RUNTIME_COMPONENT "extras_runtime" DEVEL_COMPONENT "extras_devel")
+else ()
+    install(TARGETS gnuradio-extras
+        LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
+        ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
+        RUNTIME DESTINATION bin              # .dll file
+    )
+endif ()

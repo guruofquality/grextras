@@ -25,14 +25,16 @@ cmake_minimum_required(VERSION 2.6)
 project(gr-extras CXX)
 enable_testing()
 
-#select the release build type by default to get optimization flags
-if(NOT CMAKE_BUILD_TYPE)
-   set(CMAKE_BUILD_TYPE "Release")
-   message(STATUS "Build type not specified: defaulting to release.")
-endif(NOT CMAKE_BUILD_TYPE)
-set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
+if (NOT ENABLE_EXTRAS)
+    #select the release build type by default to get optimization flags
+    if(NOT CMAKE_BUILD_TYPE)
+       set(CMAKE_BUILD_TYPE "Release")
+       message(STATUS "Build type not specified: defaulting to release.")
+    endif(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
+endif()
 
 ########################################################################
 # Compiler specific setup
