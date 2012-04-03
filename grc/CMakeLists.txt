@@ -26,7 +26,7 @@ if(UHD_FOUND AND HAVE_MSG_PASSING)
     )
 endif()
 
-if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+if(HAVE_MSG_PASSING)
     list(APPEND grc_sources
         extras_blob_to_socket.xml
         extras_blob_to_stream.xml

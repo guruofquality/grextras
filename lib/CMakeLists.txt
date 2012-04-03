@@ -31,7 +31,7 @@ if(UHD_FOUND AND HAVE_MSG_PASSING)
     )
 endif()
 
-if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+if(HAVE_MSG_PASSING)
     list(APPEND gr_extras_sources
         blob_to_filedes.cc
         blob_to_socket.cc

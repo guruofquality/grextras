@@ -125,27 +125,6 @@ include(GrPython)
 
 if(NOT ENABLE_EXTRAS)
     execute_process(
-        COMMAND ${PYTHON_EXECUTABLE} -c "from gruel import pmt; exit(hasattr(pmt, 'pmt_make_mgr'))"
-        RESULT_VARIABLE HAVE_PMT_EXTENSIONS_TEST_OUT
-    )
-endif()
-
-if(ENABLE_EXTRAS)
-    message(STATUS "PMT extensions present in supertree...")
-    set(HAVE_PMT_EXTENSIONS TRUE)
-elseif(HAVE_PMT_EXTENSIONS_TEST_OUT EQUAL 1)
-    message(STATUS "PMT extensions feature detected...")
-    set(HAVE_PMT_EXTENSIONS TRUE)
-else()
-    message(STATUS "PMT extensions feature missing...")
-    set(HAVE_PMT_EXTENSIONS FALSE)
-endif()
-
-#TODO !!!!!!!!!!!!!!!!
-set(HAVE_PMT_EXTENSIONS TRUE) #needs a new check for set_deleter
-
-if(NOT ENABLE_EXTRAS)
-    execute_process(
         COMMAND ${PYTHON_EXECUTABLE} -c "from gnuradio import gr; exit(hasattr(gr.top_block, 'msg_connect'))"
         RESULT_VARIABLE HAVE_MSG_PASSING_TEST_OUT
     )

@@ -27,7 +27,7 @@ if(UHD_FOUND AND HAVE_MSG_PASSING)
     )
 endif()
 
-if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+if(HAVE_MSG_PASSING)
     list(APPEND include_sources
         blob_to_filedes.h
         blob_to_socket.h

@@ -22,7 +22,7 @@
 ########################################################################
 include(GrPython)
 
-if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+if(HAVE_MSG_PASSING)
     list(APPEND python_sources
         pkt2.py
     )
@@ -45,7 +45,7 @@ GR_PYTHON_INSTALL(
 ########################################################################
 include(GrTest)
 
-if(HAVE_PMT_EXTENSIONS AND HAVE_MSG_PASSING)
+if(HAVE_MSG_PASSING)
     list(APPEND extras_qa_sources
         qa_msg_passing.py
     )

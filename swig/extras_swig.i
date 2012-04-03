@@ -62,7 +62,7 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 %include <extras_sources.i>
 %include <extras_fir.i>
 %include <extras_stream_selector.i>
-#ifdef HAVE_PMT_EXTENSIONS_AND_MSG_PASSING
+#ifdef HAVE_MSG_PASSING
 %include <extras_blobs.i>
 #endif
 %include <extras_block_gateway.i>
