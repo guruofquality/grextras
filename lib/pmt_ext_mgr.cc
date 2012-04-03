@@ -69,6 +69,7 @@ static void mgr_master_deleter(pmt_mgr::guts_sptr guts, pmt_base *p){
         guts->available.pop();
         lock.lock();
     }
+    pmt_set_deleter(pmt_t(p), null_deleter);
 }
 
 static void mgr_deleter(pmt_mgr::guts_sptr guts, pmt_base *p){
