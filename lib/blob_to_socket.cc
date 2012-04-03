@@ -22,7 +22,6 @@
 #include <gnuradio/extras/blob_to_socket.h>
 #include <gr_io_signature.h>
 #include <gruel/pmt_blob.h>
-#include <gruel/pmt_mgr.h>
 #include <boost/asio.hpp>
 
 namespace asio = boost::asio;

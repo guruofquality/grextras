@@ -80,7 +80,7 @@ class mod_pkts2(gr.sync_block):
             except: return -1
             if not pmt.pmt_is_blob(msg.value): continue
             pkt = packet_utils.make_packet(
-                pmt.pmt_blob_ro_data(msg.value).tostring(),
+                pmt.pmt_blob_data(msg.value).tostring(),
                 self._samples_per_symbol,
                 self._bits_per_symbol,
                 self._access_code,
@@ -155,9 +155,9 @@ class _queue_to_blob(gr.sync_block):
             in_sig = None, out_sig = None,
         )
         self._msgq = msgq
-        self._mgr = pmt.pmt_make_mgr()
+        self._mgr = pmt.pmt_mgr()
         for i in range(4):
-            pmt.pmt_mgr_set(self._mgr, pmt.pmt_make_blob(10000))
+            self._mgr.set(pmt.pmt_make_blob(10000))
 
     def work(self, input_items, output_items):
         while True:
@@ -166,10 +166,10 @@ class _queue_to_blob(gr.sync_block):
             ok, payload = packet_utils.unmake_packet(msg.to_string(), int(msg.arg1()))
             if ok:
                 payload = numpy.fromstring(payload, numpy.uint8)
-                try: blob = pmt.pmt_mgr_acquire(self._mgr, True) #block
+                try: blob = self._mgr.acquire(True) #block
                 except: return -1
                 pmt.pmt_blob_set_length(blob, len(payload))
-                pmt.pmt_blob_rw_data(blob)[:] = payload
+                pmt.pmt_blob_data(blob)[:] = payload
                 self.post_msg("blob", pmt.pmt_string_to_symbol("ok"), blob)
             else:
                 self.post_msg("blob", pmt.pmt_string_to_symbol("fail"), pmt.PMT_NIL)

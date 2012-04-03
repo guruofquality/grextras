@@ -28,37 +28,37 @@ namespace pmt {
 
 static boost::function<void(pmt_base *)> null_deleter;
 
-class pmt_mgr
+class pmt_mgr_impl : public pmt_mgr
 {
-
 public:
-  pmt_mgr(void);
-
-  class mgr_guts;
-  typedef boost::shared_ptr<mgr_guts> guts_sptr;
-  guts_sptr guts;
-
-  bool is_mgr() const { return true; }
+    pmt_mgr_impl(void);
+    ~pmt_mgr_impl(void);
+    void set(pmt_t x);
+    void reset(pmt_t x);
+    pmt_t acquire(bool block);
+    class mgr_guts;
+    typedef boost::shared_ptr<mgr_guts> guts_sptr;
+    guts_sptr guts;
 };
 
-class pmt_mgr::mgr_guts{
+class pmt_mgr_impl::mgr_guts{
 public:
-  mgr_guts(void): should_delete(false){}
+    mgr_guts(void): should_delete(false){}
 
-  bool should_delete;
+    bool should_delete;
 
-  std::queue<pmt_t> available;
+    std::queue<pmt_t> available;
 
-  //sync mechanisms
-  gruel::mutex mutex;
-  gruel::condition_variable cond;
+    //sync mechanisms
+    gruel::mutex mutex;
+    gruel::condition_variable cond;
 };
 
-pmt_mgr::pmt_mgr(void){
-    this->guts = pmt_mgr::guts_sptr(new pmt_mgr::mgr_guts());
+pmt_mgr_impl::pmt_mgr_impl(void){
+    this->guts = pmt_mgr_impl::guts_sptr(new pmt_mgr_impl::mgr_guts());
 }
 
-static void mgr_master_deleter(pmt_mgr::guts_sptr guts, pmt_base *p){
+pmt_mgr_impl::~pmt_mgr_impl(void){
     //tells the guts to delete all returning pmts
     //frees any already returned pmts in guts
     //guts will deconstruct after it frees all bound pmts
@@ -69,10 +69,9 @@ static void mgr_master_deleter(pmt_mgr::guts_sptr guts, pmt_base *p){
         guts->available.pop();
         lock.lock();
     }
-    pmt_set_deleter(pmt_t(p), null_deleter);
 }
 
-static void mgr_deleter(pmt_mgr::guts_sptr guts, pmt_base *p){
+static void mgr_deleter(pmt_mgr_impl::guts_sptr guts, pmt_base *p){
     gruel::scoped_lock lock(guts->mutex);
     if (guts->should_delete){
         pmt_set_deleter(pmt_t(p), null_deleter);
@@ -84,57 +83,19 @@ static void mgr_deleter(pmt_mgr::guts_sptr guts, pmt_base *p){
     guts->cond.notify_one();
 }
 
-bool pmt_is_mgr(pmt_t obj)
+void pmt_mgr_impl::set(pmt_t x)
 {
-    if (!pmt_is_any(obj)) return false;
-    try
-    {
-        boost::any_cast<pmt_mgr>(pmt_any_ref(obj));
-    }
-    catch(const boost::bad_any_cast &)
-    {
-        return false;
-    }
-    return true;
-}
-
-pmt_t pmt_make_mgr(void)
-{
-    pmt_mgr mgr = pmt_mgr();
-    pmt_t m = pmt_make_any(mgr);
-    boost::function<void(pmt_base *)> new_deleter = boost::bind(&mgr_master_deleter, mgr.guts, _1);
-    pmt_set_deleter(m, new_deleter);
-    return m;
-}
-
-void
-pmt_mgr_set(pmt_t mgr, pmt_t x)
-{
-    if (!pmt_is_mgr(mgr))
-        throw pmt_wrong_type("pmt_mgr_set", mgr);
-    pmt_mgr m = boost::any_cast<pmt_mgr>(pmt_any_ref(mgr));
-    boost::function<void(pmt_base *)> new_deleter = boost::bind(&mgr_deleter, m.guts, _1);
+    boost::function<void(pmt_base *)> new_deleter = boost::bind(&mgr_deleter, guts, _1);
     pmt_set_deleter(x, new_deleter);
 }
 
-void
-pmt_mgr_reset(pmt_t mgr, pmt_t x)
+void pmt_mgr_impl::reset(pmt_t x)
 {
-    if (!pmt_is_mgr(mgr))
-        throw pmt_wrong_type("pmt_mgr_reset", mgr);
-    pmt_mgr m = boost::any_cast<pmt_mgr>(pmt_any_ref(mgr));
     pmt_set_deleter(x, null_deleter);
 }
 
-pmt_t
-pmt_mgr_acquire(pmt_t mgr, bool block)
+pmt_t pmt_mgr_impl::acquire(bool block)
 {
-    if (!pmt_is_mgr(mgr))
-        throw pmt_wrong_type("pmt_mgr_acquire", mgr);
-
-    pmt_mgr m = boost::any_cast<pmt_mgr>(pmt_any_ref(mgr));
-    pmt_mgr::guts_sptr guts = m.guts;
-
     gruel::scoped_lock lock(guts->mutex);
     std::queue<pmt_t> &available = guts->available;
 
@@ -146,6 +107,10 @@ pmt_mgr_acquire(pmt_t mgr, bool block)
     pmt_t p = available.front();
     available.pop();
     return p;
+}
+
+pmt_mgr::sptr pmt_mgr::make(void){
+    return sptr(new pmt_mgr_impl());
 }
 
 } //namespace pmt

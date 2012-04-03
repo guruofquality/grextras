@@ -41,40 +41,40 @@ namespace pmt{
  * ------------------------------------------------------------------------
  */
 
-//! Return true if \p x is a manager, othewise false.
-GR_EXTRAS_API bool pmt_is_mgr(pmt_t x);
+class GR_EXTRAS_API pmt_mgr{
+public:
+    typedef boost::shared_ptr<pmt_mgr> sptr;
 
-//! Make a new pmt manager object
-GR_EXTRAS_API pmt_t pmt_make_mgr(void);
+    //! Make a new pmt manager object
+    static sptr make(void);
 
-/*!
- * \brief Set a pmt to the specified manager.
- *
- * \param mgr the pmt manager object
- * \param x any other object of type pmt
- */
-GR_EXTRAS_API void pmt_mgr_set(pmt_t mgr, pmt_t x);
+    /*!
+     * \brief Set a pmt to the specified manager.
+     *
+     * \param x any other object of type pmt
+     */
+    virtual void set(pmt_t x) = 0;
 
-/*!
- * \brief Unset a pmt from the specified manager.
- *
- * \param mgr the pmt manager object
- * \param x any other object of type pmt
- */
-GR_EXTRAS_API void pmt_mgr_reset(pmt_t mgr, pmt_t x);
+    /*!
+     * \brief Unset a pmt from the specified manager.
+     *
+     * \param x any other object of type pmt
+     */
+    virtual void reset(pmt_t x) = 0;
 
-/*!
- * \brief Acquire a pmt from the manager.
- *
- * The order of managed pmts retrieved by this function is not guaranteed.
- * For this reason, the user may want to keep a manager homogeneous.
- * Ex: This manager only manages blobs of size 1500 bytes.
- *
- * \param mgr the pmt manager object
- * \param block when true, block until pmt available
- * \return a managed pmt or empty sptr if not available
- */
-GR_EXTRAS_API pmt_t pmt_mgr_acquire(pmt_t mgr, bool block = true);
+    /*!
+     * \brief Acquire a pmt from the manager.
+     *
+     * The order of managed pmts retrieved by this function is not guaranteed.
+     * For this reason, the user may want to keep a manager homogeneous.
+     * Ex: This manager only manages blobs of size 1500 bytes.
+     *
+     * \param block when true, block until pmt available
+     * \return a managed pmt or empty sptr if not available
+     */
+    virtual pmt_t acquire(bool block = true) = 0;
+
+};
 
 }
 

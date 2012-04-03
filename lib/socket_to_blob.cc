@@ -74,9 +74,9 @@ public:
         _id = pmt::pmt_string_to_symbol(str.str());
 
         //pre-allocate blobs
-        _mgr = pmt::pmt_make_mgr();
+        _mgr = pmt::pmt_mgr::make();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            pmt::pmt_mgr_set(_mgr, pmt::pmt_make_ext_blob(mtu));
+            _mgr->set(pmt::pmt_make_ext_blob(mtu));
         }
     }
 
@@ -89,7 +89,7 @@ public:
             if (!wait_for_recv_ready(_socket->native())) continue;
 
             //perform a blocking receive
-            pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
+            pmt::pmt_t blob = _mgr->acquire(true /*block*/);
             const size_t num_bytes = _socket->receive(asio::buffer(
                 pmt::pmt_ext_blob_data(blob), _mtu
             ));
@@ -105,7 +105,8 @@ private:
     asio::io_service _io_service;
     boost::shared_ptr<asio::ip::udp::socket> _socket;
     const size_t _mtu;
-    pmt::pmt_t _id, _mgr;
+    pmt::pmt_t _id;
+    pmt::pmt_mgr::sptr _mgr;
 };
 
 /***********************************************************************
@@ -134,9 +135,9 @@ public:
         _id = pmt::pmt_string_to_symbol(str.str());
 
         //pre-allocate blobs
-        _mgr = pmt::pmt_make_mgr();
+        _mgr = pmt::pmt_mgr::make();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            pmt::pmt_mgr_set(_mgr, pmt::pmt_make_ext_blob(mtu));
+            _mgr->set(pmt::pmt_make_ext_blob(mtu));
         }
     }
 
@@ -163,7 +164,7 @@ public:
             if (!wait_for_recv_ready(_socket->native())) continue;
 
             //perform a blocking receive
-            pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
+            pmt::pmt_t blob = _mgr->acquire(true /*block*/);
             const size_t num_bytes = _socket->receive(asio::buffer(
                 pmt::pmt_ext_blob_data(blob), _mtu
             ));
@@ -180,7 +181,8 @@ private:
     boost::shared_ptr<asio::ip::tcp::socket> _socket;
     boost::shared_ptr<asio::ip::tcp::acceptor> _acceptor;
     const size_t _mtu;
-    pmt::pmt_t _id, _mgr;
+    pmt::pmt_t _id;
+    pmt::pmt_mgr::sptr _mgr;
     bool _accepted;
 };
 

@@ -22,7 +22,6 @@
 #include <gnuradio/extras/blob_to_filedes.h>
 #include <gr_io_signature.h>
 #include <gruel/pmt_blob.h>
-#include <gruel/pmt_mgr.h>
 #include <iostream>
 
 #ifdef HAVE_IO_H

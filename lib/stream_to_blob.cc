@@ -59,9 +59,9 @@ public:
         _id = pmt::pmt_string_to_symbol(str.str());
 
         //pre-allocate blobs
-        _mgr = pmt::pmt_make_mgr();
+        _mgr = pmt::pmt_mgr::make();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            pmt::pmt_mgr_set(_mgr, pmt::pmt_make_ext_blob(mtu));
+            _mgr->set(pmt::pmt_make_ext_blob(mtu));
         }
     }
 
@@ -86,7 +86,7 @@ public:
         noutput_items = std::min<size_t>(noutput_items, _mtu/_item_size);
 
         //acquire blob and memcpy stream memory to the blob memory
-        pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
+        pmt::pmt_t blob = _mgr->acquire(true /*block*/);
         pmt::pmt_ext_blob_set_length(blob, noutput_items*_item_size);
         std::memcpy(pmt::pmt_ext_blob_data(blob), input_items[0], pmt::pmt_ext_blob_length(blob));
 
@@ -101,7 +101,8 @@ private:
     const size_t _item_size;
     const size_t _mtu;
     const bool _fixed;
-    pmt::pmt_t _id, _mgr;
+    pmt::pmt_t _id;
+    pmt::pmt_mgr::sptr _mgr;
 };
 
 stream_to_blob::sptr stream_to_blob::make(

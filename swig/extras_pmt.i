@@ -28,10 +28,10 @@
 #include <gruel/pmt_mgr.h>
 
 namespace pmt{
-    pmt_t pmt_mgr_acquire_safe(pmt_t mgr, bool block){
+    pmt_t pmt_mgr_acquire_safe(boost::shared_ptr<pmt_mgr> mgr, bool block){
         pmt_t p;
         GR_PYTHON_BLOCKING_CODE(
-            p = pmt_mgr_acquire(mgr, block);
+            p = mgr->acquire(block);
         )
         return p;
     }
@@ -43,7 +43,8 @@ namespace pmt{
 %include <gruel/pmt_mgr.h>
 
 namespace pmt{
-    pmt_t pmt_mgr_acquire_safe(pmt_t mgr, bool block);
+    pmt_t pmt_mgr_acquire_safe(boost::shared_ptr<pmt_mgr> mgr, bool block);
 }
 
 using namespace pmt;
+GR_SWIG_BLOCK_MAGIC1(pmt_mgr)

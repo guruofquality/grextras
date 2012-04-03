@@ -45,12 +45,12 @@ class test_delay(gr_unittest.TestCase):
         self.assertItemsEqual(blob_data, randints)
 
     def test04 (self):
-        mgr = pmt.pmt_make_mgr()
-        pmt.pmt_mgr_set(mgr, pmt.pmt_make_blob(100))
-        pmt.pmt_mgr_set(mgr, pmt.pmt_make_blob(100))
-        a = pmt.pmt_mgr_acquire(mgr, False)
-        b = pmt.pmt_mgr_acquire(mgr, False)
-        c = pmt.pmt_mgr_acquire(mgr, False)
+        mgr = pmt.pmt_mgr()
+        mgr.set(pmt.pmt_make_blob(100))
+        mgr.set(pmt.pmt_make_blob(100))
+        a = mgr.acquire(False)
+        b = mgr.acquire(False)
+        c = mgr.acquire(False)
         self.assertTrue(not pmt.pmt_is_null(a))
         self.assertTrue(not pmt.pmt_is_null(b))
         self.assertTrue(pmt.pmt_is_null(c))

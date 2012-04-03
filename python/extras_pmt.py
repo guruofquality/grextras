@@ -45,10 +45,13 @@ def pmt_blob_data(blob):
     return __pointer_to_ndarray(extras_swig.pmt_ext_blob_data(blob), extras_swig.pmt_ext_blob_length(blob))
 
 #re-create mgr acquire by calling into python GIL-safe version
-def pmt_mgr_acquire(mgr, block = True):
-    return extras_swig.pmt_mgr_acquire_safe(mgr, block)
+class pmt_mgr:
+    def __init__(self): self._mgr = extras_swig.pmt_mgr()
+    def set(self, x): self._mgr.set(x)
+    def reset(self, x): self._mgr.reset(x)
+    def acquire(self, block = True): return extras_swig.pmt_mgr_acquire_safe(self._mgr, block)
 
 #inject it into the pmt namespace
 pmt.pmt_ext_blob_data = pmt_blob_data
 pmt.pmt_blob_data = pmt_blob_data
-pmt.pmt_mgr_acquire = pmt_mgr_acquire
+pmt.pmt_mgr = pmt_mgr
