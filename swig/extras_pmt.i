@@ -20,13 +20,28 @@
  */
 
 %include <pmt_swig.i>
+%include <gruel_common.i>
 
 %{
 
 #include <gruel/pmt_ext.h>
 
+namespace pmt{
+    pmt_t pmt_mgr_acquire_safe(pmt_t mgr, bool block){
+        pmt_t p;
+        GR_PYTHON_BLOCKING_CODE(
+            p = pmt_mgr_acquire(mgr, block);
+        )
+        return p;
+    }
+}
+
 %}
 
 %include <gruel/pmt_ext.h>
+
+namespace pmt{
+    pmt_t pmt_mgr_acquire_safe(pmt_t mgr, bool block);
+}
 
 using namespace pmt;

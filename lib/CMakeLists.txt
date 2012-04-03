@@ -59,6 +59,7 @@ list(APPEND gr_extras_sources
     block_gateway.cc
     decim_fir.cc
     pmt_ext_blob.cc
+    pmt_ext_mgr.cc
 )
 
 list(APPEND gr_extras_libs

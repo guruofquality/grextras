@@ -22,7 +22,8 @@ import extras_swig
 from gruel import pmt
 
 for name in dir(extras_swig):
-    setattr(pmt, name.replace('ext_blob', 'blob'), getattr(extras_swig, name))
+    if 'pmt' in name:
+        setattr(pmt, name.replace('ext_blob', 'blob'), getattr(extras_swig, name))
 
 #this function knows how to convert an address to a numpy array
 def __pointer_to_ndarray(addr, nitems):
@@ -45,6 +46,11 @@ def pmt_blob_rw_data(blob):
 def pmt_blob_ro_data(blob):
     return __pointer_to_ndarray(extras_swig.pmt_ext_blob_ro_data(blob), extras_swig.pmt_ext_blob_length(blob))
 
+#re-create mgr acquire by calling into python GIL-safe version
+def pmt_mgr_acquire(mgr, block = True):
+    return extras_swig.pmt_mgr_acquire_safe(mgr, block)
+
 #inject it into the pmt namespace
 pmt.pmt_blob_rw_data = pmt_blob_rw_data
 pmt.pmt_blob_ro_data = pmt_blob_ro_data
+pmt.pmt_mgr_acquire = pmt_mgr_acquire
