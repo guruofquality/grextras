@@ -76,6 +76,8 @@ Rather, the deleter returns the PMTs to the manager for re-use.
 This allows a calling thread context to wait on the manager
 while the downstream blocks consume and return the PMTs.
 
+See include/gruel/pmt_mgr.h for reference.
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 PMT "extension" blob type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -93,10 +95,11 @@ When the PMT dereferences, it will cleanup the allocated memory.
 Using the PMT manager, blobs can be continually passed downstream,
 returned, and re-used with no extra allocation overhead at runtime.
 
+See include/gruel/pmt_blob.h for reference.
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 PMT extensions documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-See include/gruel/pmt_ext.h for reference.
 See lib/* for pmt manager and blob examples.
 See python/pkt2.py for python examples.
 

@@ -41,19 +41,14 @@ def __pointer_to_ndarray(addr, nitems):
     return numpy.asarray(array_like()).view(dtype.base)
 
 #re-create the blob data functions, but yield a numpy array instead
-def pmt_blob_rw_data(blob):
-    return __pointer_to_ndarray(extras_swig.pmt_ext_blob_rw_data(blob), extras_swig.pmt_ext_blob_length(blob))
-
-def pmt_blob_ro_data(blob):
-    return __pointer_to_ndarray(extras_swig.pmt_ext_blob_ro_data(blob), extras_swig.pmt_ext_blob_length(blob))
+def pmt_blob_data(blob):
+    return __pointer_to_ndarray(extras_swig.pmt_ext_blob_data(blob), extras_swig.pmt_ext_blob_length(blob))
 
 #re-create mgr acquire by calling into python GIL-safe version
 def pmt_mgr_acquire(mgr, block = True):
     return extras_swig.pmt_mgr_acquire_safe(mgr, block)
 
 #inject it into the pmt namespace
-pmt.pmt_ext_blob_rw_data = pmt_blob_rw_data
-pmt.pmt_blob_rw_data = pmt_blob_rw_data
-pmt.pmt_ext_blob_ro_data = pmt_blob_ro_data
-pmt.pmt_blob_ro_data = pmt_blob_ro_data
+pmt.pmt_ext_blob_data = pmt_blob_data
+pmt.pmt_blob_data = pmt_blob_data
 pmt.pmt_mgr_acquire = pmt_mgr_acquire

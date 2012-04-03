@@ -24,7 +24,8 @@
 
 %{
 
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_blob.h>
+#include <gruel/pmt_mgr.h>
 
 namespace pmt{
     pmt_t pmt_mgr_acquire_safe(pmt_t mgr, bool block){
@@ -38,7 +39,8 @@ namespace pmt{
 
 %}
 
-%include <gruel/pmt_ext.h>
+%include <gruel/pmt_blob.h>
+%include <gruel/pmt_mgr.h>
 
 namespace pmt{
     pmt_t pmt_mgr_acquire_safe(pmt_t mgr, bool block);

@@ -36,13 +36,13 @@ class test_delay(gr_unittest.TestCase):
     def test03 (self):
         randints = numpy.random.randint(0, 256, 123)
         blob = pmt.pmt_make_blob(len(randints))
-        blob_rw_data = pmt.pmt_blob_rw_data(blob)
+        blob_data = pmt.pmt_blob_data(blob)
 
-        blob_rw_data[:] = randints #assign rand ints to data
-        self.assertItemsEqual(blob_rw_data, randints)
+        blob_data[:] = randints #assign rand ints to data
+        self.assertItemsEqual(blob_data, randints)
 
-        blob_ro_data = pmt.pmt_blob_ro_data(blob)
-        self.assertItemsEqual(blob_ro_data, randints)
+        blob_data = pmt.pmt_blob_data(blob)
+        self.assertItemsEqual(blob_data, randints)
 
     def test04 (self):
         mgr = pmt.pmt_make_mgr()

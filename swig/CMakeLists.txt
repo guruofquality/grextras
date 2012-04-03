@@ -33,6 +33,7 @@ include(GrPython)
 ########################################################################
 set(GR_SWIG_INCLUDE_DIRS
     ${GR_EXTRAS_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 #assume super tree
