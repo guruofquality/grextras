@@ -94,6 +94,7 @@ list(APPEND swig_sources
     extras_stream_selector.i
     extras_block_gateway.i
     extras_fir.i
+    extras_pmt.i
     ${CMAKE_CURRENT_BINARY_DIR}/extras_swig_doc.i
 )
 

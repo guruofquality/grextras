@@ -58,6 +58,7 @@ list(APPEND gr_extras_sources
     stream_selector.cc
     block_gateway.cc
     decim_fir.cc
+    pmt_ext_blob.cc
 )
 
 list(APPEND gr_extras_libs

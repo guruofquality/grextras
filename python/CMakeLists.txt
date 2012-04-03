@@ -31,6 +31,7 @@ endif()
 list(APPEND python_sources
     __init__.py
     block_gateway.py
+    extras_pmt.py
 )
 
 GR_PYTHON_INSTALL(
@@ -56,6 +57,7 @@ list(APPEND extras_qa_sources
     qa_delay.py
     qa_noise_source.py
     qa_signal_source.py
+    qa_blob.py
 )
 
 set(GR_TEST_PYTHON_DIRS
