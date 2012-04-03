@@ -22,7 +22,8 @@
 ########################################################################
 
 list(APPEND include_sources
-    pmt_ext.h
+    pmt_blob.h
+    pmt_mgr.h
 )
 
 install(

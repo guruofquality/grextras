@@ -21,7 +21,8 @@
 
 #include <gnuradio/extras/blob_to_stream.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_blob.h>
+#include <gruel/pmt_mgr.h>
 #include <cstring> //std::memcpy
 
 using namespace gnuradio::extras;
@@ -56,7 +57,7 @@ public:
         const size_t noutput_bytes = _item_size*std::min<size_t>(noutput_items, nblob_items);
 
         //perform memcpy from blob to output items
-        const char *blob_mem = reinterpret_cast<const char *>(pmt::pmt_ext_blob_ro_data(_msg.value)) + _offset;
+        const char *blob_mem = reinterpret_cast<const char *>(pmt::pmt_ext_blob_data(_msg.value)) + _offset;
         std::memcpy(output_items[0], blob_mem, noutput_bytes);
 
         //adjust the offset into the blob memory

@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_blob.h>
 #include <boost/shared_array.hpp>
 
 #define PMT_BLOB_ALIGN_MASK size_t(0x1f) //byte alignment mask of self-allocated blobs
@@ -30,16 +30,15 @@ class pmt_blob
 {
 public:
     typedef boost::shared_array<char> shart;
-    pmt_blob(const void *, void *, size_t, shart);
+    pmt_blob(void *, size_t, shart);
 
-    const void *romem;
-    void *rwmem;
+    void *mem;
     size_t len;
     shart shar;
 };
 
-pmt_blob::pmt_blob(const void *rom, void *rwm, size_t l, shart s = shart()):
-    romem(rom), rwmem(rwm), len(l), shar(s){}
+pmt_blob::pmt_blob(void *m, size_t l, shart s = shart()):
+    mem(m), len(l), shar(s){}
 
 bool pmt_is_ext_blob(pmt_t obj)
 {
@@ -60,34 +59,15 @@ pmt_t pmt_make_ext_blob(size_t len)
     pmt_blob::shart shar(new char[len + PMT_BLOB_ALIGN_MASK]);
     const size_t addr = (size_t(shar.get()) + PMT_BLOB_ALIGN_MASK) & ~PMT_BLOB_ALIGN_MASK;
     char *mem = reinterpret_cast<char *>(addr);
-    pmt_blob blob(mem, mem, len, shar);
+    pmt_blob blob(mem, len, shar);
     return pmt_make_any(blob);
 }
 
-pmt_t pmt_make_ext_blob(void *buf, size_t len)
-{
-    pmt_blob blob(buf, buf, len);
-    return pmt_make_any(blob);
-}
-
-pmt_t pmt_make_ext_blob(const void *buf, size_t len)
-{
-    pmt_blob blob(buf, NULL, len);
-    return pmt_make_any(blob);
-}
-
-void *pmt_ext_blob_rw_data(pmt_t blob)
+void *pmt_ext_blob_data(pmt_t blob)
 {
     if (!pmt_is_ext_blob(blob))
-        throw pmt_wrong_type("pmt_blob_rw_data", blob);
-    return boost::any_cast<pmt_blob>(pmt_any_ref(blob)).rwmem;
-}
-
-const void *pmt_ext_blob_ro_data(pmt_t blob)
-{
-    if (!pmt_is_ext_blob(blob))
-        throw pmt_wrong_type("pmt_blob_ro_data", blob);
-    return boost::any_cast<pmt_blob>(pmt_any_ref(blob)).romem;
+        throw pmt_wrong_type("pmt_blob_data", blob);
+    return boost::any_cast<pmt_blob>(pmt_any_ref(blob)).mem;
 }
 
 size_t pmt_ext_blob_length(pmt_t blob)

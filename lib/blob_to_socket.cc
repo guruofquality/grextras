@@ -21,7 +21,8 @@
 
 #include <gnuradio/extras/blob_to_socket.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_blob.h>
+#include <gruel/pmt_mgr.h>
 #include <boost/asio.hpp>
 
 namespace asio = boost::asio;
@@ -60,7 +61,7 @@ public:
             if (!pmt::pmt_is_ext_blob(msg.value)) continue;
             if (pmt::pmt_ext_blob_length(msg.value) == 0) break; //empty blob, we are done here
             _socket->send(asio::buffer(
-                pmt::pmt_ext_blob_ro_data(msg.value),
+                pmt::pmt_ext_blob_data(msg.value),
                 pmt::pmt_ext_blob_length(msg.value)
             ));
         }
@@ -114,7 +115,7 @@ public:
             if (!pmt::pmt_is_ext_blob(msg.value)) continue;
             if (pmt::pmt_ext_blob_length(msg.value) == 0) break; //empty blob, we are done here
             _socket->send(asio::buffer(
-                pmt::pmt_ext_blob_ro_data(msg.value),
+                pmt::pmt_ext_blob_data(msg.value),
                 pmt::pmt_ext_blob_length(msg.value)
             ));
         }

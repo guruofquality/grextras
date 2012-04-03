@@ -21,7 +21,8 @@
 
 #include <gnuradio/extras/stream_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_blob.h>
+#include <gruel/pmt_mgr.h>
 #include <cstring> //std::memcpy
 #include <stdexcept>
 
@@ -87,7 +88,7 @@ public:
         //acquire blob and memcpy stream memory to the blob memory
         pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
         pmt::pmt_ext_blob_set_length(blob, noutput_items*_item_size);
-        std::memcpy(pmt::pmt_ext_blob_rw_data(blob), input_items[0], pmt::pmt_ext_blob_length(blob));
+        std::memcpy(pmt::pmt_ext_blob_data(blob), input_items[0], pmt::pmt_ext_blob_length(blob));
 
         //post the message to downstream subscribers
         this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);

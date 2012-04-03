@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_mgr.h>
 #include <queue>
 #include <boost/bind.hpp>
 #include <gruel/thread.h>

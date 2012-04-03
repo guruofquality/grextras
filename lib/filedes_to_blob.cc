@@ -21,7 +21,8 @@
 
 #include <gnuradio/extras/filedes_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_blob.h>
+#include <gruel/pmt_mgr.h>
 #include <boost/thread/thread.hpp>
 #include <boost/asio.hpp> //select
 #include <iostream>
@@ -91,7 +92,7 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
             const int result = read(
-                _fd, pmt::pmt_ext_blob_rw_data(blob), _mtu
+                _fd, pmt::pmt_ext_blob_data(blob), _mtu
             );
             //std::cout << "read " << result << std::endl;
             if (result <= 0) std::cerr << "filedes_to_blob -> read error " << result << std::endl;

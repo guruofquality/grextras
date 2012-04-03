@@ -21,7 +21,8 @@
 
 #include <gnuradio/extras/socket_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_blob.h>
+#include <gruel/pmt_mgr.h>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
 
@@ -90,7 +91,7 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
             const size_t num_bytes = _socket->receive(asio::buffer(
-                pmt::pmt_ext_blob_rw_data(blob), _mtu
+                pmt::pmt_ext_blob_data(blob), _mtu
             ));
 
             //post the message to downstream subscribers
@@ -164,7 +165,7 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
             const size_t num_bytes = _socket->receive(asio::buffer(
-                pmt::pmt_ext_blob_rw_data(blob), _mtu
+                pmt::pmt_ext_blob_data(blob), _mtu
             ));
 
             //post the message to downstream subscribers

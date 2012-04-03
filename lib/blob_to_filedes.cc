@@ -21,7 +21,8 @@
 
 #include <gnuradio/extras/blob_to_filedes.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_ext.h>
+#include <gruel/pmt_blob.h>
+#include <gruel/pmt_mgr.h>
 #include <iostream>
 
 #ifdef HAVE_IO_H
@@ -61,7 +62,7 @@ public:
             if (pmt::pmt_ext_blob_length(msg.value) == 0) break; //empty blob, we are done here
             const int result = write(
                 _fd,
-                pmt::pmt_ext_blob_ro_data(msg.value),
+                pmt::pmt_ext_blob_data(msg.value),
                 pmt::pmt_ext_blob_length(msg.value)
             );
             //std::cout << "wrote " << result << std::endl;
