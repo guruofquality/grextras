@@ -26,6 +26,8 @@
 
 namespace pmt {
 
+#ifdef GRUEL_PMT_HAVE_PMT_SET_DELETER
+
 static boost::function<void(pmt_base *)> null_deleter;
 
 class pmt_mgr_impl : public pmt_mgr
@@ -109,8 +111,16 @@ pmt_t pmt_mgr_impl::acquire(bool block)
     return p;
 }
 
-pmt_mgr::sptr pmt_mgr::make(void){
+pmt_mgr::sptr pmt_mgr::make(void)
+{
     return sptr(new pmt_mgr_impl());
 }
+
+#else
+pmt_mgr::sptr pmt_mgr::make(void)
+{
+    throw std::runtime_error("pmt_mgr not implemented, build against a gnuradio with support for pmt_set_deleter");
+}
+#endif
 
 } //namespace pmt
