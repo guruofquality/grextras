@@ -21,6 +21,7 @@
 
 #include <gnuradio/extras/filedes_to_blob.h>
 #include <gr_io_signature.h>
+#include <gruel/pmt_ext.h>
 #include <boost/thread/thread.hpp>
 #include <boost/asio.hpp> //select
 #include <iostream>
@@ -71,7 +72,7 @@ public:
         //pre-allocate blobs
         _mgr = pmt::pmt_make_mgr();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            pmt::pmt_mgr_set(_mgr, pmt::pmt_make_blob(mtu));
+            pmt::pmt_mgr_set(_mgr, pmt::pmt_make_ext_blob(mtu));
         }
     }
 
@@ -90,13 +91,13 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
             const int result = read(
-                _fd, pmt::pmt_blob_rw_data(blob), _mtu
+                _fd, pmt::pmt_ext_blob_rw_data(blob), _mtu
             );
             //std::cout << "read " << result << std::endl;
             if (result <= 0) std::cerr << "filedes_to_blob -> read error " << result << std::endl;
 
             //post the message to downstream subscribers
-            pmt::pmt_blob_set_length(blob, (result < 0)? 0 : size_t(result));
+            pmt::pmt_ext_blob_set_length(blob, (result < 0)? 0 : size_t(result));
             this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
         }
         return -1;

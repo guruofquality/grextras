@@ -21,6 +21,7 @@
 
 #include <gnuradio/extras/stream_to_blob.h>
 #include <gr_io_signature.h>
+#include <gruel/pmt_ext.h>
 #include <cstring> //std::memcpy
 #include <stdexcept>
 
@@ -59,14 +60,14 @@ public:
         //pre-allocate blobs
         _mgr = pmt::pmt_make_mgr();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            pmt::pmt_mgr_set(_mgr, pmt::pmt_make_blob(mtu));
+            pmt::pmt_mgr_set(_mgr, pmt::pmt_make_ext_blob(mtu));
         }
     }
 
     bool stop(void){
         //post an empty blob to mark stop
         //this is used in the blob qa code to cause the blob to stream to exit work
-        pmt::pmt_t blob = pmt::pmt_make_blob(0);
+        pmt::pmt_t blob = pmt::pmt_make_ext_blob(0);
         this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
         return true;
     }
@@ -85,8 +86,8 @@ public:
 
         //acquire blob and memcpy stream memory to the blob memory
         pmt::pmt_t blob = pmt::pmt_mgr_acquire(_mgr, true /*block*/);
-        pmt::pmt_blob_set_length(blob, noutput_items*_item_size);
-        std::memcpy(pmt::pmt_blob_rw_data(blob), input_items[0], pmt::pmt_blob_length(blob));
+        pmt::pmt_ext_blob_set_length(blob, noutput_items*_item_size);
+        std::memcpy(pmt::pmt_ext_blob_rw_data(blob), input_items[0], pmt::pmt_ext_blob_length(blob));
 
         //post the message to downstream subscribers
         this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);

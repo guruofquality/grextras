@@ -23,6 +23,7 @@
 #include <gnuradio/extras/filedes_to_blob.h>
 #include <gnuradio/extras/blob_to_filedes.h>
 #include <gr_io_signature.h>
+#include <gruel/pmt_ext.h>
 #include <iostream>
 #include <boost/format.hpp>
 

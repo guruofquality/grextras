@@ -21,6 +21,7 @@
 
 #include <gnuradio/extras/blob_to_stream.h>
 #include <gr_io_signature.h>
+#include <gruel/pmt_ext.h>
 #include <cstring> //std::memcpy
 
 using namespace gnuradio::extras;
@@ -46,21 +47,21 @@ public:
         //loop until we get a blob or interrupted
         while (_offset == 0){
             _msg = this->pop_msg_queue();
-            if (pmt::pmt_is_blob(_msg.value)) break;
+            if (pmt::pmt_is_ext_blob(_msg.value)) break;
         }
-        if (pmt::pmt_blob_length(_msg.value) == 0) return -1; //empty blob, we are done here
+        if (pmt::pmt_ext_blob_length(_msg.value) == 0) return -1; //empty blob, we are done here
 
         //calculate the number of bytes to copy
-        const size_t nblob_items = (pmt::pmt_blob_length(_msg.value) - _offset)/_item_size;
+        const size_t nblob_items = (pmt::pmt_ext_blob_length(_msg.value) - _offset)/_item_size;
         const size_t noutput_bytes = _item_size*std::min<size_t>(noutput_items, nblob_items);
 
         //perform memcpy from blob to output items
-        const char *blob_mem = reinterpret_cast<const char *>(pmt::pmt_blob_ro_data(_msg.value)) + _offset;
+        const char *blob_mem = reinterpret_cast<const char *>(pmt::pmt_ext_blob_ro_data(_msg.value)) + _offset;
         std::memcpy(output_items[0], blob_mem, noutput_bytes);
 
         //adjust the offset into the blob memory
         _offset += noutput_bytes;
-        if (pmt::pmt_blob_length(_msg.value) == _offset) _offset = 0;
+        if (pmt::pmt_ext_blob_length(_msg.value) == _offset) _offset = 0;
 
         return noutput_bytes/_item_size;
     }

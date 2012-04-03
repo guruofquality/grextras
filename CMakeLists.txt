@@ -141,6 +141,9 @@ else()
     set(HAVE_PMT_EXTENSIONS FALSE)
 endif()
 
+#TODO !!!!!!!!!!!!!!!!
+set(HAVE_PMT_EXTENSIONS TRUE) #needs a new check for set_deleter
+
 if(NOT ENABLE_EXTRAS)
     execute_process(
         COMMAND ${PYTHON_EXECUTABLE} -c "from gnuradio import gr; exit(hasattr(gr.top_block, 'msg_connect'))"
