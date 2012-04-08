@@ -19,6 +19,7 @@
 
 from extras_swig import *
 import extras_pmt #act of importing performs injection
+import block_gateway #act of importing performs injection
 
 #backwards compatible contructor for old style suffix types
 add_cc = add_fc32_fc32
