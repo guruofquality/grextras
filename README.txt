@@ -27,11 +27,8 @@ http://code.ettus.com/redmine/ettus/projects/uhd/wiki
 Message passing change-set:
 https://github.com/guruofquality/gnuradio/tree/msg_passing
 
-PMT Extensions change-set:
-https://github.com/guruofquality/gnuradio/tree/pmt_set_deleter
-
-Cherry-pick these change-sets onto your desired gnuradio checkout.
-Rebuild gnuradio first before configuring GR Extras.
+Cherry-pick this change-set onto your desired gnuradio checkout;
+Rebuild and install gnuradio first before configuring GR Extras.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Build Instructions
