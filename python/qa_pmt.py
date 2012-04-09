@@ -22,7 +22,11 @@
 
 import extras_pmt #injects into pmt python namespace, internal unit test only!
 from gnuradio import gr, gr_unittest
-from gruel import pmt
+
+#hacky way so we can import in-tree
+try: import pmt
+except: from gruel import pmt
+
 import numpy
 
 class test_delay(gr_unittest.TestCase):
@@ -58,4 +62,3 @@ class test_delay(gr_unittest.TestCase):
 
 if __name__ == '__main__':
     gr_unittest.run(test_delay, "test_delay.xml")
-        

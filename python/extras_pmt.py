@@ -19,7 +19,10 @@
 
 import numpy
 import extras_swig
-from gruel import pmt
+
+#hacky way so we can import in-tree
+try: import pmt
+except: from gruel import pmt
 
 for name in dir(extras_swig):
     if 'pmt' in name:
