@@ -44,10 +44,10 @@
 // block magic
 ////////////////////////////////////////////////////////////////////////
 using namespace gnuradio::extras;
-GR_SWIG_BLOCK_MAGIC1(blob_to_filedes)
-GR_SWIG_BLOCK_MAGIC1(blob_to_socket)
-GR_SWIG_BLOCK_MAGIC1(blob_to_stream)
-GR_SWIG_BLOCK_MAGIC1(filedes_to_blob)
-GR_SWIG_BLOCK_MAGIC1(socket_to_blob)
-GR_SWIG_BLOCK_MAGIC1(stream_to_blob)
-GR_SWIG_BLOCK_MAGIC1(tuntap)
+GR_EXTRAS_SWIG_BLOCK_MAGIC1(blob_to_filedes)
+GR_EXTRAS_SWIG_BLOCK_MAGIC1(blob_to_socket)
+GR_EXTRAS_SWIG_BLOCK_MAGIC1(blob_to_stream)
+GR_EXTRAS_SWIG_BLOCK_MAGIC1(filedes_to_blob)
+GR_EXTRAS_SWIG_BLOCK_MAGIC1(socket_to_blob)
+GR_EXTRAS_SWIG_BLOCK_MAGIC1(stream_to_blob)
+GR_EXTRAS_SWIG_BLOCK_MAGIC1(tuntap)

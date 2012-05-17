@@ -20,25 +20,23 @@
  */
 
 //----------------------------------------------------------------------
-//-- GR_SWIG_BLOCK_MAGIC1 and GR_SWIG_BLOCK_MAGIC2
+//-- GR_EXTRAS_SWIG_BLOCK_MAGIC1 and GR_EXTRAS_SWIG_BLOCK_MAGIC2
 //----------------------------------------------------------------------
-%define GR_SWIG_BLOCK_MAGIC1(NAME)
-_GR_SWIG_BLOCK_MAGIC2_HELPER(NAME, make, NAME)
+%define GR_EXTRAS_SWIG_BLOCK_MAGIC1(NAME)
+_GR_EXTRAS_SWIG_BLOCK_MAGIC2_HELPER(NAME, make, NAME)
 %enddef
 
-%define GR_SWIG_BLOCK_MAGIC2(CLASS_NAME, SUFFIX)
-_GR_SWIG_BLOCK_MAGIC2_HELPER(CLASS_NAME, make ## _ ## SUFFIX, CLASS_NAME ## _ ## SUFFIX)
+%define GR_EXTRAS_SWIG_BLOCK_MAGIC2(CLASS_NAME, SUFFIX)
+_GR_EXTRAS_SWIG_BLOCK_MAGIC2_HELPER(CLASS_NAME, make ## _ ## SUFFIX, CLASS_NAME ## _ ## SUFFIX)
 %enddef
 
-#ifdef SWIGPYTHON
-%define _GR_SWIG_BLOCK_MAGIC2_HELPER(CLASS_NAME, FACTORY_NAME, PYTHON_NAME)
+%define _GR_EXTRAS_SWIG_BLOCK_MAGIC2_HELPER(CLASS_NAME, FACTORY_NAME, PYTHON_NAME)
 %template(PYTHON_NAME ## _sptr) boost::shared_ptr<CLASS_NAME>;
 %pythoncode %{
 PYTHON_NAME ## _sptr.__repr__ = lambda self: "<gr_block %s (%d)>" % (self.name(), self.unique_id ())
 PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 %}
 %enddef
-#endif
 
 #define GR_EXTRAS_API
 

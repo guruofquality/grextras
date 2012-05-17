@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -23,7 +23,6 @@
 #define INCLUDED_GR_EXTRAS_MULTIPLY_CONST_H
 
 #include <gnuradio/extras/api.h>
-#include <gnuradio/extras/op_types.h>
 #include <gr_sync_block.h>
 #include <complex>
 

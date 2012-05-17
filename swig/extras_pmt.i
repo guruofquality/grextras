@@ -47,4 +47,4 @@ namespace pmt{
 }
 
 using namespace pmt;
-GR_SWIG_BLOCK_MAGIC1(pmt_mgr)
+GR_EXTRAS_SWIG_BLOCK_MAGIC1(pmt_mgr)

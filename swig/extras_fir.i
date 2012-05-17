@@ -33,5 +33,5 @@
 ////////////////////////////////////////////////////////////////////////
 using namespace gnuradio::extras;
 
-GR_SWIG_BLOCK_MAGIC2(decim_fir, fc32_fc32_fc32)
-GR_SWIG_BLOCK_MAGIC2(decim_fir, f32_f32_f32)
+GR_EXTRAS_SWIG_BLOCK_MAGIC2(decim_fir, fc32_fc32_fc32)
+GR_EXTRAS_SWIG_BLOCK_MAGIC2(decim_fir, f32_f32_f32)
