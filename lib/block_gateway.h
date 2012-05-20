@@ -122,14 +122,6 @@ public:
         return gr_block::set_history(history);
     }
 
-    void gr_block__set_fixed_rate(bool fixed_rate){
-        return gr_block::set_fixed_rate(fixed_rate);
-    }
-
-    bool gr_block__fixed_rate(void) const{
-        return gr_block::fixed_rate();
-    }
-
     void gr_block__set_output_multiple(int multiple){
         return gr_block::set_output_multiple(multiple);
     }

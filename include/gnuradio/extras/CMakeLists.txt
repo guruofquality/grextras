@@ -41,6 +41,7 @@ endif()
 
 list(APPEND include_sources
     api.h
+    block.h
     add.h
     add_const.h
     delay.h
