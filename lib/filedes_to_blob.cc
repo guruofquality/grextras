@@ -60,7 +60,7 @@ public:
             "filedes_to_blob",
             gr_make_io_signature(0, 0, 0),
             gr_make_io_signature(0, 0, 0),
-            1 //1 message output
+            msg_signature(false, 1)
         ),
         _fd(fd),
         _mtu(mtu),
@@ -116,5 +116,5 @@ filedes_to_blob::sptr filedes_to_blob::make(
     const int fd, const size_t mtu_, const bool close_fd
 ){
     const size_t mtu = (mtu_ == 0)? 10000 : mtu_;
-    return filedes_to_blob::sptr(new filedes_to_blob_impl(fd, mtu, close_fd));
+    return gnuradio::get_initial_sptr(new filedes_to_blob_impl(fd, mtu, close_fd));
 }

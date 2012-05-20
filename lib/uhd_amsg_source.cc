@@ -42,7 +42,7 @@ public:
             "gr uhd amsg source",
             gr_make_io_signature(0, 0, 0),
             gr_make_io_signature(0, 0, 0),
-            1 //1 message output
+            msg_signature(false, 1)
         )
     {
         this->set_sync(true);
@@ -90,5 +90,5 @@ protected:
  * Make UHD Asynchronous Message Source
  **********************************************************************/
 uhd_amsg_source::sptr uhd_amsg_source::make(const uhd::device_addr_t &device_addr){
-    return uhd_amsg_source::sptr(new uhd_amsg_source_impl(device_addr));
+    return gnuradio::get_initial_sptr(new uhd_amsg_source_impl(device_addr));
 }

@@ -52,6 +52,19 @@ template <typename PtrType> struct Buffer
     size_t _len;
 };
 
+//! Message signature describes the inputs and outputs of message passing
+struct GR_EXTRAS_API msg_signature
+{
+    msg_signature(const bool has_input = false, const size_t num_outputs = 0):
+        has_input(has_input), num_outputs(num_outputs)
+    {
+        //NOP
+    }
+
+    bool has_input;
+    size_t num_outputs;
+};
+
 /*!
  * The base clock class that provides message passing,
  * and a more object oriented access to work buffers.
@@ -72,13 +85,13 @@ public:
      * \param name the name of this block
      * \param in_sig the input signature
      * \param out_sig the output signature
-     * \param num_msg_outs number message output ports
+     * \param msg_sig the IO for msg passing
      */
     block(
         const std::string &name,
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
-        const size_t num_msg_outs = 0
+        const msg_signature &msg_sig = msg_signature()
     );
 
     //! deconstructor

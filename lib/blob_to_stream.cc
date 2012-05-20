@@ -32,7 +32,8 @@ public:
         block(
             "blob_to_stream",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(1, 1, item_size)
+            gr_make_io_signature(1, 1, item_size),
+            msg_signature(true, 0)
         ),
         _item_size(item_size)
     {
@@ -73,5 +74,5 @@ private:
 };
 
 blob_to_stream::sptr blob_to_stream::make(const size_t item_size){
-    return blob_to_stream::sptr(new blob_to_stream_impl(item_size));
+    return gnuradio::get_initial_sptr(new blob_to_stream_impl(item_size));
 }

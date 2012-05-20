@@ -36,9 +36,9 @@ public:
         gr_io_signature_sptr out_sig,
         const gr_block_gw_work_type work_type,
         const unsigned factor,
-        const size_t num_msg_outs
+        const gnuradio::extras::msg_signature &msg_sig
     ):
-        block(name, in_sig, out_sig, num_msg_outs),
+        block(name, in_sig, out_sig, msg_sig),
         _handler(handler),
         _work_type(work_type)
     {
@@ -151,9 +151,10 @@ block_gateway::sptr block_gateway::make(
     gr_io_signature_sptr out_sig,
     const gr_block_gw_work_type work_type,
     const unsigned factor,
-    const size_t num_msg_outs
+    const bool has_msg_input,
+    const size_t num_msg_outputs
 ){
-    return block_gateway::sptr(
-        new block_gateway_impl(handler, name, in_sig, out_sig, work_type, factor, num_msg_outs)
+    return gnuradio::get_initial_sptr(
+        new block_gateway_impl(handler, name, in_sig, out_sig, work_type, factor, gnuradio::extras::msg_signature(has_msg_input, num_msg_outputs))
     );
 }

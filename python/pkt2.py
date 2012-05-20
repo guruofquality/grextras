@@ -61,7 +61,8 @@ class mod_pkts2(gr.sync_block):
             self,
             name = "mod_pkts2",
             in_sig = None,
-            out_sig = [numpy.uint8]
+            out_sig = [numpy.uint8],
+            has_msg_input = True,
         )
 
         self._use_whitener_offset = use_whitener_offset
@@ -153,7 +154,7 @@ class _queue_to_blob(gr.sync_block):
         gr.sync_block.__init__(
             self, name = "_queue_to_blob",
             in_sig = None, out_sig = None,
-            num_msg_outs = 1
+            num_msg_outputs = 1
         )
         self._msgq = msgq
         self._mgr = pmt.pmt_mgr()

@@ -95,7 +95,8 @@ public:
         gr_io_signature_sptr out_sig,
         const gr_block_gw_work_type work_type,
         const unsigned factor,
-        const size_t num_msg_outs = 0
+        const bool has_msg_input,
+        const size_t num_msg_outputs
     );
 
     //! Provide access to the shared message object

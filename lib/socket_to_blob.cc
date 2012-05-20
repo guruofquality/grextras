@@ -59,7 +59,7 @@ public:
             "udp_to_blob",
             gr_make_io_signature(0, 0, 0),
             gr_make_io_signature(0, 0, 0),
-            1 //1 message output
+            msg_signature(false, 1)
         ),
         _mtu(mtu)
     {
@@ -120,7 +120,7 @@ public:
             "tcp_to_blob",
             gr_make_io_signature(0, 0, 0),
             gr_make_io_signature(0, 0, 0),
-            1 //1 message output
+            msg_signature(false, 1)
         ),
         _mtu(mtu),
         _accepted(false)
@@ -196,7 +196,7 @@ socket_to_blob::sptr socket_to_blob::make(
     const std::string &proto, const std::string &addr, const std::string &port, const size_t mtu_
 ){
     const size_t mtu = (mtu_ == 0)? 1500 : mtu_;
-    if (proto == "UDP") return socket_to_blob::sptr(new gr_udp_to_blob_impl(addr, port, mtu));
-    if (proto == "TCP") return socket_to_blob::sptr(new gr_tcp_to_blob_impl(addr, port, mtu));
+    if (proto == "UDP") return gnuradio::get_initial_sptr(new gr_udp_to_blob_impl(addr, port, mtu));
+    if (proto == "TCP") return gnuradio::get_initial_sptr(new gr_tcp_to_blob_impl(addr, port, mtu));
     throw std::invalid_argument("unknown protocol for socket to blob: " + proto);
 }

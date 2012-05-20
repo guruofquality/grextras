@@ -28,6 +28,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/make_shared.hpp>
 #include <queue>
+#include <iostream>
 
 using namespace gnuradio::extras;
 
@@ -168,7 +169,9 @@ public:
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
         block *parent
-    ){
+    ):
+        gr_block(name, in_sig, out_sig)
+    {
         _parent = parent;
         _input_items.resize(in_sig->max_streams());
         _output_items.resize(out_sig->max_streams());
@@ -203,12 +206,12 @@ public:
         gr_vector_void_star &output_items
     ){
         //fill buffers
-        for (size_t i = 0; i < input_items.size(); i++)
+        for (size_t i = 0; i < _input_items.size(); i++)
         {
             _input_items[i]._mem = input_items[i];
             _input_items[i]._len = ninput_items[i];
         }
-        for (size_t i = 0; i < output_items.size(); i++)
+        for (size_t i = 0; i < _output_items.size(); i++)
         {
             _output_items[i]._mem = output_items[i];
             _output_items[i]._len = noutput_items;
@@ -218,7 +221,7 @@ public:
         const int r = _parent->work(_input_items, _output_items);
 
         //consume when in sync
-        if (!_sync && r > 0)
+        if (_sync && r > 0)
         {
             consume_each(r*_decim/_interp);
         }
@@ -306,23 +309,28 @@ struct block::impl
 
 static gr_io_signature_sptr extend_sig(gr_io_signature_sptr sig, const size_t num){
     std::vector<int> sizeof_stream_items = sig->sizeof_stream_items();
+    sizeof_stream_items.resize(sig->max_streams()); //FIXME gr bug workaround, for empty sigs, this is length 1
     for (size_t i = 0; i < num; i++)
     {
         sizeof_stream_items.push_back(1);
     }
-    return gr_make_io_signaturev(sig->min_streams(), sig->max_streams(), sizeof_stream_items);
+    if (sizeof_stream_items.size() == 0)
+    {
+        return gr_make_io_signature(0, 0, 0); //FIXME another workaround, why cant I make empty with gr_make_io_signaturev?
+    }
+    return gr_make_io_signaturev(sizeof_stream_items.size(), sizeof_stream_items.size(), sizeof_stream_items);
 }
 
 block::block(
     const std::string &name,
     gr_io_signature_sptr in_sig,
     gr_io_signature_sptr out_sig,
-    const size_t num_msg_outs
+    const msg_signature &msg_sig
 ):
     gr_hier_block2(
         name + " wrapper",
-        extend_sig(in_sig, 1),
-        extend_sig(out_sig, num_msg_outs)
+        extend_sig(in_sig, msg_sig.has_input? 1 : 0),
+        extend_sig(out_sig, msg_sig.num_outputs)
     )
 {
     _impl = boost::make_shared<impl>();
@@ -345,11 +353,14 @@ block::block(
     }
 
     //connect sinker to upper port
-    _impl->sinker = boost::make_shared<msg_sinker>();
-    this->connect(this->self(), in_sig->max_streams(), _impl->sinker, 0);
+    if (msg_sig.has_input)
+    {
+        _impl->sinker = boost::make_shared<msg_sinker>();
+        this->connect(this->self(), in_sig->max_streams(), _impl->sinker, 0);
+    }
 
     //connect sourcer to upper ports
-    for (size_t i = 0; i < num_msg_outs; i++)
+    for (size_t i = 0; i < msg_sig.num_outputs; i++)
     {
         _impl->sourcers.push_back(boost::make_shared<msg_sourcer>());
         this->connect(_impl->sourcers.back(), i, this->self(), i+out_sig->max_streams());

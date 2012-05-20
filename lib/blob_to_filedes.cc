@@ -37,7 +37,8 @@ public:
         block(
             "blob_to_filedes",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(true, 0)
         ),
         _fd(fd),
         _close(close)
@@ -79,5 +80,5 @@ private:
 blob_to_filedes::sptr blob_to_filedes::make(
     const int fd, const bool close_fd
 ){
-    return blob_to_filedes::sptr(new blob_to_filedes_impl(fd, close_fd));
+    return gnuradio::get_initial_sptr(new blob_to_filedes_impl(fd, close_fd));
 }

@@ -42,7 +42,7 @@ public:
             "stream_to_blob",
             gr_make_io_signature(1, 1, item_size),
             gr_make_io_signature(0, 0, 0),
-            1 //1 message output
+            msg_signature(false, 1)
         ),
         _item_size(item_size),
         _mtu(mtu),
@@ -114,5 +114,5 @@ stream_to_blob::sptr stream_to_blob::make(
 ){
     const size_t mtu = (mtu_ == 0)? 2048 : mtu_;
     const bool fixed = (mtu_ != 0);
-    return stream_to_blob::sptr(new stream_to_blob_impl(item_size, mtu, fixed));
+    return gnuradio::get_initial_sptr(new stream_to_blob_impl(item_size, mtu, fixed));
 }
