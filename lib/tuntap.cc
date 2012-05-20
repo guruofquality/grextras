@@ -144,7 +144,7 @@ tuntap::sptr tuntap::make(const std::string &dev){
     if (fd <= 0){
         throw std::runtime_error("gr_make_tuntap: tun_alloc failed");
     }
-    return tuntap::sptr(new tuntap_impl(fd, dev_cstr));
+    return gnuradio::get_initial_sptr(new tuntap_impl(fd, dev_cstr));
 }
 
 #else //is not a linux

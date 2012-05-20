@@ -60,6 +60,7 @@ list(APPEND gr_extras_sources
     decim_fir.cc
     pmt_ext_blob.cc
     pmt_ext_mgr.cc
+    msg_passing.cc
 )
 
 list(APPEND gr_extras_libs
@@ -85,3 +86,10 @@ else ()
         RUNTIME DESTINATION bin              # .dll file
     )
 endif ()
+
+########################################################################
+# c++ QA tests
+########################################################################
+add_executable(qa_msg_passing qa_msg_passing.cc)
+target_link_libraries(qa_msg_passing gnuradio-extras ${gr_extras_libs})
+add_test(qa_msg_passing qa_msg_passing)
