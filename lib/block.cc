@@ -170,9 +170,6 @@ public:
         block *parent
     ){
         _parent = parent;
-        _interp = 1;
-        _decim = 1;
-        _sync = false;
         _input_items.resize(in_sig->max_streams());
         _output_items.resize(out_sig->max_streams());
     }
@@ -208,13 +205,13 @@ public:
         //fill buffers
         for (size_t i = 0; i < input_items.size(); i++)
         {
-            _input_items[i].buff = input_items[i];
-            _input_items[i].num_items = ninput_items[i];
+            _input_items[i]._mem = input_items[i];
+            _input_items[i]._len = ninput_items[i];
         }
         for (size_t i = 0; i < output_items.size(); i++)
         {
-            _output_items[i].buff = output_items[i];
-            _output_items[i].num_items = noutput_items;
+            _output_items[i]._mem = output_items[i];
+            _output_items[i]._len = noutput_items;
         }
 
         //call work
@@ -331,6 +328,10 @@ block::block(
     _impl = boost::make_shared<impl>();
     _impl->master = boost::make_shared<master_block>(name, in_sig, out_sig, this);
 
+    this->set_interp(1);
+    this->set_decim(1);
+    this->set_sync(false);
+
     //connect internal sink ports
     for (size_t i = 0; i < in_sig->max_streams(); i++)
     {
@@ -368,6 +369,7 @@ void block::set_decim(const size_t decim)
 
 void block::set_interp(const size_t interp)
 {
+    this->set_output_multiple(interp);
     _impl->master->_interp = interp;
 }
 

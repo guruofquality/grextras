@@ -21,21 +21,9 @@
 # Install public header files
 ########################################################################
 
-if(UHD_FOUND AND HAVE_MSG_PASSING)
+if(UHD_FOUND)
     list(APPEND include_sources
         uhd_amsg_source.h
-    )
-endif()
-
-if(HAVE_MSG_PASSING)
-    list(APPEND include_sources
-        blob_to_filedes.h
-        blob_to_socket.h
-        blob_to_stream.h
-        filedes_to_blob.h
-        socket_to_blob.h
-        stream_to_blob.h
-        tuntap.h
     )
 endif()
 
@@ -53,6 +41,13 @@ list(APPEND include_sources
     subtract.h
     stream_selector.h
     decim_fir.h
+    blob_to_filedes.h
+    blob_to_socket.h
+    blob_to_stream.h
+    filedes_to_blob.h
+    socket_to_blob.h
+    stream_to_blob.h
+    tuntap.h
 )
 
 install(

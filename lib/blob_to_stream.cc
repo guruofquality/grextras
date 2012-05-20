@@ -29,20 +29,20 @@ using namespace gnuradio::extras;
 class blob_to_stream_impl : public blob_to_stream{
 public:
     blob_to_stream_impl(const size_t item_size):
-        gr_sync_block(
+        block(
             "blob_to_stream",
             gr_make_io_signature(0, 0, 0),
             gr_make_io_signature(1, 1, item_size)
         ),
         _item_size(item_size)
     {
+        this->set_sync(true);
         _offset = 0;
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
         //loop until we get a blob or interrupted
         while (_offset == 0){
@@ -53,11 +53,11 @@ public:
 
         //calculate the number of bytes to copy
         const size_t nblob_items = (pmt::pmt_ext_blob_length(_msg.value) - _offset)/_item_size;
-        const size_t noutput_bytes = _item_size*std::min<size_t>(noutput_items, nblob_items);
+        const size_t noutput_bytes = _item_size*std::min<size_t>(output_items[0].size(), nblob_items);
 
         //perform memcpy from blob to output items
         const char *blob_mem = reinterpret_cast<const char *>(pmt::pmt_ext_blob_data(_msg.value)) + _offset;
-        std::memcpy(output_items[0], blob_mem, noutput_bytes);
+        std::memcpy(output_items[0].get(), blob_mem, noutput_bytes);
 
         //adjust the offset into the blob memory
         _offset += noutput_bytes;

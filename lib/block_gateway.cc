@@ -25,17 +25,6 @@
 #include <boost/bind.hpp>
 
 /***********************************************************************
- * Helper routines
- **********************************************************************/
-template <typename OutType, typename InType>
-void copy_pointers(OutType &out, const InType &in){
-    out.resize(in.size());
-    for (size_t i = 0; i < in.size(); i++){
-        out[i] = (void *)(in[i]);
-    }
-}
-
-/***********************************************************************
  * The gr_block gateway implementation class
  **********************************************************************/
 class block_gateway_impl : public block_gateway{
@@ -46,33 +35,31 @@ public:
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
         const gr_block_gw_work_type work_type,
-        const unsigned factor
+        const unsigned factor,
+        const size_t num_msg_outs
     ):
-        gr_block(name, in_sig, out_sig),
+        block(name, in_sig, out_sig, num_msg_outs),
         _handler(handler),
         _work_type(work_type)
     {
         switch(_work_type){
         case GR_BLOCK_GW_WORK_GENERAL:
-            _decim = 1; //not relevant, but set anyway
-            _interp = 1; //not relevant, but set anyway
+            this->set_sync(false);
             break;
 
         case GR_BLOCK_GW_WORK_SYNC:
-            _decim = 1;
-            _interp = 1;
-            this->set_fixed_rate(true);
+            this->set_sync(true);
             break;
 
         case GR_BLOCK_GW_WORK_DECIM:
-            _decim = factor;
-            _interp = 1;
+            this->set_sync(true);
+            this->set_decim(factor);
             break;
 
         case GR_BLOCK_GW_WORK_INTERP:
-            _decim = 1;
-            _interp = factor;
-            this->set_output_multiple(_interp);
+            this->set_sync(true);
+            this->set_interp(factor);
+            this->set_output_multiple(factor);
             break;
         }
     }
@@ -94,57 +81,45 @@ public:
             return;
 
         default:
-            unsigned ninputs = ninput_items_required.size();
-            for (unsigned i = 0; i < ninputs; i++)
-                ninput_items_required[i] = fixed_rate_noutput_to_ninput(noutput_items);
-            return;
-        }
-    }
-
-    int general_work(
-        int noutput_items,
-        gr_vector_int &ninput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
-    ){
-        switch(_work_type){
-        case GR_BLOCK_GW_WORK_GENERAL:
-            _message.action = gr_block_gw_message_type::ACTION_GENERAL_WORK;
-            _message.general_work_args_noutput_items = noutput_items;
-            _message.general_work_args_ninput_items = ninput_items;
-            copy_pointers(_message.general_work_args_input_items, input_items);
-            _message.general_work_args_output_items = output_items;
-            _handler->calleval(0);
-            return _message.general_work_args_return_value;
-
-        default:
-            int r = work (noutput_items, input_items, output_items);
-            if (r > 0) consume_each(r*_decim/_interp);
-            return r;
+            return gnuradio::extras::block::forecast(noutput_items, ninput_items_required);
         }
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
-        _message.action = gr_block_gw_message_type::ACTION_WORK;
-        _message.work_args_ninput_items = fixed_rate_noutput_to_ninput(noutput_items);
-        if (_message.work_args_ninput_items == 0) return -1;
-        _message.work_args_noutput_items = noutput_items;
-        copy_pointers(_message.work_args_input_items, input_items);
-        _message.work_args_output_items = output_items;
+        switch(_work_type){
+        case GR_BLOCK_GW_WORK_GENERAL:
+            _message.action = gr_block_gw_message_type::ACTION_GENERAL_WORK;
+            break;
+        default:
+            _message.action = gr_block_gw_message_type::ACTION_WORK;
+            break;
+        }
+
+        //setup the buffers
+        _message.work_args_ninput_items.resize(input_items.size());
+        _message.work_args_input_items.resize(input_items.size());
+        for (size_t i = 0; i < input_items.size(); i++)
+        {
+            _message.work_args_ninput_items[i] = input_items[i].size();
+            _message.work_args_input_items[i] = (void *)input_items[i].get();
+        }
+
+        _message.work_args_noutput_items.resize(output_items.size());
+        _message.work_args_output_items.resize(output_items.size());
+        for (size_t i = 0; i < output_items.size(); i++)
+        {
+            _message.work_args_noutput_items[i] = output_items[i].size();
+            _message.work_args_output_items[i] = (void *)output_items[i].get();
+        }
+
+        //call the top level
         _handler->calleval(0);
+
+        //and return result
         return _message.work_args_return_value;
-    }
-
-    int fixed_rate_noutput_to_ninput(int noutput_items){
-        return (noutput_items*_decim/_interp) + history() - 1;
-    }
-
-    int fixed_rate_ninput_to_noutput(int ninput_items){
-        return std::max(0, ninput_items - (int)history() + 1)*_interp/_decim;
     }
 
     bool start(void){
@@ -167,7 +142,6 @@ private:
     gr_feval_ll *_handler;
     gr_block_gw_message_type _message;
     const gr_block_gw_work_type _work_type;
-    unsigned _decim, _interp;
 };
 
 block_gateway::sptr block_gateway::make(
@@ -176,9 +150,10 @@ block_gateway::sptr block_gateway::make(
     gr_io_signature_sptr in_sig,
     gr_io_signature_sptr out_sig,
     const gr_block_gw_work_type work_type,
-    const unsigned factor
+    const unsigned factor,
+    const size_t num_msg_outs
 ){
     return block_gateway::sptr(
-        new block_gateway_impl(handler, name, in_sig, out_sig, work_type, factor)
+        new block_gateway_impl(handler, name, in_sig, out_sig, work_type, factor, num_msg_outs)
     );
 }

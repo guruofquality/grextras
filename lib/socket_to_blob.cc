@@ -31,7 +31,6 @@ namespace asio = boost::asio;
 using namespace gnuradio::extras;
 
 static const long timeout_us = 100*1000; //100ms
-static const std::string GROUP_NAME = "blob";
 static const pmt::pmt_t BLOB_KEY = pmt::pmt_string_to_symbol("blob_stream");
 static const size_t POOL_SIZE = 4; //num pre-allocated blobs to acquire at once
 
@@ -56,13 +55,16 @@ static bool wait_for_recv_ready(int sock_fd){
 class gr_udp_to_blob_impl : public socket_to_blob{
 public:
     gr_udp_to_blob_impl(const std::string &addr, const std::string &port, const size_t mtu):
-        gr_sync_block(
+        block(
             "udp_to_blob",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            1 //1 message output
         ),
         _mtu(mtu)
     {
+        this->set_sync(true);
+
         asio::ip::udp::resolver resolver(_io_service);
         asio::ip::udp::resolver::query query(asio::ip::udp::v4(), addr, port);
         asio::ip::udp::endpoint endpoint = *resolver.resolve(query);
@@ -81,9 +83,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         while (!boost::this_thread::interruption_requested()){
             if (!wait_for_recv_ready(_socket->native())) continue;
@@ -96,7 +97,7 @@ public:
 
             //post the message to downstream subscribers
             pmt::pmt_ext_blob_set_length(blob, num_bytes);
-            this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
+            this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;
     }
@@ -115,14 +116,17 @@ private:
 class gr_tcp_to_blob_impl : public socket_to_blob{
 public:
     gr_tcp_to_blob_impl(const std::string &addr, const std::string &port, const size_t mtu):
-        gr_sync_block(
+        block(
             "tcp_to_blob",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            1 //1 message output
         ),
         _mtu(mtu),
         _accepted(false)
     {
+        this->set_sync(true);
+
         asio::ip::tcp::resolver resolver(_io_service);
         asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), addr, port);
         asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
@@ -155,9 +159,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         while (!boost::this_thread::interruption_requested()){
             if (!_accepted) this->accept();
@@ -171,7 +174,7 @@ public:
 
             //post the message to downstream subscribers
             pmt::pmt_ext_blob_set_length(blob, num_bytes);
-            this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
+            this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;
     }

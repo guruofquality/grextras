@@ -34,7 +34,6 @@
 
 using namespace gnuradio::extras;
 
-static const std::string GROUP_NAME = "blob";
 static const pmt::pmt_t BLOB_KEY = pmt::pmt_string_to_symbol("blob_stream");
 static const long timeout_us = 100*1000; //100ms
 static const size_t POOL_SIZE = 4; //num pre-allocated blobs to acquire at once
@@ -57,15 +56,17 @@ static bool wait_for_recv_ready(int sock_fd){
 class filedes_to_blob_impl : public filedes_to_blob{
 public:
     filedes_to_blob_impl(const int fd, const size_t mtu, const bool close):
-        gr_sync_block(
+        block(
             "filedes_to_blob",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            1 //1 message output
         ),
         _fd(fd),
         _mtu(mtu),
         _close(close)
     {
+        this->set_sync(true);
         std::stringstream str;
         str << name() << unique_id();
         _id = pmt::pmt_string_to_symbol(str.str());
@@ -82,9 +83,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         while (!boost::this_thread::interruption_requested()){
             if (!wait_for_recv_ready(_fd)) continue;
@@ -99,7 +99,7 @@ public:
 
             //post the message to downstream subscribers
             pmt::pmt_ext_blob_set_length(blob, (result < 0)? 0 : size_t(result));
-            this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
+            this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;
     }

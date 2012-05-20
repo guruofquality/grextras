@@ -121,7 +121,7 @@ class demod_pkts2(gr.hier_block2):
             self,
             "demod_pkts2",
             gr.io_signature(1, 1, 1),
-            gr.io_signature(0, 0, 0),
+            gr.io_signature(1, 1, 1),
         )
 
         if not access_code:
@@ -138,7 +138,7 @@ class demod_pkts2(gr.hier_block2):
         self.framer_sink = gr.framer_sink_1(msgq)
         self.connect(self, self.correlator, self.framer_sink)
         self._queue_to_blob = _queue_to_blob(msgq)
-        self.msg_connect(self._queue_to_blob, "blob", self)
+        self.connect(self._queue_to_blob, self)
 
 
 
@@ -153,6 +153,7 @@ class _queue_to_blob(gr.sync_block):
         gr.sync_block.__init__(
             self, name = "_queue_to_blob",
             in_sig = None, out_sig = None,
+            num_msg_outs = 1
         )
         self._msgq = msgq
         self._mgr = pmt.pmt_mgr()
@@ -170,6 +171,6 @@ class _queue_to_blob(gr.sync_block):
                 except: return -1
                 pmt.pmt_blob_set_length(blob, len(payload))
                 pmt.pmt_blob_data(blob)[:] = payload
-                self.post_msg("blob", pmt.pmt_string_to_symbol("ok"), blob)
+                self.post_msg(0, pmt.pmt_string_to_symbol("ok"), blob)
             else:
-                self.post_msg("blob", pmt.pmt_string_to_symbol("fail"), pmt.PMT_NIL)
+                self.post_msg(0, pmt.pmt_string_to_symbol("fail"), pmt.PMT_NIL)

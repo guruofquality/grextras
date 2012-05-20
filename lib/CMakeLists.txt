@@ -22,24 +22,12 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-if(UHD_FOUND AND HAVE_MSG_PASSING)
+if(UHD_FOUND)
     list(APPEND gr_extras_sources
         uhd_amsg_source.cc
     )
     list(APPEND gr_extras_libs
         ${UHD_LIBRARIES}
-    )
-endif()
-
-if(HAVE_MSG_PASSING)
-    list(APPEND gr_extras_sources
-        blob_to_filedes.cc
-        blob_to_socket.cc
-        blob_to_stream.cc
-        filedes_to_blob.cc
-        socket_to_blob.cc
-        stream_to_blob.cc
-        tuntap.cc
     )
 endif()
 
@@ -61,6 +49,13 @@ list(APPEND gr_extras_sources
     decim_fir.cc
     pmt_ext_blob.cc
     pmt_ext_mgr.cc
+    blob_to_filedes.cc
+    blob_to_socket.cc
+    blob_to_stream.cc
+    filedes_to_blob.cc
+    socket_to_blob.cc
+    stream_to_blob.cc
+    tuntap.cc
 )
 
 list(APPEND gr_extras_libs
@@ -86,10 +81,3 @@ else ()
         RUNTIME DESTINATION bin              # .dll file
     )
 endif ()
-
-########################################################################
-# c++ QA tests
-########################################################################
-#add_executable(qa_msg_passing qa_msg_passing.cc)
-#target_link_libraries(qa_msg_passing gnuradio-extras ${gr_extras_libs})
-#add_test(qa_msg_passing qa_msg_passing)

@@ -34,7 +34,7 @@ using namespace gnuradio::extras;
 class blob_to_filedes_impl : public blob_to_filedes{
 public:
     blob_to_filedes_impl(const int fd, const bool close):
-        gr_sync_block(
+        block(
             "blob_to_filedes",
             gr_make_io_signature(0, 0, 0),
             gr_make_io_signature(0, 0, 0)
@@ -42,7 +42,7 @@ public:
         _fd(fd),
         _close(close)
     {
-        //NOP
+        this->set_sync(true);
     }
 
     ~blob_to_filedes_impl(void){
@@ -50,9 +50,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         //loop for blobs until this thread is interrupted
         while (true){

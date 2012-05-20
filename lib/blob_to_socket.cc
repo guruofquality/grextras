@@ -34,12 +34,14 @@ using namespace gnuradio::extras;
 class gr_ext_blob_to_udp_impl : public blob_to_socket{
 public:
     gr_ext_blob_to_udp_impl(const std::string &addr, const std::string &port):
-        gr_sync_block(
+        block(
             "blob_to_udp",
             gr_make_io_signature(0, 0, 0),
             gr_make_io_signature(0, 0, 0)
         )
     {
+        this->set_sync(true);
+
         asio::ip::udp::resolver resolver(_io_service);
         asio::ip::udp::resolver::query query(asio::ip::udp::v4(), addr, port);
         asio::ip::udp::endpoint endpoint = *resolver.resolve(query);
@@ -50,9 +52,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         //loop for blobs until this thread is interrupted
         while (true){
@@ -80,13 +81,15 @@ private:
 class gr_ext_blob_to_tcp_impl : public blob_to_socket{
 public:
     gr_ext_blob_to_tcp_impl(const std::string &addr, const std::string &port):
-        gr_sync_block(
+        block(
             "blob_to_tcp",
             gr_make_io_signature(0, 0, 0),
             gr_make_io_signature(0, 0, 0)
         ),
         _connected(false)
     {
+        this->set_sync(true);
+
         asio::ip::tcp::resolver resolver(_io_service);
         asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), addr, port);
         _endpoint = *resolver.resolve(query);
@@ -104,9 +107,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         //loop for blobs until this thread is interrupted
         while (true){

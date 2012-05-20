@@ -23,11 +23,11 @@
 #define INCLUDED_GR_EXTRAS_FILEDES_TO_BLOB_H
 
 #include <gnuradio/extras/api.h>
-#include <gr_sync_block.h>
+#include <gnuradio/extras/block.h>
 
 namespace gnuradio{ namespace extras{
 
-class GR_EXTRAS_API filedes_to_blob : virtual public gr_sync_block{
+class GR_EXTRAS_API filedes_to_blob : virtual public block{
 public:
     typedef boost::shared_ptr<filedes_to_blob> sptr;
 

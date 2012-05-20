@@ -28,7 +28,6 @@
 
 using namespace gnuradio::extras;
 
-static const std::string GROUP_NAME = "blob";
 static const pmt::pmt_t BLOB_KEY = pmt::pmt_string_to_symbol("blob_stream");
 static const size_t POOL_SIZE = 4; //num pre-allocated blobs to acquire at once
 
@@ -39,15 +38,18 @@ public:
         const size_t mtu,
         const bool fixed
     ):
-        gr_sync_block(
+        block(
             "stream_to_blob",
             gr_make_io_signature(1, 1, item_size),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            1 //1 message output
         ),
         _item_size(item_size),
         _mtu(mtu),
         _fixed(fixed)
     {
+        this->set_sync(true);
+
         if (mtu%item_size != 0) throw std::invalid_argument(
             "stream_to_blob MTU is not a multiple of item size"
         );
@@ -69,15 +71,16 @@ public:
         //post an empty blob to mark stop
         //this is used in the blob qa code to cause the blob to stream to exit work
         pmt::pmt_t blob = pmt::pmt_make_ext_blob(0);
-        this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
+        this->post_msg(0, BLOB_KEY, blob, _id);
         return true;
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
+        size_t noutput_items = output_items[0].size();
+
         if (_fixed && noutput_items*_item_size < _mtu){
             throw std::runtime_error("stream to blob made false assumption about set_output_multiple");
         }
@@ -88,10 +91,10 @@ public:
         //acquire blob and memcpy stream memory to the blob memory
         pmt::pmt_t blob = _mgr->acquire(true /*block*/);
         pmt::pmt_ext_blob_set_length(blob, noutput_items*_item_size);
-        std::memcpy(pmt::pmt_ext_blob_data(blob), input_items[0], pmt::pmt_ext_blob_length(blob));
+        std::memcpy(pmt::pmt_ext_blob_data(blob), input_items[0].get(), pmt::pmt_ext_blob_length(blob));
 
         //post the message to downstream subscribers
-        this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
+        this->post_msg(0, BLOB_KEY, blob, _id);
 
         //yield the number of consumed items
         return noutput_items;

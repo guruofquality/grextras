@@ -27,6 +27,31 @@
 
 namespace gnuradio{ namespace extras{
 
+template <typename PtrType> struct Buffer
+{
+    //! get a native pointer type to this buffer
+    inline PtrType get(void) const
+    {
+        return _mem;
+    }
+
+    //! get a pointer of the desired type to this buffer
+    template <typename T> inline T cast(void) const
+    {
+        return reinterpret_cast<T>(this->get());
+    }
+
+    //! get the number of items in this buffer
+    inline size_t size(void) const
+    {
+        return _len;
+    }
+
+//private:
+    PtrType _mem;
+    size_t _len;
+};
+
 /*!
  * The base clock class that provides message passing,
  * and a more object oriented access to work buffers.
@@ -34,6 +59,9 @@ namespace gnuradio{ namespace extras{
  */
 class GR_EXTRAS_API block : public gr_hier_block2{
 public:
+
+    //! empty constructor for virtual inheritance
+    block(void){}
 
     /*!
      * The block constructor.
@@ -50,7 +78,7 @@ public:
         const std::string &name,
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
-        const size_t num_msg_outs = 1
+        const size_t num_msg_outs = 0
     );
 
     //! deconstructor
@@ -189,16 +217,6 @@ public:
 
     //! Called when the flow graph is stopped, can overload
     virtual bool stop(void);
-
-    template <typename PtrType> struct Buffer
-    {
-        PtrType buff;
-        size_t num_items;
-        template <typename T> inline T cast(void)
-        {
-            return reinterpret_cast<T>(buff);
-        }
-    };
 
     typedef std::vector<Buffer<const void *> > InputItems;
     typedef std::vector<Buffer<void *> > OutputItems;
