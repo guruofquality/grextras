@@ -30,8 +30,7 @@
     </sink>
     <source>
         <name>out</name>
-        <key>blob</key>
-        <type>msg</type>
+        <type></type>
     </source>
     <doc>
 Packet decoder block, for use with the gnuradio demodulator blocks: gmsk, psk, qam.
