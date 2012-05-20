@@ -355,6 +355,12 @@ block::block(
     }
 }
 
+block::~block(void)
+{
+    //manual impl deconstruct, could be automatic through...
+    _impl.reset();
+}
+
 void block::set_decim(const size_t decim)
 {
     _impl->master->_decim = decim;
