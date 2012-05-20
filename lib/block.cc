@@ -63,7 +63,6 @@ public:
             _msg_queue_condition_variable.wait(lock);
             msg = _msg_queue.front();
             _msg_queue.pop();
-            return 1;
         }
 
         //push the msg downstream
@@ -126,7 +125,8 @@ public:
         return 0;
     }
 
-    void push_msg_queue(const gr_tag_t &msg){
+    void push_msg_queue(const gr_tag_t &msg)
+    {
         boost::mutex::scoped_lock lock(_msg_queue_mutex);
         _msg_queue.push(msg);
         lock.unlock();
