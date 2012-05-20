@@ -98,6 +98,10 @@ public:
             break;
         }
 
+        //FIXME do we need logic to do this?
+        //if (!input_items.empty() && input_items[0].size() == 0) return -1;
+        //if (!output_items.empty() && output_items[0].size() == 0) return -1;
+
         //setup the buffers
         _message.work_args_ninput_items.resize(input_items.size());
         _message.work_args_input_items.resize(input_items.size());

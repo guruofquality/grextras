@@ -48,24 +48,36 @@ public:
         //NOP
     }
 
+    bool start(void)
+    {
+        _done = false;
+        return true;
+    }
+
+    bool stop(void)
+    {
+        _done = true;
+        _msg_queue_condition_variable.notify_one(); //if working, wakes up work to return -1
+        return true;
+    }
+
     int general_work(
         int noutput_items,
         gr_vector_int &ninput_items,
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items
     ){
-        gr_tag_t msg;
-
         //loop for the msg from the producer
         boost::mutex::scoped_lock lock(_msg_queue_mutex);
         while (_msg_queue.empty())
         {
+            if (_done) return -1;
             _msg_queue_condition_variable.wait(lock);
-            msg = _msg_queue.front();
-            _msg_queue.pop();
         }
 
         //push the msg downstream
+        gr_tag_t msg = _msg_queue.front();
+        _msg_queue.pop();
         msg.offset = this->nitems_written(0);
         this->add_item_tag(0, msg);
 
@@ -86,6 +98,7 @@ private:
     std::queue<gr_tag_t> _msg_queue;
     boost::mutex _msg_queue_mutex;
     boost::condition_variable _msg_queue_condition_variable;
+    bool _done;
 };
 
 /***********************************************************************
@@ -145,10 +158,11 @@ public:
         while (_msg_queue.empty())
         {
             _msg_queue_condition_variable.wait(lock);
-            const gr_tag_t msg = _msg_queue.front();
-            _msg_queue.pop();
-            return msg;
         }
+
+        gr_tag_t msg = _msg_queue.front();
+        _msg_queue.pop();
+        return msg;
     }
 
 private:
@@ -168,11 +182,13 @@ public:
         const std::string &name,
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
-        block *parent
+        block *parent,
+        std::vector<boost::shared_ptr<msg_sourcer> > *sourcers
     ):
         gr_block(name, in_sig, out_sig)
     {
         _parent = parent;
+        _sourcers = sourcers;
         _input_items.resize(in_sig->max_streams());
         _output_items.resize(out_sig->max_streams());
     }
@@ -224,6 +240,15 @@ public:
         if (_sync && r > 0)
         {
             consume_each(r*_decim/_interp);
+        }
+
+        //stop the sourcers when done
+        if (r == -1)
+        {
+            for (size_t i = 0; i < _sourcers->size(); i++)
+            {
+                _sourcers->at(i)->stop();
+            }
         }
 
         return r;
@@ -291,6 +316,7 @@ public: //public so block can set
 
 private:
     block *_parent;
+    std::vector<boost::shared_ptr<msg_sourcer> > *_sourcers;
     bool _sync;
     block::InputItems _input_items;
     block::OutputItems _output_items;
@@ -299,12 +325,16 @@ private:
 /***********************************************************************
  * The block object itself
  **********************************************************************/
+
+#include <gr_null_sink.h>
+
 //! The private guts of a block object
 struct block::impl
 {
     boost::shared_ptr<master_block> master;
     boost::shared_ptr<msg_sinker> sinker;
     std::vector<boost::shared_ptr<msg_sourcer> > sourcers;
+    gr_null_sink_sptr null_sink;
 };
 
 static gr_io_signature_sptr extend_sig(gr_io_signature_sptr sig, const size_t num){
@@ -334,7 +364,18 @@ block::block(
     )
 {
     _impl = boost::make_shared<impl>();
-    _impl->master = boost::make_shared<master_block>(name, in_sig, out_sig, this);
+    if (in_sig->max_streams() == 0 && out_sig->max_streams() == 0)
+    {
+        //connect master block in case it has no IO
+        //make a dummy IO that goes to a null sink
+        _impl->master = boost::make_shared<master_block>(name, in_sig, gr_make_io_signature(1, 1, 1), this, &_impl->sourcers);
+        _impl->null_sink = gr_make_null_sink(1);
+        this->connect(_impl->master, 0, _impl->null_sink, 0);
+    }
+    else
+    {
+        _impl->master = boost::make_shared<master_block>(name, in_sig, out_sig, this, &_impl->sourcers);
+    }
 
     this->set_interp(1);
     this->set_decim(1);
