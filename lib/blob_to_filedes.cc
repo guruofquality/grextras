@@ -21,7 +21,6 @@
 
 #include <gnuradio/extras/blob_to_filedes.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_blob.h>
 #include <iostream>
 
 #ifdef HAVE_IO_H
@@ -57,12 +56,12 @@ public:
         //loop for blobs until this thread is interrupted
         while (true){
             gr_tag_t msg = this->pop_msg_queue();
-            if (!pmt::pmt_is_ext_blob(msg.value)) continue;
-            if (pmt::pmt_ext_blob_length(msg.value) == 0) break; //empty blob, we are done here
+            if (!pmt::pmt_is_blob(msg.value)) continue;
+            if (pmt::pmt_blob_length(msg.value) == 0) break; //empty blob, we are done here
             const int result = write(
                 _fd,
-                pmt::pmt_ext_blob_data(msg.value),
-                pmt::pmt_ext_blob_length(msg.value)
+                pmt::pmt_blob_data(msg.value),
+                pmt::pmt_blob_length(msg.value)
             );
             //std::cout << "wrote " << result << std::endl;
             if (result <= 0) std::cerr << "gr_tuntap_sink -> write error " << result << std::endl;

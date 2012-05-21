@@ -24,6 +24,7 @@
 list(APPEND include_sources
     pmt_blob.h
     pmt_mgr.h
+    pmt_extras.h
 )
 
 install(

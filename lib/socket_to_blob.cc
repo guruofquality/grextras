@@ -21,8 +21,7 @@
 
 #include <gnuradio/extras/socket_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_blob.h>
-#include <gruel/pmt_mgr.h>
+#include <gruel/pmt_extras.h>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
 
@@ -78,7 +77,7 @@ public:
         //pre-allocate blobs
         _mgr = pmt::pmt_mgr::make();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            _mgr->set(pmt::pmt_make_ext_blob(mtu));
+            _mgr->set(pmt::pmt_make_blob(mtu));
         }
     }
 
@@ -92,11 +91,11 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = _mgr->acquire(true /*block*/);
             const size_t num_bytes = _socket->receive(asio::buffer(
-                pmt::pmt_ext_blob_data(blob), _mtu
+                pmt::pmt_blob_rw_data(blob), _mtu
             ));
 
             //post the message to downstream subscribers
-            pmt::pmt_ext_blob_set_length(blob, num_bytes);
+            pmt::pmt_blob_resize(blob, num_bytes);
             this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;
@@ -141,7 +140,7 @@ public:
         //pre-allocate blobs
         _mgr = pmt::pmt_mgr::make();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            _mgr->set(pmt::pmt_make_ext_blob(mtu));
+            _mgr->set(pmt::pmt_make_blob(mtu));
         }
     }
 
@@ -169,11 +168,11 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = _mgr->acquire(true /*block*/);
             const size_t num_bytes = _socket->receive(asio::buffer(
-                pmt::pmt_ext_blob_data(blob), _mtu
+                pmt::pmt_blob_rw_data(blob), _mtu
             ));
 
             //post the message to downstream subscribers
-            pmt::pmt_ext_blob_set_length(blob, num_bytes);
+            pmt::pmt_blob_resize(blob, num_bytes);
             this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;

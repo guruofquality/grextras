@@ -32,29 +32,18 @@ namespace pmt{
  *      Binary Large Objects (BLOBs)
  *
  * Handy for passing around uninterpreted chunks of memory.
+ * Below are additions to the blob* family of PMT functions.
  * ------------------------------------------------------------------------
  */
 
-//! Return true if \p x is a blob, othewise false.
-GR_EXTRAS_API bool pmt_is_ext_blob(pmt_t x);
+//! Make a new pmt blob, with uninitialized data
+GR_EXTRAS_API pmt_t pmt_make_blob(size_t len_in_bytes);
 
-/*!
- * \brief Allocate a blob given the length in bytes
- *
- * \param len is the size of the data in bytes.
- */
-GR_EXTRAS_API pmt_t pmt_make_ext_blob(size_t len);
+//! Resize the buffer in this blob to a new size in bytes
+GR_EXTRAS_API void pmt_blob_resize(pmt_t blob, size_t len_in_bytes);
 
-/*!
- * Return a pointer to the blob's data.
- */
-GR_EXTRAS_API void *pmt_ext_blob_data(pmt_t blob);
-
-//! Return the blob's length in bytes
-GR_EXTRAS_API size_t pmt_ext_blob_length(pmt_t blob);
-
-//! Set the blob's length in bytes
-GR_EXTRAS_API void pmt_ext_blob_set_length(pmt_t blob, size_t len_in_bytes);
+//! Get access to an writable pointer from this blob
+GR_EXTRAS_API void *pmt_blob_rw_data(pmt_t blob);
 
 }
 

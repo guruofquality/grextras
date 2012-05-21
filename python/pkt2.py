@@ -170,8 +170,8 @@ class _queue_to_blob(gr.sync_block):
                 payload = numpy.fromstring(payload, numpy.uint8)
                 try: blob = self._mgr.acquire(True) #block
                 except: return -1
-                pmt.pmt_blob_set_length(blob, len(payload))
-                pmt.pmt_blob_data(blob)[:] = payload
+                pmt.pmt_blob_resize(blob, len(payload))
+                pmt.pmt_blob_rw_data(blob)[:] = payload
                 self.post_msg(0, pmt.pmt_string_to_symbol("ok"), blob)
             else:
                 self.post_msg(0, pmt.pmt_string_to_symbol("fail"), pmt.PMT_NIL)
