@@ -3,32 +3,37 @@ GR Extras - Misc GNU Radio Blocks
 ########################################################################
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Easy way to get Gr Extras
+Build dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-This package can be included as a gnuradio submodule.
+* MSVC or GCC
+* GNU Radio
+* Boost
+* SWIG
+* UHD (optional)
 
-Simply checkout the jblum/next gnuradio branch,
-or merge the jblum/next branch into your own branch.
-
-Repository:
-git://gnuradio.org/jblum.git
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Otherwise, satify these prerequisites
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-A gnuradio install c138b94f or newer.
-
-UHD (optional for UHD async message passing block):
-http://code.ettus.com/redmine/ettus/projects/uhd/wiki
+Notes:
+- UHD install is optional for message passing UHD amsg source block.
+- The Boost and SWIG dependencies should already be satisfied
+by a standard GNU Radio development environment.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Build Instructions
+Build instructions UNIX Makefiles
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 mkdir <build dir>
 cd <build dir>
 cmake <source dir>
 make
 sudo make install
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Build instructions MSVC
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Run CMake GUI, configure with grextras source path and Visual Studio.
+* Point CMake to the gnuradio-core, gruel, and volk library and include path.
+* Point CMake to the SWIG executable.
+* Point CMake to the UHD library and include path (optional).
+* Generate Visual Studio Project file.
+* Buiult the ALL_BUILD and INSTALL targets.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Message passing implementation
