@@ -377,7 +377,7 @@ block::block(
         _impl->master = boost::make_shared<master_block>(name, in_sig, out_sig, this, &_impl->sourcers);
     }
 
-    this->set_work_mode();
+    this->set_auto(true);
 
     //connect internal sink ports
     for (size_t i = 0; i < in_sig->max_streams(); i++)
@@ -412,14 +412,9 @@ block::~block(void)
     _impl.reset();
 }
 
-void block::set_work_mode(const bool automatic, const double relative_rate)
+void block::set_auto(const bool automatic)
 {
     _impl->master->set_auto(automatic);
-    this->set_relative_rate(relative_rate);
-    if (int(relative_rate) > 1)
-    {
-        this->set_output_multiple(int(relative_rate));
-    }
 }
 
 /*******************************************************************
@@ -473,6 +468,10 @@ void block::produce(int which_output, int how_many_items)
 
 void block::set_relative_rate(double relative_rate)
 {
+    if (int(relative_rate) > 1)
+    {
+        this->set_output_multiple(int(relative_rate));
+    }
     return _impl->master->set_relative_rate(relative_rate);
 }
 

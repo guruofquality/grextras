@@ -45,8 +45,6 @@ public:
             msg_signature(false, 1)
         )
     {
-        this->set_work_mode(true);
-
         _dev = uhd::usrp::multi_usrp::make(device_addr);
         std::stringstream str;
         str << name() << unique_id();

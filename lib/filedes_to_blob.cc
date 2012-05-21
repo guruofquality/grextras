@@ -64,7 +64,6 @@ public:
         _mtu(mtu),
         _close(close)
     {
-        this->set_work_mode(true);
         std::stringstream str;
         str << name() << unique_id();
         _id = pmt::pmt_string_to_symbol(str.str());

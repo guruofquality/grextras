@@ -31,7 +31,7 @@ import block_gateway #needed to inject into gr
 #                   mod/demod with packets as i/o
 # /////////////////////////////////////////////////////////////////////////////
 
-class mod_pkts2(gr.sync_block):
+class mod_pkts2(gr.block):
     """
     Wrap an arbitrary digital modulator in our packet handling framework.
 
@@ -57,7 +57,7 @@ class mod_pkts2(gr.sync_block):
         self._bits_per_symbol = bits_per_symbol
         self._samples_per_symbol = samples_per_symbol
 
-        gr.sync_block.__init__(
+        gr.block.__init__(
             self,
             name = "mod_pkts2",
             in_sig = None,
@@ -145,13 +145,13 @@ class demod_pkts2(gr.hier_block2):
 
 
 
-class _queue_to_blob(gr.sync_block):
+class _queue_to_blob(gr.block):
     """
     Helper for the deframer, reads queue, unpacks packets, posts.
     It would be nicer if the framer_sink output'd messages.
     """
     def __init__(self, msgq):
-        gr.sync_block.__init__(
+        gr.block.__init__(
             self, name = "_queue_to_blob",
             in_sig = None, out_sig = None,
             num_msg_outputs = 1

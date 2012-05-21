@@ -99,14 +99,11 @@ public:
     virtual ~block(void);
 
     /*!
-     * Set this block work mode (how it produces and consumes, and the ratio).
+     * Set the block's work mode (how it produces and consumes, and the ratio).
      * When automatic, consume is automatically called, and forecast handled.
-     * The relative rate can be thought of as interpolation/decimation.
-     * In other words, relative rate is the ratio of output items to input items.
      * \param automatic true to call consume and forecast automatically
-     * \param relative_rate the ratio of output items to input items
      */
-    void set_work_mode(const bool automatic = true, const double relative_rate = 1.0);
+    void set_auto(const bool automatic);
 
     /*******************************************************************
      * Basic routines from basic block
@@ -130,6 +127,10 @@ public:
 
     void produce(int which_output, int how_many_items);
 
+    /*!
+     * The relative rate can be thought of as interpolation/decimation.
+     * In other words, relative rate is the ratio of output items to input items.
+     */
     void set_relative_rate(double relative_rate);
 
     double relative_rate(void) const;

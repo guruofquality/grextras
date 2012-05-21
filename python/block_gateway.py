@@ -165,7 +165,6 @@ class block(gateway_block):
             has_msg_input=has_msg_input,
             num_msg_outputs=num_msg_outputs,
         )
-        #user must call set work mode
 
 #inject into gr namespace
 gr.block = block
@@ -182,7 +181,7 @@ class basic_block(gateway_block):
             has_msg_input=has_msg_input,
             num_msg_outputs=num_msg_outputs,
         )
-        self.set_work_mode(False)
+        self.set_auto(False)
         self.work = self.general_work #makes it backwards compatible since we only call work
 
 class sync_block(gateway_block):
@@ -194,7 +193,6 @@ class sync_block(gateway_block):
             has_msg_input=has_msg_input,
             num_msg_outputs=num_msg_outputs,
         )
-        self.set_work_mode(True, 1.0)
 
 class decim_block(gateway_block):
     def __init__(self, name, in_sig, out_sig, decim, has_msg_input=False, num_msg_outputs=0):
@@ -205,7 +203,7 @@ class decim_block(gateway_block):
             has_msg_input=has_msg_input,
             num_msg_outputs=num_msg_outputs,
         )
-        self.set_work_mode(True, 1.0/decim)
+        self.set_relative_rate(1.0/decim)
 
 class interp_block(gateway_block):
     def __init__(self, name, in_sig, out_sig, interp, has_msg_input=False, num_msg_outputs=0):
@@ -216,7 +214,7 @@ class interp_block(gateway_block):
             has_msg_input=has_msg_input,
             num_msg_outputs=num_msg_outputs,
         )
-        self.set_work_mode(True, 1.0*interp)
+        self.set_relative_rate(1.0*interp)
 
 #inject into gr namespace
 gr.basic_block = basic_block

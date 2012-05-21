@@ -39,10 +39,10 @@ public:
         block(name, in_sig, out_sig, msg_sig),
         _handler(handler)
     {
-        this->set_work_mode();
+        this->set_auto(true);
     }
 
-    void set_automatic(const bool automatic)
+    void set_auto(const bool automatic)
     {
         _automatic = automatic;
     }

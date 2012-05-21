@@ -42,7 +42,7 @@ public:
         _fd(fd),
         _close(close)
     {
-        this->set_work_mode(true);
+        //NOP
     }
 
     ~blob_to_filedes_impl(void){

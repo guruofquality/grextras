@@ -87,12 +87,12 @@ public:
     virtual gr_block_gw_message_type &gr_block_message(void) = 0;
 
     //! So the implementation knows to pass up forecast or call base
-    virtual void set_automatic(const bool automatic) = 0;
+    virtual void set_auto(const bool automatic) = 0;
 
-    void gr_block__set_work_mode(const bool automatic = true, const double relative_rate = 1.0)
+    void gr_block__set_auto(const bool automatic)
     {
-        this->set_automatic(automatic);
-        return gnuradio::extras::block::set_work_mode(automatic, relative_rate);
+        this->set_auto(automatic);
+        return gnuradio::extras::block::set_auto(automatic);
     }
 
     long gr_block__unique_id(void) const{

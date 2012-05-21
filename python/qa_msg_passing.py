@@ -27,9 +27,9 @@ except ImportError: from gruel import pmt
 from gnuradio import gr, gr_unittest
 import block_gateway #needed to inject into gr
 
-class demo_msg_src(gr.sync_block):
+class demo_msg_src(gr.block):
     def __init__(self, msgs):
-        gr.sync_block.__init__(
+        gr.block.__init__(
             self,
             name = "demo msg src",
             in_sig = None,
@@ -52,9 +52,9 @@ class demo_msg_src(gr.sync_block):
         time.sleep(.1)
         return -1
 
-class demo_msg_sink(gr.sync_block):
+class demo_msg_sink(gr.block):
     def __init__(self, num):
-        gr.sync_block.__init__(
+        gr.block.__init__(
             self,
             name = "demo msg sink",
             in_sig = None,

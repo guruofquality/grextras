@@ -61,8 +61,6 @@ public:
         ),
         _mtu(mtu)
     {
-        this->set_work_mode(true);
-
         asio::ip::udp::resolver resolver(_io_service);
         asio::ip::udp::resolver::query query(asio::ip::udp::v4(), addr, port);
         asio::ip::udp::endpoint endpoint = *resolver.resolve(query);
@@ -123,8 +121,6 @@ public:
         _mtu(mtu),
         _accepted(false)
     {
-        this->set_work_mode(true);
-
         asio::ip::tcp::resolver resolver(_io_service);
         asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), addr, port);
         asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
