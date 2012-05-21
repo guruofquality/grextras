@@ -67,15 +67,14 @@ public:
     {
         //its a lazy spin implementation, best I can do without gr core mods
         //a count of 1 means we are the only ones holding the PMT reference
-        while (block)
-        {
+        do{
             BOOST_FOREACH(const pmt_t &p, _managed_pmts)
             {
                 if (p->count_ == 1) return p;
             }
             boost::this_thread::yield();
             boost::this_thread::interruption_point();
-        }
+        } while (block);
         return PMT_NIL;
     }
 
