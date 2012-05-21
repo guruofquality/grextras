@@ -21,8 +21,6 @@
 
 #include <gnuradio/extras/socket_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_blob.h>
-#include <gruel/pmt_mgr.h>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
 
@@ -31,9 +29,8 @@ namespace asio = boost::asio;
 using namespace gnuradio::extras;
 
 static const long timeout_us = 100*1000; //100ms
-static const std::string GROUP_NAME = "blob";
 static const pmt::pmt_t BLOB_KEY = pmt::pmt_string_to_symbol("blob_stream");
-static const size_t POOL_SIZE = 4; //num pre-allocated blobs to acquire at once
+static const size_t POOL_SIZE = 16; //num pre-allocated blobs to acquire at once
 
 static bool wait_for_recv_ready(int sock_fd){
     //setup timeval for timeout
@@ -56,10 +53,11 @@ static bool wait_for_recv_ready(int sock_fd){
 class gr_udp_to_blob_impl : public socket_to_blob{
 public:
     gr_udp_to_blob_impl(const std::string &addr, const std::string &port, const size_t mtu):
-        gr_sync_block(
+        block(
             "udp_to_blob",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(false, 1)
         ),
         _mtu(mtu)
     {
@@ -76,14 +74,13 @@ public:
         //pre-allocate blobs
         _mgr = pmt::pmt_mgr::make();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            _mgr->set(pmt::pmt_make_ext_blob(mtu));
+            _mgr->set(pmt::pmt_make_blob(mtu));
         }
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         while (!boost::this_thread::interruption_requested()){
             if (!wait_for_recv_ready(_socket->native())) continue;
@@ -91,12 +88,12 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = _mgr->acquire(true /*block*/);
             const size_t num_bytes = _socket->receive(asio::buffer(
-                pmt::pmt_ext_blob_data(blob), _mtu
+                pmt::pmt_blob_rw_data(blob), _mtu
             ));
 
             //post the message to downstream subscribers
-            pmt::pmt_ext_blob_set_length(blob, num_bytes);
-            this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
+            pmt::pmt_blob_resize(blob, num_bytes);
+            this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;
     }
@@ -115,10 +112,11 @@ private:
 class gr_tcp_to_blob_impl : public socket_to_blob{
 public:
     gr_tcp_to_blob_impl(const std::string &addr, const std::string &port, const size_t mtu):
-        gr_sync_block(
+        block(
             "tcp_to_blob",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(false, 1)
         ),
         _mtu(mtu),
         _accepted(false)
@@ -137,7 +135,7 @@ public:
         //pre-allocate blobs
         _mgr = pmt::pmt_mgr::make();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            _mgr->set(pmt::pmt_make_ext_blob(mtu));
+            _mgr->set(pmt::pmt_make_blob(mtu));
         }
     }
 
@@ -155,9 +153,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         while (!boost::this_thread::interruption_requested()){
             if (!_accepted) this->accept();
@@ -166,12 +163,12 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = _mgr->acquire(true /*block*/);
             const size_t num_bytes = _socket->receive(asio::buffer(
-                pmt::pmt_ext_blob_data(blob), _mtu
+                pmt::pmt_blob_rw_data(blob), _mtu
             ));
 
             //post the message to downstream subscribers
-            pmt::pmt_ext_blob_set_length(blob, num_bytes);
-            this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
+            pmt::pmt_blob_resize(blob, num_bytes);
+            this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;
     }
@@ -193,7 +190,7 @@ socket_to_blob::sptr socket_to_blob::make(
     const std::string &proto, const std::string &addr, const std::string &port, const size_t mtu_
 ){
     const size_t mtu = (mtu_ == 0)? 1500 : mtu_;
-    if (proto == "UDP") return socket_to_blob::sptr(new gr_udp_to_blob_impl(addr, port, mtu));
-    if (proto == "TCP") return socket_to_blob::sptr(new gr_tcp_to_blob_impl(addr, port, mtu));
+    if (proto == "UDP") return gnuradio::get_initial_sptr(new gr_udp_to_blob_impl(addr, port, mtu));
+    if (proto == "TCP") return gnuradio::get_initial_sptr(new gr_tcp_to_blob_impl(addr, port, mtu));
     throw std::invalid_argument("unknown protocol for socket to blob: " + proto);
 }

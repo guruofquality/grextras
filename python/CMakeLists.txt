@@ -22,16 +22,11 @@
 ########################################################################
 include(GrPython)
 
-if(HAVE_MSG_PASSING)
-    list(APPEND python_sources
-        pkt2.py
-    )
-endif()
-
 list(APPEND python_sources
     __init__.py
     block_gateway.py
     extras_pmt.py
+    pkt2.py
 )
 
 GR_PYTHON_INSTALL(
@@ -45,12 +40,6 @@ GR_PYTHON_INSTALL(
 ########################################################################
 include(GrTest)
 
-if(HAVE_MSG_PASSING)
-    list(APPEND extras_qa_sources
-        qa_msg_passing.py
-    )
-endif()
-
 list(APPEND extras_qa_sources
     qa_add_and_friends.py
     qa_block_gateway.py
@@ -58,6 +47,7 @@ list(APPEND extras_qa_sources
     qa_noise_source.py
     qa_signal_source.py
     qa_pmt.py
+    qa_msg_passing.py
 )
 
 set(GR_TEST_PYTHON_DIRS

@@ -34,6 +34,7 @@ include(GrPython)
 set(GR_SWIG_INCLUDE_DIRS
     ${GR_EXTRAS_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lib
 )
 
 #assume super tree
@@ -45,12 +46,8 @@ if(ENABLE_EXTRAS)
     list(APPEND GR_SWIG_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/gr-uhd/swig)
 endif()
 
-if(UHD_FOUND AND HAVE_MSG_PASSING)
-    list(APPEND GR_SWIG_FLAGS "-DHAVE_UHD_AND_MSG_PASSING")
-endif()
-
-if(HAVE_MSG_PASSING)
-    list(APPEND GR_SWIG_FLAGS "-DHAVE_MSG_PASSING")
+if(UHD_FOUND)
+    list(APPEND GR_SWIG_FLAGS "-DHAVE_UHD")
 endif()
 
 foreach(incdir ${GNURADIO_CORE_INCLUDE_DIRS})
@@ -79,15 +76,9 @@ GR_SWIG_INSTALL(
 ########################################################################
 # Install swig .i files for development
 ########################################################################
-if(UHD_FOUND AND HAVE_MSG_PASSING)
+if(UHD_FOUND)
     list(APPEND swig_sources
         extras_uhd_amsg_source.i
-    )
-endif()
-
-if(HAVE_MSG_PASSING)
-    list(APPEND swig_sources
-        extras_blobs.i
     )
 endif()
 
@@ -100,6 +91,7 @@ list(APPEND swig_sources
     extras_block_gateway.i
     extras_fir.i
     extras_pmt.i
+        extras_blobs.i
     ${CMAKE_CURRENT_BINARY_DIR}/extras_swig_doc.i
 )
 

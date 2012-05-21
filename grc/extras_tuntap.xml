@@ -19,12 +19,10 @@
     </param>
     <sink>
         <name>in</name>
-        <key></key>
-        <type>msg</type>
+        <type></type>
     </sink>
     <source>
         <name>out</name>
-        <key>blob</key>
-        <type>msg</type>
+        <type></type>
     </source>
 </block>

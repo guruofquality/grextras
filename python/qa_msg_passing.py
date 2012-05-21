@@ -27,36 +27,40 @@ except ImportError: from gruel import pmt
 from gnuradio import gr, gr_unittest
 import block_gateway #needed to inject into gr
 
-class demo_msg_src(gr.sync_block):
-    def __init__(self, name, msgs):
-        gr.sync_block.__init__(
+class demo_msg_src(gr.block):
+    def __init__(self, msgs):
+        gr.block.__init__(
             self,
             name = "demo msg src",
             in_sig = None,
             out_sig = None,
+            num_msg_outputs = 1,
         )
-        self._name = name
         self._msgs = msgs
 
     def work(self, input_items, output_items):
         # post all the msgs and be done...
         for msg in self._msgs:
             self.post_msg(
-                self._name,
+                0,
                 pmt.pmt_string_to_symbol("example_key"),
                 pmt.pmt_string_to_symbol(msg),
             )
+        #FIXME, wait for sink thread to get msgs
+        #if we return -1 too quickly, everything kind of shuts down b4 the messages get there...
+        import time
+        time.sleep(.1)
         return -1
 
-class demo_msg_sink(gr.sync_block):
-    def __init__(self, name, num):
-        gr.sync_block.__init__(
+class demo_msg_sink(gr.block):
+    def __init__(self, num):
+        gr.block.__init__(
             self,
             name = "demo msg sink",
             in_sig = None,
             out_sig = None,
+            has_msg_input = True
         )
-        self._name = name
         self._msgs = []
         self._num = num
 
@@ -73,9 +77,9 @@ class test_msg_passing(gr_unittest.TestCase):
     def test_top(self):
         msgs = ("this", "test", "should", "pass")
         tb = gr.top_block()
-        src = demo_msg_src("foo", msgs)
-        sink = demo_msg_sink("foo", len(msgs))
-        tb.msg_connect(src, "foo", sink)
+        src = demo_msg_src(msgs)
+        sink = demo_msg_sink(len(msgs))
+        tb.connect(src, sink)
         tb.run()
         self.assertItemsEqual(sink.msgs(), msgs)
 
@@ -84,17 +88,17 @@ class test_msg_passing(gr_unittest.TestCase):
         tb = gr.top_block()
 
         #put the source in a hier block
-        hb_src = gr.hier_block2("hb src", gr.io_signature(0, 0, 0), gr.io_signature(0, 0, 0))
-        src = demo_msg_src("bar", msgs)
-        hb_src.msg_connect(src, "bar", hb_src)
+        hb_src = gr.hier_block2("hb src", gr.io_signature(0, 0, 0), gr.io_signature(1, 1, 1))
+        src = demo_msg_src(msgs)
+        hb_src.connect(src, hb_src)
 
         #put the sink in a hier block
-        hb_sink = gr.hier_block2("hb sink", gr.io_signature(0, 0, 0), gr.io_signature(0, 0, 0))
-        sink = demo_msg_sink("bar", len(msgs))
-        hb_sink.msg_connect(hb_sink, "bar", sink)
+        hb_sink = gr.hier_block2("hb sink", gr.io_signature(1, 1, 1), gr.io_signature(0, 0, 0))
+        sink = demo_msg_sink(len(msgs))
+        hb_sink.connect(hb_sink, sink)
 
         #connect the hiers in the top level
-        tb.msg_connect(hb_src, "bar", hb_sink)
+        tb.connect(hb_src, hb_sink)
         tb.run()
         self.assertItemsEqual(sink.msgs(), msgs)
 
@@ -103,27 +107,27 @@ class test_msg_passing(gr_unittest.TestCase):
         tb = gr.top_block()
 
         #put the source in a hier block
-        hb_src = gr.hier_block2("hb src", gr.io_signature(0, 0, 0), gr.io_signature(0, 0, 0))
-        src = demo_msg_src("bar", msgs)
+        hb_src = gr.hier_block2("hb src", gr.io_signature(0, 0, 0), gr.io_signature(1, 1, 1))
+        src = demo_msg_src(msgs)
 
         #put the sink in a hier block
-        hb_sink = gr.hier_block2("hb sink", gr.io_signature(0, 0, 0), gr.io_signature(0, 0, 0))
-        sink = demo_msg_sink("bar", len(msgs))
+        hb_sink = gr.hier_block2("hb sink", gr.io_signature(1, 1, 1), gr.io_signature(0, 0, 0))
+        sink = demo_msg_sink(len(msgs))
 
         #connect
-        hb_src.msg_connect(src, "bar", hb_src)
-        hb_sink.msg_connect(hb_sink, "bar", sink)
-        tb.msg_connect(hb_src, "bar", hb_sink)
+        hb_src.connect(src, hb_src)
+        hb_sink.connect(hb_sink, sink)
+        tb.connect(hb_src, hb_sink)
 
         #disconnect
-        hb_src.msg_disconnect(src, "bar", hb_src)
-        hb_sink.msg_disconnect(hb_sink, "bar", sink)
-        tb.msg_disconnect(hb_src, "bar", hb_sink)
+        hb_src.disconnect(src, hb_src)
+        hb_sink.disconnect(hb_sink, sink)
+        tb.disconnect(hb_src, hb_sink)
 
         #reconnect
-        hb_src.msg_connect(src, "bar", hb_src)
-        hb_sink.msg_connect(hb_sink, "bar", sink)
-        tb.msg_connect(hb_src, "bar", hb_sink)
+        hb_src.connect(src, hb_src)
+        hb_sink.connect(hb_sink, sink)
+        tb.connect(hb_src, hb_sink)
 
         tb.run()
         self.assertItemsEqual(sink.msgs(), msgs)

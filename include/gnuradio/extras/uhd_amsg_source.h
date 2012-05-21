@@ -23,12 +23,12 @@
 #define INCLUDED_GR_EXTRAS_UHD_AMSG_SOURCE_H
 
 #include <gnuradio/extras/api.h>
-#include <gr_sync_block.h>
+#include <gnuradio/extras/block.h>
 #include <uhd/usrp/multi_usrp.hpp>
 
 namespace gnuradio{ namespace extras{
 
-class GR_EXTRAS_API uhd_amsg_source : virtual public gr_sync_block{
+class GR_EXTRAS_API uhd_amsg_source : virtual public block{
 public:
     typedef boost::shared_ptr<uhd_amsg_source> sptr;
 

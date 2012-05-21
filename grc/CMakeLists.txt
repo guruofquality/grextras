@@ -20,22 +20,9 @@
 ########################################################################
 # Install GRC xml files
 ########################################################################
-if(UHD_FOUND AND HAVE_MSG_PASSING)
+if(UHD_FOUND)
     list(APPEND grc_sources
         extras_uhd_amsg_source.xml
-    )
-endif()
-
-if(HAVE_MSG_PASSING)
-    list(APPEND grc_sources
-        extras_blob_to_socket.xml
-        extras_blob_to_stream.xml
-        extras_socket_to_blob.xml
-        extras_stream_to_blob.xml
-        extras_tuntap.xml
-        digital_packet_framer2.xml
-        digital_packet_deframer2.xml
-        extras_stream_selector.xml
     )
 endif()
 
@@ -51,6 +38,14 @@ list(APPEND grc_sources
     extras_multiply_const.xml
     extras_noise_source.xml
     filter_decim_fir.xml
+    extras_blob_to_socket.xml
+    extras_blob_to_stream.xml
+    extras_socket_to_blob.xml
+    extras_stream_to_blob.xml
+    extras_tuntap.xml
+    digital_packet_framer2.xml
+    digital_packet_deframer2.xml
+    extras_stream_selector.xml
 )
 
 install(

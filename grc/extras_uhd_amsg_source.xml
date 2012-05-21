@@ -20,7 +20,6 @@
     </param>
     <source>
         <name>out</name>
-        <key>async</key>
-        <type>msg</type>
+        <type></type>
     </source>
 </block>

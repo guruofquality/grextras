@@ -21,8 +21,6 @@
 
 #include <gnuradio/extras/filedes_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_blob.h>
-#include <gruel/pmt_mgr.h>
 #include <boost/thread/thread.hpp>
 #include <boost/asio.hpp> //select
 #include <iostream>
@@ -34,10 +32,9 @@
 
 using namespace gnuradio::extras;
 
-static const std::string GROUP_NAME = "blob";
 static const pmt::pmt_t BLOB_KEY = pmt::pmt_string_to_symbol("blob_stream");
 static const long timeout_us = 100*1000; //100ms
-static const size_t POOL_SIZE = 4; //num pre-allocated blobs to acquire at once
+static const size_t POOL_SIZE = 16; //num pre-allocated blobs to acquire at once
 
 static bool wait_for_recv_ready(int sock_fd){
     //setup timeval for timeout
@@ -57,10 +54,11 @@ static bool wait_for_recv_ready(int sock_fd){
 class filedes_to_blob_impl : public filedes_to_blob{
 public:
     filedes_to_blob_impl(const int fd, const size_t mtu, const bool close):
-        gr_sync_block(
+        block(
             "filedes_to_blob",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(false, 1)
         ),
         _fd(fd),
         _mtu(mtu),
@@ -73,7 +71,7 @@ public:
         //pre-allocate blobs
         _mgr = pmt::pmt_mgr::make();
         for (size_t i = 0; i < POOL_SIZE; i++){
-            _mgr->set(pmt::pmt_make_ext_blob(mtu));
+            _mgr->set(pmt::pmt_make_blob(mtu));
         }
     }
 
@@ -82,9 +80,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         while (!boost::this_thread::interruption_requested()){
             if (!wait_for_recv_ready(_fd)) continue;
@@ -92,14 +89,14 @@ public:
             //perform a blocking receive
             pmt::pmt_t blob = _mgr->acquire(true /*block*/);
             const int result = read(
-                _fd, pmt::pmt_ext_blob_data(blob), _mtu
+                _fd, pmt::pmt_blob_rw_data(blob), _mtu
             );
             //std::cout << "read " << result << std::endl;
             if (result <= 0) std::cerr << "filedes_to_blob -> read error " << result << std::endl;
 
             //post the message to downstream subscribers
-            pmt::pmt_ext_blob_set_length(blob, (result < 0)? 0 : size_t(result));
-            this->post_msg(GROUP_NAME, BLOB_KEY, blob, _id);
+            pmt::pmt_blob_resize(blob, (result < 0)? 0 : size_t(result));
+            this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;
     }
@@ -116,5 +113,5 @@ filedes_to_blob::sptr filedes_to_blob::make(
     const int fd, const size_t mtu_, const bool close_fd
 ){
     const size_t mtu = (mtu_ == 0)? 10000 : mtu_;
-    return filedes_to_blob::sptr(new filedes_to_blob_impl(fd, mtu, close_fd));
+    return gnuradio::get_initial_sptr(new filedes_to_blob_impl(fd, mtu, close_fd));
 }

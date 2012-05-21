@@ -17,8 +17,7 @@
     </param>
     <sink>
         <name>in</name>
-        <key></key> <!-- empty key, only one message input per block -->
-        <type>msg</type>
+        <type></type>
     </sink>
     <source>
         <name>out</name>

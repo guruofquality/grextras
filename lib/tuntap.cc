@@ -115,8 +115,8 @@ public:
         _sink = blob_to_filedes::make(_fd);
 
         //connect
-        this->msg_connect(this->self(), GROUP_NAME, _sink);
-        this->msg_connect(_source, GROUP_NAME, this->self());
+        this->connect(this->self(), 0, _sink, 0);
+        this->connect(_source, 0, this->self(), 0);
     }
 
     ~tuntap_impl(void){
@@ -128,7 +128,8 @@ public:
     }
 
 private:
-    gr_block_sptr _source, _sink;
+    filedes_to_blob::sptr _source;
+    blob_to_filedes::sptr _sink;
     const int _fd;
     const std::string _dev_name;
 };

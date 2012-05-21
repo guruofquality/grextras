@@ -22,7 +22,7 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-if(UHD_FOUND AND HAVE_MSG_PASSING)
+if(UHD_FOUND)
     list(APPEND gr_extras_sources
         uhd_amsg_source.cc
     )
@@ -31,19 +31,8 @@ if(UHD_FOUND AND HAVE_MSG_PASSING)
     )
 endif()
 
-if(HAVE_MSG_PASSING)
-    list(APPEND gr_extras_sources
-        blob_to_filedes.cc
-        blob_to_socket.cc
-        blob_to_stream.cc
-        filedes_to_blob.cc
-        socket_to_blob.cc
-        stream_to_blob.cc
-        tuntap.cc
-    )
-endif()
-
 list(APPEND gr_extras_sources
+    block.cc
     add.cc
     add_const.cc
     add_const_v.cc
@@ -60,6 +49,13 @@ list(APPEND gr_extras_sources
     decim_fir.cc
     pmt_ext_blob.cc
     pmt_ext_mgr.cc
+    blob_to_filedes.cc
+    blob_to_socket.cc
+    blob_to_stream.cc
+    filedes_to_blob.cc
+    socket_to_blob.cc
+    stream_to_blob.cc
+    tuntap.cc
 )
 
 list(APPEND gr_extras_libs

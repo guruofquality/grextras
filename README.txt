@@ -18,17 +18,8 @@ Otherwise, satify these prerequisites
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 A gnuradio install c138b94f or newer.
 
-Other prerequisites are optional,
-depending upon what blocks the user needs.
-
-UHD:
+UHD (optional for UHD async message passing block):
 http://code.ettus.com/redmine/ettus/projects/uhd/wiki
-
-Message passing change-set:
-https://github.com/guruofquality/gnuradio/tree/msg_passing
-
-Cherry-pick this change-set onto your desired gnuradio checkout;
-Rebuild and install gnuradio first before configuring GR Extras.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Build Instructions
@@ -40,9 +31,23 @@ make
 sudo make install
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Message passing implementation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Formerly a change-set against gnuradio-core,
+this feature is not implemented 100% out of tree.
+
+GrExtras implements a simple PMT-based message passing interface.
+The message passing is implemented on top of the stream tags API.
+Dummy streams are created after the block's official streams,
+to source and sink messages, and can be connected like normal streams.
+The GrExtras block class encapsulates all of this functionality,
+the user merley needs to connect the message ports with tb.connect().
+
+See include/gnuradio/extras/block.h for reference.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Write blocks in python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 Formally part of the GrBlocks project.
 
 This project includes the c++ to python block gateway.
@@ -76,18 +81,13 @@ while the downstream blocks consume and return the PMTs.
 See include/gruel/pmt_mgr.h for reference.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-PMT "extension" blob type
+Extensions to the PMT blob type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The PMT blob type is for passing around binary blobs (pointer/length).
-Unfortunately, the PMT blob type that comes with gnuradio is difficult
-to use because it has no concept of memory management:
-Basically, how should the downstream communicate to the upstream
-that a memory resource is available to either re-use or free?
+Extensions onto the existing blob type:
 
-Fortunately, this new "ext_blob" type can manage its own memory.
-The extension blob can allocate memory at construction time.
-The user will fill this memory with information to pass downstream.
-When the PMT dereferences, it will cleanup the allocated memory.
+* New factory function creates unitialized blob
+* Resize the blob to arbitrary length in bytes
+* Get access to read/write pointer to blob buffer
 
 Using the PMT manager, blobs can be continually passed downstream,
 returned, and re-used with no extra allocation overhead at runtime.

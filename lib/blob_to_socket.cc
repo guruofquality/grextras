@@ -21,7 +21,6 @@
 
 #include <gnuradio/extras/blob_to_socket.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_blob.h>
 #include <boost/asio.hpp>
 
 namespace asio = boost::asio;
@@ -31,13 +30,14 @@ using namespace gnuradio::extras;
 /***********************************************************************
  * UDP Implementation
  **********************************************************************/
-class gr_ext_blob_to_udp_impl : public blob_to_socket{
+class gr_blob_to_udp_impl : public blob_to_socket{
 public:
-    gr_ext_blob_to_udp_impl(const std::string &addr, const std::string &port):
-        gr_sync_block(
+    gr_blob_to_udp_impl(const std::string &addr, const std::string &port):
+        block(
             "blob_to_udp",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(true, 0)
         )
     {
         asio::ip::udp::resolver resolver(_io_service);
@@ -50,18 +50,17 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         //loop for blobs until this thread is interrupted
         while (true){
             gr_tag_t msg = this->pop_msg_queue();
-            if (!pmt::pmt_is_ext_blob(msg.value)) continue;
-            if (pmt::pmt_ext_blob_length(msg.value) == 0) break; //empty blob, we are done here
+            if (!pmt::pmt_is_blob(msg.value)) continue;
+            if (pmt::pmt_blob_length(msg.value) == 0) break; //empty blob, we are done here
             _socket->send(asio::buffer(
-                pmt::pmt_ext_blob_data(msg.value),
-                pmt::pmt_ext_blob_length(msg.value)
+                pmt::pmt_blob_data(msg.value),
+                pmt::pmt_blob_length(msg.value)
             ));
         }
 
@@ -77,13 +76,14 @@ private:
 /***********************************************************************
  * TCP Implementation
  **********************************************************************/
-class gr_ext_blob_to_tcp_impl : public blob_to_socket{
+class gr_blob_to_tcp_impl : public blob_to_socket{
 public:
-    gr_ext_blob_to_tcp_impl(const std::string &addr, const std::string &port):
-        gr_sync_block(
+    gr_blob_to_tcp_impl(const std::string &addr, const std::string &port):
+        block(
             "blob_to_tcp",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(true, 0)
         ),
         _connected(false)
     {
@@ -104,18 +104,17 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         //loop for blobs until this thread is interrupted
         while (true){
             gr_tag_t msg = this->pop_msg_queue();
-            if (!pmt::pmt_is_ext_blob(msg.value)) continue;
-            if (pmt::pmt_ext_blob_length(msg.value) == 0) break; //empty blob, we are done here
+            if (!pmt::pmt_is_blob(msg.value)) continue;
+            if (pmt::pmt_blob_length(msg.value) == 0) break; //empty blob, we are done here
             _socket->send(asio::buffer(
-                pmt::pmt_ext_blob_data(msg.value),
-                pmt::pmt_ext_blob_length(msg.value)
+                pmt::pmt_blob_data(msg.value),
+                pmt::pmt_blob_length(msg.value)
             ));
         }
 
@@ -136,7 +135,7 @@ private:
 blob_to_socket::sptr blob_to_socket::make(
     const std::string &proto, const std::string &addr, const std::string &port
 ){
-    if (proto == "UDP") return blob_to_socket::sptr(new gr_ext_blob_to_udp_impl(addr, port));
-    if (proto == "TCP") return blob_to_socket::sptr(new gr_ext_blob_to_tcp_impl(addr, port));
+    if (proto == "UDP") return gnuradio::get_initial_sptr(new gr_blob_to_udp_impl(addr, port));
+    if (proto == "TCP") return gnuradio::get_initial_sptr(new gr_blob_to_tcp_impl(addr, port));
     throw std::invalid_argument("unknown protocol for socket to blob: " + proto);
 }

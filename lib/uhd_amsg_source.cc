@@ -38,10 +38,11 @@ public:
     uhd_amsg_source_impl(
         const uhd::device_addr_t &device_addr
     ):
-        gr_sync_block(
+        block(
             "gr uhd amsg source",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(false, 1)
         )
     {
         _dev = uhd::usrp::multi_usrp::make(device_addr);
@@ -51,9 +52,8 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         uhd::async_metadata_t md;
         //pop messages from uhd and post to the subscribers
@@ -76,7 +76,7 @@ public:
         }
         pmt::pmt_dict_add(value_dict, CHAN_KEY, pmt::pmt_from_uint64(md.channel));
         pmt::pmt_dict_add(value_dict, EVENT_KEY, pmt::pmt_from_uint64(md.event_code));
-        this->post_msg("async", AMSG_KEY, value_dict, _id);
+        this->post_msg(0, AMSG_KEY, value_dict, _id);
     }
 
 protected:
@@ -88,5 +88,5 @@ protected:
  * Make UHD Asynchronous Message Source
  **********************************************************************/
 uhd_amsg_source::sptr uhd_amsg_source::make(const uhd::device_addr_t &device_addr){
-    return uhd_amsg_source::sptr(new uhd_amsg_source_impl(device_addr));
+    return gnuradio::get_initial_sptr(new uhd_amsg_source_impl(device_addr));
 }

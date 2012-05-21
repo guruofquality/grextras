@@ -21,7 +21,6 @@
 
 #include <gnuradio/extras/blob_to_filedes.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_blob.h>
 #include <iostream>
 
 #ifdef HAVE_IO_H
@@ -34,10 +33,11 @@ using namespace gnuradio::extras;
 class blob_to_filedes_impl : public blob_to_filedes{
 public:
     blob_to_filedes_impl(const int fd, const bool close):
-        gr_sync_block(
+        block(
             "blob_to_filedes",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(true, 0)
         ),
         _fd(fd),
         _close(close)
@@ -50,19 +50,18 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &,
+        const OutputItems &
     ){
         //loop for blobs until this thread is interrupted
         while (true){
             gr_tag_t msg = this->pop_msg_queue();
-            if (!pmt::pmt_is_ext_blob(msg.value)) continue;
-            if (pmt::pmt_ext_blob_length(msg.value) == 0) break; //empty blob, we are done here
+            if (!pmt::pmt_is_blob(msg.value)) continue;
+            if (pmt::pmt_blob_length(msg.value) == 0) break; //empty blob, we are done here
             const int result = write(
                 _fd,
-                pmt::pmt_ext_blob_data(msg.value),
-                pmt::pmt_ext_blob_length(msg.value)
+                pmt::pmt_blob_data(msg.value),
+                pmt::pmt_blob_length(msg.value)
             );
             //std::cout << "wrote " << result << std::endl;
             if (result <= 0) std::cerr << "gr_tuntap_sink -> write error " << result << std::endl;
@@ -80,5 +79,5 @@ private:
 blob_to_filedes::sptr blob_to_filedes::make(
     const int fd, const bool close_fd
 ){
-    return blob_to_filedes::sptr(new blob_to_filedes_impl(fd, close_fd));
+    return gnuradio::get_initial_sptr(new blob_to_filedes_impl(fd, close_fd));
 }

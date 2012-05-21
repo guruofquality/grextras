@@ -123,28 +123,6 @@ endif()
 ########################################################################
 include(GrPython)
 
-if(NOT ENABLE_EXTRAS)
-    execute_process(
-        COMMAND ${PYTHON_EXECUTABLE} -c "from gnuradio import gr; exit(hasattr(gr.top_block, 'msg_connect'))"
-        RESULT_VARIABLE HAVE_MSG_PASSING_TEST_OUT
-    )
-endif()
-
-if(ENABLE_EXTRAS)
-    message(STATUS "Message passing present in supertree...")
-    set(HAVE_MSG_PASSING TRUE)
-elseif (HAVE_MSG_PASSING_TEST_OUT EQUAL 1)
-    message(STATUS "Message passing feature detected...")
-    set(HAVE_MSG_PASSING TRUE)
-else()
-    message(STATUS "Message passing feature missing...")
-    set(HAVE_MSG_PASSING FALSE)
-endif()
-
-if(HAVE_MSG_PASSING)
-    add_definitions(-DHAVE_MSG_PASSING)
-endif()
-
 #when not a subproject we must manually set this stuff
 if (NOT ENABLE_EXTRAS AND MSVC)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/cmake/msvc) #missing headers
@@ -179,7 +157,7 @@ include_directories(
 ########################################################################
 find_package(UHD)
 
-if(UHD_FOUND AND HAVE_MSG_PASSING)
+if(UHD_FOUND)
     include_directories(${UHD_INCLUDE_DIRS})
     link_directories(${UHD_LIBRARY_DIRS})
 endif()

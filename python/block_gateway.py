@@ -62,7 +62,7 @@ class gateway_handler(gr.feval_ll):
 ########################################################################
 class gateway_block(object):
 
-    def __init__(self, name, in_sig, out_sig, work_type, factor):
+    def __init__(self, name, in_sig, out_sig, has_msg_input, num_msg_outputs):
 
         #ensure that the sigs are iterable dtypes
         def sig_to_dtype_sig(sig):
@@ -86,7 +86,7 @@ class gateway_block(object):
         self.__handler = gateway_handler()
         self.__handler.init(self.__gr_block_handle)
         self.__gateway = block_gateway(
-            self.__handler, name, gr_in_sig, gr_out_sig, work_type, factor)
+            self.__handler, name, gr_in_sig, gr_out_sig, has_msg_input, num_msg_outputs)
         self.__message = self.__gateway.gr_block_message()
 
         #register gr_block functions
@@ -105,35 +105,19 @@ class gateway_block(object):
         """
         Dispatch tasks according to the action type specified in the message.
         """
-        if self.__message.action == gr_block_gw_message_type.ACTION_GENERAL_WORK:
-            self.__message.general_work_args_return_value = self.general_work(
-
-                input_items=[pointer_to_ndarray(
-                    self.__message.general_work_args_input_items[i],
-                    self.__in_sig[i],
-                    self.__message.general_work_args_ninput_items[i]
-                ) for i in self.__in_indexes],
-
-                output_items=[pointer_to_ndarray(
-                    self.__message.general_work_args_output_items[i],
-                    self.__out_sig[i],
-                    self.__message.general_work_args_noutput_items
-                ) for i in self.__out_indexes],
-            )
-
-        elif self.__message.action == gr_block_gw_message_type.ACTION_WORK:
+        if self.__message.action == gr_block_gw_message_type.ACTION_WORK:
             self.__message.work_args_return_value = self.work(
 
                 input_items=[pointer_to_ndarray(
                     self.__message.work_args_input_items[i],
                     self.__in_sig[i],
-                    self.__message.work_args_ninput_items
+                    self.__message.work_args_ninput_items[i]
                 ) for i in self.__in_indexes],
 
                 output_items=[pointer_to_ndarray(
                     self.__message.work_args_output_items[i],
                     self.__out_sig[i],
-                    self.__message.work_args_noutput_items
+                    self.__message.work_args_noutput_items[i]
                 ) for i in self.__out_indexes],
             )
 
@@ -172,45 +156,65 @@ class gateway_block(object):
 ########################################################################
 # Wrappers for the user to inherit from
 ########################################################################
-class basic_block(gateway_block):
-    def __init__(self, name, in_sig, out_sig):
+class block(gateway_block):
+    def __init__(self, name, in_sig, out_sig, has_msg_input=False, num_msg_outputs=0):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            work_type=extras_swig.GR_BLOCK_GW_WORK_GENERAL,
-            factor=1, #not relevant factor
+            has_msg_input=has_msg_input,
+            num_msg_outputs=num_msg_outputs,
         )
 
-class sync_block(gateway_block):
-    def __init__(self, name, in_sig, out_sig):
+#inject into gr namespace
+gr.block = block
+
+########################################################################
+# DEPRECATED: Wrappers for the user to inherit from
+########################################################################
+class basic_block(gateway_block):
+    def __init__(self, name, in_sig, out_sig, has_msg_input=False, num_msg_outputs=0):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            work_type=extras_swig.GR_BLOCK_GW_WORK_SYNC,
-            factor=1,
+            has_msg_input=has_msg_input,
+            num_msg_outputs=num_msg_outputs,
+        )
+        self.set_auto(False)
+        self.work = self.general_work #makes it backwards compatible since we only call work
+
+class sync_block(gateway_block):
+    def __init__(self, name, in_sig, out_sig, has_msg_input=False, num_msg_outputs=0):
+        gateway_block.__init__(self,
+            name=name,
+            in_sig=in_sig,
+            out_sig=out_sig,
+            has_msg_input=has_msg_input,
+            num_msg_outputs=num_msg_outputs,
         )
 
 class decim_block(gateway_block):
-    def __init__(self, name, in_sig, out_sig, decim):
+    def __init__(self, name, in_sig, out_sig, decim, has_msg_input=False, num_msg_outputs=0):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            work_type=extras_swig.GR_BLOCK_GW_WORK_DECIM,
-            factor=decim,
+            has_msg_input=has_msg_input,
+            num_msg_outputs=num_msg_outputs,
         )
+        self.set_relative_rate(1.0/decim)
 
 class interp_block(gateway_block):
-    def __init__(self, name, in_sig, out_sig, interp):
+    def __init__(self, name, in_sig, out_sig, interp, has_msg_input=False, num_msg_outputs=0):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            work_type=extras_swig.GR_BLOCK_GW_WORK_INTERP,
-            factor=interp,
+            has_msg_input=has_msg_input,
+            num_msg_outputs=num_msg_outputs,
         )
+        self.set_relative_rate(1.0*interp)
 
 #inject into gr namespace
 gr.basic_block = basic_block

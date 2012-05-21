@@ -30,7 +30,6 @@
     </sink>
     <source>
         <name>out</name>
-        <key>blob</key> <!-- key is name of message subscriber group -->
-        <type>msg</type>
+        <type></type>
     </source>
 </block>

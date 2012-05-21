@@ -31,7 +31,7 @@ import block_gateway #needed to inject into gr
 #                   mod/demod with packets as i/o
 # /////////////////////////////////////////////////////////////////////////////
 
-class mod_pkts2(gr.sync_block):
+class mod_pkts2(gr.block):
     """
     Wrap an arbitrary digital modulator in our packet handling framework.
 
@@ -57,11 +57,12 @@ class mod_pkts2(gr.sync_block):
         self._bits_per_symbol = bits_per_symbol
         self._samples_per_symbol = samples_per_symbol
 
-        gr.sync_block.__init__(
+        gr.block.__init__(
             self,
             name = "mod_pkts2",
             in_sig = None,
-            out_sig = [numpy.uint8]
+            out_sig = [numpy.uint8],
+            has_msg_input = True,
         )
 
         self._use_whitener_offset = use_whitener_offset
@@ -121,7 +122,7 @@ class demod_pkts2(gr.hier_block2):
             self,
             "demod_pkts2",
             gr.io_signature(1, 1, 1),
-            gr.io_signature(0, 0, 0),
+            gr.io_signature(1, 1, 1),
         )
 
         if not access_code:
@@ -138,25 +139,26 @@ class demod_pkts2(gr.hier_block2):
         self.framer_sink = gr.framer_sink_1(msgq)
         self.connect(self, self.correlator, self.framer_sink)
         self._queue_to_blob = _queue_to_blob(msgq)
-        self.msg_connect(self._queue_to_blob, "blob", self)
+        self.connect(self._queue_to_blob, self)
 
 
 
 
 
-class _queue_to_blob(gr.sync_block):
+class _queue_to_blob(gr.block):
     """
     Helper for the deframer, reads queue, unpacks packets, posts.
     It would be nicer if the framer_sink output'd messages.
     """
     def __init__(self, msgq):
-        gr.sync_block.__init__(
+        gr.block.__init__(
             self, name = "_queue_to_blob",
             in_sig = None, out_sig = None,
+            num_msg_outputs = 1
         )
         self._msgq = msgq
         self._mgr = pmt.pmt_mgr()
-        for i in range(4):
+        for i in range(16):
             self._mgr.set(pmt.pmt_make_blob(10000))
 
     def work(self, input_items, output_items):
@@ -168,8 +170,8 @@ class _queue_to_blob(gr.sync_block):
                 payload = numpy.fromstring(payload, numpy.uint8)
                 try: blob = self._mgr.acquire(True) #block
                 except: return -1
-                pmt.pmt_blob_set_length(blob, len(payload))
-                pmt.pmt_blob_data(blob)[:] = payload
-                self.post_msg("blob", pmt.pmt_string_to_symbol("ok"), blob)
+                pmt.pmt_blob_resize(blob, len(payload))
+                pmt.pmt_blob_rw_data(blob)[:] = payload
+                self.post_msg(0, pmt.pmt_string_to_symbol("ok"), blob)
             else:
-                self.post_msg("blob", pmt.pmt_string_to_symbol("fail"), pmt.PMT_NIL)
+                self.post_msg(0, pmt.pmt_string_to_symbol("fail"), pmt.PMT_NIL)
