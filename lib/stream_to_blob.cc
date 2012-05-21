@@ -29,7 +29,7 @@
 using namespace gnuradio::extras;
 
 static const pmt::pmt_t BLOB_KEY = pmt::pmt_string_to_symbol("blob_stream");
-static const size_t POOL_SIZE = 4; //num pre-allocated blobs to acquire at once
+static const size_t POOL_SIZE = 16; //num pre-allocated blobs to acquire at once
 
 class stream_to_blob_impl : public stream_to_blob{
 public:
@@ -79,25 +79,25 @@ public:
         const InputItems &input_items,
         const OutputItems &output_items
     ){
-        size_t noutput_items = output_items[0].size();
+        size_t ninput_items = input_items[0].size();
 
-        if (_fixed && noutput_items*_item_size < _mtu){
+        if (_fixed && ninput_items*_item_size < _mtu){
             throw std::runtime_error("stream to blob made false assumption about set_output_multiple");
         }
 
         //cap the output items to the mtu size
-        noutput_items = std::min<size_t>(noutput_items, _mtu/_item_size);
+        ninput_items = std::min<size_t>(ninput_items, _mtu/_item_size);
 
         //acquire blob and memcpy stream memory to the blob memory
         pmt::pmt_t blob = _mgr->acquire(true /*block*/);
-        pmt::pmt_ext_blob_set_length(blob, noutput_items*_item_size);
+        pmt::pmt_ext_blob_set_length(blob, ninput_items*_item_size);
         std::memcpy(pmt::pmt_ext_blob_data(blob), input_items[0].get(), pmt::pmt_ext_blob_length(blob));
 
         //post the message to downstream subscribers
         this->post_msg(0, BLOB_KEY, blob, _id);
 
         //yield the number of consumed items
-        return noutput_items;
+        return ninput_items;
     }
 
 private:

@@ -77,6 +77,7 @@ public:
 
         //push the msg downstream
         gr_tag_t msg = _msg_queue.front();
+        _msg_queue.front() = gr_tag_t(); //resets PMT ref counts
         _msg_queue.pop();
         msg.offset = this->nitems_written(0);
         this->add_item_tag(0, msg);
@@ -129,9 +130,10 @@ public:
         this->consume(0, ninput_items[0]); //consume port 0 input
 
         //push the tags in the queue
-        BOOST_FOREACH(const gr_tag_t &msg, _tags)
+        BOOST_FOREACH(gr_tag_t &msg, _tags)
         {
             this->push_msg_queue(msg);
+            msg = gr_tag_t(); //resets PMT ref in _tags
         }
 
         //return produced
@@ -161,6 +163,7 @@ public:
         }
 
         gr_tag_t msg = _msg_queue.front();
+        _msg_queue.front() = gr_tag_t(); //resets PMT ref counts
         _msg_queue.pop();
         return msg;
     }
