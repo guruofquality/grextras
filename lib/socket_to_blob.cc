@@ -21,7 +21,6 @@
 
 #include <gnuradio/extras/socket_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_extras.h>
 #include <boost/asio.hpp>
 #include <boost/thread/thread.hpp>
 

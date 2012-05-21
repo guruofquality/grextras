@@ -21,7 +21,6 @@
 
 #include <gnuradio/extras/filedes_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_extras.h>
 #include <boost/thread/thread.hpp>
 #include <boost/asio.hpp> //select
 #include <iostream>

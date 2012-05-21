@@ -21,7 +21,6 @@
 
 #include <gnuradio/extras/stream_to_blob.h>
 #include <gr_io_signature.h>
-#include <gruel/pmt_extras.h>
 #include <cstring> //std::memcpy
 #include <stdexcept>
 

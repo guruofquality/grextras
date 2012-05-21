@@ -22,6 +22,7 @@
 #define INCLUDED_GR_EXTRAS_BLOCK_H
 
 #include <gnuradio/extras/api.h>
+#include <gruel/pmt_extras.h>
 #include <gr_hier_block2.h>
 #include <gr_block.h>
 
@@ -95,7 +96,7 @@ public:
     );
 
     //! deconstructor
-    ~block(void);
+    virtual ~block(void);
 
     /*!
      * Set this block work mode (how it produces and consumes, and the ratio).

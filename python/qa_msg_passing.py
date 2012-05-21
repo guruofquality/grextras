@@ -46,6 +46,10 @@ class demo_msg_src(gr.sync_block):
                 pmt.pmt_string_to_symbol("example_key"),
                 pmt.pmt_string_to_symbol(msg),
             )
+        #FIXME, wait for sink thread to get msgs
+        #if we return -1 too quickly, everything kind of shuts down b4 the messages get there...
+        import time
+        time.sleep(.1)
         return -1
 
 class demo_msg_sink(gr.sync_block):
