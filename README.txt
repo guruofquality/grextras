@@ -3,6 +3,14 @@ GR Extras - Misc GNU Radio Blocks
 ########################################################################
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Extremely useful documentation:
+https://github.com/guruofquality/grextras/wiki/Blocks-Coding-Guide
+
+See the various blocks and QA code in this source tree as examples.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Build dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 * MSVC or GCC
