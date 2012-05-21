@@ -34,34 +34,17 @@ public:
         const std::string &name,
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
-        const gr_block_gw_work_type work_type,
-        const unsigned factor,
         const gnuradio::extras::msg_signature &msg_sig
     ):
         block(name, in_sig, out_sig, msg_sig),
-        _handler(handler),
-        _work_type(work_type)
+        _handler(handler)
     {
-        switch(_work_type){
-        case GR_BLOCK_GW_WORK_GENERAL:
-            this->set_sync(false);
-            break;
+        this->set_work_mode();
+    }
 
-        case GR_BLOCK_GW_WORK_SYNC:
-            this->set_sync(true);
-            break;
-
-        case GR_BLOCK_GW_WORK_DECIM:
-            this->set_sync(true);
-            this->set_decim(factor);
-            break;
-
-        case GR_BLOCK_GW_WORK_INTERP:
-            this->set_sync(true);
-            this->set_interp(factor);
-            this->set_output_multiple(factor);
-            break;
-        }
+    void set_automatic(const bool automatic)
+    {
+        _automatic = automatic;
     }
 
     /*******************************************************************
@@ -71,16 +54,17 @@ public:
         int noutput_items,
         gr_vector_int &ninput_items_required
     ){
-        switch(_work_type){
-        case GR_BLOCK_GW_WORK_GENERAL:
+        if (not _automatic)
+        {
             _message.action = gr_block_gw_message_type::ACTION_FORECAST;
             _message.forecast_args_noutput_items = noutput_items;
             _message.forecast_args_ninput_items_required = ninput_items_required;
             _handler->calleval(0);
             ninput_items_required = _message.forecast_args_ninput_items_required;
-            return;
+        }
 
-        default:
+        else
+        {
             return gnuradio::extras::block::forecast(noutput_items, ninput_items_required);
         }
     }
@@ -89,14 +73,8 @@ public:
         const InputItems &input_items,
         const OutputItems &output_items
     ){
-        switch(_work_type){
-        case GR_BLOCK_GW_WORK_GENERAL:
-            _message.action = gr_block_gw_message_type::ACTION_GENERAL_WORK;
-            break;
-        default:
-            _message.action = gr_block_gw_message_type::ACTION_WORK;
-            break;
-        }
+
+        _message.action = gr_block_gw_message_type::ACTION_WORK;
 
         //FIXME do we need logic to do this?
         //if (!input_items.empty() && input_items[0].size() == 0) return -1;
@@ -145,7 +123,7 @@ public:
 private:
     gr_feval_ll *_handler;
     gr_block_gw_message_type _message;
-    const gr_block_gw_work_type _work_type;
+    bool _automatic;
 };
 
 block_gateway::sptr block_gateway::make(
@@ -153,12 +131,10 @@ block_gateway::sptr block_gateway::make(
     const std::string &name,
     gr_io_signature_sptr in_sig,
     gr_io_signature_sptr out_sig,
-    const gr_block_gw_work_type work_type,
-    const unsigned factor,
     const bool has_msg_input,
     const size_t num_msg_outputs
 ){
     return gnuradio::get_initial_sptr(
-        new block_gateway_impl(handler, name, in_sig, out_sig, work_type, factor, gnuradio::extras::msg_signature(has_msg_input, num_msg_outputs))
+        new block_gateway_impl(handler, name, in_sig, out_sig, gnuradio::extras::msg_signature(has_msg_input, num_msg_outputs))
     );
 }

@@ -45,7 +45,7 @@ public:
             msg_signature(false, 1)
         )
     {
-        this->set_sync(true);
+        this->set_work_mode(true);
 
         _dev = uhd::usrp::multi_usrp::make(device_addr);
         std::stringstream str;

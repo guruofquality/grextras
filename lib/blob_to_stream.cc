@@ -37,7 +37,7 @@ public:
         ),
         _item_size(item_size)
     {
-        this->set_sync(true);
+        this->set_work_mode(true);
         _offset = 0;
     }
 

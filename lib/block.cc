@@ -203,7 +203,7 @@ public:
         int noutput_items,
         gr_vector_int &ninput_items_required
     ){
-        if (!_sync)
+        if (!_automatic)
         {
             return _parent->forecast(noutput_items, ninput_items_required);
         }
@@ -240,9 +240,9 @@ public:
         const int r = _parent->work(_input_items, _output_items);
 
         //consume when in sync
-        if (_sync && r > 0)
+        if (_automatic && r > 0)
         {
-            consume_each(r*_decim/_interp);
+            consume_each(int(r/this->relative_rate()));
         }
 
         //stop the sourcers when done
@@ -258,11 +258,11 @@ public:
     }
 
     int fixed_rate_noutput_to_ninput(int noutput_items){
-        return (noutput_items*_decim/_interp) + history() - 1;
+        return int((noutput_items/this->relative_rate()) + history() - 1);
     }
 
     int fixed_rate_ninput_to_noutput(int ninput_items){
-        return std::max(0, ninput_items - (int)history() + 1)*_interp/_decim;
+        return int(std::max(0, ninput_items - (int)history() + 1)*this->relative_rate());
     }
 
     bool start(void){
@@ -273,10 +273,10 @@ public:
         return _parent->stop();
     }
 
-    void set_sync(const bool sync)
+    void set_auto(const bool automatic)
     {
-        _sync = sync;
-        this->set_fixed_rate(sync);
+        _automatic = automatic;
+        this->set_fixed_rate(automatic);
     }
 
     void public_add_item_tag(
@@ -314,13 +314,10 @@ public:
         return this->get_tags_in_range(tags, which_input, abs_start, abs_end, key);
     }
 
-public: //public so block can set
-    size_t _interp, _decim;
-
 private:
     block *_parent;
     std::vector<boost::shared_ptr<msg_sourcer> > *_sourcers;
-    bool _sync;
+    bool _automatic;
     block::InputItems _input_items;
     block::OutputItems _output_items;
 };
@@ -380,9 +377,7 @@ block::block(
         _impl->master = boost::make_shared<master_block>(name, in_sig, out_sig, this, &_impl->sourcers);
     }
 
-    this->set_interp(1);
-    this->set_decim(1);
-    this->set_sync(false);
+    this->set_work_mode();
 
     //connect internal sink ports
     for (size_t i = 0; i < in_sig->max_streams(); i++)
@@ -417,20 +412,14 @@ block::~block(void)
     _impl.reset();
 }
 
-void block::set_decim(const size_t decim)
+void block::set_work_mode(const bool automatic, const double relative_rate)
 {
-    _impl->master->_decim = decim;
-}
-
-void block::set_interp(const size_t interp)
-{
-    this->set_output_multiple(interp);
-    _impl->master->_interp = interp;
-}
-
-void block::set_sync(const bool sync)
-{
-    _impl->master->set_sync(sync);
+    _impl->master->set_auto(automatic);
+    this->set_relative_rate(relative_rate);
+    if (int(relative_rate) > 1)
+    {
+        this->set_output_multiple(int(relative_rate));
+    }
 }
 
 /*******************************************************************

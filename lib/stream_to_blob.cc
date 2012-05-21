@@ -48,7 +48,7 @@ public:
         _mtu(mtu),
         _fixed(fixed)
     {
-        this->set_sync(true);
+        this->set_work_mode(true);
 
         if (mtu%item_size != 0) throw std::invalid_argument(
             "stream_to_blob MTU is not a multiple of item size"

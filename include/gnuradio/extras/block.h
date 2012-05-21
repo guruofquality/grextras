@@ -97,18 +97,15 @@ public:
     //! deconstructor
     ~block(void);
 
-    //! set the decimation rate for decimating sync blocks
-    void set_decim(const size_t decim);
-
-    //! set the interpolation rate for interpolating sync blocks
-    void set_interp(const size_t interp);
-
     /*!
-     * Set sync mode to true when this is a sync block.
-     * When in sync mode, forecast, produce and consume will be automatic
-     * \param sync set to true for sync mode
+     * Set this block work mode (how it produces and consumes, and the ratio).
+     * When automatic, consume is automatically called, and forecast handled.
+     * The relative rate can be thought of as interpolation/decimation.
+     * In other words, relative rate is the ratio of output items to input items.
+     * \param automatic true to call consume and forecast automatically
+     * \param relative_rate the ratio of output items to input items
      */
-    void set_sync(const bool sync);
+    void set_work_mode(const bool automatic = true, const double relative_rate = 1.0);
 
     /*******************************************************************
      * Basic routines from basic block

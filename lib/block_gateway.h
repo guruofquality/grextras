@@ -28,23 +28,11 @@
 #include <gr_feval.h>
 
 /*!
- * The work type enum tells the gateway what kind of block to implement.
- * The choices are familiar gnuradio block overloads (sync, decim, interp).
- */
-enum gr_block_gw_work_type{
-    GR_BLOCK_GW_WORK_GENERAL,
-    GR_BLOCK_GW_WORK_SYNC,
-    GR_BLOCK_GW_WORK_DECIM,
-    GR_BLOCK_GW_WORK_INTERP,
-};
-
-/*!
  * Shared message structure between python and gateway.
  * Each action type represents a scheduler-called function.
  */
 struct gr_block_gw_message_type{
     enum action_type{
-        ACTION_GENERAL_WORK, //dispatch work
         ACTION_WORK, //dispatch work
         ACTION_FORECAST, //dispatch forecast
         ACTION_START, //dispatch start
@@ -84,8 +72,6 @@ public:
      * \param name the name of the block (Ex: "Shirley")
      * \param in_sig the input signature for this block
      * \param out_sig the output signature for this block
-     * \param work_type the type of block overload to implement
-     * \param factor the decimation or interpolation factor
      * \return a new gateway block
      */
     static sptr make(
@@ -93,14 +79,21 @@ public:
         const std::string &name,
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
-        const gr_block_gw_work_type work_type,
-        const unsigned factor,
         const bool has_msg_input,
         const size_t num_msg_outputs
     );
 
     //! Provide access to the shared message object
     virtual gr_block_gw_message_type &gr_block_message(void) = 0;
+
+    //! So the implementation knows to pass up forecast or call base
+    virtual void set_automatic(const bool automatic) = 0;
+
+    void gr_block__set_work_mode(const bool automatic = true, const double relative_rate = 1.0)
+    {
+        this->set_automatic(automatic);
+        return gnuradio::extras::block::set_work_mode(automatic, relative_rate);
+    }
 
     long gr_block__unique_id(void) const{
         return gnuradio::extras::block::unique_id();

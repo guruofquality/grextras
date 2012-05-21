@@ -41,7 +41,7 @@ public:
             msg_signature(true, 0)
         )
     {
-        this->set_sync(true);
+        this->set_work_mode(true);
 
         asio::ip::udp::resolver resolver(_io_service);
         asio::ip::udp::resolver::query query(asio::ip::udp::v4(), addr, port);
@@ -90,7 +90,7 @@ public:
         ),
         _connected(false)
     {
-        this->set_sync(true);
+        this->set_work_mode(true);
 
         asio::ip::tcp::resolver resolver(_io_service);
         asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), addr, port);

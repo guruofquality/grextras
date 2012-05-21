@@ -43,7 +43,7 @@ public:
         _fd(fd),
         _close(close)
     {
-        this->set_sync(true);
+        this->set_work_mode(true);
     }
 
     ~blob_to_filedes_impl(void){
