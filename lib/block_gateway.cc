@@ -54,7 +54,7 @@ public:
         int noutput_items,
         gr_vector_int &ninput_items_required
     ){
-        if (not _automatic)
+        if (!_automatic)
         {
             _message.action = gr_block_gw_message_type::ACTION_FORECAST;
             _message.forecast_args_noutput_items = noutput_items;

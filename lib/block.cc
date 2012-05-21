@@ -26,6 +26,8 @@
 #include <gnuradio/extras/block.h>
 #include <boost/foreach.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/condition_variable.hpp>
 #include <boost/make_shared.hpp>
 #include <queue>
 #include <iostream>
@@ -380,13 +382,13 @@ block::block(
     this->set_auto(true);
 
     //connect internal sink ports
-    for (size_t i = 0; i < in_sig->max_streams(); i++)
+    for (size_t i = 0; i < size_t(in_sig->max_streams()); i++)
     {
         this->connect(this->self(), i, _impl->master, i);
     }
 
     //connect internal source ports
-    for (size_t i = 0; i < out_sig->max_streams(); i++)
+    for (size_t i = 0; i < size_t(out_sig->max_streams()); i++)
     {
         this->connect(_impl->master, i, this->self(), i);
     }
