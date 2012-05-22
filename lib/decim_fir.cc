@@ -26,91 +26,89 @@
 #include <stdexcept>
 #include <volk/volk.h>
 #include <iostream>
-#include <boost/bind.hpp>
 
 using namespace gnuradio::extras;
-
-typedef boost::function<int(int, gr_vector_const_void_star, gr_vector_void_star, const void *, const size_t, const size_t)> volk_work_type;
 
 /***********************************************************************
  * FIR filter FC32 implementation
  **********************************************************************/
-static int decim_fir_fc32_work(
-    int noutput_items,
-    gr_vector_const_void_star &input_items,
-    gr_vector_void_star &output_items,
-    const void *taps_ptr,
-    const size_t num_taps,
-    const size_t decim
-){
-    typedef std::complex<float> type;
-    type *out = reinterpret_cast<type *>(output_items[0]);
-    const type *in = reinterpret_cast<const type *>(input_items[0]);
-    const type *taps = reinterpret_cast<const type *>(taps_ptr);
+struct decim_fir_fc32_work{
+    int operator()(
+        const block::InputItems &input_items,
+        const block::OutputItems &output_items,
+        const void *taps_ptr,
+        const size_t num_taps,
+        const size_t decim
+    ){
+        typedef std::complex<float> type;
+        type *out = output_items[0].cast<type *>();
+        const type *in = input_items[0].cast<const type *>();
+        const type *taps = reinterpret_cast<const type *>(taps_ptr);
 
-    for (size_t i = 0; i < size_t(noutput_items); i++){
-        volk_32fc_x2_dot_prod_32fc_u(out+i, in, taps, num_taps);
-        in += decim;
+        for (size_t i = 0; i < output_items[0].size(); i++){
+            volk_32fc_x2_dot_prod_32fc_u(out+i, in, taps, num_taps);
+            in += decim;
+        }
+
+        return output_items[0].size();
     }
-
-    return noutput_items;
-}
+};
 
 /***********************************************************************
  * FIR filter F32 implementation
  **********************************************************************/
-static int decim_fir_f32_work(
-    int noutput_items,
-    gr_vector_const_void_star &input_items,
-    gr_vector_void_star &output_items,
-    const void *taps_ptr,
-    const size_t num_taps,
-    const size_t decim
-){
-    typedef float type;
-    type *out = reinterpret_cast<type *>(output_items[0]);
-    const type *in = reinterpret_cast<const type *>(input_items[0]);
-    const type *taps = reinterpret_cast<const type *>(taps_ptr);
+struct decim_fir_f32_work{
+    int operator()(
+        const block::InputItems &input_items,
+        const block::OutputItems &output_items,
+        const void *taps_ptr,
+        const size_t num_taps,
+        const size_t decim
+    ){
+        typedef float type;
+        type *out = output_items[0].cast<type *>();
+        const type *in = input_items[0].cast<const type *>();
+        const type *taps = reinterpret_cast<const type *>(taps_ptr);
 
-    for (size_t i = 0; i < size_t(noutput_items); i++){
-        volk_32f_x2_dot_prod_32f_u(out+i, in, taps, num_taps);
-        in += decim;
+        for (size_t i = 0; i < output_items[0].size(); i++){
+            volk_32f_x2_dot_prod_32f_u(out+i, in, taps, num_taps);
+            in += decim;
+        }
+
+        return output_items[0].size();
     }
-
-    return noutput_items;
-}
+};
 
 /***********************************************************************
  * FIR filter generic implementation
  **********************************************************************/
-template <typename intype, typename tapstype, typename outtype>
+template <typename intype, typename tapstype, typename outtype, typename WorkType>
 class generic_decim_fir : public decim_fir{
 public:
 
-    generic_decim_fir(const size_t decim, const volk_work_type volk_work):
-        gr_sync_decimator(
+    generic_decim_fir(const size_t decim, WorkType volk_work):
+        block(
             "FIR filter",
             gr_make_io_signature (1, 1, sizeof(intype)),
-            gr_make_io_signature (1, 1, sizeof(outtype)),
-            decim
+            gr_make_io_signature (1, 1, sizeof(outtype))
         ),
         _volk_work(volk_work)
     {
-        //NOP
+        this->set_relative_rate(1.0/decim);
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
         gruel::scoped_lock lock(_taps_mutex);
         _volk_work(
-            noutput_items, input_items, output_items,
-            &_converted_taps.front(), this->history(),
-            this->decimation()
+            input_items, output_items,
+            &_converted_taps.front(),
+            this->history(),
+            size_t(1.0/this->relative_rate())
         );
-        return noutput_items;
+        return output_items[0].size();
     }
 
     void set_taps(const taps_type &taps){
@@ -136,7 +134,7 @@ private:
     gruel::mutex _taps_mutex;
     std::vector<tapstype> _converted_taps;
     taps_type _original_taps;
-    const volk_work_type _volk_work;
+    WorkType _volk_work;
 };
 
 /***********************************************************************
@@ -145,8 +143,9 @@ private:
 decim_fir::sptr decim_fir::make_fc32_fc32_fc32(
     const taps_type &taps, const size_t decim
 ){
-    decim_fir::sptr b(new generic_decim_fir<std::complex<float>, std::complex<float>, std::complex<float> >(
-        decim, boost::bind(&decim_fir_fc32_work, _1, _2, _3, _4, _5, _6)));
+    decim_fir::sptr b = gnuradio::get_initial_sptr(new generic_decim_fir
+        <std::complex<float>, std::complex<float>, std::complex<float>, decim_fir_fc32_work >(
+        decim, decim_fir_fc32_work()));
     b->set_taps(taps);
     return b;
 }
@@ -154,8 +153,9 @@ decim_fir::sptr decim_fir::make_fc32_fc32_fc32(
 decim_fir::sptr decim_fir::make_f32_f32_f32(
     const taps_type &taps, const size_t decim
 ){
-    decim_fir::sptr b(new generic_decim_fir<float, float, float>(
-        decim, boost::bind(&decim_fir_f32_work, _1, _2, _3, _4, _5, _6)));
+    decim_fir::sptr b = gnuradio::get_initial_sptr(new generic_decim_fir
+        <float, float, float, decim_fir_f32_work>(
+        decim, decim_fir_f32_work()));
     b->set_taps(taps);
     return b;
 }

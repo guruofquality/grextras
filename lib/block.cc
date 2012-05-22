@@ -574,7 +574,11 @@ bool block::stop(void)
     return true;
 }
 
-void block::forecast(int, gr_vector_int &)
+void block::forecast(int noutput_items, gr_vector_int &ninput_items_required)
 {
-    return;
+    //simple 1:1 ratio forecast for default
+    for (unsigned i = 0; i < ninput_items_required.size(); i++)
+    {
+        ninput_items_required[i] = noutput_items;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -23,7 +23,7 @@
 #define INCLUDED_GR_EXTRAS_NOISE_SOURCE_H
 
 #include <gnuradio/extras/api.h>
-#include <gr_sync_block.h>
+#include <gnuradio/extras/block.h>
 #include <complex>
 
 namespace gnuradio{ namespace extras{
@@ -32,18 +32,18 @@ namespace gnuradio{ namespace extras{
  * \brief random number source
  * \ingroup source_blk
  */
-class GR_EXTRAS_API noise_source : virtual public gr_sync_block{
+class GR_EXTRAS_API noise_source : virtual public block{
 public:
     typedef boost::shared_ptr<noise_source> sptr;
 
-    static sptr make_fc32(const long seed = 42);
-    static sptr make_sc32(const long seed = 42);
-    static sptr make_sc16(const long seed = 42);
-    static sptr make_sc8(const long seed = 42);
-    static sptr make_f32(const long seed = 42);
-    static sptr make_s32(const long seed = 42);
-    static sptr make_s16(const long seed = 42);
-    static sptr make_s8(const long seed = 42);
+    static sptr make_fc32(const long seed = -42);
+    static sptr make_sc32(const long seed = -42);
+    static sptr make_sc16(const long seed = -42);
+    static sptr make_sc8(const long seed = -42);
+    static sptr make_f32(const long seed = -42);
+    static sptr make_s32(const long seed = -42);
+    static sptr make_s16(const long seed = -42);
+    static sptr make_s8(const long seed = -42);
 
     //! Set the waveform type (UNIFORM, GAUSSIAN, LAPLACIAN, IMPULSE)
     virtual void set_waveform(const std::string &) = 0;

@@ -32,13 +32,14 @@ using namespace gnuradio::extras;
 class delay_impl : public delay{
 public:
     delay_impl(const size_t itemsize):
-        gr_block(
+        block(
             "extras delay block",
             gr_make_io_signature (1, 1, itemsize),
             gr_make_io_signature (1, 1, itemsize)
         ),
         _itemsize(itemsize)
     {
+        this->set_auto(false);
         this->set_delay(0);
     }
 
@@ -47,31 +48,41 @@ public:
         _delay_items = -nitems;
     }
 
-    int general_work(
+    void forecast(
         int noutput_items,
-        gr_vector_int &ninput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        gr_vector_int &ninput_items_required
+    ){
+        //simple 1:1 ratio forecast
+        for (unsigned i = 0; i < ninput_items_required.size(); i++)
+        {
+            ninput_items_required[i] = noutput_items;
+        }
+    }
+
+    int work(
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
         gruel::scoped_lock l(_delay_mutex);
+        size_t noutput_items = output_items[0].size();
         const int delta = int64_t(nitems_read(0)) - int64_t(nitems_written(0)) - _delay_items;
 
         //consume but not produce (drops samples)
         if (delta < 0){
-            consume_each(std::min(ninput_items[0], -delta));
+            this->consume_each(std::min(input_items[0].size(), size_t(-delta)));
             return 0;
         }
 
         //produce but not consume (inserts zeros)
         if (delta > 0){
-            noutput_items = std::min(noutput_items, delta);
-            std::memset(output_items[0], 0, noutput_items*_itemsize);
+            noutput_items = std::min(noutput_items, size_t(delta));
+            std::memset(output_items[0].get(), 0, output_items[0].size()*_itemsize);
             return noutput_items;
         }
 
         //otherwise just memcpy
-        noutput_items = std::min(noutput_items, ninput_items[0]);
-        std::memcpy(output_items[0], input_items[0], noutput_items*_itemsize);
+        noutput_items = std::min(noutput_items, input_items[0].size());
+        std::memcpy(output_items[0].get(), input_items[0].get(), noutput_items*_itemsize);
         consume_each(noutput_items);
         return noutput_items;
     }
@@ -86,5 +97,5 @@ private:
  * Delay factory function
  **********************************************************************/
 delay::sptr delay::make(const size_t itemsize){
-    return sptr(new delay_impl(itemsize));
+    return gnuradio::get_initial_sptr(new delay_impl(itemsize));
 }

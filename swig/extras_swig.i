@@ -43,7 +43,6 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 %ignore gr_block;
 %ignore gr_sync_block;
 %ignore gr_hier_block2;
-%ignore gr_sync_decimator;
 
 %include <extras_swig_doc.i>
 
@@ -53,6 +52,10 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 %include <gnuradio.i>
 
 %include <gnuradio/extras/block.h>
+
+namespace std {
+    %template() vector< std::complex<double> >;
+}
 
 ////////////////////////////////////////////////////////////////////////
 // block includes

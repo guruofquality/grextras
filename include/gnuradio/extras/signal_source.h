@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -23,7 +23,7 @@
 #define INCLUDED_GR_EXTRAS_SIGNAL_SOURCE_H
 
 #include <gnuradio/extras/api.h>
-#include <gr_sync_block.h>
+#include <gnuradio/extras/block.h>
 #include <complex>
 
 namespace gnuradio{ namespace extras{
@@ -32,7 +32,7 @@ namespace gnuradio{ namespace extras{
  * \brief signal generator source
  * \ingroup source_blk
  */
-class GR_EXTRAS_API signal_source : virtual public gr_sync_block{
+class GR_EXTRAS_API signal_source : virtual public block{
 public:
     typedef boost::shared_ptr<signal_source> sptr;
 

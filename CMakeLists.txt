@@ -22,7 +22,7 @@
 # Project setup
 ########################################################################
 cmake_minimum_required(VERSION 2.6)
-project(gr-extras CXX C)
+project(grextras CXX C)
 enable_testing()
 
 if (NOT ENABLE_EXTRAS)

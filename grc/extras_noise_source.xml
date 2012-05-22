@@ -44,7 +44,7 @@ self.$(id).set_factor($factor)</make>
     <param>
         <name>Seed</name>
         <key>seed</key>
-        <value>42</value>
+        <value>-42</value>
         <type>int</type>
     </param>
     <param>

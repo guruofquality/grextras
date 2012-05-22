@@ -23,16 +23,16 @@
 #define INCLUDED_GR_EXTRAS_DECIM_FIR_H
 
 #include <gnuradio/extras/api.h>
-#include <gr_sync_decimator.h>
+#include <gnuradio/extras/block.h>
 #include <vector>
 #include <complex>
 
 namespace gnuradio{ namespace extras{
 
-class GR_EXTRAS_API decim_fir : virtual public gr_sync_decimator{
+class GR_EXTRAS_API decim_fir : virtual public block{
 public:
     typedef boost::shared_ptr<decim_fir> sptr;
-    typedef std::vector<std::complex<double> > taps_type;
+    typedef std::vector<std::complex<float> > taps_type;
 
     //! Make a new FIR filter complex float input, taps, output type
     static sptr make_fc32_fc32_fc32(

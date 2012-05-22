@@ -38,7 +38,7 @@ template <typename type>
 class noise_source_impl : public noise_source{
 public:
     noise_source_impl(const long seed):
-        gr_sync_block(
+        block(
             "noise source",
             gr_make_io_signature (0, 0, 0),
             gr_make_io_signature (1, 1, sizeof(type))
@@ -53,18 +53,17 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
         _index += size_t(_random.ran1()*wave_table_size); //lookup into table is random each work()
 
-        type *out = reinterpret_cast<type *>(output_items[0]);
-        for (size_t i = 0; i < size_t(noutput_items); i++){
+        type *out = output_items[0].cast<type *>();
+        for (size_t i = 0; i < output_items[0].size(); i++){
             out[i] = _table[_index % wave_table_size];
             _index++;
         }
-        return noutput_items;
+        return output_items[0].size();
     }
 
     void set_waveform(const std::string &wave){
@@ -145,33 +144,33 @@ private:
  * factory function
  **********************************************************************/
 noise_source::sptr noise_source::make_fc32(const long seed){
-    return sptr(new noise_source_impl<std::complex<float> >(seed));
+    return gnuradio::get_initial_sptr(new noise_source_impl<std::complex<float> >(seed));
 }
 
 noise_source::sptr noise_source::make_sc32(const long seed){
-    return sptr(new noise_source_impl<std::complex<int32_t> >(seed));
+    return gnuradio::get_initial_sptr(new noise_source_impl<std::complex<int32_t> >(seed));
 }
 
 noise_source::sptr noise_source::make_sc16(const long seed){
-    return sptr(new noise_source_impl<std::complex<int16_t> >(seed));
+    return gnuradio::get_initial_sptr(new noise_source_impl<std::complex<int16_t> >(seed));
 }
 
 noise_source::sptr noise_source::make_sc8(const long seed){
-    return sptr(new noise_source_impl<std::complex<int8_t> >(seed));
+    return gnuradio::get_initial_sptr(new noise_source_impl<std::complex<int8_t> >(seed));
 }
 
 noise_source::sptr noise_source::make_f32(const long seed){
-    return sptr(new noise_source_impl<float>(seed));
+    return gnuradio::get_initial_sptr(new noise_source_impl<float>(seed));
 }
 
 noise_source::sptr noise_source::make_s32(const long seed){
-    return sptr(new noise_source_impl<int32_t>(seed));
+    return gnuradio::get_initial_sptr(new noise_source_impl<int32_t>(seed));
 }
 
 noise_source::sptr noise_source::make_s16(const long seed){
-    return sptr(new noise_source_impl<int16_t>(seed));
+    return gnuradio::get_initial_sptr(new noise_source_impl<int16_t>(seed));
 }
 
 noise_source::sptr noise_source::make_s8(const long seed){
-    return sptr(new noise_source_impl<int8_t>(seed));
+    return gnuradio::get_initial_sptr(new noise_source_impl<int8_t>(seed));
 }

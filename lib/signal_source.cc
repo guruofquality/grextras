@@ -41,7 +41,7 @@ template <typename type>
 class signal_source_impl : public signal_source{
 public:
     signal_source_impl(void):
-        gr_sync_block(
+        block(
             "signal source",
             gr_make_io_signature (0, 0, 0),
             gr_make_io_signature (1, 1, sizeof(type))
@@ -55,16 +55,15 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
-        type *out = reinterpret_cast<type *>(output_items[0]);
-        for (size_t i = 0; i < size_t(noutput_items); i++){
+        type *out = output_items[0].cast<type *>();
+        for (size_t i = 0; i < output_items[0].size(); i++){
             out[i] = _table[_index % wave_table_size];
             _index += _step;
         }
-        return noutput_items;
+        return output_items[0].size();
     }
 
     void set_waveform(const std::string &wave){
@@ -150,33 +149,33 @@ private:
  * factory function
  **********************************************************************/
 signal_source::sptr signal_source::make_fc32(void){
-    return sptr(new signal_source_impl<std::complex<float> >());
+    return gnuradio::get_initial_sptr(new signal_source_impl<std::complex<float> >());
 }
 
 signal_source::sptr signal_source::make_sc32(void){
-    return sptr(new signal_source_impl<std::complex<int32_t> >());
+    return gnuradio::get_initial_sptr(new signal_source_impl<std::complex<int32_t> >());
 }
 
 signal_source::sptr signal_source::make_sc16(void){
-    return sptr(new signal_source_impl<std::complex<int16_t> >());
+    return gnuradio::get_initial_sptr(new signal_source_impl<std::complex<int16_t> >());
 }
 
 signal_source::sptr signal_source::make_sc8(void){
-    return sptr(new signal_source_impl<std::complex<int8_t> >());
+    return gnuradio::get_initial_sptr(new signal_source_impl<std::complex<int8_t> >());
 }
 
 signal_source::sptr signal_source::make_f32(void){
-    return sptr(new signal_source_impl<float>());
+    return gnuradio::get_initial_sptr(new signal_source_impl<float>());
 }
 
 signal_source::sptr signal_source::make_s32(void){
-    return sptr(new signal_source_impl<int32_t>());
+    return gnuradio::get_initial_sptr(new signal_source_impl<int32_t>());
 }
 
 signal_source::sptr signal_source::make_s16(void){
-    return sptr(new signal_source_impl<int16_t>());
+    return gnuradio::get_initial_sptr(new signal_source_impl<int16_t>());
 }
 
 signal_source::sptr signal_source::make_s8(void){
-    return sptr(new signal_source_impl<int8_t>());
+    return gnuradio::get_initial_sptr(new signal_source_impl<int8_t>());
 }

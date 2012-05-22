@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -22,14 +22,14 @@
 #define INCLUDED_GR_EXTRAS_DELAY_H
 
 #include <gnuradio/extras/api.h>
-#include <gr_block.h>
+#include <gnuradio/extras/block.h>
 
 namespace gnuradio{ namespace extras{
 
 /*!
  * This block delays a stream by a selectable number of items.
  */
-class GR_EXTRAS_API delay : virtual public gr_block{
+class GR_EXTRAS_API delay : virtual public block{
 public:
     typedef boost::shared_ptr<delay> sptr;
 
