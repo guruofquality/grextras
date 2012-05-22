@@ -34,6 +34,11 @@
 
 using namespace gnuradio::extras;
 
+static int mylround(double x)
+{
+    return int(x + 0.5);
+}
+
 /***********************************************************************
  * The message sourcer object
  **********************************************************************/
@@ -212,8 +217,7 @@ public:
 
         else
         {
-            unsigned ninputs = ninput_items_required.size();
-            for (unsigned i = 0; i < ninputs; i++)
+            for (size_t i = 0; i < ninput_items_required.size(); i++)
             {
                 ninput_items_required[i] = fixed_rate_noutput_to_ninput(noutput_items);
             }
@@ -244,7 +248,7 @@ public:
         //consume when in sync
         if (_automatic && r > 0)
         {
-            consume_each(int(r/this->relative_rate()));
+            consume_each(mylround(r/this->relative_rate()));
         }
 
         //stop the sourcers when done
@@ -260,11 +264,11 @@ public:
     }
 
     int fixed_rate_noutput_to_ninput(int noutput_items){
-        return int((noutput_items/this->relative_rate()) + history() - 1);
+        return mylround((noutput_items/this->relative_rate()) + history() - 1);
     }
 
     int fixed_rate_ninput_to_noutput(int ninput_items){
-        return int(std::max(0, ninput_items - (int)history() + 1)*this->relative_rate());
+        return mylround(std::max(0, ninput_items - (int)history() + 1)*this->relative_rate());
     }
 
     bool start(void){
@@ -380,6 +384,7 @@ block::block(
     }
 
     this->set_auto(true);
+    this->set_relative_rate(1.0);
 
     //connect internal sink ports
     for (size_t i = 0; i < size_t(in_sig->max_streams()); i++)
@@ -579,6 +584,6 @@ void block::forecast(int noutput_items, gr_vector_int &ninput_items_required)
     //simple 1:1 ratio forecast for default
     for (unsigned i = 0; i < ninput_items_required.size(); i++)
     {
-        ninput_items_required[i] = noutput_items;
+        ninput_items_required[i] = noutput_items + this->history() - 1;
     }
 }
