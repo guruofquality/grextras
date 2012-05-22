@@ -27,7 +27,7 @@
 using namespace gnuradio::extras;
 
 static const pmt::pmt_t BLOB_KEY = pmt::pmt_string_to_symbol("blob_stream");
-static const size_t POOL_SIZE = 16; //num pre-allocated blobs to acquire at once
+static const size_t POOL_SIZE = 64; //num pre-allocated blobs to acquire at once
 
 class stream_to_blob_impl : public stream_to_blob{
 public:

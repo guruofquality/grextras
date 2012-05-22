@@ -158,7 +158,7 @@ class _queue_to_blob(gr.block):
         )
         self._msgq = msgq
         self._mgr = pmt.pmt_mgr()
-        for i in range(16):
+        for i in range(64):
             self._mgr.set(pmt.pmt_make_blob(10000))
 
     def work(self, input_items, output_items):

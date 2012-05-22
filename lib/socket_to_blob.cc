@@ -30,7 +30,7 @@ using namespace gnuradio::extras;
 
 static const long timeout_us = 100*1000; //100ms
 static const pmt::pmt_t BLOB_KEY = pmt::pmt_string_to_symbol("blob_stream");
-static const size_t POOL_SIZE = 16; //num pre-allocated blobs to acquire at once
+static const size_t POOL_SIZE = 64; //num pre-allocated blobs to acquire at once
 
 static bool wait_for_recv_ready(int sock_fd){
     //setup timeval for timeout
