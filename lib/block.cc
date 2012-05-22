@@ -90,7 +90,8 @@ public:
         this->add_item_tag(0, msg);
 
         //return produced
-        return 1;
+        //produce entire buffer so work has to get called again
+        return noutput_items;
     }
 
     void post_msg(const gr_tag_t &msg)
