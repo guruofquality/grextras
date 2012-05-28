@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -18,26 +18,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
+
 #ifndef INCLUDED_GR_EXTRAS_DIVIDE_H
 #define INCLUDED_GR_EXTRAS_DIVIDE_H
 
 #include <gnuradio/extras/api.h>
-#include <gr_sync_block.h>
+#include <gnuradio/block.h>
 
 namespace gnuradio{ namespace extras{
 
-class GR_EXTRAS_API divide : virtual public gr_sync_block{
+class GR_EXTRAS_API divide : virtual public block{
 public:
     typedef boost::shared_ptr<divide> sptr;
 
-    static sptr make_fc32_fc32(const size_t vlen = 1);
-    static sptr make_sc32_sc32(const size_t vlen = 1);
-    static sptr make_sc16_sc16(const size_t vlen = 1);
-    static sptr make_sc8_sc8(const size_t vlen = 1);
-    static sptr make_f32_f32(const size_t vlen = 1);
-    static sptr make_s32_s32(const size_t vlen = 1);
-    static sptr make_s16_s16(const size_t vlen = 1);
-    static sptr make_s8_s8(const size_t vlen = 1);
+    static sptr make_fc32_fc32(const size_t num_inputs, const size_t vlen = 1);
+    static sptr make_sc32_sc32(const size_t num_inputs, const size_t vlen = 1);
+    static sptr make_sc16_sc16(const size_t num_inputs, const size_t vlen = 1);
+    static sptr make_sc8_sc8(const size_t num_inputs, const size_t vlen = 1);
+    static sptr make_f32_f32(const size_t num_inputs, const size_t vlen = 1);
+    static sptr make_s32_s32(const size_t num_inputs, const size_t vlen = 1);
+    static sptr make_s16_s16(const size_t num_inputs, const size_t vlen = 1);
+    static sptr make_s8_s8(const size_t num_inputs, const size_t vlen = 1);
 };
 
 }}

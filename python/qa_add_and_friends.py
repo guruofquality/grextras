@@ -107,7 +107,7 @@ class test_add_and_friends (gr_unittest.TestCase):
         src1_data = (1,  2, 3, 4, 5)
         src2_data = (8, -3, 4, 8, 2)
         expected_result = (9, -1, 7, 12, 7)
-        op = extras.add_s32_s32()
+        op = extras.add_s32_s32(2)
         self.help_ii ((src1_data, src2_data),
                       expected_result, op)
 
@@ -115,7 +115,7 @@ class test_add_and_friends (gr_unittest.TestCase):
         src1_data = (1,  2, 3, 4)
         src2_data = (8., -3., 4., 8.)
         expected_result = (9., -1., 7., 12.)
-        op = extras.add_f32_f32()
+        op = extras.add_f32_f32(2)
         self.help_ff ((src1_data, src2_data),
                       expected_result, op)
 
@@ -123,7 +123,7 @@ class test_add_and_friends (gr_unittest.TestCase):
         src1_data = (1+1j, 2+2j, 3+3j, 4+4j)
         src2_data = (8+8j, -3-3j, 4+4j, 8+8j)
         expected_result = (9+9j, -1-1j, 7+7j, 12+12j)
-        op = extras.add_fc32_fc32()
+        op = extras.add_fc32_fc32(2)
         self.help_cc ((src1_data, src2_data),
                       expected_result, op)
 
@@ -131,7 +131,7 @@ class test_add_and_friends (gr_unittest.TestCase):
         src1_data = (1,  2, 3, 4, 5)
         src2_data = (8, -3, 4, 8, 2)
         expected_result = (8, -6, 12, 32, 10)
-        op = extras.multiply_s32_s32()
+        op = extras.multiply_s32_s32(2)
         self.help_ii ((src1_data, src2_data),
                       expected_result, op)
 
@@ -139,7 +139,7 @@ class test_add_and_friends (gr_unittest.TestCase):
         src1_data = (1,  2, 3, 4)
         src2_data = (8, -3, 4, 8)
         expected_result = (8, -6, 12, 32)
-        op = extras.multiply_fc32_fc32()
+        op = extras.multiply_fc32_fc32(2)
         self.help_cc ((src1_data, src2_data),
                       expected_result, op)
 
@@ -147,14 +147,14 @@ class test_add_and_friends (gr_unittest.TestCase):
         src1_data = (1,  2, 3, 4)
         src2_data = (8, -3, 4, 8)
         expected_result = (8, -6, 12, 32)
-        op = extras.multiply_f32_f32()
+        op = extras.multiply_f32_f32(2)
         self.help_ff ((src1_data, src2_data),
                       expected_result, op)
 
     def test_sub_ii_1 (self):
         src1_data = (1,  2, 3, 4, 5)
         expected_result = (-1, -2, -3, -4, -5)
-        op = extras.subtract_s32_s32()
+        op = extras.subtract_s32_s32(1)
         self.help_ii ((src1_data,),
                       expected_result, op)
 
@@ -162,14 +162,14 @@ class test_add_and_friends (gr_unittest.TestCase):
         src1_data = (1,  2, 3, 4, 5)
         src2_data = (8, -3, 4, 8, 2)
         expected_result = (-7, 5, -1, -4, 3)
-        op = extras.subtract_s32_s32()
+        op = extras.subtract_s32_s32(2)
         self.help_ii ((src1_data, src2_data),
                       expected_result, op)
 
     def test_div_ff_1 (self):
         src1_data       = (1,  2,  4,    -8)
         expected_result = (1, 0.5, 0.25, -.125)
-        op = extras.divide_f32_f32()
+        op = extras.divide_f32_f32(1)
         self.help_ff ((src1_data,),
                       expected_result, op)
 
@@ -177,7 +177,7 @@ class test_add_and_friends (gr_unittest.TestCase):
         src1_data       = ( 5,  9, -15, 1024)
         src2_data       = (10,  3,  -5,   64)
         expected_result = (0.5, 3,   3,   16)
-        op = extras.divide_f32_f32()
+        op = extras.divide_f32_f32(2)
         self.help_ff ((src1_data, src2_data),
                       expected_result, op)
 

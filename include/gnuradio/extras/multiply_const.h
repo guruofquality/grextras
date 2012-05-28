@@ -23,12 +23,13 @@
 #define INCLUDED_GR_EXTRAS_MULTIPLY_CONST_H
 
 #include <gnuradio/extras/api.h>
-#include <gr_sync_block.h>
+#include <gnuradio/block.h>
+#include <gr_hier_block2.h>
 #include <complex>
 
 namespace gnuradio{ namespace extras{
 
-class GR_EXTRAS_API multiply_const : virtual public gr_sync_block{
+class GR_EXTRAS_API multiply_const : virtual public gr_hier_block2{
 public:
     typedef boost::shared_ptr<multiply_const> sptr;
 
@@ -48,7 +49,7 @@ public:
     virtual std::complex<double> get_const(void) = 0;
 };
 
-class GR_EXTRAS_API multiply_const_v : virtual public gr_sync_block{
+class GR_EXTRAS_API multiply_const_v : virtual public block{
 public:
     typedef boost::shared_ptr<multiply_const_v> sptr;
 

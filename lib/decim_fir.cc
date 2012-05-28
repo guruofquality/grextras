@@ -34,8 +34,8 @@ using namespace gnuradio::extras;
  **********************************************************************/
 struct decim_fir_fc32_work{
     int operator()(
-        const block::InputItems &input_items,
-        const block::OutputItems &output_items,
+        const gnuradio::block::InputItems &input_items,
+        const gnuradio::block::OutputItems &output_items,
         const void *taps_ptr,
         const size_t num_taps,
         const size_t decim
@@ -59,8 +59,8 @@ struct decim_fir_fc32_work{
  **********************************************************************/
 struct decim_fir_f32_work{
     int operator()(
-        const block::InputItems &input_items,
-        const block::OutputItems &output_items,
+        const gnuradio::block::InputItems &input_items,
+        const gnuradio::block::OutputItems &output_items,
         const void *taps_ptr,
         const size_t num_taps,
         const size_t decim
@@ -86,13 +86,12 @@ template <typename intype, typename tapstype, typename outtype, typename WorkTyp
 class generic_decim_fir : public decim_fir{
 public:
 
-    generic_decim_fir(const size_t decim, WorkType volk_work):
+    generic_decim_fir(const size_t decim):
         block(
             "FIR filter",
             gr_make_io_signature (1, 1, sizeof(intype)),
             gr_make_io_signature (1, 1, sizeof(outtype))
-        ),
-        _volk_work(volk_work)
+        )
     {
         this->set_relative_rate(1.0/decim);
     }
@@ -144,8 +143,7 @@ decim_fir::sptr decim_fir::make_fc32_fc32_fc32(
     const taps_type &taps, const size_t decim
 ){
     decim_fir::sptr b = gnuradio::get_initial_sptr(new generic_decim_fir
-        <std::complex<float>, std::complex<float>, std::complex<float>, decim_fir_fc32_work >(
-        decim, decim_fir_fc32_work()));
+        <std::complex<float>, std::complex<float>, std::complex<float>, decim_fir_fc32_work >(decim));
     b->set_taps(taps);
     return b;
 }
@@ -154,8 +152,7 @@ decim_fir::sptr decim_fir::make_f32_f32_f32(
     const taps_type &taps, const size_t decim
 ){
     decim_fir::sptr b = gnuradio::get_initial_sptr(new generic_decim_fir
-        <float, float, float, decim_fir_f32_work>(
-        decim, decim_fir_f32_work()));
+        <float, float, float, decim_fir_f32_work>(decim));
     b->set_taps(taps);
     return b;
 }

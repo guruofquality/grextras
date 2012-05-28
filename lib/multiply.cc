@@ -24,66 +24,78 @@
 #include <stdexcept>
 #include <complex>
 #include <volk/volk.h>
-#include <boost/bind.hpp>
 
 using namespace gnuradio::extras;
-
-typedef boost::function<int(int, gr_vector_const_void_star, gr_vector_void_star)> volk_work_type;
 
 /***********************************************************************
  * Multiplier implementation with complex float32 - calls volk
  **********************************************************************/
-static int mult_fc32_work(
-    int noutput_items,
-    gr_vector_const_void_star &input_items,
-    gr_vector_void_star &output_items
-){
-    std::complex<float> *out = reinterpret_cast<std::complex<float> *>(output_items[0]);
-    const std::complex<float> *in0 = reinterpret_cast<const std::complex<float> *>(input_items[0]);
+struct multiply_fc32_work{
+    operator bool(){return true;}
+    void operator()(
+        const size_t num_items,
+        const gnuradio::block::InputItems &input_items,
+        const gnuradio::block::OutputItems &output_items
+    ){
+        std::complex<float> *out = output_items[0].cast<std::complex<float> *>();
+        const std::complex<float> *in0 = input_items[0].cast<const std::complex<float> *>();
 
-    for (size_t n = 1; n < input_items.size(); n++){
-        const std::complex<float> *in = reinterpret_cast<const std::complex<float> *>(input_items[n]);
-        volk_32fc_x2_multiply_32fc_a(out, in0, in, noutput_items);
-        in0 = out; //for next input, we do output += input
+        for (size_t n = 1; n < input_items.size(); n++){
+            const std::complex<float> *in = input_items[n].cast<const std::complex<float> *>();
+            volk_32fc_x2_multiply_32fc_a(out, in0, in, num_items);
+            in0 = out; //for next input, we do output += input
+        }
     }
-
-    return noutput_items;
-}
+};
 
 /***********************************************************************
  * Multiplier implementation with float32 - calls volk
  **********************************************************************/
-static int mult_f32_work(
-    int noutput_items,
-    gr_vector_const_void_star &input_items,
-    gr_vector_void_star &output_items
-){
-    float *out = reinterpret_cast<float *>(output_items[0]);
-    const float *in0 = reinterpret_cast<const float *>(input_items[0]);
+struct multiply_f32_work{
+    operator bool(){return true;}
+    void operator()(
+        const size_t num_items,
+        const gnuradio::block::InputItems &input_items,
+        const gnuradio::block::OutputItems &output_items
+    ){
+        float *out = output_items[0].cast<float *>();
+        const float *in0 = input_items[0].cast<const float *>();
 
-    for (size_t n = 1; n < input_items.size(); n++){
-        const float *in = reinterpret_cast<const float *>(input_items[n]);
-        volk_32f_x2_multiply_32f_a(out, in0, in, noutput_items);
-        in0 = out; //for next input, we do output += input
+        for (size_t n = 1; n < input_items.size(); n++){
+            const float *in = input_items[n].cast<const float *>();
+            volk_32f_x2_multiply_32f_a(out, in0, in, num_items);
+            in0 = out; //for next input, we do output += input
+        }
     }
+};
 
-    return noutput_items;
-}
+/***********************************************************************
+ * To use the generic impl
+ **********************************************************************/
+struct multiply_nop_work{
+    operator bool(){return false;}
+    void operator()(
+        const size_t,
+        const gnuradio::block::InputItems &,
+        const gnuradio::block::OutputItems &
+    ){
+        //NOP
+    }
+};
 
 /***********************************************************************
  * Generic multiplyer implementation
  **********************************************************************/
-template <typename type>
+template <typename type, typename WorkType = multiply_nop_work>
 class multiply_generic : public multiply{
 public:
-    multiply_generic(const size_t vlen, const volk_work_type volk_work = volk_work_type()):
-        gr_sync_block(
+    multiply_generic(const size_t num_inputs, const size_t vlen):
+        block(
             "multiply generic",
-            gr_make_io_signature (1, -1, sizeof(type)*vlen),
+            gr_make_io_signature (num_inputs, num_inputs, sizeof(type)*vlen),
             gr_make_io_signature (1, 1, sizeof(type)*vlen)
         ),
-        _vlen(vlen),
-        _volk_work(volk_work)
+        _vlen(vlen)
     {
         if (_volk_work){
             const int alignment_multiple = volk_get_alignment() / (sizeof(type)*vlen);
@@ -92,66 +104,67 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
+        const size_t noutput_items = output_items[0].size();
+
         if (_volk_work){
             _volk_work(noutput_items * _vlen, input_items, output_items);
             return noutput_items;
         }
 
-        const size_t n_nums = noutput_items * _vlen;
-        type *out = reinterpret_cast<type *>(output_items[0]);
-        const type *in0 = reinterpret_cast<const type *>(input_items[0]);
+        const size_t n_nums = output_items[0].size() * _vlen;
+        type *out = output_items[0].cast<type *>();
+        const type *in0 = input_items[0].cast<const type *>();
 
         for (size_t n = 1; n < input_items.size(); n++){
-            const type *in = reinterpret_cast<const type *>(input_items[n]);
+            const type *in = input_items[n].cast<const type *>();
             for (size_t i = 0; i < n_nums; i++){
                 out[i] = in0[i] * in[i];
             }
             in0 = out; //for next input, we do output *= input
         }
 
-        return noutput_items;
+        return output_items[0].size();
     }
 
 private:
     const size_t _vlen;
-    const volk_work_type _volk_work;
+    WorkType _volk_work;
 };
 
 /***********************************************************************
  * factory function
  **********************************************************************/
-multiply::sptr multiply::make_fc32_fc32(const size_t vlen){
-    return sptr(new multiply_generic<float>(2*vlen, boost::bind(mult_fc32_work, _1, _2, _3)));
+multiply::sptr multiply::make_fc32_fc32(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new multiply_generic<float, multiply_fc32_work>(num_inputs, 2*vlen));
 }
 
-multiply::sptr multiply::make_sc32_sc32(const size_t vlen){
-    return sptr(new multiply_generic<int32_t>(2*vlen));
+multiply::sptr multiply::make_sc32_sc32(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new multiply_generic<int32_t>(num_inputs, 2*vlen));
 }
 
-multiply::sptr multiply::make_sc16_sc16(const size_t vlen){
-    return sptr(new multiply_generic<int16_t>(2*vlen));
+multiply::sptr multiply::make_sc16_sc16(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new multiply_generic<int16_t>(num_inputs, 2*vlen));
 }
 
-multiply::sptr multiply::make_sc8_sc8(const size_t vlen){
-    return sptr(new multiply_generic<int8_t>(2*vlen));
+multiply::sptr multiply::make_sc8_sc8(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new multiply_generic<int8_t>(num_inputs, 2*vlen));
 }
 
-multiply::sptr multiply::make_f32_f32(const size_t vlen){
-    return sptr(new multiply_generic<float>(vlen, boost::bind(mult_f32_work, _1, _2, _3)));
+multiply::sptr multiply::make_f32_f32(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new multiply_generic<float, multiply_f32_work>(num_inputs, vlen));
 }
 
-multiply::sptr multiply::make_s32_s32(const size_t vlen){
-    return sptr(new multiply_generic<int32_t>(vlen));
+multiply::sptr multiply::make_s32_s32(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new multiply_generic<int32_t>(num_inputs, vlen));
 }
 
-multiply::sptr multiply::make_s16_s16(const size_t vlen){
-    return sptr(new multiply_generic<int16_t>(vlen));
+multiply::sptr multiply::make_s16_s16(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new multiply_generic<int16_t>(num_inputs, vlen));
 }
 
-multiply::sptr multiply::make_s8_s8(const size_t vlen){
-    return sptr(new multiply_generic<int8_t>(vlen));
+multiply::sptr multiply::make_s8_s8(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new multiply_generic<int8_t>(num_inputs, vlen));
 }

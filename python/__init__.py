@@ -21,7 +21,12 @@ from extras_swig import *
 import extras_pmt #act of importing performs injection
 import block_gateway #act of importing performs injection
 
+try: #it may not exist based on prereqs
+    from pkt2 import mod_pkts2, demod_pkts2
+except ImportError: pass
+
 #backwards compatible contructor for old style suffix types
+"""
 add_cc = add_fc32_fc32
 add_ff = add_f32_f32
 add_ii = add_s32_s32
@@ -84,7 +89,4 @@ add_const_ii  = lambda k: _inject_k(add_const_s32_s32, int, k)
 add_const_vii = lambda k: _inject_k(add_const_v_s32_s32, int, k)
 add_const_ss  = lambda k: _inject_k(add_const_s16_s16, int, k)
 add_const_vss = lambda k: _inject_k(add_const_v_s16_s16, int, k)
-
-try: #it may not exist based on prereqs
-    from pkt2 import mod_pkts2, demod_pkts2
-except ImportError: pass
+"""

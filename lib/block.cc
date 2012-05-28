@@ -23,7 +23,7 @@
 #include <gr_block.h>
 #include <gr_io_signature.h>
 
-#include <gnuradio/extras/block.h>
+#include <gnuradio/block.h>
 #include <boost/foreach.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
@@ -32,7 +32,12 @@
 #include <queue>
 #include <iostream>
 
-using namespace gnuradio::extras;
+using namespace gnuradio;
+
+static int mylround(double x)
+{
+    return int(x + 0.5);
+}
 
 /***********************************************************************
  * The message sourcer object
@@ -85,7 +90,8 @@ public:
         this->add_item_tag(0, msg);
 
         //return produced
-        return 1;
+        //produce entire buffer so work has to get called again
+        return noutput_items;
     }
 
     void post_msg(const gr_tag_t &msg)
@@ -212,8 +218,7 @@ public:
 
         else
         {
-            unsigned ninputs = ninput_items_required.size();
-            for (unsigned i = 0; i < ninputs; i++)
+            for (size_t i = 0; i < ninput_items_required.size(); i++)
             {
                 ninput_items_required[i] = fixed_rate_noutput_to_ninput(noutput_items);
             }
@@ -244,7 +249,7 @@ public:
         //consume when in sync
         if (_automatic && r > 0)
         {
-            consume_each(int(r/this->relative_rate()));
+            consume_each(mylround(r/this->relative_rate()));
         }
 
         //stop the sourcers when done
@@ -260,11 +265,11 @@ public:
     }
 
     int fixed_rate_noutput_to_ninput(int noutput_items){
-        return int((noutput_items/this->relative_rate()) + history() - 1);
+        return mylround((noutput_items/this->relative_rate()) + history() - 1);
     }
 
     int fixed_rate_ninput_to_noutput(int ninput_items){
-        return int(std::max(0, ninput_items - (int)history() + 1)*this->relative_rate());
+        return mylround(std::max(0, ninput_items - (int)history() + 1)*this->relative_rate());
     }
 
     bool start(void){
@@ -275,7 +280,7 @@ public:
         return _parent->stop();
     }
 
-    void set_auto(const bool automatic)
+    void set_auto_consume(const bool automatic)
     {
         _automatic = automatic;
         this->set_fixed_rate(automatic);
@@ -341,14 +346,17 @@ struct block::impl
 
 static gr_io_signature_sptr extend_sig(gr_io_signature_sptr sig, const size_t num){
     std::vector<int> sizeof_stream_items = sig->sizeof_stream_items();
-    sizeof_stream_items.resize(sig->max_streams()); //FIXME gr bug workaround, for empty sigs, this is length 1
+    //FIXME 1 gr bug workaround, for empty sigs, this is length 1
+    //FIXME 2, and this vector can be smaller than max streams
+    sizeof_stream_items.resize(sig->max_streams(), sizeof_stream_items[0]);
     for (size_t i = 0; i < num; i++)
     {
         sizeof_stream_items.push_back(1);
     }
+    //FIXME 3 another workaround, why cant I make empty with gr_make_io_signaturev?
     if (sizeof_stream_items.size() == 0)
     {
-        return gr_make_io_signature(0, 0, 0); //FIXME another workaround, why cant I make empty with gr_make_io_signaturev?
+        return gr_make_io_signature(0, 0, 0);
     }
     return gr_make_io_signaturev(sizeof_stream_items.size(), sizeof_stream_items.size(), sizeof_stream_items);
 }
@@ -379,7 +387,8 @@ block::block(
         _impl->master = boost::make_shared<master_block>(name, in_sig, out_sig, this, &_impl->sourcers);
     }
 
-    this->set_auto(true);
+    this->set_auto_consume(true);
+    this->set_relative_rate(1.0);
 
     //connect internal sink ports
     for (size_t i = 0; i < size_t(in_sig->max_streams()); i++)
@@ -414,9 +423,9 @@ block::~block(void)
     _impl.reset();
 }
 
-void block::set_auto(const bool automatic)
+void block::set_auto_consume(const bool automatic)
 {
-    _impl->master->set_auto(automatic);
+    _impl->master->set_auto_consume(automatic);
 }
 
 /*******************************************************************
@@ -579,6 +588,6 @@ void block::forecast(int noutput_items, gr_vector_int &ninput_items_required)
     //simple 1:1 ratio forecast for default
     for (unsigned i = 0; i < ninput_items_required.size(); i++)
     {
-        ninput_items_required[i] = noutput_items;
+        ninput_items_required[i] = noutput_items + this->history() - 1;
     }
 }

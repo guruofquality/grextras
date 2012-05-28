@@ -34,15 +34,15 @@ public:
         const std::string &name,
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
-        const gnuradio::extras::msg_signature &msg_sig
+        const msg_signature &msg_sig
     ):
         block(name, in_sig, out_sig, msg_sig),
         _handler(handler)
     {
-        this->set_auto(true);
+        this->set_auto_consume(true);
     }
 
-    void set_auto(const bool automatic)
+    void set_auto_consume(const bool automatic)
     {
         _automatic = automatic;
     }
@@ -65,7 +65,7 @@ public:
 
         else
         {
-            return gnuradio::extras::block::forecast(noutput_items, ninput_items_required);
+            return gnuradio::block::forecast(noutput_items, ninput_items_required);
         }
     }
 
@@ -135,6 +135,6 @@ block_gateway::sptr block_gateway::make(
     const size_t num_msg_outputs
 ){
     return gnuradio::get_initial_sptr(
-        new block_gateway_impl(handler, name, in_sig, out_sig, gnuradio::extras::msg_signature(has_msg_input, num_msg_outputs))
+        new block_gateway_impl(handler, name, in_sig, out_sig, msg_signature(has_msg_input, num_msg_outputs))
     );
 }

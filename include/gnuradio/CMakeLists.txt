@@ -21,36 +21,10 @@
 # Install public header files
 ########################################################################
 
-if(UHD_FOUND)
-    list(APPEND include_sources
-        uhd_amsg_source.h
-    )
-endif()
-
-list(APPEND include_sources
-    api.h
-    add.h
-    add_const.h
-    delay.h
-    divide.h
-    multiply.h
-    multiply_const.h
-    noise_source.h
-    signal_source.h
-    subtract.h
-    stream_selector.h
-    decim_fir.h
-    blob_to_filedes.h
-    blob_to_socket.h
-    blob_to_stream.h
-    filedes_to_blob.h
-    socket_to_blob.h
-    stream_to_blob.h
-    tuntap.h
-)
-
 install(
-    FILES ${include_sources}
-    DESTINATION ${GR_INCLUDE_DIR}/gnuradio/extras
+    FILES block.h
+    DESTINATION ${GR_INCLUDE_DIR}/gnuradio
     COMPONENT "extras_devel"
 )
+
+add_subdirectory(extras)

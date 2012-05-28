@@ -33,7 +33,7 @@ template <typename type>
 class add_const_generic : public add_const_v{
 public:
     add_const_generic(const std::vector<type> &vec):
-        gr_sync_block(
+        block(
             "add const generic",
             gr_make_io_signature (1, 1, sizeof(type)*vec.size()),
             gr_make_io_signature (1, 1, sizeof(type)*vec.size())
@@ -44,13 +44,12 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
-        const size_t n_nums = noutput_items * _val.size();
-        type *out = reinterpret_cast<type *>(output_items[0]);
-        const type *in = reinterpret_cast<const type *>(input_items[0]);
+        const size_t n_nums = output_items.size() * _val.size();
+        type *out = output_items[0].cast<type *>();
+        const type *in = input_items[0].cast<const type *>();
 
         //simple vec len 1 for the fast
         if (_val.size() == 1){
@@ -66,7 +65,7 @@ public:
                 out[i] = in[i] + _val[i%_val.size()];
             }
         }
-        return noutput_items;
+        return output_items.size();
     }
 
     void _set_const(const std::vector<std::complex<double> > &val){
@@ -94,7 +93,7 @@ private:
  **********************************************************************/
 #define make_factory_function(suffix, type) \
     add_const_v::sptr add_const_v::make_ ## suffix(const std::vector<type > &vec){ \
-    return sptr(new add_const_generic<type >(vec)); \
+    return gnuradio::get_initial_sptr(new add_const_generic<type >(vec)); \
 }
 
 make_factory_function(fc32_fc32, std::complex<float>)
