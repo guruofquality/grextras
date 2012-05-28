@@ -24,11 +24,12 @@
 
 #include <gnuradio/extras/api.h>
 #include <gnuradio/block.h>
+#include <gr_hier_block2.h>
 #include <complex>
 
 namespace gnuradio{ namespace extras{
 
-class GR_EXTRAS_API multiply_const : virtual public block{
+class GR_EXTRAS_API multiply_const : virtual public gr_hier_block2{
 public:
     typedef boost::shared_ptr<multiply_const> sptr;
 

@@ -30,19 +30,15 @@ class multiply_const_derived : public multiply_const{
 public:
 
     multiply_const_derived(const size_t size, multiply_const_v::sptr ub):
-        block(
-            "multiply const generic",
+        gr_hier_block2(
+            "multiply const wrapper",
             gr_make_io_signature (1, 1, size),
             gr_make_io_signature (1, 1, size)
         ),
         underlying_block(ub)
-    { /* NOP */ }
-
-    int work(
-        const InputItems &input_items,
-        const OutputItems &output_items
-    ){
-        return underlying_block->work(input_items, output_items);
+    {
+        this->connect(this->self(), 0, ub, 0);
+        this->connect(ub, 0, this->self(), 0);
     }
 
     void set_const(const std::complex<double> &val){
