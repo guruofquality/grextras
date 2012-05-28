@@ -346,14 +346,17 @@ struct block::impl
 
 static gr_io_signature_sptr extend_sig(gr_io_signature_sptr sig, const size_t num){
     std::vector<int> sizeof_stream_items = sig->sizeof_stream_items();
-    sizeof_stream_items.resize(sig->max_streams()); //FIXME gr bug workaround, for empty sigs, this is length 1
+    //FIXME 1 gr bug workaround, for empty sigs, this is length 1
+    //FIXME 2, and this vector can be smaller than max streams
+    sizeof_stream_items.resize(sig->max_streams(), sizeof_stream_items[0]);
     for (size_t i = 0; i < num; i++)
     {
         sizeof_stream_items.push_back(1);
     }
+    //FIXME 3 another workaround, why cant I make empty with gr_make_io_signaturev?
     if (sizeof_stream_items.size() == 0)
     {
-        return gr_make_io_signature(0, 0, 0); //FIXME another workaround, why cant I make empty with gr_make_io_signaturev?
+        return gr_make_io_signature(0, 0, 0);
     }
     return gr_make_io_signaturev(sizeof_stream_items.size(), sizeof_stream_items.size(), sizeof_stream_items);
 }
