@@ -280,7 +280,7 @@ public:
         return _parent->stop();
     }
 
-    void set_auto(const bool automatic)
+    void set_auto_consume(const bool automatic)
     {
         _automatic = automatic;
         this->set_fixed_rate(automatic);
@@ -387,7 +387,7 @@ block::block(
         _impl->master = boost::make_shared<master_block>(name, in_sig, out_sig, this, &_impl->sourcers);
     }
 
-    this->set_auto(true);
+    this->set_auto_consume(true);
     this->set_relative_rate(1.0);
 
     //connect internal sink ports
@@ -423,9 +423,9 @@ block::~block(void)
     _impl.reset();
 }
 
-void block::set_auto(const bool automatic)
+void block::set_auto_consume(const bool automatic)
 {
-    _impl->master->set_auto(automatic);
+    _impl->master->set_auto_consume(automatic);
 }
 
 /*******************************************************************

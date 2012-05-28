@@ -39,7 +39,7 @@ public:
         ),
         _itemsize(itemsize)
     {
-        this->set_auto(false);
+        this->set_auto_consume(false);
         this->set_delay(0);
     }
 

@@ -106,7 +106,7 @@ public:
      * When automatic, consume is automatically called, and forecast handled.
      * \param automatic true to call consume and forecast automatically
      */
-    void set_auto(const bool automatic);
+    void set_auto_consume(const bool automatic);
 
     /*******************************************************************
      * Basic routines from basic block
