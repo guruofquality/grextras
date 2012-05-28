@@ -51,7 +51,7 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 ////////////////////////////////////////////////////////////////////////
 %include <gnuradio.i>
 
-%include <gnuradio/extras/block.h>
+%include <gnuradio/block.h>
 
 namespace std {
     %template() vector< std::complex<double> >;

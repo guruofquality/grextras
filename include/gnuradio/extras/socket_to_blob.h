@@ -23,7 +23,7 @@
 #define INCLUDED_GR_EXTRAS_SOCKET_TO_BLOB_H
 
 #include <gnuradio/extras/api.h>
-#include <gnuradio/extras/block.h>
+#include <gnuradio/block.h>
 
 namespace gnuradio{ namespace extras{
 

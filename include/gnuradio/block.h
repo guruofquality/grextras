@@ -18,6 +18,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
+
 #ifndef INCLUDED_GR_EXTRAS_BLOCK_H
 #define INCLUDED_GR_EXTRAS_BLOCK_H
 
@@ -26,7 +27,7 @@
 #include <gr_hier_block2.h>
 #include <gr_block.h>
 
-namespace gnuradio{ namespace extras{
+namespace gnuradio{
 
 template <typename PtrType> struct Buffer
 {
@@ -73,6 +74,8 @@ struct GR_EXTRAS_API msg_signature
  */
 class GR_EXTRAS_API block : public gr_hier_block2{
 public:
+    //! Make msg_signature available in block context
+    typedef gnuradio::msg_signature msg_signature;
 
     //! empty constructor for virtual inheritance
     block(void){}
@@ -251,6 +254,6 @@ private:
     boost::shared_ptr<impl> _impl;
 };
 
-}}
+}
 
 #endif /* INCLUDED_GR_EXTRAS_BLOCK_H */

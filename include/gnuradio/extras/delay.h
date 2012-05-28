@@ -22,7 +22,7 @@
 #define INCLUDED_GR_EXTRAS_DELAY_H
 
 #include <gnuradio/extras/api.h>
-#include <gnuradio/extras/block.h>
+#include <gnuradio/block.h>
 
 namespace gnuradio{ namespace extras{
 

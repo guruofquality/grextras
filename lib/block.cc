@@ -23,7 +23,7 @@
 #include <gr_block.h>
 #include <gr_io_signature.h>
 
-#include <gnuradio/extras/block.h>
+#include <gnuradio/block.h>
 #include <boost/foreach.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
@@ -32,7 +32,7 @@
 #include <queue>
 #include <iostream>
 
-using namespace gnuradio::extras;
+using namespace gnuradio;
 
 static int mylround(double x)
 {

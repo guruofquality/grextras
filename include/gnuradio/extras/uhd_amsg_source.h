@@ -23,7 +23,7 @@
 #define INCLUDED_GR_EXTRAS_UHD_AMSG_SOURCE_H
 
 #include <gnuradio/extras/api.h>
-#include <gnuradio/extras/block.h>
+#include <gnuradio/block.h>
 #include <uhd/usrp/multi_usrp.hpp>
 
 namespace gnuradio{ namespace extras{

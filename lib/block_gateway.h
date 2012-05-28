@@ -23,7 +23,7 @@
 #define INCLUDED_GRBLOCK_GATEWAY_H
 
 #include <gnuradio/extras/api.h>
-#include <gnuradio/extras/block.h>
+#include <gnuradio/block.h>
 #include <stdexcept>
 #include <gr_feval.h>
 
@@ -62,7 +62,7 @@ struct gr_block_gw_message_type{
  * The methods prefixed with gr_block__ are renamed
  * to class methods without the prefix in python.
  */
-class GR_EXTRAS_API block_gateway : virtual public gnuradio::extras::block{
+class GR_EXTRAS_API block_gateway : virtual public gnuradio::block{
 public:
     typedef boost::shared_ptr<block_gateway> sptr;
 
@@ -92,73 +92,73 @@ public:
     void gr_block__set_auto(const bool automatic)
     {
         this->set_auto(automatic);
-        return gnuradio::extras::block::set_auto(automatic);
+        return gnuradio::block::set_auto(automatic);
     }
 
     long gr_block__unique_id(void) const{
-        return gnuradio::extras::block::unique_id();
+        return gnuradio::block::unique_id();
     }
 
     std::string gr_block__name(void) const{
-        return gnuradio::extras::block::name();
+        return gnuradio::block::name();
     }
 
     unsigned gr_block__history(void) const{
-        return gnuradio::extras::block::history();
+        return gnuradio::block::history();
     }
 
     void gr_block__set_history(unsigned history){
-        return gnuradio::extras::block::set_history(history);
+        return gnuradio::block::set_history(history);
     }
 
     void gr_block__set_output_multiple(int multiple){
-        return gnuradio::extras::block::set_output_multiple(multiple);
+        return gnuradio::block::set_output_multiple(multiple);
     }
 
     int gr_block__output_multiple(void) const{
-        return gnuradio::extras::block::output_multiple();
+        return gnuradio::block::output_multiple();
     }
 
     void gr_block__consume(int which_input, int how_many_items){
-        return gnuradio::extras::block::consume(which_input, how_many_items);
+        return gnuradio::block::consume(which_input, how_many_items);
     }
 
     void gr_block__consume_each(int how_many_items){
-        return gnuradio::extras::block::consume_each(how_many_items);
+        return gnuradio::block::consume_each(how_many_items);
     }
 
     void gr_block__produce(int which_output, int how_many_items){
-        return gnuradio::extras::block::produce(which_output, how_many_items);
+        return gnuradio::block::produce(which_output, how_many_items);
     }
 
     void gr_block__set_relative_rate(double relative_rate){
-        return gnuradio::extras::block::set_relative_rate(relative_rate);
+        return gnuradio::block::set_relative_rate(relative_rate);
     }
 
     double gr_block__relative_rate(void) const{
-        return gnuradio::extras::block::relative_rate();
+        return gnuradio::block::relative_rate();
     }
 
     uint64_t gr_block__nitems_read(unsigned int which_input){
-        return gnuradio::extras::block::nitems_read(which_input);
+        return gnuradio::block::nitems_read(which_input);
     }
 
     uint64_t gr_block__nitems_written(unsigned int which_output){
-        return gnuradio::extras::block::nitems_written(which_output);
+        return gnuradio::block::nitems_written(which_output);
     }
 
     gr_block::tag_propagation_policy_t gr_block__tag_propagation_policy(void){
-        return gnuradio::extras::block::tag_propagation_policy();
+        return gnuradio::block::tag_propagation_policy();
     }
 
     void gr_block__set_tag_propagation_policy(gr_block::tag_propagation_policy_t p){
-        return gnuradio::extras::block::set_tag_propagation_policy(p);
+        return gnuradio::block::set_tag_propagation_policy(p);
     }
 
     void gr_block__add_item_tag(
         unsigned int which_output, const gr_tag_t &tag
     ){
-        return gnuradio::extras::block::add_item_tag(which_output, tag);
+        return gnuradio::block::add_item_tag(which_output, tag);
     }
 
     void gr_block__add_item_tag(
@@ -168,7 +168,7 @@ public:
         const pmt::pmt_t &value,
         const pmt::pmt_t &srcid=pmt::PMT_F
     ){
-        return gnuradio::extras::block::add_item_tag(which_output, abs_offset, key, value, srcid);
+        return gnuradio::block::add_item_tag(which_output, abs_offset, key, value, srcid);
     }
 
     std::vector<gr_tag_t> gr_block__get_tags_in_range(
@@ -177,7 +177,7 @@ public:
         uint64_t abs_end
     ){
         std::vector<gr_tag_t> tags;
-        gnuradio::extras::block::get_tags_in_range(tags, which_input, abs_start, abs_end);
+        gnuradio::block::get_tags_in_range(tags, which_input, abs_start, abs_end);
         return tags;
     }
 
@@ -188,20 +188,20 @@ public:
         const pmt::pmt_t &key
     ){
         std::vector<gr_tag_t> tags;
-        gnuradio::extras::block::get_tags_in_range(tags, which_input, abs_start, abs_end, key);
+        gnuradio::block::get_tags_in_range(tags, which_input, abs_start, abs_end, key);
         return tags;
     }
 
     bool gr_block__check_msg_queue(void){
-        return gnuradio::extras::block::check_msg_queue();
+        return gnuradio::block::check_msg_queue();
     }
 
     gr_tag_t gr_block__pop_msg_queue(void){
-        return gnuradio::extras::block::pop_msg_queue();
+        return gnuradio::block::pop_msg_queue();
     }
 
     void gr_block__post_msg(const size_t &group, const gr_tag_t &msg){
-        return gnuradio::extras::block::post_msg(group, msg);
+        return gnuradio::block::post_msg(group, msg);
     }
 
     void gr_block__post_msg(
@@ -210,7 +210,7 @@ public:
         const pmt::pmt_t &value,
         const pmt::pmt_t &srcid=pmt::PMT_F
     ){
-        return gnuradio::extras::block::post_msg(group, key, value, srcid);
+        return gnuradio::block::post_msg(group, key, value, srcid);
     }
 
 };

@@ -198,7 +198,7 @@ endif()
 ########################################################################
 # Add subdirectories
 ########################################################################
-add_subdirectory(include/gnuradio/extras)
+add_subdirectory(include/gnuradio)
 add_subdirectory(include/gruel)
 add_subdirectory(lib)
 add_subdirectory(swig)

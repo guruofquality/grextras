@@ -34,8 +34,8 @@ using namespace gnuradio::extras;
  **********************************************************************/
 struct decim_fir_fc32_work{
     int operator()(
-        const block::InputItems &input_items,
-        const block::OutputItems &output_items,
+        const gnuradio::block::InputItems &input_items,
+        const gnuradio::block::OutputItems &output_items,
         const void *taps_ptr,
         const size_t num_taps,
         const size_t decim
@@ -59,8 +59,8 @@ struct decim_fir_fc32_work{
  **********************************************************************/
 struct decim_fir_f32_work{
     int operator()(
-        const block::InputItems &input_items,
-        const block::OutputItems &output_items,
+        const gnuradio::block::InputItems &input_items,
+        const gnuradio::block::OutputItems &output_items,
         const void *taps_ptr,
         const size_t num_taps,
         const size_t decim
