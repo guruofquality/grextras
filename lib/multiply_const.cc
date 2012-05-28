@@ -29,16 +29,20 @@ using namespace gnuradio::extras;
 class multiply_const_derived : public multiply_const{
 public:
 
-    multiply_const_derived(multiply_const_v::sptr ub):
-        gr_sync_block(*ub), underlying_block(ub)
+    multiply_const_derived(const size_t size, multiply_const_v::sptr ub):
+        block(
+            "multiply const generic",
+            gr_make_io_signature (1, 1, size),
+            gr_make_io_signature (1, 1, size)
+        ),
+        underlying_block(ub)
     { /* NOP */ }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
-        return underlying_block->work(noutput_items, input_items, output_items);
+        return underlying_block->work(input_items, output_items);
     }
 
     void set_const(const std::complex<double> &val){
@@ -58,7 +62,8 @@ private:
     multiply_const::sptr multiply_const::make_ ## suffix( \
         const std::complex<double> &val \
     ){ \
-        return sptr(new multiply_const_derived( \
+        return gnuradio::get_initial_sptr(new multiply_const_derived( \
+            sizeof(type), \
             multiply_const_v::make_ ## suffix( \
             std::vector<type>(1, type(val op))))); \
     }

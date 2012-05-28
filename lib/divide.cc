@@ -33,10 +33,10 @@ using namespace gnuradio::extras;
 template <typename type>
 class divide_generic : public divide{
 public:
-    divide_generic(const size_t vlen):
-        gr_sync_block(
+    divide_generic(const size_t num_inputs, const size_t vlen):
+        block(
             "divide generic",
-            gr_make_io_signature (1, -1, sizeof(type)*vlen),
+            gr_make_io_signature (num_inputs, num_inputs, sizeof(type)*vlen),
             gr_make_io_signature (1, 1, sizeof(type)*vlen)
         ),
         _vlen(vlen)
@@ -45,14 +45,15 @@ public:
     }
 
     int work(
-        int noutput_items,
-        gr_vector_const_void_star &input_items,
-        gr_vector_void_star &output_items
+        const InputItems &input_items,
+        const OutputItems &output_items
     ){
+        const size_t noutput_items = output_items[0].size();
+
         if(input_items.size() == 1) {
             const size_t n_nums = noutput_items * _vlen;
-            type *out = reinterpret_cast<type *>(output_items[0]);
-            const type *in = reinterpret_cast<const type *>(input_items[0]);
+            type *out = output_items[0].cast<type *>();
+            const type *in = input_items[0].cast<const type *>();
 
             for (size_t i = 0; i < n_nums; i++){
                 out[i] = static_cast<type>(1) / in[i];
@@ -62,11 +63,11 @@ public:
         }
         else {
             const size_t n_nums = noutput_items * _vlen;
-            type *out = reinterpret_cast<type *>(output_items[0]);
-            const type *in0 = reinterpret_cast<const type *>(input_items[0]);
+            type *out = output_items[0].cast<type *>();
+            const type *in0 = input_items[0].cast<const type *>();
 
             for (size_t n = 1; n < input_items.size(); n++){
-                const type *in = reinterpret_cast<const type *>(input_items[n]);
+                const type *in = input_items[n].cast<const type *>();
                 for (size_t i = 0; i < n_nums; i++){
                     out[i] = in0[i] / in[i];
                 }
@@ -84,34 +85,34 @@ private:
 /***********************************************************************
  * factory function
  **********************************************************************/
-divide::sptr divide::make_fc32_fc32(const size_t vlen){
-    return sptr(new divide_generic<float>(2*vlen));
+divide::sptr divide::make_fc32_fc32(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new divide_generic<float>(num_inputs, 2*vlen));
 }
 
-divide::sptr divide::make_sc32_sc32(const size_t vlen){
-    return sptr(new divide_generic<int32_t>(2*vlen));
+divide::sptr divide::make_sc32_sc32(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new divide_generic<int32_t>(num_inputs, 2*vlen));
 }
 
-divide::sptr divide::make_sc16_sc16(const size_t vlen){
-    return sptr(new divide_generic<int16_t>(2*vlen));
+divide::sptr divide::make_sc16_sc16(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new divide_generic<int16_t>(num_inputs, 2*vlen));
 }
 
-divide::sptr divide::make_sc8_sc8(const size_t vlen){
-    return sptr(new divide_generic<int8_t>(2*vlen));
+divide::sptr divide::make_sc8_sc8(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new divide_generic<int8_t>(num_inputs, 2*vlen));
 }
 
-divide::sptr divide::make_f32_f32(const size_t vlen){
-    return sptr(new divide_generic<float>(vlen));
+divide::sptr divide::make_f32_f32(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new divide_generic<float>(num_inputs, vlen));
 }
 
-divide::sptr divide::make_s32_s32(const size_t vlen){
-    return sptr(new divide_generic<int32_t>(vlen));
+divide::sptr divide::make_s32_s32(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new divide_generic<int32_t>(num_inputs, vlen));
 }
 
-divide::sptr divide::make_s16_s16(const size_t vlen){
-    return sptr(new divide_generic<int16_t>(vlen));
+divide::sptr divide::make_s16_s16(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new divide_generic<int16_t>(num_inputs, vlen));
 }
 
-divide::sptr divide::make_s8_s8(const size_t vlen){
-    return sptr(new divide_generic<int8_t>(vlen));
+divide::sptr divide::make_s8_s8(const size_t num_inputs, const size_t vlen){
+    return gnuradio::get_initial_sptr(new divide_generic<int8_t>(num_inputs, vlen));
 }
