@@ -181,7 +181,7 @@ class basic_block(gateway_block):
             has_msg_input=has_msg_input,
             num_msg_outputs=num_msg_outputs,
         )
-        self.set_auto(False)
+        self.set_auto_consume(False)
         self.work = self.general_work #makes it backwards compatible since we only call work
 
 class sync_block(gateway_block):
