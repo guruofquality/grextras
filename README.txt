@@ -11,6 +11,12 @@ https://github.com/guruofquality/grextras/wiki
 See the various blocks and QA code in this source tree as examples.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Support
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Questions, comments, issues?
+discuss-gnuradio@gnu.org
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Build dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 * MSVC or GCC
