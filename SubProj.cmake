@@ -56,5 +56,5 @@ CPACK_COMPONENT("extras_swig"
     DEPENDS      "core_swig;extras_python;extras_devel"
 )
 
-add_subdirectory(grextras)
+add_subdirectory(${GR_EXTRAS_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/grextras)
 endif(ENABLE_EXTRAS)
