@@ -84,6 +84,7 @@ endif()
 
 list(APPEND swig_sources
     extras_swig.i
+    extras_factory.i
     extras_delay.i
     extras_sources.i
     extras_ops.i
@@ -91,7 +92,7 @@ list(APPEND swig_sources
     extras_block_gateway.i
     extras_fir.i
     extras_pmt.i
-        extras_blobs.i
+    extras_blobs.i
     ${CMAKE_CURRENT_BINARY_DIR}/extras_swig_doc.i
 )
 

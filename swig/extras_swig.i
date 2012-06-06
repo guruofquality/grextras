@@ -19,29 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-//----------------------------------------------------------------------
-//-- GR_EXTRAS_SWIG_BLOCK_MAGIC1 and GR_EXTRAS_SWIG_BLOCK_MAGIC2
-//----------------------------------------------------------------------
-%define GR_EXTRAS_SWIG_BLOCK_MAGIC1(NAME)
-_GR_EXTRAS_SWIG_BLOCK_MAGIC2_HELPER(NAME, make, NAME)
-%enddef
-
-%define GR_EXTRAS_SWIG_BLOCK_MAGIC2(CLASS_NAME, SUFFIX)
-_GR_EXTRAS_SWIG_BLOCK_MAGIC2_HELPER(CLASS_NAME, make ## _ ## SUFFIX, CLASS_NAME ## _ ## SUFFIX)
-%enddef
-
-%define _GR_EXTRAS_SWIG_BLOCK_MAGIC2_HELPER(CLASS_NAME, FACTORY_NAME, PYTHON_NAME)
-%template(PYTHON_NAME ## _sptr) boost::shared_ptr<CLASS_NAME>;
-%pythoncode %{
-PYTHON_NAME ## _sptr.__repr__ = lambda self: "<gr_block %s (%d)>" % (self.name(), self.unique_id ())
-PYTHON_NAME = CLASS_NAME.FACTORY_NAME
-%}
-%enddef
 
 #define GR_EXTRAS_API
 
-%ignore gr_block;
-%ignore gr_sync_block;
 %ignore gr_hier_block2;
 
 %include <extras_swig_doc.i>
@@ -50,7 +30,7 @@ PYTHON_NAME = CLASS_NAME.FACTORY_NAME
 // standard includes
 ////////////////////////////////////////////////////////////////////////
 %include <gnuradio.i>
-
+%include "extras_factory.i"
 %include <gnuradio/block.h>
 
 namespace std {

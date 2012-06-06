@@ -32,4 +32,4 @@
 // block magic
 ////////////////////////////////////////////////////////////////////////
 using namespace gnuradio::extras;
-GR_EXTRAS_SWIG_BLOCK_MAGIC1(stream_selector)
+GR_EXTRAS_SWIG_BLOCK_FACTORY(stream_selector)

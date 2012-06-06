@@ -32,4 +32,4 @@
 // block magic
 ////////////////////////////////////////////////////////////////////////
 using namespace gnuradio::extras;
-GR_EXTRAS_SWIG_BLOCK_MAGIC1(delay)
+GR_EXTRAS_SWIG_BLOCK_FACTORY(delay)

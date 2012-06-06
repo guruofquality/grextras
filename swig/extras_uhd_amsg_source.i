@@ -34,4 +34,4 @@
 // block magic
 ////////////////////////////////////////////////////////////////////////
 using namespace gnuradio::extras;
-GR_EXTRAS_SWIG_BLOCK_MAGIC1(uhd_amsg_source)
+GR_EXTRAS_SWIG_BLOCK_FACTORY(uhd_amsg_source)
