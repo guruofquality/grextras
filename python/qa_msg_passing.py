@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011-2012 Free Software Foundation, Inc.
 # 
 # This file is part of GNU Radio
 # 
@@ -20,7 +20,7 @@
 # Boston, MA 02110-1301, USA.
 # 
 
-#import pmt, first from local super tree if possible
+#hacky way so we can import in-tree
 try: import pmt
 except ImportError: from gruel import pmt
 

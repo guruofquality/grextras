@@ -20,6 +20,7 @@
 from extras_swig import *
 import extras_pmt #act of importing performs injection
 import block_gateway #act of importing performs injection
+import pmt_to_python #act of importing performs injection
 
 try: #it may not exist based on prereqs
     from pkt2 import mod_pkts2, demod_pkts2

@@ -26,6 +26,7 @@ list(APPEND python_sources
     __init__.py
     block_gateway.py
     extras_pmt.py
+    pmt_to_python.py
     pkt2.py
 )
 
@@ -48,6 +49,7 @@ list(APPEND extras_qa_sources
     qa_signal_source.py
     qa_pmt.py
     qa_msg_passing.py
+    qa_pmt_to_python.py
 )
 
 set(GR_TEST_PYTHON_DIRS

@@ -22,7 +22,7 @@ import extras_swig
 
 #hacky way so we can import in-tree
 try: import pmt
-except: from gruel import pmt
+except ImportError: from gruel import pmt
 
 for name in dir(extras_swig):
     if 'pmt' in name:
