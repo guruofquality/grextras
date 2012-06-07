@@ -84,20 +84,20 @@ THE_TABLE = ( #python type, check pmt type, to python, from python
     (tuple, pmt.pmt_is_tuple, pmt_to_tuple, pmt_from_tuple),
     (list, pmt.pmt_is_vector, pmt_to_vector, pmt_from_vector),
     (dict, pmt.pmt_is_dict, pmt_to_dict, pmt_from_dict),
-    (numpy.array, pmt.pmt_is_blob, pmt.pmt_blob_data, numpy_to_blob),
+    (numpy.ndarray, pmt.pmt_is_blob, pmt.pmt_blob_data, numpy_to_blob),
 )
 
 def pmt_to_python(p):
     for python_type, pmt_check, to_python, from_python in THE_TABLE:
         if pmt_check(p): return to_python(p)
-    return p #give up, we return the pmt
+    return p #give up, we return the same
 
 def python_to_pmt(p):
     for python_type, pmt_check, to_python, from_python in THE_TABLE:
         if python_type is None:
             if p == None: return from_python(p)
         elif isinstance(p, python_type): return from_python(p)
-    raise TypeError, 'python_to_pmt cannot convert %s into a pmt'%str(p)
+    return p #give up, we return the same
 
 #inject into pmt
 pmt.to_python = pmt_to_python

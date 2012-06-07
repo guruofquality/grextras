@@ -66,7 +66,11 @@ class test_pmt_to_python(gr_unittest.TestCase):
     def test_nested(self):
         self.loopback([(1, "two"), {3 : 4.0}, [5, (6j, )]])
 
-    #TODO test numpy loopback
+    def test_numpy(self):
+        python_data = numpy.array([1, 2, 3], numpy.uint8)
+        as_a_pmt = pmt.from_python(python_data)
+        back_to_python = pmt.to_python(as_a_pmt)
+        self.assertTrue((python_data == back_to_python).all())
 
 if __name__ == '__main__':
     gr_unittest.run(test_pmt_to_python, "test_pmt_to_python.xml")
