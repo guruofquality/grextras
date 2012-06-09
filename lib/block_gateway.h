@@ -200,17 +200,17 @@ public:
         return gnuradio::block::pop_msg_queue();
     }
 
-    void gr_block__post_msg(const size_t &group, const gr_tag_t &msg){
-        return gnuradio::block::post_msg(group, msg);
+    void gr_block__post_msg(const size_t port, const gr_tag_t &msg){
+        return gnuradio::block::post_msg(port, msg);
     }
 
     void gr_block__post_msg(
-        const size_t &group,
+        const size_t port,
         const pmt::pmt_t &key,
         const pmt::pmt_t &value,
         const pmt::pmt_t &srcid=pmt::PMT_F
     ){
-        return gnuradio::block::post_msg(group, key, value, srcid);
+        return gnuradio::block::post_msg(port, key, value, srcid);
     }
 
 };

@@ -564,9 +564,9 @@ gr_tag_t block::pop_msg_queue(void)
     return _impl->sinker->pop_msg_queue();
 }
 
-void block::post_msg(const size_t &group, const gr_tag_t &msg)
+void block::post_msg(const size_t port, const gr_tag_t &msg)
 {
-    return _impl->sourcers.at(group)->post_msg(msg);
+    return _impl->sourcers.at(port)->post_msg(msg);
 }
 
 /*******************************************************************

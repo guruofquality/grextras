@@ -194,23 +194,26 @@ public:
     gr_tag_t pop_msg_queue(void);
 
     /*!
-     * \brief Post a message to a subscriber group.
-     * All message subscribers in the group will get this message.
-     * \param group the index of the subscriber group
+     * \brief Post a message to a message source port on this block.
+     * All message sinks connected to this port will get this message.
+     * Example: the port index will be 0 for the blocks's 0th message source.
+     *
+     * \param port the index of the message source port
      * \param msg the message to post to all subscribers
      */
-    void post_msg(const size_t &group, const gr_tag_t &msg);
+    void post_msg(const size_t port, const gr_tag_t &msg);
 
     /*!
-     * \brief Post a message to a subscriber group.
+     * \brief Post a message to a message source port on this block.
+     * All message sinks connected to this port will get this message.
      *
-     * \param group the index of the subscriber group
+     * \\param port the index of the message source port
      * \param key the tag key as a PMT symbol
      * \param value any PMT holding any value for the given key
      * \param srcid optional source ID specifier; defaults to PMT_F
      */
     inline void post_msg(
-        const size_t &group,
+        const size_t port,
         const pmt::pmt_t &key,
         const pmt::pmt_t &value,
         const pmt::pmt_t &srcid=pmt::PMT_F
@@ -220,7 +223,7 @@ public:
         tag.key = key;
         tag.value = value;
         tag.srcid = srcid;
-        this->post_msg(group, tag);
+        this->post_msg(port, tag);
     }
 
     /*******************************************************************
