@@ -569,6 +569,20 @@ void block::post_msg(const size_t port, const gr_tag_t &msg)
     return _impl->sourcers.at(port)->post_msg(msg);
 }
 
+void block::post_msg(
+    const size_t port,
+    const pmt::pmt_t &key,
+    const pmt::pmt_t &value,
+    const pmt::pmt_t &srcid
+){
+    gr_tag_t tag;
+    tag.offset = 0; //not used
+    tag.key = key;
+    tag.value = value;
+    tag.srcid = srcid;
+    this->post_msg(port, tag);
+}
+
 /*******************************************************************
  * Work related routines from basic block
  ******************************************************************/

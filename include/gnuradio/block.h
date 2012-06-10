@@ -212,19 +212,12 @@ public:
      * \param value any PMT holding any value for the given key
      * \param srcid optional source ID specifier; defaults to PMT_F
      */
-    inline void post_msg(
+    void post_msg(
         const size_t port,
         const pmt::pmt_t &key,
         const pmt::pmt_t &value,
         const pmt::pmt_t &srcid=pmt::PMT_F
-    ){
-        gr_tag_t tag;
-        tag.offset = 0; //not used
-        tag.key = key;
-        tag.value = value;
-        tag.srcid = srcid;
-        this->post_msg(port, tag);
-    }
+    );
 
     /*******************************************************************
      * Work related routines from basic block
