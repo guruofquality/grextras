@@ -46,6 +46,7 @@ list(APPEND grc_sources
     digital_packet_framer2.xml
     digital_packet_deframer2.xml
     extras_stream_selector.xml
+    extras_pmt_rpc.xml
 )
 
 install(

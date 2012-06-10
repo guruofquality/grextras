@@ -49,5 +49,6 @@
         <block>digital_packet_deframer2</block>
         <block>extras_uhd_amsg_source</block>
         <block>filter_decim_fir</block>
+        <block>extras_pmt_rpc</block>
     </cat>
 </cat>

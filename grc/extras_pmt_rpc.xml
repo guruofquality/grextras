@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<block>
+    <name>Extras: PMT RPC</name>
+    <key>extras_pmt_rpc</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.pmt_rpc(obj=self, result_msg=$result_msg)</make>
+    <param>
+        <name>Result Message</name>
+        <key>result_msg</key>
+        <value>False</value>
+        <type>bool</type>
+        <option><name>Discard</name><key>False</key></option>
+        <option><name>Produce</name><key>True</key></option>
+    </param>
+    <sink>
+        <name>req</name>
+        <type></type>
+    </sink>
+    <source>
+        <name>res</name>
+        <type></type>
+        <optional>1</optional>
+    </source>
+    <doc>
+The PMT RPC block can call arbitrary functions in your flow graph.
+A control block should provide request messages (req port). \
+The result messages (res port) can be optionally produced.
+    </doc>
+</block>

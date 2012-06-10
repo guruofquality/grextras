@@ -26,6 +26,8 @@ try: #it may not exist based on prereqs
     from pkt2 import mod_pkts2, demod_pkts2
 except ImportError: pass
 
+from pmt_rpc import pmt_rpc
+
 #backwards compatible contructor for old style suffix types
 """
 add_cc = add_fc32_fc32
