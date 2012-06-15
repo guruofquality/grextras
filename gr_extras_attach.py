@@ -8,7 +8,7 @@ if __name__ == '__main__':
         print 'usage: gr_extras_attach.py [path to gnuradio src tree]'
         exit()
     top_gr_cmakelists = os.path.join(sys.argv[1], 'CMakeLists.txt')
-    gr_extras_src_dir = os.path.dirname(os.path.abspath(__file__))
+    gr_extras_src_dir = os.path.dirname(os.path.abspath(__file__)).replace("\\","\\\\")
     content = open(top_gr_cmakelists).read()
     if 'SubProj.cmake' not in content:
         content = content.replace('add_subdirectory(grc)',
