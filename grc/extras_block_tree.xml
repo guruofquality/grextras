@@ -30,25 +30,25 @@
     <name></name> <!-- Blank for Root Name -->
     <cat>
         <name>Extras</name>
-        <block>gr_extras_signal_source</block>
-        <block>gr_extras_noise_source</block>
-        <block>gr_extras_stream_selector</block>
-        <block>gr_extras_delay</block>
-        <block>gr_extras_add</block>
-        <block>gr_extras_add_const</block>
-        <block>gr_extras_subtract</block>
-        <block>gr_extras_multiply</block>
-        <block>gr_extras_multiply_const</block>
-        <block>gr_extras_divide</block>
-        <block>gr_extras_blob_to_socket</block>
-        <block>gr_extras_blob_to_stream</block>
-        <block>gr_extras_socket_to_blob</block>
-        <block>gr_extras_stream_to_blob</block>
-        <block>gr_extras_tuntap</block>
-        <block>digital_packet_framer2</block>
-        <block>digital_packet_deframer2</block>
+        <block>extras_signal_source</block>
+        <block>extras_noise_source</block>
+        <block>extras_stream_selector</block>
+        <block>extras_delay</block>
+        <block>extras_add</block>
+        <block>extras_add_const</block>
+        <block>extras_subtract</block>
+        <block>extras_multiply</block>
+        <block>extras_multiply_const</block>
+        <block>extras_divide</block>
+        <block>extras_blob_to_socket</block>
+        <block>extras_blob_to_stream</block>
+        <block>extras_socket_to_blob</block>
+        <block>extras_stream_to_blob</block>
+        <block>extras_tuntap</block>
+        <block>extras_packet_framer</block>
+        <block>extras_packet_deframer</block>
         <block>extras_uhd_amsg_source</block>
-        <block>filter_decim_fir</block>
+        <block>extras_decim_fir</block>
         <block>extras_pmt_rpc</block>
     </cat>
 </cat>

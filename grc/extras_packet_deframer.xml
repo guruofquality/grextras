@@ -5,10 +5,10 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Packet Deframer v2</name>
-    <key>digital_packet_deframer2</key>
+    <name>Extras: Packet Deframer</name>
+    <key>extras_packet_deframer</key>
     <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.demod_pkts2(
+    <make>gr_extras.packet_deframer(
     access_code=$access_code,
     threshold=$threshold,
 )</make>

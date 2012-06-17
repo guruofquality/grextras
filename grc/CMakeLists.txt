@@ -37,14 +37,14 @@ list(APPEND grc_sources
     extras_delay.xml
     extras_multiply_const.xml
     extras_noise_source.xml
-    filter_decim_fir.xml
+    extras_decim_fir.xml
     extras_blob_to_socket.xml
     extras_blob_to_stream.xml
     extras_socket_to_blob.xml
     extras_stream_to_blob.xml
     extras_tuntap.xml
-    digital_packet_framer2.xml
-    digital_packet_deframer2.xml
+    extras_packet_framer.xml
+    extras_packet_deframer.xml
     extras_stream_selector.xml
     extras_pmt_rpc.xml
 )

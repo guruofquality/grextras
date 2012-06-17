@@ -5,10 +5,10 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Packet Framer v2</name>
-    <key>digital_packet_framer2</key>
+    <name>Extras: Packet Framer</name>
+    <key>extras_packet_framer</key>
     <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.mod_pkts2(
+    <make>gr_extras.packet_framer(
     samples_per_symbol=$samples_per_symbol,
     bits_per_symbol=$bits_per_symbol,
     access_code=$access_code,

@@ -6,7 +6,7 @@
  -->
 <block>
     <name>Extras: Noise Source</name>
-    <key>gr_extras_noise_source</key>
+    <key>extras_noise_source</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.noise_source_$(type)($seed)
 self.$(id).set_waveform($wave)

@@ -23,7 +23,7 @@ import block_gateway #act of importing performs injection
 import pmt_to_python #act of importing performs injection
 
 try: #it may not exist based on prereqs
-    from pkt2 import mod_pkts2, demod_pkts2
+    from packet_framer import *
 except ImportError: pass
 
 from pmt_rpc import pmt_rpc

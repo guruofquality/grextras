@@ -31,12 +31,13 @@ import block_gateway #needed to inject into gr
 #                   mod/demod with packets as i/o
 # /////////////////////////////////////////////////////////////////////////////
 
-class mod_pkts2(gr.block):
+class packet_framer(gr.block):
     """
-    Wrap an arbitrary digital modulator in our packet handling framework.
+    The input is a pmt message blob.
+    Non-blob messages will be ignored.
+    The output is a byte stream for the modulator
+    """
 
-    Send packets by calling send_pkt
-    """
     def __init__(
         self,
         samples_per_symbol,
@@ -45,10 +46,7 @@ class mod_pkts2(gr.block):
         use_whitener_offset=False
     ):
         """
-        The input is a pmt message blob.
-        Non-blob messages will be ignored.
-        The output is a byte stream for the modulator
-
+        Create a new packet framer.
         @param access_code: AKA sync vector
         @type access_code: string of 1's and 0's between 1 and 64 long
         @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
@@ -97,21 +95,17 @@ class mod_pkts2(gr.block):
         self._pkt = self._pkt[num_items:] #residue for next work()
         return num_items
 
-class demod_pkts2(gr.hier_block2):
+class packet_deframer(gr.hier_block2):
     """
-    Wrap an arbitrary digital demodulator in our packet handling framework.
+    Hierarchical block for demodulating and deframing packets.
 
-    The input is complex baseband.  When packets are demodulated, they are passed to the
-    app via the callback.
+    The input is a byte stream from the demodulator.
+    The output is a pmt message blob.
     """
 
     def __init__(self, access_code=None, threshold=-1):
         """
-        Hierarchical block for demodulating and deframing packets.
-
-        The input is a byte stream from the demodulator.
-        The output is a pmt message blob.
-
+        Create a new packet deframer.
         @param access_code: AKA sync vector
         @type access_code: string of 1's and 0's
         @param threshold: detect access_code with up to threshold bits wrong (-1 -> use default)

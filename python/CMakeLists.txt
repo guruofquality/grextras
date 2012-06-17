@@ -28,7 +28,7 @@ list(APPEND python_sources
     extras_pmt.py
     pmt_to_python.py
     pmt_rpc.py
-    pkt2.py
+    packet_framer.py
 )
 
 GR_PYTHON_INSTALL(

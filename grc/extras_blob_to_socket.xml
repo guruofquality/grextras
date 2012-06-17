@@ -6,7 +6,7 @@
  -->
 <block>
     <name>Extras: Blob to Socket</name>
-    <key>gr_extras_blob_to_socket</key>
+    <key>extras_blob_to_socket</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.blob_to_socket($proto, $addr, $port)</make>
     <param>

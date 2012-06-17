@@ -6,7 +6,7 @@
  -->
 <block>
     <name>Extras: Stream to Blob</name>
-    <key>gr_extras_stream_to_blob</key>
+    <key>extras_stream_to_blob</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.stream_to_blob($item_size, $mtu)</make>
     <param>

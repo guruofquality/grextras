@@ -7,7 +7,7 @@
  -->
 <block>
     <name>Extras: Add</name>
-    <key>gr_extras_add</key>
+    <key>extras_add</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.add_$(type)($num_inputs, $vlen)</make>
     <param>

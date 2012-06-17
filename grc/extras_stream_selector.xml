@@ -6,7 +6,7 @@
  -->
 <block>
     <name>Extras: Stream Selector</name>
-    <key>gr_extras_stream_selector</key>
+    <key>extras_stream_selector</key>
     <import>from gnuradio import gr</import>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.stream_selector(
