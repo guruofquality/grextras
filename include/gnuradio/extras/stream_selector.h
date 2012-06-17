@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Free Software Foundation, Inc.
+ * Copyright 2011-2012 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -43,8 +43,18 @@ public:
 
     /*!
      * Set the path for samples for each input ports.
-     * Element i of paths specifies the output port index for input port i.
-     * The value of the element may also be: -1 to block or -2 to consume.
+     *
+     * Paths should be number of input ports in length.
+     * Each element represents the destination for an input port.
+     * The possible values for each element is an output port index,
+     * or the value may also be: -1 to block or -2 to consume.
+     *
+     * Ex, a block with one input and two outputs:
+     * paths = [1] input0 -> output1, output0 nothing.
+     *
+     * Ex, a block with two inputs and one output:
+     * paths = [-1, 0] input0 blocks, input1 -> output0.
+     *
      * \param paths a list of stream destinations for each port
      */
     virtual void set_paths(const std::vector<int> &paths) = 0;
