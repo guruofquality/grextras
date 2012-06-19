@@ -31,7 +31,12 @@
 ////////////////////////////////////////////////////////////////////////
 %include <gnuradio.i>
 %include "extras_factory.i"
-%include <gnuradio/block.h>
+
+//use a dummy block class to save on swig generation size
+//%include <gnuradio/block.h>
+namespace gnuradio {
+    class block : public gr_hier_block2{};
+}
 
 namespace std {
     %template() vector< std::complex<double> >;
