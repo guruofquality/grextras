@@ -56,6 +56,7 @@ list(APPEND gr_extras_sources
     socket_to_blob.cc
     stream_to_blob.cc
     tuntap.cc
+    msg_many_to_one.cc
 )
 
 list(APPEND gr_extras_libs

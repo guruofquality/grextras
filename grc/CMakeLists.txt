@@ -47,6 +47,7 @@ list(APPEND grc_sources
     extras_packet_deframer.xml
     extras_stream_selector.xml
     extras_pmt_rpc.xml
+    extras_msg_many_to_one.xml
 )
 
 install(

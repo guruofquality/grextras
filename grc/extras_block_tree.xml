@@ -50,5 +50,6 @@
         <block>extras_uhd_amsg_source</block>
         <block>extras_decim_fir</block>
         <block>extras_pmt_rpc</block>
+        <block>extras_msg_many_to_one</block>
     </cat>
 </cat>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<block>
+    <name>Extras: Msg M21</name>
+    <key>extras_msg_many_to_one</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.msg_many_to_one($num_inputs)</make>
+    <param>
+        <name>Num Inputs</name>
+        <key>num_inputs</key>
+        <value>2</value>
+        <type>int</type>
+    </param>
+    <sink>
+        <name>in</name>
+        <type></type>
+        <nports>$num_inputs</nports>
+    </sink>
+    <source>
+        <name>out</name>
+        <type></type>
+    </source>
+    <doc>
+The message many to one block combines messages from several inputs.
+    </doc>
+</block>
