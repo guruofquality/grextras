@@ -235,7 +235,10 @@ public:
         for (size_t i = 0; i < _input_items.size(); i++)
         {
             _input_items[i]._mem = input_items[i];
-            _input_items[i]._len = ninput_items[i];
+            if (_automatic)
+                _input_items[i]._len = fixed_rate_noutput_to_ninput(noutput_items);
+            else
+                _input_items[i]._len = ninput_items[i];
         }
         for (size_t i = 0; i < _output_items.size(); i++)
         {
