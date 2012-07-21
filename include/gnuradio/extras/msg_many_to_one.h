@@ -23,11 +23,11 @@
 #define INCLUDED_GR_EXTRAS_MSG_MANY_TO_ONE_H
 
 #include <gnuradio/extras/api.h>
-#include <gnuradio/block.h>
+#include <gr_hier_block2.h>
 
 namespace gnuradio{ namespace extras{
 
-class GR_EXTRAS_API msg_many_to_one : virtual public block{
+class GR_EXTRAS_API msg_many_to_one : virtual public gr_hier_block2{
 public:
     typedef boost::shared_ptr<msg_many_to_one> sptr;
 
