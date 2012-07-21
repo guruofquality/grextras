@@ -102,6 +102,12 @@ public:
         }
     }
 
+    ~msg_many_to_one_impl(void)
+    {
+        inputs.clear();
+        output.reset();
+    }
+
     std::vector<boost::shared_ptr<m21_input> > inputs;
     boost::shared_ptr<m21_output> output;
 };
