@@ -75,7 +75,7 @@ public:
             output->queue.push(tag);
             output->cond.notify_one();
         }
-        return output_items[0].size();
+        return input_items[0].size();
     }
 
     boost::shared_ptr<m21_output> output;
