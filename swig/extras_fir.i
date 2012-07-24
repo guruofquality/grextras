@@ -33,5 +33,6 @@
 ////////////////////////////////////////////////////////////////////////
 using namespace gnuradio::extras;
 
+GR_EXTRAS_SWIG_BLOCK_FACTORY_DECL(decim_fir)
 GR_EXTRAS_SWIG_BLOCK_FACTORY2(decim_fir, fc32_fc32_fc32)
 GR_EXTRAS_SWIG_BLOCK_FACTORY2(decim_fir, f32_f32_f32)

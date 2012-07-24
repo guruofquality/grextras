@@ -50,6 +50,7 @@
 using namespace gnuradio::extras;
 
 %define MAKE_ALL_THE_OP_TYPES(op)
+    GR_EXTRAS_SWIG_BLOCK_FACTORY_DECL(op)
     GR_EXTRAS_SWIG_BLOCK_FACTORY2(op, fc32_fc32)
     GR_EXTRAS_SWIG_BLOCK_FACTORY2(op, sc32_sc32)
     GR_EXTRAS_SWIG_BLOCK_FACTORY2(op, sc16_sc16)

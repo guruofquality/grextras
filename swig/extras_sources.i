@@ -36,6 +36,7 @@
 using namespace gnuradio::extras;
 
 %define MAKE_ALL_THE_SOURCE_TYPES(src)
+    GR_EXTRAS_SWIG_BLOCK_FACTORY_DECL(src)
     GR_EXTRAS_SWIG_BLOCK_FACTORY2(src, fc32)
     GR_EXTRAS_SWIG_BLOCK_FACTORY2(src, sc32)
     GR_EXTRAS_SWIG_BLOCK_FACTORY2(src, sc16)

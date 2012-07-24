@@ -28,6 +28,7 @@
 //----------------------------------------------------------------------\
 
 %define GR_EXTRAS_SWIG_BLOCK_FACTORY(NAME)
+    GR_EXTRAS_SWIG_BLOCK_FACTORY_DECL(NAME)
     GR_EXTRAS_SWIG_BLOCK_FACTORY3(NAME, make, NAME)
 %enddef
 
@@ -36,9 +37,14 @@
 %enddef
 
 %define GR_EXTRAS_SWIG_BLOCK_FACTORY3(CLASS_NAME, FACTORY_NAME, PYTHON_NAME)
-    %template(PYTHON_NAME ## _sptr) boost::shared_ptr<CLASS_NAME>;
     %pythoncode %{
-        PYTHON_NAME ## _sptr.__repr__ = lambda self: "<gr_block %s (%d)>" % (self.name(), self.unique_id ())
         PYTHON_NAME = CLASS_NAME.FACTORY_NAME
+    %}
+%enddef
+
+%define GR_EXTRAS_SWIG_BLOCK_FACTORY_DECL(CLASS_NAME)
+    %template(CLASS_NAME ## _sptr) boost::shared_ptr<CLASS_NAME>;
+    %pythoncode %{
+        CLASS_NAME ## _sptr.__repr__ = lambda self: "<gr_block %s (%d)>" % (self.name(), self.unique_id ())
     %}
 %enddef
