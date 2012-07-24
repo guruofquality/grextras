@@ -96,8 +96,8 @@ public:
     tuntap_impl(const int fd, const std::string &dev_name):
         gr_hier_block2(
             "tuntap",
-            gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(1, 1, 1),
+            gr_make_io_signature(1, 1, 1)
         ),
         _fd(fd),
         _dev_name(dev_name)
