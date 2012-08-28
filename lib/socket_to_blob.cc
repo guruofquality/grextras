@@ -87,6 +87,7 @@ public:
 
             //perform a blocking receive
             pmt::pmt_t blob = _mgr->acquire(true /*block*/);
+            pmt::pmt_blob_resize(blob, _mtu);
             const size_t num_bytes = _socket->receive(asio::buffer(
                 pmt::pmt_blob_rw_data(blob), _mtu
             ));
@@ -162,6 +163,7 @@ public:
 
             //perform a blocking receive
             pmt::pmt_t blob = _mgr->acquire(true /*block*/);
+            pmt::pmt_blob_resize(blob, _mtu);
             const size_t num_bytes = _socket->receive(asio::buffer(
                 pmt::pmt_blob_rw_data(blob), _mtu
             ));
