@@ -416,7 +416,7 @@ block::block(
     for (size_t i = 0; i < msg_sig.num_outputs; i++)
     {
         _impl->sourcers.push_back(boost::make_shared<msg_sourcer>());
-        this->connect(_impl->sourcers.back(), i, this->self(), i+out_sig->max_streams());
+        this->connect(_impl->sourcers.back(), 0, this->self(), i+out_sig->max_streams());
     }
 }
 
