@@ -27,6 +27,12 @@
 #include <stdexcept>
 #include <gr_feval.h>
 
+enum tag_propagation_policy_t {
+    TPP_DONT = 0,
+    TPP_ALL_TO_ALL = 1,
+    TPP_ONE_TO_ONE = 2
+};
+
 /*!
  * Shared message structure between python and gateway.
  * Each action type represents a scheduler-called function.
@@ -147,12 +153,12 @@ public:
         return gnuradio::block::nitems_written(which_output);
     }
 
-    gr_block::tag_propagation_policy_t gr_block__tag_propagation_policy(void){
-        return gnuradio::block::tag_propagation_policy();
+    tag_propagation_policy_t gr_block__tag_propagation_policy(void){
+        return (tag_propagation_policy_t)gnuradio::block::tag_propagation_policy();
     }
 
-    void gr_block__set_tag_propagation_policy(gr_block::tag_propagation_policy_t p){
-        return gnuradio::block::set_tag_propagation_policy(p);
+    void gr_block__set_tag_propagation_policy(tag_propagation_policy_t p){
+        return gnuradio::block::set_tag_propagation_policy((gr_block::tag_propagation_policy_t)p);
     }
 
     void gr_block__add_item_tag(
