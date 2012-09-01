@@ -39,6 +39,43 @@ static int mylround(double x)
     return int(x + 0.5);
 }
 
+template <typename T>
+struct MyQueue
+{
+
+    void push(const T &msg)
+    {
+        boost::mutex::scoped_lock lock(_msg_queue_mutex);
+        _msg_queue.push(msg);
+        lock.unlock();
+        _msg_queue_condition_variable.notify_one();
+    }
+
+    bool ready(void)
+    {
+        boost::mutex::scoped_lock lock(_msg_queue_mutex);
+        return !_msg_queue.empty();
+    }
+
+    T pop(void)
+    {
+        boost::mutex::scoped_lock lock(_msg_queue_mutex);
+        while (_msg_queue.empty())
+        {
+            _msg_queue_condition_variable.wait(lock);
+        }
+
+        T msg = _msg_queue.front();
+        _msg_queue.front() = T(); //resets ref counts
+        _msg_queue.pop();
+        return msg;
+    }
+
+    std::queue<T> _msg_queue;
+    boost::mutex _msg_queue_mutex;
+    boost::condition_variable _msg_queue_condition_variable;
+};
+
 /***********************************************************************
  * The message sourcer object
  **********************************************************************/
@@ -140,7 +177,8 @@ public:
         //push the tags in the queue
         BOOST_FOREACH(gr_tag_t &msg, _tags)
         {
-            this->push_msg_queue(msg);
+            msg.offset = this->index;
+            this->queue->push(msg);
             msg = gr_tag_t(); //resets PMT ref in _tags
         }
 
@@ -148,39 +186,11 @@ public:
         return 0;
     }
 
-    void push_msg_queue(const gr_tag_t &msg)
-    {
-        boost::mutex::scoped_lock lock(_msg_queue_mutex);
-        _msg_queue.push(msg);
-        lock.unlock();
-        _msg_queue_condition_variable.notify_one();
-    }
-
-    bool check_msg_queue(void)
-    {
-        boost::mutex::scoped_lock lock(_msg_queue_mutex);
-        return !_msg_queue.empty();
-    }
-
-    gr_tag_t pop_msg_queue(void)
-    {
-        boost::mutex::scoped_lock lock(_msg_queue_mutex);
-        while (_msg_queue.empty())
-        {
-            _msg_queue_condition_variable.wait(lock);
-        }
-
-        gr_tag_t msg = _msg_queue.front();
-        _msg_queue.front() = gr_tag_t(); //resets PMT ref counts
-        _msg_queue.pop();
-        return msg;
-    }
+    size_t index;
+    MyQueue<gr_tag_t> *queue;
 
 private:
     std::vector<gr_tag_t> _tags;
-    std::queue<gr_tag_t> _msg_queue;
-    boost::mutex _msg_queue_mutex;
-    boost::condition_variable _msg_queue_condition_variable;
 };
 
 /***********************************************************************
@@ -342,9 +352,10 @@ private:
 struct block::impl
 {
     boost::shared_ptr<master_block> master;
-    boost::shared_ptr<msg_sinker> sinker;
+    std::vector<boost::shared_ptr<msg_sinker> > sinkers;
     std::vector<boost::shared_ptr<msg_sourcer> > sourcers;
     gr_null_sink_sptr null_sink;
+    MyQueue<gr_tag_t> queue;
 };
 
 static gr_io_signature_sptr extend_sig(gr_io_signature_sptr sig, const size_t num){
@@ -372,7 +383,7 @@ block::block(
 ):
     gr_hier_block2(
         name + " wrapper",
-        extend_sig(in_sig, msg_sig.has_input? 1 : 0),
+        extend_sig(in_sig, msg_sig.num_inputs),
         extend_sig(out_sig, msg_sig.num_outputs)
     )
 {
@@ -406,10 +417,12 @@ block::block(
     }
 
     //connect sinker to upper port
-    if (msg_sig.has_input)
+    for (size_t i = 0; i < msg_sig.num_inputs; i++)
     {
-        _impl->sinker = boost::make_shared<msg_sinker>();
-        this->connect(this->self(), in_sig->max_streams(), _impl->sinker, 0);
+        _impl->sinkers.push_back(boost::make_shared<msg_sinker>());
+        _impl->sinkers.back()->queue = &_impl->queue;
+        _impl->sinkers.back()->index = i;
+        this->connect(this->self(), in_sig->max_streams(), _impl->sinkers.back(), 0);
     }
 
     //connect sourcer to upper ports
@@ -559,12 +572,12 @@ void block::get_tags_in_range(
 
 bool block::check_msg_queue(void)
 {
-    return _impl->sinker->check_msg_queue();
+    return _impl->queue.ready();
 }
 
 gr_tag_t block::pop_msg_queue(void)
 {
-    return _impl->sinker->pop_msg_queue();
+    return _impl->queue.pop();
 }
 
 void block::post_msg(const size_t port, const gr_tag_t &msg)

@@ -62,7 +62,10 @@ class gateway_handler(gr.feval_ll):
 ########################################################################
 class gateway_block(object):
 
-    def __init__(self, name, in_sig, out_sig, has_msg_input, num_msg_outputs):
+    def __init__(self, name, in_sig, out_sig, num_msg_inputs=0, num_msg_outputs=0, has_msg_input=False):
+
+        #backwards compat to handle has_msg_input
+        if has_msg_input: num_msg_inputs += 1
 
         #ensure that the sigs are iterable dtypes
         def sig_to_dtype_sig(sig):
@@ -86,7 +89,7 @@ class gateway_block(object):
         self.__handler = gateway_handler()
         self.__handler.init(self.__gr_block_handle)
         self.__gateway = block_gateway(
-            self.__handler, name, gr_in_sig, gr_out_sig, has_msg_input, num_msg_outputs)
+            self.__handler, name, gr_in_sig, gr_out_sig, num_msg_inputs, num_msg_outputs)
         self.__message = self.__gateway.gr_block_message()
 
         #register gr_block functions
@@ -157,13 +160,12 @@ class gateway_block(object):
 # Wrappers for the user to inherit from
 ########################################################################
 class block(gateway_block):
-    def __init__(self, name, in_sig, out_sig, has_msg_input=False, num_msg_outputs=0):
+    def __init__(self, name, in_sig, out_sig, **kwargs):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            has_msg_input=has_msg_input,
-            num_msg_outputs=num_msg_outputs,
+            **kwargs
         )
 
 #inject into gr namespace
@@ -173,46 +175,42 @@ gr.block = block
 # DEPRECATED: Wrappers for the user to inherit from
 ########################################################################
 class basic_block(gateway_block):
-    def __init__(self, name, in_sig, out_sig, has_msg_input=False, num_msg_outputs=0):
+    def __init__(self, name, in_sig, out_sig, **kwargs):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            has_msg_input=has_msg_input,
-            num_msg_outputs=num_msg_outputs,
+            **kwargs
         )
         self.set_auto_consume(False)
         self.work = self.general_work #makes it backwards compatible since we only call work
 
 class sync_block(gateway_block):
-    def __init__(self, name, in_sig, out_sig, has_msg_input=False, num_msg_outputs=0):
+    def __init__(self, name, in_sig, out_sig, **kwargs):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            has_msg_input=has_msg_input,
-            num_msg_outputs=num_msg_outputs,
+            **kwargs
         )
 
 class decim_block(gateway_block):
-    def __init__(self, name, in_sig, out_sig, decim, has_msg_input=False, num_msg_outputs=0):
+    def __init__(self, name, in_sig, out_sig, decim, **kwargs):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            has_msg_input=has_msg_input,
-            num_msg_outputs=num_msg_outputs,
+            **kwargs
         )
         self.set_relative_rate(1.0/decim)
 
 class interp_block(gateway_block):
-    def __init__(self, name, in_sig, out_sig, interp, has_msg_input=False, num_msg_outputs=0):
+    def __init__(self, name, in_sig, out_sig, interp, **kwargs):
         gateway_block.__init__(self,
             name=name,
             in_sig=in_sig,
             out_sig=out_sig,
-            has_msg_input=has_msg_input,
-            num_msg_outputs=num_msg_outputs,
+            **kwargs
         )
         self.set_relative_rate(1.0*interp)
 

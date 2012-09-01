@@ -85,7 +85,7 @@ public:
         const std::string &name,
         gr_io_signature_sptr in_sig,
         gr_io_signature_sptr out_sig,
-        const bool has_msg_input,
+        const size_t num_msg_inputs,
         const size_t num_msg_outputs
     );
 

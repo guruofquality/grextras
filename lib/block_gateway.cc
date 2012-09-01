@@ -131,10 +131,10 @@ block_gateway::sptr block_gateway::make(
     const std::string &name,
     gr_io_signature_sptr in_sig,
     gr_io_signature_sptr out_sig,
-    const bool has_msg_input,
+    const size_t num_msg_inputs,
     const size_t num_msg_outputs
 ){
     return gnuradio::get_initial_sptr(
-        new block_gateway_impl(handler, name, in_sig, out_sig, msg_signature(has_msg_input, num_msg_outputs))
+        new block_gateway_impl(handler, name, in_sig, out_sig, msg_signature(num_msg_inputs, num_msg_outputs))
     );
 }

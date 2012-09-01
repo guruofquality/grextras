@@ -57,13 +57,25 @@ template <typename PtrType> struct Buffer
 //! Message signature describes the inputs and outputs of message passing
 struct GR_EXTRAS_API msg_signature
 {
-    msg_signature(const bool has_input = false, const size_t num_outputs = 0):
-        has_input(has_input), num_outputs(num_outputs)
+    msg_signature(void):
+        num_inputs(0), num_outputs(0)
     {
         //NOP
     }
 
-    bool has_input;
+    msg_signature(const bool has_input, const size_t num_outputs):
+        num_inputs(has_input?1:0), num_outputs(num_outputs)
+    {
+        //NOP
+    }
+
+    msg_signature(const size_t num_inputs, const size_t num_outputs):
+        num_inputs(num_inputs), num_outputs(num_outputs)
+    {
+        //NOP
+    }
+
+    size_t num_inputs;
     size_t num_outputs;
 };
 
