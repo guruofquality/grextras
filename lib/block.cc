@@ -416,13 +416,13 @@ block::block(
         this->connect(_impl->master, i, this->self(), i);
     }
 
-    //connect sinker to upper port
+    //connect sinker to upper ports
     for (size_t i = 0; i < msg_sig.num_inputs; i++)
     {
         _impl->sinkers.push_back(boost::make_shared<msg_sinker>());
         _impl->sinkers.back()->queue = &_impl->queue;
         _impl->sinkers.back()->index = i;
-        this->connect(this->self(), in_sig->max_streams(), _impl->sinkers.back(), 0);
+        this->connect(this->self(), i+in_sig->max_streams(), _impl->sinkers.back(), 0);
     }
 
     //connect sourcer to upper ports
