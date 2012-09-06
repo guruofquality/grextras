@@ -72,10 +72,10 @@ public:
                 pmt::pmt_from_uint64(md.time_spec.get_full_secs()),
                 pmt::pmt_from_double(md.time_spec.get_frac_secs())
             );
-            pmt::pmt_dict_add(value_dict, TIME_KEY, timestamp);
+            value_dict = pmt::pmt_dict_add(value_dict, TIME_KEY, timestamp);
         }
-        pmt::pmt_dict_add(value_dict, CHAN_KEY, pmt::pmt_from_uint64(md.channel));
-        pmt::pmt_dict_add(value_dict, EVENT_KEY, pmt::pmt_from_uint64(md.event_code));
+        value_dict = pmt::pmt_dict_add(value_dict, CHAN_KEY, pmt::pmt_from_uint64(md.channel));
+        value_dict = pmt::pmt_dict_add(value_dict, EVENT_KEY, pmt::pmt_from_uint64(md.event_code));
         this->post_msg(0, AMSG_KEY, value_dict, _id);
     }
 
