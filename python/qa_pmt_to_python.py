@@ -65,6 +65,13 @@ class test_pmt_to_python(gr_unittest.TestCase):
 
     def test_nested(self):
         self.loopback([(1, "two"), {3 : 4.0}, [5, (6j, )]])
+        self.loopback({'channel': 123, 'timestamp': (100L, 0.2)})
+
+    def test_time_tuple(self):
+        timestamp = pmt.pmt_make_tuple(pmt.pmt_from_uint64(123), pmt.pmt_from_double(0.123))
+        ts = pmt.to_python(timestamp)
+        self.assertTrue(isinstance(ts[0], long));
+        self.assertTrue(isinstance(ts[1], float));
 
     def test_numpy(self):
         python_data = numpy.array([1, 2, 3], numpy.uint8)
