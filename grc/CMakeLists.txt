@@ -48,6 +48,7 @@ list(APPEND grc_sources
     extras_stream_selector.xml
     extras_pmt_rpc.xml
     extras_msg_many_to_one.xml
+    extras_socket_msg.xml
 )
 
 install(

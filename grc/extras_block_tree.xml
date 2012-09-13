@@ -40,6 +40,7 @@
         <block>extras_multiply</block>
         <block>extras_multiply_const</block>
         <block>extras_divide</block>
+        <block>extras_socket_msg</block>
         <block>extras_blob_to_socket</block>
         <block>extras_blob_to_stream</block>
         <block>extras_socket_to_blob</block>

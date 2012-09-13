@@ -31,6 +31,7 @@
 #include <gnuradio/extras/stream_to_blob.h>
 #include <gnuradio/extras/tuntap.h>
 #include <gnuradio/extras/msg_many_to_one.h>
+#include <gnuradio/extras/socket_msg.h>
 %}
 
 %include <gnuradio/extras/blob_to_filedes.h>
@@ -41,6 +42,7 @@
 %include <gnuradio/extras/stream_to_blob.h>
 %include <gnuradio/extras/tuntap.h>
 %include <gnuradio/extras/msg_many_to_one.h>
+%include <gnuradio/extras/socket_msg.h>
 
 ////////////////////////////////////////////////////////////////////////
 // block magic
@@ -54,3 +56,4 @@ GR_EXTRAS_SWIG_BLOCK_FACTORY(socket_to_blob)
 GR_EXTRAS_SWIG_BLOCK_FACTORY(stream_to_blob)
 GR_EXTRAS_SWIG_BLOCK_FACTORY(tuntap)
 GR_EXTRAS_SWIG_BLOCK_FACTORY(msg_many_to_one)
+GR_EXTRAS_SWIG_BLOCK_FACTORY(socket_msg)
