@@ -48,6 +48,7 @@ list(APPEND include_sources
     stream_to_blob.h
     tuntap.h
     msg_many_to_one.h
+    socket_msg.h
 )
 
 install(
