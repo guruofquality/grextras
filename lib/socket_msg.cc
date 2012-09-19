@@ -61,7 +61,8 @@ struct socket_msg_producer : gnuradio::block
         gnuradio::block(
             "socket_msg_producer",
             gr_make_io_signature(0, 0, 0),
-            gr_make_io_signature(1, 1, 1)
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(size_t(0), size_t(1)) //1 output msg port
         ),
         _mtu(mtu)
     {
@@ -127,8 +128,9 @@ struct socket_msg_consumer : gnuradio::block
     socket_msg_consumer(void):
         gnuradio::block(
             "socket_msg_consumer",
-            gr_make_io_signature(1, 1, 1),
-            gr_make_io_signature(0, 0, 0)
+            gr_make_io_signature(0, 0, 0),
+            gr_make_io_signature(0, 0, 0),
+            msg_signature(size_t(1), size_t(0)) //1 input msg port
         )
     {
         //NOP
