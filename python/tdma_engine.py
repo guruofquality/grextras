@@ -49,24 +49,19 @@ HAVE_TIME = 0
 
 
 # /////////////////////////////////////////////////////////////////////////////
-#                   Simple MAC w/ ARQ
+#                   TDMA MAC
 # /////////////////////////////////////////////////////////////////////////////
 
 class tdma_engine(gr.block):
     """
-    Provide ARQ capability, virtual channel capability, stat mux, etc
+    TDMA implementation.  See wiki for more details
     """
     def __init__(
         self,initial_slot,slot_interval,guard_interval,num_slots,lead_limit,link_bps
     ):
         """
-        The input is a pmt message blob.
-        Non-blob messages will be ignored.
-        The output is a byte stream for the modulator
-
-        @param access_code: AKA sync vector
-        @type access_code: string of 1's and 0's between 1 and 64 long
-        @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
+        Inputs: complex stream from USRP, pkt in, ctrl in
+        Outputs: pkt out, ctrl out
         """
 
         gr.block.__init__(
