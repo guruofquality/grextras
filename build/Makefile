@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/john/src/grextras
+CMAKE_SOURCE_DIR = /home/john/src/pre-cog
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/john/src/grextras/build
+CMAKE_BINARY_DIR = /home/john/src/pre-cog/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -120,9 +120,9 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/grextras/build/CMakeFiles /home/john/src/grextras/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/pre-cog/build/CMakeFiles /home/john/src/pre-cog/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/grextras/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/pre-cog/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -215,43 +215,43 @@ extras_swig_swig_doc/fast:
 .PHONY : extras_swig_swig_doc/fast
 
 #=============================================================================
-# Target rules for targets named pygen_swig_02940
+# Target rules for targets named pygen_swig_960de
 
 # Build rule for target.
-pygen_swig_02940: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pygen_swig_02940
-.PHONY : pygen_swig_02940
+pygen_swig_960de: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pygen_swig_960de
+.PHONY : pygen_swig_960de
 
 # fast build rule for target.
-pygen_swig_02940/fast:
-	$(MAKE) -f swig/CMakeFiles/pygen_swig_02940.dir/build.make swig/CMakeFiles/pygen_swig_02940.dir/build
-.PHONY : pygen_swig_02940/fast
+pygen_swig_960de/fast:
+	$(MAKE) -f swig/CMakeFiles/pygen_swig_960de.dir/build.make swig/CMakeFiles/pygen_swig_960de.dir/build
+.PHONY : pygen_swig_960de/fast
 
 #=============================================================================
-# Target rules for targets named pygen_python_363a8
+# Target rules for targets named pygen_python_4bde2
 
 # Build rule for target.
-pygen_python_363a8: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pygen_python_363a8
-.PHONY : pygen_python_363a8
+pygen_python_4bde2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pygen_python_4bde2
+.PHONY : pygen_python_4bde2
 
 # fast build rule for target.
-pygen_python_363a8/fast:
-	$(MAKE) -f python/CMakeFiles/pygen_python_363a8.dir/build.make python/CMakeFiles/pygen_python_363a8.dir/build
-.PHONY : pygen_python_363a8/fast
+pygen_python_4bde2/fast:
+	$(MAKE) -f python/CMakeFiles/pygen_python_4bde2.dir/build.make python/CMakeFiles/pygen_python_4bde2.dir/build
+.PHONY : pygen_python_4bde2/fast
 
 #=============================================================================
-# Target rules for targets named pygen_scripts_8aea9
+# Target rules for targets named pygen_scripts_00a0c
 
 # Build rule for target.
-pygen_scripts_8aea9: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pygen_scripts_8aea9
-.PHONY : pygen_scripts_8aea9
+pygen_scripts_00a0c: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pygen_scripts_00a0c
+.PHONY : pygen_scripts_00a0c
 
 # fast build rule for target.
-pygen_scripts_8aea9/fast:
-	$(MAKE) -f scripts/CMakeFiles/pygen_scripts_8aea9.dir/build.make scripts/CMakeFiles/pygen_scripts_8aea9.dir/build
-.PHONY : pygen_scripts_8aea9/fast
+pygen_scripts_00a0c/fast:
+	$(MAKE) -f scripts/CMakeFiles/pygen_scripts_00a0c.dir/build.make scripts/CMakeFiles/pygen_scripts_00a0c.dir/build
+.PHONY : pygen_scripts_00a0c/fast
 
 # Help Target
 help:
@@ -271,9 +271,9 @@ help:
 	@echo "... _extras_swig"
 	@echo "... _extras_swig_swig_tag"
 	@echo "... extras_swig_swig_doc"
-	@echo "... pygen_swig_02940"
-	@echo "... pygen_python_363a8"
-	@echo "... pygen_scripts_8aea9"
+	@echo "... pygen_swig_960de"
+	@echo "... pygen_python_4bde2"
+	@echo "... pygen_scripts_00a0c"
 .PHONY : help
 
 

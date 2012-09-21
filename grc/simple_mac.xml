@@ -49,6 +49,6 @@
         <type></type>
     </source>
     <doc>
-This is a Simple MAC implementation with ARQ.  
+This is a Simple MAC implementation with ARQ.  Set address of radio, ARQ limit, and ARQ timeout.  Currently, this only implements stop-and-wait ARQ.
     </doc>
 </block>

@@ -1,4 +1,4 @@
-# Install script for directory: /home/john/src/grextras/include/gnuradio/extras
+# Install script for directory: /home/john/src/pre-cog/include/gnuradio/extras
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,28 +34,28 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_devel")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/gnuradio/extras" TYPE FILE FILES
-    "/home/john/src/grextras/include/gnuradio/extras/uhd_amsg_source.h"
-    "/home/john/src/grextras/include/gnuradio/extras/api.h"
-    "/home/john/src/grextras/include/gnuradio/extras/add.h"
-    "/home/john/src/grextras/include/gnuradio/extras/add_const.h"
-    "/home/john/src/grextras/include/gnuradio/extras/delay.h"
-    "/home/john/src/grextras/include/gnuradio/extras/divide.h"
-    "/home/john/src/grextras/include/gnuradio/extras/multiply.h"
-    "/home/john/src/grextras/include/gnuradio/extras/multiply_const.h"
-    "/home/john/src/grextras/include/gnuradio/extras/noise_source.h"
-    "/home/john/src/grextras/include/gnuradio/extras/signal_source.h"
-    "/home/john/src/grextras/include/gnuradio/extras/subtract.h"
-    "/home/john/src/grextras/include/gnuradio/extras/stream_selector.h"
-    "/home/john/src/grextras/include/gnuradio/extras/decim_fir.h"
-    "/home/john/src/grextras/include/gnuradio/extras/blob_to_filedes.h"
-    "/home/john/src/grextras/include/gnuradio/extras/blob_to_socket.h"
-    "/home/john/src/grextras/include/gnuradio/extras/blob_to_stream.h"
-    "/home/john/src/grextras/include/gnuradio/extras/filedes_to_blob.h"
-    "/home/john/src/grextras/include/gnuradio/extras/socket_to_blob.h"
-    "/home/john/src/grextras/include/gnuradio/extras/stream_to_blob.h"
-    "/home/john/src/grextras/include/gnuradio/extras/tuntap.h"
-    "/home/john/src/grextras/include/gnuradio/extras/msg_many_to_one.h"
-    "/home/john/src/grextras/include/gnuradio/extras/socket_msg.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/uhd_amsg_source.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/api.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/add.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/add_const.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/delay.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/divide.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/multiply.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/multiply_const.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/noise_source.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/signal_source.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/subtract.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/stream_selector.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/decim_fir.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/blob_to_filedes.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/blob_to_socket.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/blob_to_stream.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/filedes_to_blob.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/socket_to_blob.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/stream_to_blob.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/tuntap.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/msg_many_to_one.h"
+    "/home/john/src/pre-cog/include/gnuradio/extras/socket_msg.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_devel")
 

@@ -194,7 +194,7 @@ stdexcept
 gr_feval.h
 -
 
-/home/john/src/grextras/build/swig/extras_swigPYTHON_wrap.cxx
+/home/john/src/pre-cog/build/swig/extras_swigPYTHON_wrap.cxx
 Python.h
 -
 string.h
@@ -202,7 +202,7 @@ string.h
 stdexcept
 -
 gnuradio_swig_bug_workaround.h
-/home/john/src/grextras/build/swig/gnuradio_swig_bug_workaround.h
+/home/john/src/pre-cog/build/swig/gnuradio_swig_bug_workaround.h
 gr_types.h
 -
 stddef.h

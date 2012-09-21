@@ -13,7 +13,7 @@ CMakeCXXCompilerId.cpp:193:54: warning: deprecated conversion from string consta
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
 
-The CXX compiler identification is GNU, found in "/home/john/src/grextras/build/CMakeFiles/CompilerIdCXX/a.out"
+The CXX compiler identification is GNU, found in "/home/john/src/pre-cog/build/CMakeFiles/CompilerIdCXX/a.out"
 
 Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
 Compiler: /usr/bin/gcc 
@@ -26,30 +26,30 @@ The output was:
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
 
-The C compiler identification is GNU, found in "/home/john/src/grextras/build/CMakeFiles/CompilerIdC/a.out"
+The C compiler identification is GNU, found in "/home/john/src/pre-cog/build/CMakeFiles/CompilerIdC/a.out"
 
 Determining if the CXX compiler works passed with the following output:
-Change Dir: /home/john/src/grextras/build/CMakeFiles/CMakeTmp
+Change Dir: /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp
 
 Run Build Command:/usr/bin/make "cmTryCompileExec/fast"
 /usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
-make[1]: Entering directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp'
-/usr/bin/cmake -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+make[1]: Entering directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp/CMakeFiles 1
 Building CXX object CMakeFiles/cmTryCompileExec.dir/testCXXCompiler.cxx.o
-/usr/bin/c++     -o CMakeFiles/cmTryCompileExec.dir/testCXXCompiler.cxx.o -c /home/john/src/grextras/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+/usr/bin/c++     -o CMakeFiles/cmTryCompileExec.dir/testCXXCompiler.cxx.o -c /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
 Linking CXX executable cmTryCompileExec
 /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
 /usr/bin/c++         CMakeFiles/cmTryCompileExec.dir/testCXXCompiler.cxx.o  -o cmTryCompileExec -rdynamic 
-make[1]: Leaving directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp'
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /home/john/src/grextras/build/CMakeFiles/CMakeTmp
+Change Dir: /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp
 
 Run Build Command:/usr/bin/make "cmTryCompileExec/fast"
 /usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
-make[1]: Entering directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp'
-/usr/bin/cmake -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+make[1]: Entering directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp/CMakeFiles 1
 Building CXX object CMakeFiles/cmTryCompileExec.dir/CMakeCXXCompilerABI.cpp.o
 /usr/bin/c++     -o CMakeFiles/cmTryCompileExec.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp
 Linking CXX executable cmTryCompileExec
@@ -66,17 +66,17 @@ COMPILER_PATH=/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/:/usr/lib/x86
 LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/:/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../../:/lib/:/usr/lib/:/usr/lib/x86_64-linux-gnu/
 COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec' '-rdynamic' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
  /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/collect2 --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../../crt1.o /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../../crti.o /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/crtbegin.o -L/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2 -L/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../.. -L/usr/lib/x86_64-linux-gnu CMakeFiles/cmTryCompileExec.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/crtend.o /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../../crtn.o
-make[1]: Leaving directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp'
 
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/john/src/grextras/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp]
   ignore line: []
   ignore line: [Run Build Command:/usr/bin/make "cmTryCompileExec/fast"]
   ignore line: [/usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build]
-  ignore line: [make[1]: Entering directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp']
-  ignore line: [/usr/bin/cmake -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles/CMakeTmp/CMakeFiles 1]
+  ignore line: [make[1]: Entering directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/cmake -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp/CMakeFiles 1]
   ignore line: [Building CXX object CMakeFiles/cmTryCompileExec.dir/CMakeCXXCompilerABI.cpp.o]
   ignore line: [/usr/bin/c++     -o CMakeFiles/cmTryCompileExec.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp]
   ignore line: [Linking CXX executable cmTryCompileExec]
@@ -133,27 +133,27 @@ Parsed CXX implicit link information from above output:
 
 
 Determining if the C compiler works passed with the following output:
-Change Dir: /home/john/src/grextras/build/CMakeFiles/CMakeTmp
+Change Dir: /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp
 
 Run Build Command:/usr/bin/make "cmTryCompileExec/fast"
 /usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
-make[1]: Entering directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp'
-/usr/bin/cmake -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+make[1]: Entering directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp/CMakeFiles 1
 Building C object CMakeFiles/cmTryCompileExec.dir/testCCompiler.c.o
-/usr/bin/gcc    -o CMakeFiles/cmTryCompileExec.dir/testCCompiler.c.o   -c /home/john/src/grextras/build/CMakeFiles/CMakeTmp/testCCompiler.c
+/usr/bin/gcc    -o CMakeFiles/cmTryCompileExec.dir/testCCompiler.c.o   -c /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp/testCCompiler.c
 Linking C executable cmTryCompileExec
 /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
 /usr/bin/gcc        CMakeFiles/cmTryCompileExec.dir/testCCompiler.c.o  -o cmTryCompileExec -rdynamic 
-make[1]: Leaving directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp'
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: /home/john/src/grextras/build/CMakeFiles/CMakeTmp
+Change Dir: /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp
 
 Run Build Command:/usr/bin/make "cmTryCompileExec/fast"
 /usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
-make[1]: Entering directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp'
-/usr/bin/cmake -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+make[1]: Entering directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp/CMakeFiles 1
 Building C object CMakeFiles/cmTryCompileExec.dir/CMakeCCompilerABI.c.o
 /usr/bin/gcc    -o CMakeFiles/cmTryCompileExec.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-2.8/Modules/CMakeCCompilerABI.c
 Linking C executable cmTryCompileExec
@@ -170,17 +170,17 @@ COMPILER_PATH=/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/:/usr/lib/x86
 LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/:/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../../:/lib/:/usr/lib/:/usr/lib/x86_64-linux-gnu/
 COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec' '-rdynamic' '-mtune=generic' '-march=x86-64'
  /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/collect2 --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../../crt1.o /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../../crti.o /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/crtbegin.o -L/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2 -L/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../.. -L/usr/lib/x86_64-linux-gnu CMakeFiles/cmTryCompileExec.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/crtend.o /usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2/../../../crtn.o
-make[1]: Leaving directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp'
 
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/john/src/grextras/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp]
   ignore line: []
   ignore line: [Run Build Command:/usr/bin/make "cmTryCompileExec/fast"]
   ignore line: [/usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build]
-  ignore line: [make[1]: Entering directory `/home/john/src/grextras/build/CMakeFiles/CMakeTmp']
-  ignore line: [/usr/bin/cmake -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles/CMakeTmp/CMakeFiles 1]
+  ignore line: [make[1]: Entering directory `/home/john/src/pre-cog/build/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/cmake -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles/CMakeTmp/CMakeFiles 1]
   ignore line: [Building C object CMakeFiles/cmTryCompileExec.dir/CMakeCCompilerABI.c.o]
   ignore line: [/usr/bin/gcc    -o CMakeFiles/cmTryCompileExec.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-2.8/Modules/CMakeCCompilerABI.c]
   ignore line: [Linking C executable cmTryCompileExec]

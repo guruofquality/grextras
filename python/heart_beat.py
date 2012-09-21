@@ -33,14 +33,12 @@ import time
 
 
 # /////////////////////////////////////////////////////////////////////////////
-#                   Simple MAC w/ ARQ
+#                   Heart Beat - period blob generation with param key and value
 # /////////////////////////////////////////////////////////////////////////////
 
 class heart_beat(gr.block):
     """
-    Wrap an arbitrary digital modulator in our packet handling framework.
-
-    Send packets by calling send_pkt
+    Generates blob at specified interval (w/ sleep)
     """
     def __init__(
         self,period,key,value
@@ -50,9 +48,9 @@ class heart_beat(gr.block):
         Non-blob messages will be ignored.
         The output is a byte stream for the modulator
 
-        @param access_code: AKA sync vector
-        @type access_code: string of 1's and 0's between 1 and 64 long
-        @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
+        @param period: Time between blopbs
+        @param key: String for key
+        @param value: String for value
         """
 
 		

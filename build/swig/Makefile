@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/john/src/grextras
+CMAKE_SOURCE_DIR = /home/john/src/pre-cog
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/john/src/grextras/build
+CMAKE_BINARY_DIR = /home/john/src/pre-cog/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -120,14 +120,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/grextras/build/CMakeFiles /home/john/src/grextras/build/swig/CMakeFiles/progress.marks
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 swig/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/grextras/build/CMakeFiles 0
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/pre-cog/build/CMakeFiles /home/john/src/pre-cog/build/swig/CMakeFiles/progress.marks
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 swig/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/pre-cog/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 swig/clean
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 swig/clean
 .PHONY : clean
 
 # The main clean target
@@ -136,22 +136,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 swig/preinstall
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 swig/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 swig/preinstall
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 swig/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 swig/CMakeFiles/_extras_swig.dir/rule:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 swig/CMakeFiles/_extras_swig.dir/rule
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 swig/CMakeFiles/_extras_swig.dir/rule
 .PHONY : swig/CMakeFiles/_extras_swig.dir/rule
 
 # Convenience name for target.
@@ -160,12 +160,12 @@ _extras_swig: swig/CMakeFiles/_extras_swig.dir/rule
 
 # fast build rule for target.
 _extras_swig/fast:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/_extras_swig.dir/build.make swig/CMakeFiles/_extras_swig.dir/build
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/_extras_swig.dir/build.make swig/CMakeFiles/_extras_swig.dir/build
 .PHONY : _extras_swig/fast
 
 # Convenience name for target.
 swig/CMakeFiles/_extras_swig_swig_tag.dir/rule:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 swig/CMakeFiles/_extras_swig_swig_tag.dir/rule
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 swig/CMakeFiles/_extras_swig_swig_tag.dir/rule
 .PHONY : swig/CMakeFiles/_extras_swig_swig_tag.dir/rule
 
 # Convenience name for target.
@@ -174,12 +174,12 @@ _extras_swig_swig_tag: swig/CMakeFiles/_extras_swig_swig_tag.dir/rule
 
 # fast build rule for target.
 _extras_swig_swig_tag/fast:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/_extras_swig_swig_tag.dir/build.make swig/CMakeFiles/_extras_swig_swig_tag.dir/build
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/_extras_swig_swig_tag.dir/build.make swig/CMakeFiles/_extras_swig_swig_tag.dir/build
 .PHONY : _extras_swig_swig_tag/fast
 
 # Convenience name for target.
 swig/CMakeFiles/extras_swig_swig_doc.dir/rule:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 swig/CMakeFiles/extras_swig_swig_doc.dir/rule
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 swig/CMakeFiles/extras_swig_swig_doc.dir/rule
 .PHONY : swig/CMakeFiles/extras_swig_swig_doc.dir/rule
 
 # Convenience name for target.
@@ -188,29 +188,29 @@ extras_swig_swig_doc: swig/CMakeFiles/extras_swig_swig_doc.dir/rule
 
 # fast build rule for target.
 extras_swig_swig_doc/fast:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/extras_swig_swig_doc.dir/build.make swig/CMakeFiles/extras_swig_swig_doc.dir/build
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/extras_swig_swig_doc.dir/build.make swig/CMakeFiles/extras_swig_swig_doc.dir/build
 .PHONY : extras_swig_swig_doc/fast
 
 # Convenience name for target.
-swig/CMakeFiles/pygen_swig_02940.dir/rule:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 swig/CMakeFiles/pygen_swig_02940.dir/rule
-.PHONY : swig/CMakeFiles/pygen_swig_02940.dir/rule
+swig/CMakeFiles/pygen_swig_960de.dir/rule:
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 swig/CMakeFiles/pygen_swig_960de.dir/rule
+.PHONY : swig/CMakeFiles/pygen_swig_960de.dir/rule
 
 # Convenience name for target.
-pygen_swig_02940: swig/CMakeFiles/pygen_swig_02940.dir/rule
-.PHONY : pygen_swig_02940
+pygen_swig_960de: swig/CMakeFiles/pygen_swig_960de.dir/rule
+.PHONY : pygen_swig_960de
 
 # fast build rule for target.
-pygen_swig_02940/fast:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/pygen_swig_02940.dir/build.make swig/CMakeFiles/pygen_swig_02940.dir/build
-.PHONY : pygen_swig_02940/fast
+pygen_swig_960de/fast:
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/pygen_swig_960de.dir/build.make swig/CMakeFiles/pygen_swig_960de.dir/build
+.PHONY : pygen_swig_960de/fast
 
 _extras_swig_swig_tag.o: _extras_swig_swig_tag.cpp.o
 .PHONY : _extras_swig_swig_tag.o
 
 # target to build an object file
 _extras_swig_swig_tag.cpp.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/_extras_swig_swig_tag.dir/build.make swig/CMakeFiles/_extras_swig_swig_tag.dir/_extras_swig_swig_tag.cpp.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/_extras_swig_swig_tag.dir/build.make swig/CMakeFiles/_extras_swig_swig_tag.dir/_extras_swig_swig_tag.cpp.o
 .PHONY : _extras_swig_swig_tag.cpp.o
 
 _extras_swig_swig_tag.i: _extras_swig_swig_tag.cpp.i
@@ -218,7 +218,7 @@ _extras_swig_swig_tag.i: _extras_swig_swig_tag.cpp.i
 
 # target to preprocess a source file
 _extras_swig_swig_tag.cpp.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/_extras_swig_swig_tag.dir/build.make swig/CMakeFiles/_extras_swig_swig_tag.dir/_extras_swig_swig_tag.cpp.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/_extras_swig_swig_tag.dir/build.make swig/CMakeFiles/_extras_swig_swig_tag.dir/_extras_swig_swig_tag.cpp.i
 .PHONY : _extras_swig_swig_tag.cpp.i
 
 _extras_swig_swig_tag.s: _extras_swig_swig_tag.cpp.s
@@ -226,7 +226,7 @@ _extras_swig_swig_tag.s: _extras_swig_swig_tag.cpp.s
 
 # target to generate assembly for a file
 _extras_swig_swig_tag.cpp.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/_extras_swig_swig_tag.dir/build.make swig/CMakeFiles/_extras_swig_swig_tag.dir/_extras_swig_swig_tag.cpp.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/_extras_swig_swig_tag.dir/build.make swig/CMakeFiles/_extras_swig_swig_tag.dir/_extras_swig_swig_tag.cpp.s
 .PHONY : _extras_swig_swig_tag.cpp.s
 
 extras_swigPYTHON_wrap.o: extras_swigPYTHON_wrap.cxx.o
@@ -234,7 +234,7 @@ extras_swigPYTHON_wrap.o: extras_swigPYTHON_wrap.cxx.o
 
 # target to build an object file
 extras_swigPYTHON_wrap.cxx.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/_extras_swig.dir/build.make swig/CMakeFiles/_extras_swig.dir/extras_swigPYTHON_wrap.cxx.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/_extras_swig.dir/build.make swig/CMakeFiles/_extras_swig.dir/extras_swigPYTHON_wrap.cxx.o
 .PHONY : extras_swigPYTHON_wrap.cxx.o
 
 extras_swigPYTHON_wrap.i: extras_swigPYTHON_wrap.cxx.i
@@ -242,7 +242,7 @@ extras_swigPYTHON_wrap.i: extras_swigPYTHON_wrap.cxx.i
 
 # target to preprocess a source file
 extras_swigPYTHON_wrap.cxx.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/_extras_swig.dir/build.make swig/CMakeFiles/_extras_swig.dir/extras_swigPYTHON_wrap.cxx.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/_extras_swig.dir/build.make swig/CMakeFiles/_extras_swig.dir/extras_swigPYTHON_wrap.cxx.i
 .PHONY : extras_swigPYTHON_wrap.cxx.i
 
 extras_swigPYTHON_wrap.s: extras_swigPYTHON_wrap.cxx.s
@@ -250,7 +250,7 @@ extras_swigPYTHON_wrap.s: extras_swigPYTHON_wrap.cxx.s
 
 # target to generate assembly for a file
 extras_swigPYTHON_wrap.cxx.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f swig/CMakeFiles/_extras_swig.dir/build.make swig/CMakeFiles/_extras_swig.dir/extras_swigPYTHON_wrap.cxx.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f swig/CMakeFiles/_extras_swig.dir/build.make swig/CMakeFiles/_extras_swig.dir/extras_swigPYTHON_wrap.cxx.s
 .PHONY : extras_swigPYTHON_wrap.cxx.s
 
 # Help Target
@@ -267,7 +267,7 @@ help:
 	@echo "... install/local"
 	@echo "... install/strip"
 	@echo "... list_install_components"
-	@echo "... pygen_swig_02940"
+	@echo "... pygen_swig_960de"
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... _extras_swig_swig_tag.o"
@@ -287,6 +287,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

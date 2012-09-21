@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 ###################################################
-##Heartbeat
+##Virtual Channel Formatter
 ###################################################
  -->
 <block>
@@ -38,6 +38,7 @@
 
  
     <doc>
-Key work.
+Congigures key for destination address and ARQ settings.
+For use with Simple MAC.
     </doc>
 </block>

@@ -48,22 +48,22 @@ class virtual_channel_formatter(gr.block):
         self,channel,arq
     ):
         """
-        The input is a pmt message blob.
-        Non-blob messages will be ignored.
-        The output is a byte stream for the modulator
+        Sets the key of a blob as neccassary for simple_mac and similar blocks.
+        Encodes information like destination radio addr, ARQ settings etc.
+        
+        Blob in, blob out.
 
-        @param access_code: AKA sync vector
-        @type access_code: string of 1's and 0's between 1 and 64 long
-        @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
-        """
+        @param destination_addr: physical address of radio the pkt is destined for
+        @param ARQ: Use ARQ or don't
+       """
 
         gr.block.__init__(
             self,
             name = "virtual_channel_formatter",
             in_sig = None,
             out_sig = None,
-            num_msg_inputs = 3,
-            num_msg_outputs = 2,
+            num_msg_inputs = 1,
+            num_msg_outputs = 1,
         )
     
         self.mgr = pmt.pmt_mgr()

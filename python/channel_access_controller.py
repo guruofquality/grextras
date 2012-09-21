@@ -28,7 +28,7 @@ from gnuradio.digital import packet_utils
 import gnuradio.digital as gr_digital
 import block_gateway #needed to inject into gr
 import Queue
-import time
+
 
 OTA_OUT = 'U'
 OTA_IN = 'V'
@@ -38,7 +38,7 @@ READY = 0
 NOT_READY = 1
 
 # /////////////////////////////////////////////////////////////////////////////
-#                   Simple MAC w/ ARQ
+#                   Channel Access Controller
 # /////////////////////////////////////////////////////////////////////////////
 
 class channel_access_controller(gr.block):
@@ -51,14 +51,11 @@ class channel_access_controller(gr.block):
         self
     ):
         """
-        The input is a pmt message blob.
-        Non-blob messages will be ignored.
-        The output is a byte stream for the modulator
-
-        @param access_code: AKA sync vector
-        @type access_code: string of 1's and 0's between 1 and 64 long
-        @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
-        """
+        First input is a state.
+        Will hold state staticly until updated received on first input
+        Will queue messages from second input.
+        Will pass queued messages to output when state is '0'
+       """
 
 		
         gr.block.__init__(

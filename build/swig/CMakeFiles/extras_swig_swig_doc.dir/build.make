@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/john/src/grextras
+CMAKE_SOURCE_DIR = /home/john/src/pre-cog
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/john/src/grextras/build
+CMAKE_BINARY_DIR = /home/john/src/pre-cog/build
 
 # Utility rule file for extras_swig_swig_doc.
 
@@ -53,10 +53,10 @@ swig/CMakeFiles/extras_swig_swig_doc.dir/build: extras_swig_swig_doc
 .PHONY : swig/CMakeFiles/extras_swig_swig_doc.dir/build
 
 swig/CMakeFiles/extras_swig_swig_doc.dir/clean:
-	cd /home/john/src/grextras/build/swig && $(CMAKE_COMMAND) -P CMakeFiles/extras_swig_swig_doc.dir/cmake_clean.cmake
+	cd /home/john/src/pre-cog/build/swig && $(CMAKE_COMMAND) -P CMakeFiles/extras_swig_swig_doc.dir/cmake_clean.cmake
 .PHONY : swig/CMakeFiles/extras_swig_swig_doc.dir/clean
 
 swig/CMakeFiles/extras_swig_swig_doc.dir/depend:
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/john/src/grextras /home/john/src/grextras/swig /home/john/src/grextras/build /home/john/src/grextras/build/swig /home/john/src/grextras/build/swig/CMakeFiles/extras_swig_swig_doc.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/john/src/pre-cog /home/john/src/pre-cog/swig /home/john/src/pre-cog/build /home/john/src/pre-cog/build/swig /home/john/src/pre-cog/build/swig/CMakeFiles/extras_swig_swig_doc.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : swig/CMakeFiles/extras_swig_swig_doc.dir/depend
 

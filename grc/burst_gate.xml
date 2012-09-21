@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
 ###################################################
-##Adder
+##Burst Gate
 ###################################################
  -->
 <block>
-    <name>Extras: Burst Gate</name>
+    <name>Precog: Burst Gate</name>
     <key>burst_gate</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.burst_gate()</make>
@@ -20,6 +20,7 @@
     </source>
 
     <doc>
-Burst gate.  
+Moves EOB to the end of a sample set when it is present.
+Use this when an block in the flowgraph is inserting EOB before DSP interpolation.
     </doc>
 </block>

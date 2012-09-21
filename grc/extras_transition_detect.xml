@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
 ###################################################
-##Adder
+##Transition Detect
 ###################################################
  -->
 <block>
-    <name>Extras: John's Transition Detect</name>
+    <name>Extras: Transition Detect</name>
     <key>transition_detect</key>
     <import>import gnuradio.extras as gr_extras</import>
     <make>gr_extras.transition_detect()</make>
@@ -18,6 +18,7 @@
         <type></type>
     </source>
     <doc>
-Adding with messages.
+Looks at stream-based byte input, generates blob with value of input when there is a change.
+Useful for providing transition indications to msg based blocks.
     </doc>
 </block>

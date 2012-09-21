@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/john/src/grextras
+CMAKE_SOURCE_DIR = /home/john/src/pre-cog
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/john/src/grextras/build
+CMAKE_BINARY_DIR = /home/john/src/pre-cog/build
 
 # Include any dependencies generated for this target.
 include lib/CMakeFiles/gnuradio-extras.dir/depend.make
@@ -51,17 +51,17 @@ include lib/CMakeFiles/gnuradio-extras.dir/flags.make
 
 lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o: ../lib/uhd_amsg_source.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o -c /home/john/src/grextras/lib/uhd_amsg_source.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o -c /home/john/src/pre-cog/lib/uhd_amsg_source.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/uhd_amsg_source.cc > CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/uhd_amsg_source.cc > CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/uhd_amsg_source.cc -o CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/uhd_amsg_source.cc -o CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o.requires
@@ -75,17 +75,17 @@ lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o.provides.build: lib/CMak
 
 lib/CMakeFiles/gnuradio-extras.dir/block.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/block.cc.o: ../lib/block.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/block.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/block.cc.o -c /home/john/src/grextras/lib/block.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/block.cc.o -c /home/john/src/pre-cog/lib/block.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/block.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/block.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/block.cc > CMakeFiles/gnuradio-extras.dir/block.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/block.cc > CMakeFiles/gnuradio-extras.dir/block.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/block.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/block.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/block.cc -o CMakeFiles/gnuradio-extras.dir/block.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/block.cc -o CMakeFiles/gnuradio-extras.dir/block.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/block.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/block.cc.o.requires
@@ -99,17 +99,17 @@ lib/CMakeFiles/gnuradio-extras.dir/block.cc.o.provides.build: lib/CMakeFiles/gnu
 
 lib/CMakeFiles/gnuradio-extras.dir/add.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/add.cc.o: ../lib/add.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/add.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/add.cc.o -c /home/john/src/grextras/lib/add.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/add.cc.o -c /home/john/src/pre-cog/lib/add.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/add.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/add.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/add.cc > CMakeFiles/gnuradio-extras.dir/add.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/add.cc > CMakeFiles/gnuradio-extras.dir/add.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/add.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/add.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/add.cc -o CMakeFiles/gnuradio-extras.dir/add.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/add.cc -o CMakeFiles/gnuradio-extras.dir/add.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/add.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/add.cc.o.requires
@@ -123,17 +123,17 @@ lib/CMakeFiles/gnuradio-extras.dir/add.cc.o.provides.build: lib/CMakeFiles/gnura
 
 lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o: ../lib/add_const.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_4)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/add_const.cc.o -c /home/john/src/grextras/lib/add_const.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/add_const.cc.o -c /home/john/src/pre-cog/lib/add_const.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/add_const.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/add_const.cc > CMakeFiles/gnuradio-extras.dir/add_const.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/add_const.cc > CMakeFiles/gnuradio-extras.dir/add_const.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/add_const.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/add_const.cc -o CMakeFiles/gnuradio-extras.dir/add_const.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/add_const.cc -o CMakeFiles/gnuradio-extras.dir/add_const.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o.requires
@@ -147,17 +147,17 @@ lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o.provides.build: lib/CMakeFiles
 
 lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o: ../lib/add_const_v.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o -c /home/john/src/grextras/lib/add_const_v.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o -c /home/john/src/pre-cog/lib/add_const_v.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/add_const_v.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/add_const_v.cc > CMakeFiles/gnuradio-extras.dir/add_const_v.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/add_const_v.cc > CMakeFiles/gnuradio-extras.dir/add_const_v.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/add_const_v.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/add_const_v.cc -o CMakeFiles/gnuradio-extras.dir/add_const_v.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/add_const_v.cc -o CMakeFiles/gnuradio-extras.dir/add_const_v.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o.requires
@@ -171,17 +171,17 @@ lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o.provides.build: lib/CMakeFil
 
 lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o: ../lib/delay.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_6)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/delay.cc.o -c /home/john/src/grextras/lib/delay.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/delay.cc.o -c /home/john/src/pre-cog/lib/delay.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/delay.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/delay.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/delay.cc > CMakeFiles/gnuradio-extras.dir/delay.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/delay.cc > CMakeFiles/gnuradio-extras.dir/delay.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/delay.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/delay.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/delay.cc -o CMakeFiles/gnuradio-extras.dir/delay.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/delay.cc -o CMakeFiles/gnuradio-extras.dir/delay.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o.requires
@@ -195,17 +195,17 @@ lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o.provides.build: lib/CMakeFiles/gnu
 
 lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o: ../lib/divide.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_7)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/divide.cc.o -c /home/john/src/grextras/lib/divide.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/divide.cc.o -c /home/john/src/pre-cog/lib/divide.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/divide.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/divide.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/divide.cc > CMakeFiles/gnuradio-extras.dir/divide.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/divide.cc > CMakeFiles/gnuradio-extras.dir/divide.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/divide.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/divide.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/divide.cc -o CMakeFiles/gnuradio-extras.dir/divide.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/divide.cc -o CMakeFiles/gnuradio-extras.dir/divide.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o.requires
@@ -219,17 +219,17 @@ lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o.provides.build: lib/CMakeFiles/gn
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o: ../lib/multiply.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_8)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_8)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/multiply.cc.o -c /home/john/src/grextras/lib/multiply.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/multiply.cc.o -c /home/john/src/pre-cog/lib/multiply.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/multiply.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/multiply.cc > CMakeFiles/gnuradio-extras.dir/multiply.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/multiply.cc > CMakeFiles/gnuradio-extras.dir/multiply.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/multiply.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/multiply.cc -o CMakeFiles/gnuradio-extras.dir/multiply.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/multiply.cc -o CMakeFiles/gnuradio-extras.dir/multiply.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o.requires
@@ -243,17 +243,17 @@ lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o.provides.build: lib/CMakeFiles/
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o: ../lib/multiply_const.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_9)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_9)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o -c /home/john/src/grextras/lib/multiply_const.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o -c /home/john/src/pre-cog/lib/multiply_const.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/multiply_const.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/multiply_const.cc > CMakeFiles/gnuradio-extras.dir/multiply_const.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/multiply_const.cc > CMakeFiles/gnuradio-extras.dir/multiply_const.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/multiply_const.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/multiply_const.cc -o CMakeFiles/gnuradio-extras.dir/multiply_const.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/multiply_const.cc -o CMakeFiles/gnuradio-extras.dir/multiply_const.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o.requires
@@ -267,17 +267,17 @@ lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o.provides.build: lib/CMake
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o: ../lib/multiply_const_v.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_10)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_10)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o -c /home/john/src/grextras/lib/multiply_const_v.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o -c /home/john/src/pre-cog/lib/multiply_const_v.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/multiply_const_v.cc > CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/multiply_const_v.cc > CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/multiply_const_v.cc -o CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/multiply_const_v.cc -o CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o.requires
@@ -291,17 +291,17 @@ lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o.provides.build: lib/CMa
 
 lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o: ../lib/noise_source.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_11)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_11)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/noise_source.cc.o -c /home/john/src/grextras/lib/noise_source.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/noise_source.cc.o -c /home/john/src/pre-cog/lib/noise_source.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/noise_source.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/noise_source.cc > CMakeFiles/gnuradio-extras.dir/noise_source.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/noise_source.cc > CMakeFiles/gnuradio-extras.dir/noise_source.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/noise_source.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/noise_source.cc -o CMakeFiles/gnuradio-extras.dir/noise_source.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/noise_source.cc -o CMakeFiles/gnuradio-extras.dir/noise_source.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o.requires
@@ -315,17 +315,17 @@ lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o.provides.build: lib/CMakeFi
 
 lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o: ../lib/signal_source.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_12)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_12)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/signal_source.cc.o -c /home/john/src/grextras/lib/signal_source.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/signal_source.cc.o -c /home/john/src/pre-cog/lib/signal_source.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/signal_source.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/signal_source.cc > CMakeFiles/gnuradio-extras.dir/signal_source.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/signal_source.cc > CMakeFiles/gnuradio-extras.dir/signal_source.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/signal_source.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/signal_source.cc -o CMakeFiles/gnuradio-extras.dir/signal_source.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/signal_source.cc -o CMakeFiles/gnuradio-extras.dir/signal_source.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o.requires
@@ -339,17 +339,17 @@ lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o.provides.build: lib/CMakeF
 
 lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o: ../lib/subtract.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_13)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_13)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/subtract.cc.o -c /home/john/src/grextras/lib/subtract.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/subtract.cc.o -c /home/john/src/pre-cog/lib/subtract.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/subtract.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/subtract.cc > CMakeFiles/gnuradio-extras.dir/subtract.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/subtract.cc > CMakeFiles/gnuradio-extras.dir/subtract.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/subtract.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/subtract.cc -o CMakeFiles/gnuradio-extras.dir/subtract.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/subtract.cc -o CMakeFiles/gnuradio-extras.dir/subtract.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o.requires
@@ -363,17 +363,17 @@ lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o.provides.build: lib/CMakeFiles/
 
 lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o: ../lib/stream_selector.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_14)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_14)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o -c /home/john/src/grextras/lib/stream_selector.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o -c /home/john/src/pre-cog/lib/stream_selector.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/stream_selector.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/stream_selector.cc > CMakeFiles/gnuradio-extras.dir/stream_selector.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/stream_selector.cc > CMakeFiles/gnuradio-extras.dir/stream_selector.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/stream_selector.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/stream_selector.cc -o CMakeFiles/gnuradio-extras.dir/stream_selector.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/stream_selector.cc -o CMakeFiles/gnuradio-extras.dir/stream_selector.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o.requires
@@ -387,17 +387,17 @@ lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o.provides.build: lib/CMak
 
 lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o: ../lib/block_gateway.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_15)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_15)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o -c /home/john/src/grextras/lib/block_gateway.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o -c /home/john/src/pre-cog/lib/block_gateway.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/block_gateway.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/block_gateway.cc > CMakeFiles/gnuradio-extras.dir/block_gateway.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/block_gateway.cc > CMakeFiles/gnuradio-extras.dir/block_gateway.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/block_gateway.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/block_gateway.cc -o CMakeFiles/gnuradio-extras.dir/block_gateway.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/block_gateway.cc -o CMakeFiles/gnuradio-extras.dir/block_gateway.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o.requires
@@ -411,17 +411,17 @@ lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o.provides.build: lib/CMakeF
 
 lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o: ../lib/decim_fir.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_16)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_16)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o -c /home/john/src/grextras/lib/decim_fir.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o -c /home/john/src/pre-cog/lib/decim_fir.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/decim_fir.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/decim_fir.cc > CMakeFiles/gnuradio-extras.dir/decim_fir.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/decim_fir.cc > CMakeFiles/gnuradio-extras.dir/decim_fir.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/decim_fir.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/decim_fir.cc -o CMakeFiles/gnuradio-extras.dir/decim_fir.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/decim_fir.cc -o CMakeFiles/gnuradio-extras.dir/decim_fir.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o.requires
@@ -435,17 +435,17 @@ lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o.provides.build: lib/CMakeFiles
 
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o: ../lib/pmt_ext_blob.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_17)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_17)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o -c /home/john/src/grextras/lib/pmt_ext_blob.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o -c /home/john/src/pre-cog/lib/pmt_ext_blob.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/pmt_ext_blob.cc > CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/pmt_ext_blob.cc > CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/pmt_ext_blob.cc -o CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/pmt_ext_blob.cc -o CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o.requires
@@ -459,17 +459,17 @@ lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o.provides.build: lib/CMakeFi
 
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o: ../lib/pmt_ext_mgr.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_18)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_18)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o -c /home/john/src/grextras/lib/pmt_ext_mgr.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o -c /home/john/src/pre-cog/lib/pmt_ext_mgr.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/pmt_ext_mgr.cc > CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/pmt_ext_mgr.cc > CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/pmt_ext_mgr.cc -o CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/pmt_ext_mgr.cc -o CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o.requires
@@ -483,17 +483,17 @@ lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o.provides.build: lib/CMakeFil
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o: ../lib/blob_to_filedes.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_19)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_19)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o -c /home/john/src/grextras/lib/blob_to_filedes.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o -c /home/john/src/pre-cog/lib/blob_to_filedes.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/blob_to_filedes.cc > CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/blob_to_filedes.cc > CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/blob_to_filedes.cc -o CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/blob_to_filedes.cc -o CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o.requires
@@ -507,17 +507,17 @@ lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o.provides.build: lib/CMak
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o: ../lib/blob_to_socket.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_20)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_20)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o -c /home/john/src/grextras/lib/blob_to_socket.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o -c /home/john/src/pre-cog/lib/blob_to_socket.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/blob_to_socket.cc > CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/blob_to_socket.cc > CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/blob_to_socket.cc -o CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/blob_to_socket.cc -o CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o.requires
@@ -531,17 +531,17 @@ lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o.provides.build: lib/CMake
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o: ../lib/blob_to_stream.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_21)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_21)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o -c /home/john/src/grextras/lib/blob_to_stream.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o -c /home/john/src/pre-cog/lib/blob_to_stream.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/blob_to_stream.cc > CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/blob_to_stream.cc > CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/blob_to_stream.cc -o CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/blob_to_stream.cc -o CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o.requires
@@ -555,17 +555,17 @@ lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o.provides.build: lib/CMake
 
 lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o: ../lib/filedes_to_blob.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_22)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_22)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o -c /home/john/src/grextras/lib/filedes_to_blob.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o -c /home/john/src/pre-cog/lib/filedes_to_blob.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/filedes_to_blob.cc > CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/filedes_to_blob.cc > CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/filedes_to_blob.cc -o CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/filedes_to_blob.cc -o CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o.requires
@@ -579,17 +579,17 @@ lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o.provides.build: lib/CMak
 
 lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o: ../lib/socket_to_blob.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_23)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_23)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o -c /home/john/src/grextras/lib/socket_to_blob.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o -c /home/john/src/pre-cog/lib/socket_to_blob.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/socket_to_blob.cc > CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/socket_to_blob.cc > CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/socket_to_blob.cc -o CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/socket_to_blob.cc -o CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o.requires
@@ -603,17 +603,17 @@ lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o.provides.build: lib/CMake
 
 lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o: ../lib/stream_to_blob.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_24)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_24)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o -c /home/john/src/grextras/lib/stream_to_blob.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o -c /home/john/src/pre-cog/lib/stream_to_blob.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/stream_to_blob.cc > CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/stream_to_blob.cc > CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/stream_to_blob.cc -o CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/stream_to_blob.cc -o CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o.requires
@@ -627,17 +627,17 @@ lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o.provides.build: lib/CMake
 
 lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o: ../lib/tuntap.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_25)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_25)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/tuntap.cc.o -c /home/john/src/grextras/lib/tuntap.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/tuntap.cc.o -c /home/john/src/pre-cog/lib/tuntap.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/tuntap.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/tuntap.cc > CMakeFiles/gnuradio-extras.dir/tuntap.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/tuntap.cc > CMakeFiles/gnuradio-extras.dir/tuntap.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/tuntap.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/tuntap.cc -o CMakeFiles/gnuradio-extras.dir/tuntap.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/tuntap.cc -o CMakeFiles/gnuradio-extras.dir/tuntap.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o.requires
@@ -651,17 +651,17 @@ lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o.provides.build: lib/CMakeFiles/gn
 
 lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o: ../lib/msg_many_to_one.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_26)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_26)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o -c /home/john/src/grextras/lib/msg_many_to_one.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o -c /home/john/src/pre-cog/lib/msg_many_to_one.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/msg_many_to_one.cc > CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/msg_many_to_one.cc > CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/msg_many_to_one.cc -o CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/msg_many_to_one.cc -o CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o.requires
@@ -675,17 +675,17 @@ lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o.provides.build: lib/CMak
 
 lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o: lib/CMakeFiles/gnuradio-extras.dir/flags.make
 lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o: ../lib/socket_msg.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/grextras/build/CMakeFiles $(CMAKE_PROGRESS_27)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/john/src/pre-cog/build/CMakeFiles $(CMAKE_PROGRESS_27)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o -c /home/john/src/grextras/lib/socket_msg.cc
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o -c /home/john/src/pre-cog/lib/socket_msg.cc
 
 lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-extras.dir/socket_msg.cc.i"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/grextras/lib/socket_msg.cc > CMakeFiles/gnuradio-extras.dir/socket_msg.cc.i
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/john/src/pre-cog/lib/socket_msg.cc > CMakeFiles/gnuradio-extras.dir/socket_msg.cc.i
 
 lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-extras.dir/socket_msg.cc.s"
-	cd /home/john/src/grextras/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/grextras/lib/socket_msg.cc -o CMakeFiles/gnuradio-extras.dir/socket_msg.cc.s
+	cd /home/john/src/pre-cog/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/john/src/pre-cog/lib/socket_msg.cc -o CMakeFiles/gnuradio-extras.dir/socket_msg.cc.s
 
 lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o.requires:
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o.requires
@@ -764,7 +764,7 @@ lib/libgnuradio-extras.so: /usr/local/lib/libgnuradio-core.so
 lib/libgnuradio-extras.so: lib/CMakeFiles/gnuradio-extras.dir/build.make
 lib/libgnuradio-extras.so: lib/CMakeFiles/gnuradio-extras.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX shared library libgnuradio-extras.so"
-	cd /home/john/src/grextras/build/lib && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gnuradio-extras.dir/link.txt --verbose=$(VERBOSE)
+	cd /home/john/src/pre-cog/build/lib && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gnuradio-extras.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 lib/CMakeFiles/gnuradio-extras.dir/build: lib/libgnuradio-extras.so
@@ -800,10 +800,10 @@ lib/CMakeFiles/gnuradio-extras.dir/requires: lib/CMakeFiles/gnuradio-extras.dir/
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/requires
 
 lib/CMakeFiles/gnuradio-extras.dir/clean:
-	cd /home/john/src/grextras/build/lib && $(CMAKE_COMMAND) -P CMakeFiles/gnuradio-extras.dir/cmake_clean.cmake
+	cd /home/john/src/pre-cog/build/lib && $(CMAKE_COMMAND) -P CMakeFiles/gnuradio-extras.dir/cmake_clean.cmake
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/clean
 
 lib/CMakeFiles/gnuradio-extras.dir/depend:
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/john/src/grextras /home/john/src/grextras/lib /home/john/src/grextras/build /home/john/src/grextras/build/lib /home/john/src/grextras/build/lib/CMakeFiles/gnuradio-extras.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/john/src/pre-cog /home/john/src/pre-cog/lib /home/john/src/pre-cog/build /home/john/src/pre-cog/build/lib /home/john/src/pre-cog/build/lib/CMakeFiles/gnuradio-extras.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/depend
 

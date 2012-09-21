@@ -35,15 +35,15 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/john/src/grextras
+CMAKE_SOURCE_DIR = /home/john/src/pre-cog
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/john/src/grextras/build
+CMAKE_BINARY_DIR = /home/john/src/pre-cog/build
 
 # Utility rule file for uninstall.
 
 CMakeFiles/uninstall:
-	/usr/bin/cmake -P /home/john/src/grextras/build/cmake_uninstall.cmake
+	/usr/bin/cmake -P /home/john/src/pre-cog/build/cmake_uninstall.cmake
 
 uninstall: CMakeFiles/uninstall
 uninstall: CMakeFiles/uninstall.dir/build.make
@@ -58,6 +58,6 @@ CMakeFiles/uninstall.dir/clean:
 .PHONY : CMakeFiles/uninstall.dir/clean
 
 CMakeFiles/uninstall.dir/depend:
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/john/src/grextras /home/john/src/grextras /home/john/src/grextras/build /home/john/src/grextras/build /home/john/src/grextras/build/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/john/src/pre-cog /home/john/src/pre-cog /home/john/src/pre-cog/build /home/john/src/pre-cog/build /home/john/src/pre-cog/build/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/uninstall.dir/depend
 

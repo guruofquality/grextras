@@ -34,14 +34,13 @@ SEARCH_EOB_IN = 0
 FOUND_EOB_IN = 1
 
 # /////////////////////////////////////////////////////////////////////////////
-#                   Simple MAC w/ ARQ
+#                   Burst Gate - moves EOB to end of sample set
+#                   Useful for DSP chains with propgation after eob insertion
 # /////////////////////////////////////////////////////////////////////////////
 
 class burst_gate(gr.block):
     """
-    Wrap an arbitrary digital modulator in our packet handling framework.
-
-    Send packets by calling send_pkt
+    Moves EOB to the end of a set of samples.
     """
     def __init__(self):
         gr.block.__init__(self, name="burst_gate", in_sig=[numpy.complex64], out_sig=[numpy.complex64])
@@ -56,17 +55,7 @@ class burst_gate(gr.block):
         out = output_items[0]
         
         out[:] = in0[:]
-        #print output_items[0]
 
-        #process data
-        #out[:] = in0[:]
-
-        #//consume the inputs
-        #self.consume(0, len(in0)) #//consume port 0 input
-        #self.consume_each(len(out)) //or shortcut to consume on all inputs
-
-        
-        
         nread = self.nitems_read(0) #number of items read on port 0
         ninput_items = len(input_items[0])
 
@@ -77,9 +66,7 @@ class burst_gate(gr.block):
         
         if (len(input_items[0]) > len(output_items[0])):
             print "Burst Gate: Output items small. Might be bad."
-        
-        #print num_items
-        
+ 
         source = pmt.pmt_string_to_symbol("")
         
         for tag in tags:
@@ -88,7 +75,6 @@ class burst_gate(gr.block):
             else:
                 self.add_item_tag(0, tag.offset, tag.key, tag.value, source)
 
-                
         if self.state == FOUND_EOB_IN:
             item_index = num_items #which output item gets the tag?
             offset = self.nitems_written(0) + item_index

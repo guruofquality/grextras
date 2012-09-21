@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /home/john/src/grextras
-# Build directory: /home/john/src/grextras/build
+# Source directory: /home/john/src/pre-cog
+# Build directory: /home/john/src/pre-cog/build
 # 
 # This file includes the relevent testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.

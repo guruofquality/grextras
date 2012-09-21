@@ -29,7 +29,7 @@ swig/CMakeFiles/_extras_swig.dir/extras_swigPYTHON_wrap.cxx.o
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
  ../lib/block_gateway.h
- /home/john/src/grextras/build/swig/extras_swigPYTHON_wrap.cxx
+ /home/john/src/pre-cog/build/swig/extras_swigPYTHON_wrap.cxx
  /usr/include/python2.7/Python.h
  /usr/include/python2.7/abstract.h
  /usr/include/python2.7/boolobject.h

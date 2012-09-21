@@ -1,4 +1,4 @@
-# Install script for directory: /home/john/src/grextras/include/gruel
+# Install script for directory: /home/john/src/pre-cog/include/gruel
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,9 +34,9 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_devel")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/gruel" TYPE FILE FILES
-    "/home/john/src/grextras/include/gruel/pmt_blob.h"
-    "/home/john/src/grextras/include/gruel/pmt_mgr.h"
-    "/home/john/src/grextras/include/gruel/pmt_extras.h"
+    "/home/john/src/pre-cog/include/gruel/pmt_blob.h"
+    "/home/john/src/pre-cog/include/gruel/pmt_mgr.h"
+    "/home/john/src/pre-cog/include/gruel/pmt_extras.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_devel")
 

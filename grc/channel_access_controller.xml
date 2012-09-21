@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 ###################################################
-##Heartbeat
+##  Channel Acccess Controller
 ###################################################
  -->
 <block>
@@ -23,6 +23,8 @@
     </source>
  
     <doc>
-Channel access controller.
+Channel access controller.  Two msg inputs.  One port sets the state of the channel. 
+The other takes blobs and queues them, passing them to the output only when the last state received
+on first port is "0".
     </doc>
 </block>

@@ -28,29 +28,25 @@ import gnuradio.digital as gr_digital
 import block_gateway #needed to inject into gr
 
 # /////////////////////////////////////////////////////////////////////////////
-#                   Simple MAC w/ ARQ
+#                   Blob Append Key (overwrites)
 # /////////////////////////////////////////////////////////////////////////////
 
 class append_key(gr.block):
     """
-    Wrap an arbitrary digital modulator in our packet handling framework.
-
-    Send packets by calling send_pkt
+    Block over-writes key of a blob.
+    
     """
+    #TODO: add support for prepend, append modes
     def __init__(
         self,key
     ):
         """
         The input is a pmt message blob.
         Non-blob messages will be ignored.
-        The output is a byte stream for the modulator
+        The output is pmt message blob
 
-        @param access_code: AKA sync vector
-        @type access_code: string of 1's and 0's between 1 and 64 long
-        @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
+        @param key: String replacement for key
         """
-
-		
         gr.block.__init__(
             self,
             name = "append_key",
@@ -76,7 +72,6 @@ class append_key(gr.block):
 			except: return -1
 			
 			if not pmt.pmt_is_blob(msg.value): 
-				#print "not a blob - append key"
 				continue
 
 			self.post_msg(0, pmt.pmt_string_to_symbol(self.key), msg.value)

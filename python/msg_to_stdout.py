@@ -29,26 +29,21 @@ import block_gateway #needed to inject into gr
 from gruel import pmt
 
 # /////////////////////////////////////////////////////////////////////////////
-#                   mod/demod with packets as i/o
+#                  msg_to_stdout.py - prints 
 # /////////////////////////////////////////////////////////////////////////////
 
 class msg_to_stdout(gr.block):
     """
-    Wrap an arbitrary digital modulator in our packet handling framework.
-
-    Send packets by calling send_pkt
+    Simply prints the key and value of a blob or general pmt to stdout
+    Useful for debugging msg based applications.
     """
     def __init__(
         self,
     ):
         """
         The input is a pmt message blob.
-        Non-blob messages will be ignored.
-        The output is a byte stream for the modulator
-
-        @param access_code: AKA sync vector
-        @type access_code: string of 1's and 0's between 1 and 64 long
-        @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
+        No outputs.
+        Prints contents of blobs.
         """
 
         
@@ -76,9 +71,6 @@ class msg_to_stdout(gr.block):
 
             else:
                 print "Key: ",pmt.pmt_symbol_to_string(msg.key),"Value: ",pmt.pmt_blob_data(msg.value).tostring()                
-                
-            #a_pmt_obj = pmt.PMT_T
-            #print "Value: " + pmt.pmt_symbol_to_string(msg.value)
-
+   
 
             

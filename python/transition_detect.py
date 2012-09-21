@@ -28,7 +28,7 @@ import gnuradio.digital as gr_digital
 import block_gateway #needed to inject into gr
 
 # /////////////////////////////////////////////////////////////////////////////
-#                   mod/demod with packets as i/o
+#                   transition_detect - output msg with value when byte stream changes
 # /////////////////////////////////////////////////////////////////////////////
 
 class transition_detect(gr.block):
@@ -41,13 +41,8 @@ class transition_detect(gr.block):
         self,
     ):
         """
-        The input is a pmt message blob.
-        Non-blob messages will be ignored.
-        The output is a byte stream for the modulator
-
-        @param access_code: AKA sync vector
-        @type access_code: string of 1's and 0's between 1 and 64 long
-        @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
+        The input is a stream of bytes.
+        Outputs a blob with value of current byte if it is different from last.
         """
 
 		
@@ -81,7 +76,6 @@ class transition_detect(gr.block):
 				pmt.pmt_blob_rw_data(blob)[:] = self.value
 				self.post_msg(0, pmt.pmt_string_to_symbol("W"), blob)
 			self.old_result = in0[x]
-		#print self.trans_count
 		self.consume(0, len(in0))
 		return 0
 			

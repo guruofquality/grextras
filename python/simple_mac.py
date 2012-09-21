@@ -85,13 +85,9 @@ class simple_mac(gr.block):
         self,addr,timeout,max_attempts
     ):
         """
-        The input is a pmt message blob.
-        Non-blob messages will be ignored.
-        The output is a byte stream for the modulator
+        three inputs: radio, from_app, ctrl_in
+        Three outputs: radio, to_app, ctrl_out
 
-        @param access_code: AKA sync vector
-        @type access_code: string of 1's and 0's between 1 and 64 long
-        @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
         """
 
         

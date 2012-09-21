@@ -1,4 +1,4 @@
-# Install script for directory: /home/john/src/grextras/swig
+# Install script for directory: /home/john/src/pre-cog/swig
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/gnuradio/extras/_extras_swig.so"
          RPATH "")
   ENDIF()
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/gnuradio/extras" TYPE MODULE FILES "/home/john/src/grextras/build/swig/_extras_swig.so")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/gnuradio/extras" TYPE MODULE FILES "/home/john/src/pre-cog/build/swig/_extras_swig.so")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/gnuradio/extras/_extras_swig.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/gnuradio/extras/_extras_swig.so")
     FILE(RPATH_REMOVE
@@ -51,30 +51,30 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_python")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_python")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/gnuradio/extras" TYPE FILE FILES "/home/john/src/grextras/build/swig/extras_swig.py")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/gnuradio/extras" TYPE FILE FILES "/home/john/src/pre-cog/build/swig/extras_swig.py")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_python")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_python")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/gnuradio/extras" TYPE FILE FILES
-    "/home/john/src/grextras/build/swig/extras_swig.pyc"
-    "/home/john/src/grextras/build/swig/extras_swig.pyo"
+    "/home/john/src/pre-cog/build/swig/extras_swig.pyc"
+    "/home/john/src/pre-cog/build/swig/extras_swig.pyo"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_python")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_swig")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/gnuradio/swig" TYPE FILE FILES
-    "/home/john/src/grextras/swig/extras_uhd_amsg_source.i"
-    "/home/john/src/grextras/swig/extras_swig.i"
-    "/home/john/src/grextras/swig/extras_factory.i"
-    "/home/john/src/grextras/swig/extras_delay.i"
-    "/home/john/src/grextras/swig/extras_sources.i"
-    "/home/john/src/grextras/swig/extras_ops.i"
-    "/home/john/src/grextras/swig/extras_stream_selector.i"
-    "/home/john/src/grextras/swig/extras_block_gateway.i"
-    "/home/john/src/grextras/swig/extras_fir.i"
-    "/home/john/src/grextras/swig/extras_pmt.i"
-    "/home/john/src/grextras/swig/extras_blobs.i"
-    "/home/john/src/grextras/build/swig/extras_swig_doc.i"
+    "/home/john/src/pre-cog/swig/extras_uhd_amsg_source.i"
+    "/home/john/src/pre-cog/swig/extras_swig.i"
+    "/home/john/src/pre-cog/swig/extras_factory.i"
+    "/home/john/src/pre-cog/swig/extras_delay.i"
+    "/home/john/src/pre-cog/swig/extras_sources.i"
+    "/home/john/src/pre-cog/swig/extras_ops.i"
+    "/home/john/src/pre-cog/swig/extras_stream_selector.i"
+    "/home/john/src/pre-cog/swig/extras_block_gateway.i"
+    "/home/john/src/pre-cog/swig/extras_fir.i"
+    "/home/john/src/pre-cog/swig/extras_pmt.i"
+    "/home/john/src/pre-cog/swig/extras_blobs.i"
+    "/home/john/src/pre-cog/build/swig/extras_swig_doc.i"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "extras_swig")
 

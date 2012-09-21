@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/john/src/grextras
+CMAKE_SOURCE_DIR = /home/john/src/pre-cog
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/john/src/grextras/build
+CMAKE_BINARY_DIR = /home/john/src/pre-cog/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -120,14 +120,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/grextras/build/CMakeFiles /home/john/src/grextras/build/lib/CMakeFiles/progress.marks
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 lib/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/grextras/build/CMakeFiles 0
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/pre-cog/build/CMakeFiles /home/john/src/pre-cog/build/lib/CMakeFiles/progress.marks
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 lib/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/john/src/pre-cog/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 lib/clean
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 lib/clean
 .PHONY : clean
 
 # The main clean target
@@ -136,22 +136,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 lib/CMakeFiles/gnuradio-extras.dir/rule:
-	cd /home/john/src/grextras/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/gnuradio-extras.dir/rule
+	cd /home/john/src/pre-cog/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/gnuradio-extras.dir/rule
 .PHONY : lib/CMakeFiles/gnuradio-extras.dir/rule
 
 # Convenience name for target.
@@ -160,7 +160,7 @@ gnuradio-extras: lib/CMakeFiles/gnuradio-extras.dir/rule
 
 # fast build rule for target.
 gnuradio-extras/fast:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/build
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/build
 .PHONY : gnuradio-extras/fast
 
 add.o: add.cc.o
@@ -168,7 +168,7 @@ add.o: add.cc.o
 
 # target to build an object file
 add.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add.cc.o
 .PHONY : add.cc.o
 
 add.i: add.cc.i
@@ -176,7 +176,7 @@ add.i: add.cc.i
 
 # target to preprocess a source file
 add.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add.cc.i
 .PHONY : add.cc.i
 
 add.s: add.cc.s
@@ -184,7 +184,7 @@ add.s: add.cc.s
 
 # target to generate assembly for a file
 add.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add.cc.s
 .PHONY : add.cc.s
 
 add_const.o: add_const.cc.o
@@ -192,7 +192,7 @@ add_const.o: add_const.cc.o
 
 # target to build an object file
 add_const.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o
 .PHONY : add_const.cc.o
 
 add_const.i: add_const.cc.i
@@ -200,7 +200,7 @@ add_const.i: add_const.cc.i
 
 # target to preprocess a source file
 add_const.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.i
 .PHONY : add_const.cc.i
 
 add_const.s: add_const.cc.s
@@ -208,7 +208,7 @@ add_const.s: add_const.cc.s
 
 # target to generate assembly for a file
 add_const.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.s
 .PHONY : add_const.cc.s
 
 add_const_v.o: add_const_v.cc.o
@@ -216,7 +216,7 @@ add_const_v.o: add_const_v.cc.o
 
 # target to build an object file
 add_const_v.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o
 .PHONY : add_const_v.cc.o
 
 add_const_v.i: add_const_v.cc.i
@@ -224,7 +224,7 @@ add_const_v.i: add_const_v.cc.i
 
 # target to preprocess a source file
 add_const_v.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.i
 .PHONY : add_const_v.cc.i
 
 add_const_v.s: add_const_v.cc.s
@@ -232,7 +232,7 @@ add_const_v.s: add_const_v.cc.s
 
 # target to generate assembly for a file
 add_const_v.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.s
 .PHONY : add_const_v.cc.s
 
 blob_to_filedes.o: blob_to_filedes.cc.o
@@ -240,7 +240,7 @@ blob_to_filedes.o: blob_to_filedes.cc.o
 
 # target to build an object file
 blob_to_filedes.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o
 .PHONY : blob_to_filedes.cc.o
 
 blob_to_filedes.i: blob_to_filedes.cc.i
@@ -248,7 +248,7 @@ blob_to_filedes.i: blob_to_filedes.cc.i
 
 # target to preprocess a source file
 blob_to_filedes.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.i
 .PHONY : blob_to_filedes.cc.i
 
 blob_to_filedes.s: blob_to_filedes.cc.s
@@ -256,7 +256,7 @@ blob_to_filedes.s: blob_to_filedes.cc.s
 
 # target to generate assembly for a file
 blob_to_filedes.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.s
 .PHONY : blob_to_filedes.cc.s
 
 blob_to_socket.o: blob_to_socket.cc.o
@@ -264,7 +264,7 @@ blob_to_socket.o: blob_to_socket.cc.o
 
 # target to build an object file
 blob_to_socket.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o
 .PHONY : blob_to_socket.cc.o
 
 blob_to_socket.i: blob_to_socket.cc.i
@@ -272,7 +272,7 @@ blob_to_socket.i: blob_to_socket.cc.i
 
 # target to preprocess a source file
 blob_to_socket.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.i
 .PHONY : blob_to_socket.cc.i
 
 blob_to_socket.s: blob_to_socket.cc.s
@@ -280,7 +280,7 @@ blob_to_socket.s: blob_to_socket.cc.s
 
 # target to generate assembly for a file
 blob_to_socket.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.s
 .PHONY : blob_to_socket.cc.s
 
 blob_to_stream.o: blob_to_stream.cc.o
@@ -288,7 +288,7 @@ blob_to_stream.o: blob_to_stream.cc.o
 
 # target to build an object file
 blob_to_stream.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o
 .PHONY : blob_to_stream.cc.o
 
 blob_to_stream.i: blob_to_stream.cc.i
@@ -296,7 +296,7 @@ blob_to_stream.i: blob_to_stream.cc.i
 
 # target to preprocess a source file
 blob_to_stream.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.i
 .PHONY : blob_to_stream.cc.i
 
 blob_to_stream.s: blob_to_stream.cc.s
@@ -304,7 +304,7 @@ blob_to_stream.s: blob_to_stream.cc.s
 
 # target to generate assembly for a file
 blob_to_stream.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.s
 .PHONY : blob_to_stream.cc.s
 
 block.o: block.cc.o
@@ -312,7 +312,7 @@ block.o: block.cc.o
 
 # target to build an object file
 block.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block.cc.o
 .PHONY : block.cc.o
 
 block.i: block.cc.i
@@ -320,7 +320,7 @@ block.i: block.cc.i
 
 # target to preprocess a source file
 block.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block.cc.i
 .PHONY : block.cc.i
 
 block.s: block.cc.s
@@ -328,7 +328,7 @@ block.s: block.cc.s
 
 # target to generate assembly for a file
 block.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block.cc.s
 .PHONY : block.cc.s
 
 block_gateway.o: block_gateway.cc.o
@@ -336,7 +336,7 @@ block_gateway.o: block_gateway.cc.o
 
 # target to build an object file
 block_gateway.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o
 .PHONY : block_gateway.cc.o
 
 block_gateway.i: block_gateway.cc.i
@@ -344,7 +344,7 @@ block_gateway.i: block_gateway.cc.i
 
 # target to preprocess a source file
 block_gateway.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.i
 .PHONY : block_gateway.cc.i
 
 block_gateway.s: block_gateway.cc.s
@@ -352,7 +352,7 @@ block_gateway.s: block_gateway.cc.s
 
 # target to generate assembly for a file
 block_gateway.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.s
 .PHONY : block_gateway.cc.s
 
 decim_fir.o: decim_fir.cc.o
@@ -360,7 +360,7 @@ decim_fir.o: decim_fir.cc.o
 
 # target to build an object file
 decim_fir.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o
 .PHONY : decim_fir.cc.o
 
 decim_fir.i: decim_fir.cc.i
@@ -368,7 +368,7 @@ decim_fir.i: decim_fir.cc.i
 
 # target to preprocess a source file
 decim_fir.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.i
 .PHONY : decim_fir.cc.i
 
 decim_fir.s: decim_fir.cc.s
@@ -376,7 +376,7 @@ decim_fir.s: decim_fir.cc.s
 
 # target to generate assembly for a file
 decim_fir.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.s
 .PHONY : decim_fir.cc.s
 
 delay.o: delay.cc.o
@@ -384,7 +384,7 @@ delay.o: delay.cc.o
 
 # target to build an object file
 delay.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o
 .PHONY : delay.cc.o
 
 delay.i: delay.cc.i
@@ -392,7 +392,7 @@ delay.i: delay.cc.i
 
 # target to preprocess a source file
 delay.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/delay.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/delay.cc.i
 .PHONY : delay.cc.i
 
 delay.s: delay.cc.s
@@ -400,7 +400,7 @@ delay.s: delay.cc.s
 
 # target to generate assembly for a file
 delay.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/delay.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/delay.cc.s
 .PHONY : delay.cc.s
 
 divide.o: divide.cc.o
@@ -408,7 +408,7 @@ divide.o: divide.cc.o
 
 # target to build an object file
 divide.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o
 .PHONY : divide.cc.o
 
 divide.i: divide.cc.i
@@ -416,7 +416,7 @@ divide.i: divide.cc.i
 
 # target to preprocess a source file
 divide.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/divide.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/divide.cc.i
 .PHONY : divide.cc.i
 
 divide.s: divide.cc.s
@@ -424,7 +424,7 @@ divide.s: divide.cc.s
 
 # target to generate assembly for a file
 divide.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/divide.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/divide.cc.s
 .PHONY : divide.cc.s
 
 filedes_to_blob.o: filedes_to_blob.cc.o
@@ -432,7 +432,7 @@ filedes_to_blob.o: filedes_to_blob.cc.o
 
 # target to build an object file
 filedes_to_blob.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o
 .PHONY : filedes_to_blob.cc.o
 
 filedes_to_blob.i: filedes_to_blob.cc.i
@@ -440,7 +440,7 @@ filedes_to_blob.i: filedes_to_blob.cc.i
 
 # target to preprocess a source file
 filedes_to_blob.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.i
 .PHONY : filedes_to_blob.cc.i
 
 filedes_to_blob.s: filedes_to_blob.cc.s
@@ -448,7 +448,7 @@ filedes_to_blob.s: filedes_to_blob.cc.s
 
 # target to generate assembly for a file
 filedes_to_blob.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.s
 .PHONY : filedes_to_blob.cc.s
 
 msg_many_to_one.o: msg_many_to_one.cc.o
@@ -456,7 +456,7 @@ msg_many_to_one.o: msg_many_to_one.cc.o
 
 # target to build an object file
 msg_many_to_one.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o
 .PHONY : msg_many_to_one.cc.o
 
 msg_many_to_one.i: msg_many_to_one.cc.i
@@ -464,7 +464,7 @@ msg_many_to_one.i: msg_many_to_one.cc.i
 
 # target to preprocess a source file
 msg_many_to_one.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.i
 .PHONY : msg_many_to_one.cc.i
 
 msg_many_to_one.s: msg_many_to_one.cc.s
@@ -472,7 +472,7 @@ msg_many_to_one.s: msg_many_to_one.cc.s
 
 # target to generate assembly for a file
 msg_many_to_one.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.s
 .PHONY : msg_many_to_one.cc.s
 
 multiply.o: multiply.cc.o
@@ -480,7 +480,7 @@ multiply.o: multiply.cc.o
 
 # target to build an object file
 multiply.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o
 .PHONY : multiply.cc.o
 
 multiply.i: multiply.cc.i
@@ -488,7 +488,7 @@ multiply.i: multiply.cc.i
 
 # target to preprocess a source file
 multiply.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.i
 .PHONY : multiply.cc.i
 
 multiply.s: multiply.cc.s
@@ -496,7 +496,7 @@ multiply.s: multiply.cc.s
 
 # target to generate assembly for a file
 multiply.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.s
 .PHONY : multiply.cc.s
 
 multiply_const.o: multiply_const.cc.o
@@ -504,7 +504,7 @@ multiply_const.o: multiply_const.cc.o
 
 # target to build an object file
 multiply_const.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o
 .PHONY : multiply_const.cc.o
 
 multiply_const.i: multiply_const.cc.i
@@ -512,7 +512,7 @@ multiply_const.i: multiply_const.cc.i
 
 # target to preprocess a source file
 multiply_const.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.i
 .PHONY : multiply_const.cc.i
 
 multiply_const.s: multiply_const.cc.s
@@ -520,7 +520,7 @@ multiply_const.s: multiply_const.cc.s
 
 # target to generate assembly for a file
 multiply_const.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.s
 .PHONY : multiply_const.cc.s
 
 multiply_const_v.o: multiply_const_v.cc.o
@@ -528,7 +528,7 @@ multiply_const_v.o: multiply_const_v.cc.o
 
 # target to build an object file
 multiply_const_v.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o
 .PHONY : multiply_const_v.cc.o
 
 multiply_const_v.i: multiply_const_v.cc.i
@@ -536,7 +536,7 @@ multiply_const_v.i: multiply_const_v.cc.i
 
 # target to preprocess a source file
 multiply_const_v.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.i
 .PHONY : multiply_const_v.cc.i
 
 multiply_const_v.s: multiply_const_v.cc.s
@@ -544,7 +544,7 @@ multiply_const_v.s: multiply_const_v.cc.s
 
 # target to generate assembly for a file
 multiply_const_v.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.s
 .PHONY : multiply_const_v.cc.s
 
 noise_source.o: noise_source.cc.o
@@ -552,7 +552,7 @@ noise_source.o: noise_source.cc.o
 
 # target to build an object file
 noise_source.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o
 .PHONY : noise_source.cc.o
 
 noise_source.i: noise_source.cc.i
@@ -560,7 +560,7 @@ noise_source.i: noise_source.cc.i
 
 # target to preprocess a source file
 noise_source.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.i
 .PHONY : noise_source.cc.i
 
 noise_source.s: noise_source.cc.s
@@ -568,7 +568,7 @@ noise_source.s: noise_source.cc.s
 
 # target to generate assembly for a file
 noise_source.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.s
 .PHONY : noise_source.cc.s
 
 pmt_ext_blob.o: pmt_ext_blob.cc.o
@@ -576,7 +576,7 @@ pmt_ext_blob.o: pmt_ext_blob.cc.o
 
 # target to build an object file
 pmt_ext_blob.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o
 .PHONY : pmt_ext_blob.cc.o
 
 pmt_ext_blob.i: pmt_ext_blob.cc.i
@@ -584,7 +584,7 @@ pmt_ext_blob.i: pmt_ext_blob.cc.i
 
 # target to preprocess a source file
 pmt_ext_blob.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.i
 .PHONY : pmt_ext_blob.cc.i
 
 pmt_ext_blob.s: pmt_ext_blob.cc.s
@@ -592,7 +592,7 @@ pmt_ext_blob.s: pmt_ext_blob.cc.s
 
 # target to generate assembly for a file
 pmt_ext_blob.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.s
 .PHONY : pmt_ext_blob.cc.s
 
 pmt_ext_mgr.o: pmt_ext_mgr.cc.o
@@ -600,7 +600,7 @@ pmt_ext_mgr.o: pmt_ext_mgr.cc.o
 
 # target to build an object file
 pmt_ext_mgr.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o
 .PHONY : pmt_ext_mgr.cc.o
 
 pmt_ext_mgr.i: pmt_ext_mgr.cc.i
@@ -608,7 +608,7 @@ pmt_ext_mgr.i: pmt_ext_mgr.cc.i
 
 # target to preprocess a source file
 pmt_ext_mgr.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.i
 .PHONY : pmt_ext_mgr.cc.i
 
 pmt_ext_mgr.s: pmt_ext_mgr.cc.s
@@ -616,7 +616,7 @@ pmt_ext_mgr.s: pmt_ext_mgr.cc.s
 
 # target to generate assembly for a file
 pmt_ext_mgr.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.s
 .PHONY : pmt_ext_mgr.cc.s
 
 signal_source.o: signal_source.cc.o
@@ -624,7 +624,7 @@ signal_source.o: signal_source.cc.o
 
 # target to build an object file
 signal_source.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o
 .PHONY : signal_source.cc.o
 
 signal_source.i: signal_source.cc.i
@@ -632,7 +632,7 @@ signal_source.i: signal_source.cc.i
 
 # target to preprocess a source file
 signal_source.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.i
 .PHONY : signal_source.cc.i
 
 signal_source.s: signal_source.cc.s
@@ -640,7 +640,7 @@ signal_source.s: signal_source.cc.s
 
 # target to generate assembly for a file
 signal_source.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.s
 .PHONY : signal_source.cc.s
 
 socket_msg.o: socket_msg.cc.o
@@ -648,7 +648,7 @@ socket_msg.o: socket_msg.cc.o
 
 # target to build an object file
 socket_msg.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o
 .PHONY : socket_msg.cc.o
 
 socket_msg.i: socket_msg.cc.i
@@ -656,7 +656,7 @@ socket_msg.i: socket_msg.cc.i
 
 # target to preprocess a source file
 socket_msg.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.i
 .PHONY : socket_msg.cc.i
 
 socket_msg.s: socket_msg.cc.s
@@ -664,7 +664,7 @@ socket_msg.s: socket_msg.cc.s
 
 # target to generate assembly for a file
 socket_msg.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.s
 .PHONY : socket_msg.cc.s
 
 socket_to_blob.o: socket_to_blob.cc.o
@@ -672,7 +672,7 @@ socket_to_blob.o: socket_to_blob.cc.o
 
 # target to build an object file
 socket_to_blob.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o
 .PHONY : socket_to_blob.cc.o
 
 socket_to_blob.i: socket_to_blob.cc.i
@@ -680,7 +680,7 @@ socket_to_blob.i: socket_to_blob.cc.i
 
 # target to preprocess a source file
 socket_to_blob.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.i
 .PHONY : socket_to_blob.cc.i
 
 socket_to_blob.s: socket_to_blob.cc.s
@@ -688,7 +688,7 @@ socket_to_blob.s: socket_to_blob.cc.s
 
 # target to generate assembly for a file
 socket_to_blob.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.s
 .PHONY : socket_to_blob.cc.s
 
 stream_selector.o: stream_selector.cc.o
@@ -696,7 +696,7 @@ stream_selector.o: stream_selector.cc.o
 
 # target to build an object file
 stream_selector.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o
 .PHONY : stream_selector.cc.o
 
 stream_selector.i: stream_selector.cc.i
@@ -704,7 +704,7 @@ stream_selector.i: stream_selector.cc.i
 
 # target to preprocess a source file
 stream_selector.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.i
 .PHONY : stream_selector.cc.i
 
 stream_selector.s: stream_selector.cc.s
@@ -712,7 +712,7 @@ stream_selector.s: stream_selector.cc.s
 
 # target to generate assembly for a file
 stream_selector.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.s
 .PHONY : stream_selector.cc.s
 
 stream_to_blob.o: stream_to_blob.cc.o
@@ -720,7 +720,7 @@ stream_to_blob.o: stream_to_blob.cc.o
 
 # target to build an object file
 stream_to_blob.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o
 .PHONY : stream_to_blob.cc.o
 
 stream_to_blob.i: stream_to_blob.cc.i
@@ -728,7 +728,7 @@ stream_to_blob.i: stream_to_blob.cc.i
 
 # target to preprocess a source file
 stream_to_blob.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.i
 .PHONY : stream_to_blob.cc.i
 
 stream_to_blob.s: stream_to_blob.cc.s
@@ -736,7 +736,7 @@ stream_to_blob.s: stream_to_blob.cc.s
 
 # target to generate assembly for a file
 stream_to_blob.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.s
 .PHONY : stream_to_blob.cc.s
 
 subtract.o: subtract.cc.o
@@ -744,7 +744,7 @@ subtract.o: subtract.cc.o
 
 # target to build an object file
 subtract.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o
 .PHONY : subtract.cc.o
 
 subtract.i: subtract.cc.i
@@ -752,7 +752,7 @@ subtract.i: subtract.cc.i
 
 # target to preprocess a source file
 subtract.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.i
 .PHONY : subtract.cc.i
 
 subtract.s: subtract.cc.s
@@ -760,7 +760,7 @@ subtract.s: subtract.cc.s
 
 # target to generate assembly for a file
 subtract.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.s
 .PHONY : subtract.cc.s
 
 tuntap.o: tuntap.cc.o
@@ -768,7 +768,7 @@ tuntap.o: tuntap.cc.o
 
 # target to build an object file
 tuntap.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o
 .PHONY : tuntap.cc.o
 
 tuntap.i: tuntap.cc.i
@@ -776,7 +776,7 @@ tuntap.i: tuntap.cc.i
 
 # target to preprocess a source file
 tuntap.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.i
 .PHONY : tuntap.cc.i
 
 tuntap.s: tuntap.cc.s
@@ -784,7 +784,7 @@ tuntap.s: tuntap.cc.s
 
 # target to generate assembly for a file
 tuntap.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.s
 .PHONY : tuntap.cc.s
 
 uhd_amsg_source.o: uhd_amsg_source.cc.o
@@ -792,7 +792,7 @@ uhd_amsg_source.o: uhd_amsg_source.cc.o
 
 # target to build an object file
 uhd_amsg_source.cc.o:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o
 .PHONY : uhd_amsg_source.cc.o
 
 uhd_amsg_source.i: uhd_amsg_source.cc.i
@@ -800,7 +800,7 @@ uhd_amsg_source.i: uhd_amsg_source.cc.i
 
 # target to preprocess a source file
 uhd_amsg_source.cc.i:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.i
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.i
 .PHONY : uhd_amsg_source.cc.i
 
 uhd_amsg_source.s: uhd_amsg_source.cc.s
@@ -808,7 +808,7 @@ uhd_amsg_source.s: uhd_amsg_source.cc.s
 
 # target to generate assembly for a file
 uhd_amsg_source.cc.s:
-	cd /home/john/src/grextras/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.s
+	cd /home/john/src/pre-cog/build && $(MAKE) -f lib/CMakeFiles/gnuradio-extras.dir/build.make lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.s
 .PHONY : uhd_amsg_source.cc.s
 
 # Help Target
@@ -917,6 +917,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/john/src/grextras/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/john/src/pre-cog/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

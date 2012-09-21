@@ -8,7 +8,7 @@ lib/CMakeFiles/gnuradio-extras.dir/add.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/add.cc
+ /home/john/src/pre-cog/lib/add.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -37,7 +37,7 @@ lib/CMakeFiles/gnuradio-extras.dir/add_const.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/add_const.cc
+ /home/john/src/pre-cog/lib/add_const.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -61,7 +61,7 @@ lib/CMakeFiles/gnuradio-extras.dir/add_const_v.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/add_const_v.cc
+ /home/john/src/pre-cog/lib/add_const_v.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -85,7 +85,7 @@ lib/CMakeFiles/gnuradio-extras.dir/blob_to_filedes.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/blob_to_filedes.cc
+ /home/john/src/pre-cog/lib/blob_to_filedes.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -109,7 +109,7 @@ lib/CMakeFiles/gnuradio-extras.dir/blob_to_socket.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/blob_to_socket.cc
+ /home/john/src/pre-cog/lib/blob_to_socket.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -133,7 +133,7 @@ lib/CMakeFiles/gnuradio-extras.dir/blob_to_stream.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/blob_to_stream.cc
+ /home/john/src/pre-cog/lib/blob_to_stream.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -156,7 +156,7 @@ lib/CMakeFiles/gnuradio-extras.dir/block.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/block.cc
+ /home/john/src/pre-cog/lib/block.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -181,8 +181,8 @@ lib/CMakeFiles/gnuradio-extras.dir/block_gateway.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/block_gateway.cc
- /home/john/src/grextras/lib/block_gateway.h
+ /home/john/src/pre-cog/lib/block_gateway.cc
+ /home/john/src/pre-cog/lib/block_gateway.h
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -207,7 +207,7 @@ lib/CMakeFiles/gnuradio-extras.dir/decim_fir.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/decim_fir.cc
+ /home/john/src/pre-cog/lib/decim_fir.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -237,7 +237,7 @@ lib/CMakeFiles/gnuradio-extras.dir/delay.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/delay.cc
+ /home/john/src/pre-cog/lib/delay.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -262,7 +262,7 @@ lib/CMakeFiles/gnuradio-extras.dir/divide.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/divide.cc
+ /home/john/src/pre-cog/lib/divide.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -291,7 +291,7 @@ lib/CMakeFiles/gnuradio-extras.dir/filedes_to_blob.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/filedes_to_blob.cc
+ /home/john/src/pre-cog/lib/filedes_to_blob.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -315,7 +315,7 @@ lib/CMakeFiles/gnuradio-extras.dir/msg_many_to_one.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/msg_many_to_one.cc
+ /home/john/src/pre-cog/lib/msg_many_to_one.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -340,7 +340,7 @@ lib/CMakeFiles/gnuradio-extras.dir/multiply.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/multiply.cc
+ /home/john/src/pre-cog/lib/multiply.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -369,7 +369,7 @@ lib/CMakeFiles/gnuradio-extras.dir/multiply_const.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/multiply_const.cc
+ /home/john/src/pre-cog/lib/multiply_const.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -393,7 +393,7 @@ lib/CMakeFiles/gnuradio-extras.dir/multiply_const_v.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/multiply_const_v.cc
+ /home/john/src/pre-cog/lib/multiply_const_v.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -422,7 +422,7 @@ lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/noise_source.cc
+ /home/john/src/pre-cog/lib/noise_source.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -443,8 +443,8 @@ lib/CMakeFiles/gnuradio-extras.dir/noise_source.cc.o
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o
  ../include/gnuradio/extras/api.h
  ../include/gruel/pmt_blob.h
- /home/john/src/grextras/lib/pmt_defs.h
- /home/john/src/grextras/lib/pmt_ext_blob.cc
+ /home/john/src/pre-cog/lib/pmt_defs.h
+ /home/john/src/pre-cog/lib/pmt_ext_blob.cc
  /usr/local/include/gruel/api.h
  /usr/local/include/gruel/attributes.h
  /usr/local/include/gruel/pmt.h
@@ -452,8 +452,8 @@ lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_blob.cc.o
 lib/CMakeFiles/gnuradio-extras.dir/pmt_ext_mgr.cc.o
  ../include/gnuradio/extras/api.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/pmt_defs.h
- /home/john/src/grextras/lib/pmt_ext_mgr.cc
+ /home/john/src/pre-cog/lib/pmt_defs.h
+ /home/john/src/pre-cog/lib/pmt_ext_mgr.cc
  /usr/local/include/gruel/api.h
  /usr/local/include/gruel/attributes.h
  /usr/local/include/gruel/pmt.h
@@ -465,7 +465,7 @@ lib/CMakeFiles/gnuradio-extras.dir/signal_source.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/signal_source.cc
+ /home/john/src/pre-cog/lib/signal_source.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -489,7 +489,7 @@ lib/CMakeFiles/gnuradio-extras.dir/socket_msg.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/socket_msg.cc
+ /home/john/src/pre-cog/lib/socket_msg.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -513,7 +513,7 @@ lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/socket_to_blob.cc
+ /home/john/src/pre-cog/lib/socket_to_blob.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -533,7 +533,7 @@ lib/CMakeFiles/gnuradio-extras.dir/socket_to_blob.cc.o
 lib/CMakeFiles/gnuradio-extras.dir/stream_selector.cc.o
  ../include/gnuradio/extras/api.h
  ../include/gnuradio/extras/stream_selector.h
- /home/john/src/grextras/lib/stream_selector.cc
+ /home/john/src/pre-cog/lib/stream_selector.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -559,7 +559,7 @@ lib/CMakeFiles/gnuradio-extras.dir/stream_to_blob.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/stream_to_blob.cc
+ /home/john/src/pre-cog/lib/stream_to_blob.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -583,7 +583,7 @@ lib/CMakeFiles/gnuradio-extras.dir/subtract.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/subtract.cc
+ /home/john/src/pre-cog/lib/subtract.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -614,7 +614,7 @@ lib/CMakeFiles/gnuradio-extras.dir/tuntap.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/tuntap.cc
+ /home/john/src/pre-cog/lib/tuntap.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h
@@ -638,7 +638,7 @@ lib/CMakeFiles/gnuradio-extras.dir/uhd_amsg_source.cc.o
  ../include/gruel/pmt_blob.h
  ../include/gruel/pmt_extras.h
  ../include/gruel/pmt_mgr.h
- /home/john/src/grextras/lib/uhd_amsg_source.cc
+ /home/john/src/pre-cog/lib/uhd_amsg_source.cc
  /usr/local/include/gnuradio/gr_basic_block.h
  /usr/local/include/gnuradio/gr_block.h
  /usr/local/include/gnuradio/gr_complex.h

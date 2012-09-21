@@ -22,4 +22,8 @@
         <name>out</name>
         <type></type>
     </source>
+    <doc>
+    Over-writes key of PMT (blobl only).
+    
+    </doc>
 </block>
