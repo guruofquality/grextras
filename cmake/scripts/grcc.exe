@@ -1,0 +1,61 @@
+#!/usr/bin/python2.7
+#!/usr/bin/env python
+"""
+License and Copyright:
+	Copyright Paul Miller 2012
+
+	This program is really just copied from GNU Radio (via source
+	diving).  Please considered it licensed under whatever
+	licenses (and versions) GNU Radio itself is using.
+
+Usage: grcc [list of grc files to compile]
+
+Options:
+  --version	  show program's version number and exit
+  -h, --help	 show this help message and exit
+  -v, --verbose  verbose output during compile [default=False]
+"""
+
+import sys
+import os
+from optparse import OptionParser
+from gnuradio import gr
+from gnuradio.grc.python.Constants import HIER_BLOCKS_LIB_DIR
+from gnuradio.grc.python.Platform  import Platform
+
+def compile_one(file_name, output_dir):
+	platform = Platform()
+	state = platform.parse_flow_graph(file_name)
+	flowgraph = platform.get_new_flow_graph()
+
+	flowgraph.import_data(state)
+	flowgraph.validate();
+
+	generator = platform.get_generator()( flowgraph, output_dir )
+
+	generator.write()
+
+if __name__ == "__main__":
+	usage = 'usage: %prog [list of grc files to compile]'
+	version = """
+GNU Radio Companion Compiler %s
+
+This program is part of GNU Radio
+grcc comes with ABSOLUTELY NO WARRANTY.
+This is free software,
+and you are welcome to redistribute it.
+"""%gr.version()
+
+	parser = OptionParser(usage=usage, version=version)
+	parser.add_option("-v", "--verbose", action="store_true", default=False,
+		help="verbose output during compile [default=%default]")
+	(options, args) = parser.parse_args()
+
+	output_dir = HIER_BLOCKS_LIB_DIR
+
+	if "GRC_OUTPUT_DIRECTORY" in os.environ:
+		output_dir = os.environ["GRC_OUTPUT_DIRECTORY"]
+
+	for x in args:
+		if options.verbose: print "compiling %s -> %s" % (x, output_dir)
+		compile_one(x, output_dir)

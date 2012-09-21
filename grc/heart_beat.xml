@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Heartbeat
+###################################################
+ -->
+<block>
+    <name>Extras: Heartbeat</name>
+    <key>heart_beat</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.heart_beat($period,$key,$value)</make>
+    <param>
+        <name>Period(seconds)</name>
+        <key>period</key>
+        <type>real</type>
+    </param>
+    <param>
+        <name>Key</name>
+        <key>key</key>
+        <type>string</type>
+    </param>
+        <param>
+        <name>Value</name>
+        <key>value</key>
+        <type>string</type>
+    </param>
+    <source>
+        <name>out</name>
+        <type></type>
+    </source>
+ 
+    <doc>
+Generates a message with specific key and value once every [period].
+    </doc>
+</block>

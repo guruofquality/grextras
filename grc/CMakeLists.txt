@@ -49,6 +49,17 @@ list(APPEND grc_sources
     extras_pmt_rpc.xml
     extras_msg_many_to_one.xml
     extras_socket_msg.xml
+    extras_transition_detect.xml
+    extras_msg_to_stdout.xml
+    simple_mac.xml
+    adder.xml
+    extras_append_key.xml
+    heart_beat.xml
+    burst_gate.xml
+    channel_access_controller.xml
+    tdma_engine.xml
+    virtual_channel_formatter.xml
+    virtual_channel_mux.xml
 )
 
 install(

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Adder
+###################################################
+ -->
+<block>
+    <name>Extras: Burst Gate</name>
+    <key>burst_gate</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.burst_gate()</make>
+    
+    <sink>
+        <name>in</name>
+        <type>complex</type>
+    </sink>
+    <source>
+        <name>out</name>
+        <type>complex</type>
+    </source>
+
+    <doc>
+Burst gate.  
+    </doc>
+</block>

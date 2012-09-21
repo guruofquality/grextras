@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Heartbeat
+###################################################
+ -->
+<block>
+    <name>Extras: Channel Access Controller</name>
+    <key>channel_access_controller</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.channel_access_controller()</make>
+    <sink>
+        <name>state</name>
+        <type></type>
+    </sink>
+    <sink>
+        <name>pkt</name>
+        <type></type>
+    </sink>
+    <source>
+        <name>out</name>
+        <type></type>
+    </source>
+ 
+    <doc>
+Channel access controller.
+    </doc>
+</block>
