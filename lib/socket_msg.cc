@@ -117,6 +117,7 @@ struct socket_msg_producer : gnuradio::block
     pmt::pmt_mgr::sptr _mgr;
 
     boost::weak_ptr<asio::ip::tcp::socket> weak_socket;
+    boost::shared_ptr<asio::io_service> io_service;
 };
 
 
@@ -165,6 +166,7 @@ struct socket_msg_consumer : gnuradio::block
     }
 
     boost::weak_ptr<asio::ip::tcp::socket> weak_socket;
+    boost::shared_ptr<asio::io_service> io_service;
 };
 
 /***********************************************************************
@@ -180,15 +182,18 @@ public:
         )
     {
         //setup tcp listen service
-        asio::ip::tcp::resolver resolver(_io_service);
+        _io_service = boost::make_shared<asio::io_service>();
+        asio::ip::tcp::resolver resolver(*_io_service);
         asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), addr, port);
         asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
-        _acceptor = boost::shared_ptr<asio::ip::tcp::acceptor>(new asio::ip::tcp::acceptor(_io_service, endpoint));
+        _acceptor = boost::shared_ptr<asio::ip::tcp::acceptor>(new asio::ip::tcp::acceptor(*_io_service, endpoint));
         _tg.create_thread(boost::bind(&socket_msg_impl::serve, this));
 
         //make the blocks
-        _consumer = boost::make_shared<socket_msg_consumer>();
-        _producer = boost::make_shared<socket_msg_producer>(mtu);
+        _consumer = gnuradio::get_initial_sptr(new socket_msg_consumer());
+        _consumer->io_service = _io_service;
+        _producer = gnuradio::get_initial_sptr(new socket_msg_producer(mtu));
+        _producer->io_service = _io_service;
 
         //connect
         this->connect(this->self(), 0, _consumer, 0);
@@ -208,7 +213,7 @@ private:
         while (not boost::this_thread::interruption_requested())
         {
             if (!wait_for_recv_ready(_acceptor->native())) continue;
-            _socket = boost::shared_ptr<asio::ip::tcp::socket>(new asio::ip::tcp::socket(_io_service));
+            _socket = boost::shared_ptr<asio::ip::tcp::socket>(new asio::ip::tcp::socket(*_io_service));
             _acceptor->accept(*_socket);
 
             //a synchronous switchover to a new client socket
@@ -218,7 +223,7 @@ private:
     }
 
     boost::thread_group _tg;
-    asio::io_service _io_service;
+    boost::shared_ptr<asio::io_service> _io_service;
     boost::shared_ptr<asio::ip::tcp::socket> _socket;
     boost::shared_ptr<asio::ip::tcp::acceptor> _acceptor;
 
@@ -229,8 +234,9 @@ private:
 /***********************************************************************
  * Factory function
  **********************************************************************/
-socket_msg::sptr socket_msg::make(const std::string &proto, const std::string &addr, const std::string &port, const size_t mtu)
+socket_msg::sptr socket_msg::make(const std::string &proto, const std::string &addr, const std::string &port, const size_t mtu_)
 {
+    const size_t mtu = (mtu_ == 0)? 1500 : mtu_;
     if (proto != "TCP") throw std::invalid_argument("unknown protocol for socket msg: " + proto);
     return gnuradio::get_initial_sptr(new socket_msg_impl(addr, port, mtu));
 }
