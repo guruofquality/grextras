@@ -84,7 +84,7 @@ struct socket_msg_producer : gnuradio::block
         while (!boost::this_thread::interruption_requested())
         {
             //wait for socket to be init'd
-            boost::shared_ptr<asio::ip::tcp::socket> _socket = weak_socket.lock();
+            boost::shared_ptr<asio::ip::tcp::socket> _socket = socket;
             if (not _socket)
             {
                 boost::this_thread::sleep(boost::posix_time::microseconds(timeout_us));
@@ -103,6 +103,7 @@ struct socket_msg_producer : gnuradio::block
                 ));
             }catch(...){
                 std::cerr << "socket msg block, socket receive error, continuing..." << std::endl;
+                socket.reset();
             }
 
             //post the message to downstream subscribers
@@ -116,7 +117,7 @@ struct socket_msg_producer : gnuradio::block
     pmt::pmt_t _id;
     pmt::pmt_mgr::sptr _mgr;
 
-    boost::weak_ptr<asio::ip::tcp::socket> weak_socket;
+    boost::shared_ptr<asio::ip::tcp::socket> socket;
     boost::shared_ptr<asio::io_service> io_service;
 };
 
@@ -148,7 +149,7 @@ struct socket_msg_consumer : gnuradio::block
             if (pmt::pmt_blob_length(msg.value) == 0) break; //empty blob, we are done here
 
             //if we dont have a socket, the message is dropped
-            boost::shared_ptr<asio::ip::tcp::socket> _socket = weak_socket.lock();
+            boost::shared_ptr<asio::ip::tcp::socket> _socket = socket;
             if (not _socket) continue;
 
             try{
@@ -158,6 +159,7 @@ struct socket_msg_consumer : gnuradio::block
                 ));
             }catch(...){
                 std::cerr << "socket msg block, socket send error, continuing..." << std::endl;
+                socket.reset();
             }
         }
 
@@ -165,7 +167,7 @@ struct socket_msg_consumer : gnuradio::block
         return -1;
     }
 
-    boost::weak_ptr<asio::ip::tcp::socket> weak_socket;
+    boost::shared_ptr<asio::ip::tcp::socket> socket;
     boost::shared_ptr<asio::io_service> io_service;
 };
 
@@ -213,18 +215,17 @@ private:
         while (not boost::this_thread::interruption_requested())
         {
             if (!wait_for_recv_ready(_acceptor->native())) continue;
-            _socket = boost::shared_ptr<asio::ip::tcp::socket>(new asio::ip::tcp::socket(*_io_service));
-            _acceptor->accept(*_socket);
+            boost::shared_ptr<asio::ip::tcp::socket> socket(new asio::ip::tcp::socket(*_io_service));
+            _acceptor->accept(*socket);
 
             //a synchronous switchover to a new client socket
-            _consumer->weak_socket = _socket;
-            _producer->weak_socket = _socket;
+            _consumer->socket = socket;
+            _producer->socket = socket;
         }
     }
 
     boost::thread_group _tg;
     boost::shared_ptr<asio::io_service> _io_service;
-    boost::shared_ptr<asio::ip::tcp::socket> _socket;
     boost::shared_ptr<asio::ip::tcp::acceptor> _acceptor;
 
     boost::shared_ptr<socket_msg_consumer> _consumer;
