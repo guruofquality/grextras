@@ -27,10 +27,6 @@ try: #it may not exist based on prereqs
 except ImportError: pass
 
 try: #it may not exist based on prereqs
-    from adder import adder
-except ImportError: pass
-
-try: #it may not exist based on prereqs
     from msg_to_stdout import msg_to_stdout
 except ImportError: pass
 
