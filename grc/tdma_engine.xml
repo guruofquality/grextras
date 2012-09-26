@@ -49,7 +49,7 @@
     </sink>
     <sink>
         <name>in_pkt_in</name>
-        <type></type>
+        <type>byte</type>
     </sink>
     <sink>
         <name>ctrl_port_in</name>
