@@ -31,10 +31,12 @@
         <sink>
         <name>from_app</name>
         <type></type>
+        <optional>1</optional>
     </sink>
         <sink>
         <name>ctrl_in</name>
         <type></type>
+        <optional>1</optional>
     </sink>
     <source>
         <name>to_radio</name>
@@ -43,10 +45,12 @@
     <source>
         <name>to_app</name>
         <type></type>
+        <optional>1</optional>
     </source>
     <source>
         <name>ctrl_out</name>
         <type></type>
+        <optional>1</optional>
     </source>
     <doc>
 This is a Simple MAC implementation with ARQ.  Set address of radio, ARQ limit, and ARQ timeout.  Currently, this only implements stop-and-wait ARQ.

@@ -54,6 +54,7 @@
     <sink>
         <name>ctrl_port_in</name>
         <type></type>
+        <optional>1</optional>
     </sink>
     <source>
         <name>to_framer</name>
@@ -62,6 +63,7 @@
     <source>
         <name>ctrl_port_out</name>
         <type></type>
+        <optional>1</optional>
     </source>
     <doc>
 TDMA Implementation.. see wiki for more details

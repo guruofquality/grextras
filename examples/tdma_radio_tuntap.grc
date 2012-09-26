@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Tue Sep 25 11:34:43 2012</timestamp>
+  <timestamp>Wed Sep 26 01:14:44 2012</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -644,77 +644,6 @@
     </param>
   </block>
   <block>
-    <key>tdma_hier</key>
-    <param>
-      <key>id</key>
-      <value>tdma_hier_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>rx_gain</key>
-      <value>rx_gain</value>
-    </param>
-    <param>
-      <key>rate</key>
-      <value>rate</value>
-    </param>
-    <param>
-      <key>samp_per_sym</key>
-      <value>samp_per_sym</value>
-    </param>
-    <param>
-      <key>args</key>
-      <value>args</value>
-    </param>
-    <param>
-      <key>freq</key>
-      <value>freq</value>
-    </param>
-    <param>
-      <key>ampl</key>
-      <value>ampl</value>
-    </param>
-    <param>
-      <key>tx_gain</key>
-      <value>tx_gain</value>
-    </param>
-    <param>
-      <key>number_of_slots</key>
-      <value>num_slots</value>
-    </param>
-    <param>
-      <key>lead_limit</key>
-      <value>lead_limit</value>
-    </param>
-    <param>
-      <key>initial_slot</key>
-      <value>initial_slot</value>
-    </param>
-    <param>
-      <key>link_speed</key>
-      <value>rate/samp_per_sym</value>
-    </param>
-    <param>
-      <key>slot_interval</key>
-      <value>slot_interval</value>
-    </param>
-    <param>
-      <key>guard_interval</key>
-      <value>guard_interval</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(655, 18)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>180</value>
-    </param>
-  </block>
-  <block>
     <key>parameter</key>
     <param>
       <key>id</key>
@@ -1106,6 +1035,162 @@
       <value>0</value>
     </param>
   </block>
+  <block>
+    <key>gr_null_sink</key>
+    <param>
+      <key>id</key>
+      <value>gr_null_sink_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>byte</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(387, 135)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>180</value>
+    </param>
+  </block>
+  <block>
+    <key>tdma_hier</key>
+    <param>
+      <key>id</key>
+      <value>tdma_hier_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>rx_gain</key>
+      <value>rx_gain</value>
+    </param>
+    <param>
+      <key>rate</key>
+      <value>rate</value>
+    </param>
+    <param>
+      <key>samp_per_sym</key>
+      <value>samp_per_sym</value>
+    </param>
+    <param>
+      <key>args</key>
+      <value>args</value>
+    </param>
+    <param>
+      <key>freq</key>
+      <value>freq</value>
+    </param>
+    <param>
+      <key>ampl</key>
+      <value>ampl</value>
+    </param>
+    <param>
+      <key>tx_gain</key>
+      <value>tx_gain</value>
+    </param>
+    <param>
+      <key>number_of_slots</key>
+      <value>num_slots</value>
+    </param>
+    <param>
+      <key>lead_limit</key>
+      <value>lead_limit</value>
+    </param>
+    <param>
+      <key>initial_slot</key>
+      <value>initial_slot</value>
+    </param>
+    <param>
+      <key>link_speed</key>
+      <value>rate/samp_per_sym</value>
+    </param>
+    <param>
+      <key>slot_interval</key>
+      <value>slot_interval</value>
+    </param>
+    <param>
+      <key>guard_interval</key>
+      <value>guard_interval</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(655, 18)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>180</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_nop</key>
+    <param>
+      <key>id</key>
+      <value>gr_nop_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>byte</value>
+    </param>
+    <param>
+      <key>num_ports</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(881, 165)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>180</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_null_source</key>
+    <param>
+      <key>id</key>
+      <value>gr_null_source_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>byte</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(935, 110)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>180</value>
+    </param>
+  </block>
   <connection>
     <source_block_id>heart_beat_0</source_block_id>
     <sink_block_id>simple_mac_0</sink_block_id>
@@ -1140,6 +1225,24 @@
     <source_block_id>tdma_hier_0</source_block_id>
     <sink_block_id>simple_mac_0</sink_block_id>
     <source_key>1</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>tdma_hier_0</source_block_id>
+    <sink_block_id>gr_null_sink_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_null_source_0</source_block_id>
+    <sink_block_id>gr_nop_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_nop_0</source_block_id>
+    <sink_block_id>tdma_hier_0</sink_block_id>
+    <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
 </flow_graph>
