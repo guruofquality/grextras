@@ -50,5 +50,8 @@
     </source>
     <doc>
 This is a Simple MAC implementation with ARQ.  Set address of radio, ARQ limit, and ARQ timeout.  Currently, this only implements stop-and-wait ARQ.
+
+Simple ARQ - accepts msg blobs on the "app in" msg port.  It will add a header that incldues a sequence number, desination address, source address, and a couple of control words.  Source address is the address of the MAC itself.  The source address is the address of the radio we want to send the message to.  This address is encoded into the key of the incoming blob so you can have multiple streams to multiple radios.  The ARQ selection is also encoded into the key of the incoming blob.  Currently, this block supports simple stop-and-qait ARQ.  Blobs with header are exchanged on the "radio" ports.  Ctrl ports also provided, but do nothing useful at the moment. 
+
     </doc>
 </block>

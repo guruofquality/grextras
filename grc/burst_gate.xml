@@ -22,5 +22,7 @@
     <doc>
 Moves EOB to the end of a sample set when it is present.
 Use this when an block in the flowgraph is inserting EOB before DSP interpolation.
+
+Burst Gate - this is block is a band-aid to move the eob to the end of a sample set.  This is helpful if you are doing burst radios with interpolation between the insertion of the eob and the USRP sink.  (GNU radio doesn't propopgate eob to be aligned with inerpolated samples). 
     </doc>
 </block>

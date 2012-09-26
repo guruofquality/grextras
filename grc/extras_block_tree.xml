@@ -52,5 +52,13 @@
         <block>extras_decim_fir</block>
         <block>extras_pmt_rpc</block>
         <block>extras_msg_many_to_one</block>
+        <block>transition_detect</block>
+        <block>heart_beat</block>
+        <block>simple_mac</block>
+        <block>tdma_engine</block>
+        <block>channel_access_controller</block>
+        <block>virtual_channel_mux</block>
+        <block>virtual_channel_demux</block>
+        <block>virtual_channel_formatter</block>
     </cat>
 </cat>

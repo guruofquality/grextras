@@ -65,5 +65,8 @@
     </source>
     <doc>
 TDMA Implementation.. see wiki for more details
+
+TDMA Engine - this block will monitor a USRP receiver stream to determine the time.  Based on the assigned slot, specified guard interval, and number of slots in the TDMA frame, this block will hold back all incoming blobs until it's assigned slot (plus guard interval) approaches.  It will output these msg's as blobs after its next slot interval - lead limit passes. 
+
     </doc>
 </block>

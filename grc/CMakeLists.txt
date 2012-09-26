@@ -58,7 +58,8 @@ list(APPEND grc_sources
     channel_access_controller.xml
     tdma_engine.xml
     virtual_channel_formatter.xml
-    #virtual_channel_mux.xml
+    virtual_channel_mux.xml
+    virtual_channel_demux.xml
 )
 
 install(
