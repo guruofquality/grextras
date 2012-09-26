@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##TDMA Engine
+###################################################
+ -->
+<block>
+    <name>Extras: TDMA Engine</name>
+    <key>tdma_engine</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.tdma_engine($initial_slot,$slot_interval,$guard_interval,$num_slots,$lead_limit,$link_bps)</make>
+    <param>
+        <name>Initial Slot</name>
+        <key>initial_slot</key>
+        <type>int</type>
+    </param>
+    <param>
+        <name>Slot Interval</name>
+        <key>slot_interval</key>
+        <type>real</type>
+    </param>
+    <param>
+        <name>Guard Interval</name>
+        <key>guard_interval</key>
+        <type>real</type>
+    </param>
+        <param>
+        <name>Number of Slots</name>
+        <key>num_slots</key>
+        <type>int</type>
+    </param>
+        <param>
+        <name>Lead Limit(s)</name>
+        <key>lead_limit</key>
+        <type>real</type>
+    </param>
+        <param>
+        <name>Link Speed(bps)</name>
+        <key>link_bps</key>
+        <type>real</type>
+    </param>
+    <sink>
+        <name>usrp</name>
+        <type>complex</type>
+    </sink>
+    <sink>
+        <name>out_pkt_in</name>
+        <type></type>
+    </sink>
+    <sink>
+        <name>in_pkt_in</name>
+        <type></type>
+    </sink>
+    <sink>
+        <name>ctrl_port_in</name>
+        <type></type>
+    </sink>
+    <source>
+        <name>to_framer</name>
+        <type></type>
+    </source>
+    <source>
+        <name>ctrl_port_out</name>
+        <type></type>
+    </source>
+    <doc>
+TDMA Implementation.. see wiki for more details
+    </doc>
+</block>

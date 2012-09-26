@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Virtual Channel Demux
+###################################################
+ -->
+<block>
+    <name>Extras: Virtual Channel Demux</name>
+    <key>virtual_channel_demux</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.virtual_channel_demux($ports)</make>
+    <param>
+        <name>Output Ports</name>
+        <key>ports</key>
+        <value>2</value>
+        <type>int</type>
+    </param>
+    <sink>
+        <name>in</name>
+        <type></type>
+    </sink>
+    <source>
+        <name>out</name>
+        <type></type>
+        <nports>$ports</nports>
+    </source>
+ 
+    <doc>
+Virtual channel demux.
+    </doc>
+</block>

@@ -29,6 +29,16 @@ list(APPEND python_sources
     pmt_to_python.py
     pmt_rpc.py
     packet_framer.py
+    transition_detect.py
+    msg_to_stdout.py
+    simple_mac.py
+    append_key.py
+    heart_beat.py
+    burst_gate.py
+    channel_access_controller.py
+    tdma_engine.py
+    virtual_channel_formatter.py
+    #virtual_channel_mux.py
 )
 
 GR_PYTHON_INSTALL(

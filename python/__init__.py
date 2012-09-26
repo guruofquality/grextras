@@ -23,7 +23,47 @@ import block_gateway #act of importing performs injection
 import pmt_to_python #act of importing performs injection
 
 try: #it may not exist based on prereqs
+    from transition_detect import transition_detect
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from msg_to_stdout import msg_to_stdout
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from simple_mac import simple_mac
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from append_key import append_key
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from heart_beat import heart_beat
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from burst_gate import burst_gate
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from tdma_engine import tdma_engine
+except ImportError: pass
+
+try: #it may not exist based on prereqs
     from packet_framer import *
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from channel_access_controller import *
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from virtual_channel_formatter import *
+except ImportError: pass
+
+try: #it may not exist based on prereqs
+    from virtual_channel_mux import *
 except ImportError: pass
 
 from pmt_rpc import pmt_rpc

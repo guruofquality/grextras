@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -O3 -DNDEBUG  -shared -Wl,-soname,_extras_swig.so -o _extras_swig.so CMakeFiles/_extras_swig.dir/extras_swigPYTHON_wrap.cxx.o -lpython2.7 ../lib/libgnuradio-extras.so /usr/local/lib/libuhd.so /usr/local/lib/libvolk.so /usr/local/lib/libgruel.so /usr/local/lib/libgnuradio-core.so -Wl,-rpath,/home/john/src/grextras/cmake/lib:/usr/local/lib: 

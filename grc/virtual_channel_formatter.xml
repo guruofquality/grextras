@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Virtual Channel Formatter
+###################################################
+ -->
+<block>
+    <name>Extras: Virtual Channel Formatter</name>
+    <key>virtual_channel_formatter</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.virtual_channel_formatter($channel,$arq)</make>
+    <param>
+        <name>Dest. Address</name>
+        <key>channel</key>
+        <type>int</type>
+    </param>
+    <param>
+        <name>ARQ</name>
+        <key>arq</key>
+        <type>int</type>
+        <option>
+			<name>ARQ_FALSE</name>
+			<key>0</key>
+		</option>
+        <option>
+			<name>ARQ_TRUE</name>
+			<key>1</key>
+		</option>
+    </param>
+    <sink>
+        <name>in</name>
+        <type></type>
+    </sink>
+    <source>
+        <name>out</name>
+        <type></type>
+    </source>
+
+ 
+    <doc>
+Congigures key for destination address and ARQ settings.
+For use with Simple MAC.
+    </doc>
+</block>

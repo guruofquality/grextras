@@ -1,0 +1,40 @@
+commit e83aaffc53716882be450ec6d4f100aa543d9da3
+Author: Josh Blum <josh@joshknows.com>
+Date:   Thu Aug 30 15:21:52 2012 -0700
+
+    redefine tag_propagation_policy_t for swig's benefit
+
+diff --git a/lib/block_gateway.h b/lib/block_gateway.h
+index b2de490..e16a81e 100644
+--- a/lib/block_gateway.h
++++ b/lib/block_gateway.h
+@@ -27,6 +27,12 @@
+ #include <stdexcept>
+ #include <gr_feval.h>
+ 
++enum tag_propagation_policy_t {
++    TPP_DONT = 0,
++    TPP_ALL_TO_ALL = 1,
++    TPP_ONE_TO_ONE = 2
++};
++
+ /*!
+  * Shared message structure between python and gateway.
+  * Each action type represents a scheduler-called function.
+@@ -147,12 +153,12 @@ public:
+         return gnuradio::block::nitems_written(which_output);
+     }
+ 
+-    gr_block::tag_propagation_policy_t gr_block__tag_propagation_policy(void){
+-        return gnuradio::block::tag_propagation_policy();
++    tag_propagation_policy_t gr_block__tag_propagation_policy(void){
++        return (tag_propagation_policy_t)gnuradio::block::tag_propagation_policy();
+     }
+ 
+-    void gr_block__set_tag_propagation_policy(gr_block::tag_propagation_policy_t p){
+-        return gnuradio::block::set_tag_propagation_policy(p);
++    void gr_block__set_tag_propagation_policy(tag_propagation_policy_t p){
++        return gnuradio::block::set_tag_propagation_policy((gr_block::tag_propagation_policy_t)p);
+     }
+ 
+     void gr_block__add_item_tag(
