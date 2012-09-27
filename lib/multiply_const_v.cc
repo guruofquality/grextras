@@ -28,73 +28,6 @@
 using namespace gnuradio::extras;
 
 /***********************************************************************
- * Generic vlen == 1 multiplier implementation
- **********************************************************************/
-template <typename type>
-struct multiply_const_work{
-    size_t multiple(void){return 1;}
-    size_t operator()(
-        const std::vector<type> &val,
-        const gnuradio::block::InputItems &input_items,
-        const gnuradio::block::OutputItems &output_items
-    ){
-        const size_t noutput_items = output_items[0].size();
-        type *out = output_items[0].cast<type *>();
-        const type *in = input_items[0].cast<const type *>();
-
-        for (size_t i = 0; i < noutput_items; i++){
-            out[i] = in[i] * val[0];
-        }
-
-        return noutput_items;
-    }
-};
-
-/***********************************************************************
- * FC32 vlen == 1 multiplier implementation
- **********************************************************************/
-template <>
-struct multiply_const_work <std::complex<float> >
-{
-    size_t multiple(void){return volk_get_alignment();}
-    size_t operator()(
-        const std::vector<std::complex<float> > &val,
-        const gnuradio::block::InputItems &input_items,
-        const gnuradio::block::OutputItems &output_items
-    ){
-        const size_t num_items = output_items[0].size();
-        typedef std::complex<float> type;
-        const type scalar = reinterpret_cast<const type *>(&val[0])[0];
-        type *out = output_items[0].cast<type *>();
-        const type *in = input_items[0].cast<const type *>();
-        volk_32fc_s32fc_multiply_32fc_a(out, in, scalar, num_items);
-        return num_items;
-    }
-};
-
-/***********************************************************************
- * F32 vlen == 1 multiplier implementation
- **********************************************************************/
-template <>
-struct multiply_const_work <float>
-{
-    size_t multiple(void){return volk_get_alignment();}
-    size_t operator()(
-        const std::vector<float> &val,
-        const gnuradio::block::InputItems &input_items,
-        const gnuradio::block::OutputItems &output_items
-    ){
-        const size_t num_items = output_items[0].size();
-        typedef float type;
-        const type scalar = reinterpret_cast<const type *>(&val[0])[0];
-        type *out = output_items[0].cast<type *>();
-        const type *in = input_items[0].cast<const type *>();
-        volk_32f_s32f_multiply_32f_a(out, in, scalar, num_items);
-        return num_items;
-    }
-};
-
-/***********************************************************************
  * Generic multiply const implementation
  **********************************************************************/
 template <typename type>
@@ -109,15 +42,22 @@ public:
     {
         _val.resize(vec.size());
         this->set_const(vec);
-        const int alignment_multiple = _work.multiple() / (sizeof(type)*_val.size());
+        const int alignment_multiple = get_work_multiple() / (sizeof(type)*_val.size());
         set_output_multiple(std::max(1, alignment_multiple));
     }
+
+    size_t get_work_multiple(void);
+
+    int work1(
+        const InputItems &input_items,
+        const OutputItems &output_items
+    );
 
     int work(
         const InputItems &input_items,
         const OutputItems &output_items
     ){
-        if (_val.size() == 1) return _work(_val, input_items, output_items);
+        if (_val.size() == 1) return work1(input_items, output_items);
 
         const size_t noutput_items = output_items[0].size();
         const size_t n_nums = noutput_items * _val.size();
@@ -149,8 +89,78 @@ public:
 private:
     std::vector<std::complex<double> > _original_val;
     std::vector<type> _val;
-    multiply_const_work<type> _work;
 };
+
+/***********************************************************************
+ * Generic vlen == 1 multiplier implementation
+ **********************************************************************/
+template <typename type>
+size_t multiply_const_generic<type>::get_work_multiple(void)
+{
+    return 1;
+}
+
+template <typename type>
+int multiply_const_generic<type>::work1(
+    const InputItems &input_items,
+    const OutputItems &output_items
+){
+    const size_t noutput_items = output_items[0].size();
+    type *out = output_items[0].cast<type *>();
+    const type *in = input_items[0].cast<const type *>();
+
+    for (size_t i = 0; i < noutput_items; i++){
+        out[i] = in[i] * _val[0];
+    }
+
+    return noutput_items;
+}
+
+/***********************************************************************
+ * FC32 vlen == 1 multiplier implementation
+ **********************************************************************/
+template <>
+size_t multiply_const_generic<std::complex<float> >::get_work_multiple(void)
+{
+    return volk_get_alignment();
+}
+
+template <>
+int multiply_const_generic<std::complex<float> >::work1(
+    const InputItems &input_items,
+    const OutputItems &output_items
+){
+    const size_t num_items = output_items[0].size();
+    typedef std::complex<float> type;
+    const type scalar = reinterpret_cast<const type *>(&_val[0])[0];
+    type *out = output_items[0].cast<type *>();
+    const type *in = input_items[0].cast<const type *>();
+    volk_32fc_s32fc_multiply_32fc_a(out, in, scalar, num_items);
+    return num_items;
+}
+
+/***********************************************************************
+ * F32 vlen == 1 multiplier implementation
+ **********************************************************************/
+template <>
+size_t multiply_const_generic<float>::get_work_multiple(void)
+{
+    return volk_get_alignment();
+}
+
+template <>
+int multiply_const_generic<float>::work1(
+    const InputItems &input_items,
+    const OutputItems &output_items
+){
+    const size_t num_items = output_items[0].size();
+    typedef float type;
+    const type scalar = reinterpret_cast<const type *>(&_val[0])[0];
+    type *out = output_items[0].cast<type *>();
+    const type *in = input_items[0].cast<const type *>();
+    volk_32f_s32f_multiply_32f_a(out, in, scalar, num_items);
+    return num_items;
+}
 
 /***********************************************************************
  * factory function

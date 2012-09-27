@@ -28,60 +28,6 @@
 using namespace gnuradio::extras;
 
 /***********************************************************************
- * Generic adder implementation
- **********************************************************************/
-template <typename type>
-struct add_work
-{
-    size_t multiple(void){return 1;}
-    size_t operator()(
-        const size_t vlen,
-        const gnuradio::block::InputItems &input_items,
-        const gnuradio::block::OutputItems &output_items
-    ){
-        const size_t n_nums = output_items[0].size() * vlen;
-        type *out = output_items[0].cast<type *>();
-        const type *in0 = input_items[0].cast<const type *>();
-
-        for (size_t n = 1; n < input_items.size(); n++){
-            const type *in = input_items[n].cast<const type *>();
-            for (size_t i = 0; i < n_nums; i++){
-                out[i] = in0[i] + in[i];
-            }
-            in0 = out; //for next input, we do output += input
-        }
-
-        return output_items[0].size();
-    }
-};
-
-/***********************************************************************
- * Adder implementation with float32 - calls volk
- **********************************************************************/
-template <>
-struct add_work <float>
-{
-    size_t multiple(void){return volk_get_alignment();}
-    size_t operator()(
-        const size_t vlen,
-        const gnuradio::block::InputItems &input_items,
-        const gnuradio::block::OutputItems &output_items
-    ){
-        const size_t n_nums = output_items[0].size() * vlen;
-        float *out = output_items[0].cast<float *>();
-        const float *in0 = input_items[0].cast<const float *>();
-
-        for (size_t n = 1; n < input_items.size(); n++){
-            const float *in = input_items[n].cast<const float *>();
-            volk_32f_x2_add_32f_a(out, in0, in, n_nums);
-            in0 = out; //for next input, we do output += input
-        }
-
-        return output_items[0].size();
-    }
-};
-
-/***********************************************************************
  * Templated adder class
  **********************************************************************/
 template <typename type>
@@ -95,22 +41,76 @@ public:
         ),
         _vlen(vlen)
     {
-        const int alignment_multiple = _work.multiple() / (sizeof(type)*vlen);
+        const int alignment_multiple = get_work_multiple() / (sizeof(type)*vlen);
         set_output_multiple(std::max(1, alignment_multiple));
     }
+
+    size_t get_work_multiple(void);
 
     int work(
         const InputItems &input_items,
         const OutputItems &output_items
-    ){
-        const size_t noutput_items = output_items[0].size();
-        return _work(_vlen, input_items, output_items);
-    }
+    );
 
 private:
     const size_t _vlen;
-    add_work<type> _work;
 };
+
+/***********************************************************************
+ * Generic adder implementation
+ **********************************************************************/
+template <typename type>
+size_t add_generic<type>::get_work_multiple(void)
+{
+    return 1;
+}
+
+template <typename type>
+int add_generic<type>::work(
+    const InputItems &input_items,
+    const OutputItems &output_items
+){
+    const size_t n_nums = output_items[0].size() * _vlen;
+    type *out = output_items[0].cast<type *>();
+    const type *in0 = input_items[0].cast<const type *>();
+
+    for (size_t n = 1; n < input_items.size(); n++){
+        const type *in = input_items[n].cast<const type *>();
+        for (size_t i = 0; i < n_nums; i++){
+            out[i] = in0[i] + in[i];
+        }
+        in0 = out; //for next input, we do output += input
+    }
+
+    return output_items[0].size();
+}
+
+/***********************************************************************
+ * Adder implementation with float32 - calls volk
+ **********************************************************************/
+template <>
+size_t add_generic<float>::get_work_multiple(void)
+{
+    return volk_get_alignment();
+}
+
+template <>
+int add_generic<float>::work(
+    const InputItems &input_items,
+    const OutputItems &output_items
+){
+    const size_t n_nums = output_items[0].size() * _vlen;
+    float *out = output_items[0].cast<float *>();
+    const float *in0 = input_items[0].cast<const float *>();
+
+    for (size_t n = 1; n < input_items.size(); n++){
+        const float *in = input_items[n].cast<const float *>();
+        volk_32f_x2_add_32f_a(out, in0, in, n_nums);
+        in0 = out; //for next input, we do output += input
+    }
+
+    return output_items[0].size();
+}
 
 /***********************************************************************
  * factory function
