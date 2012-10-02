@@ -108,7 +108,7 @@ struct socket_msg_producer : gnuradio::block
 
             //post the message to downstream subscribers
             pmt::pmt_blob_resize(blob, num_bytes);
-            this->post_msg(0, BLOB_KEY, pmt::pmt_string_to_symbol("test"), pmt::pmt_string_to_symbol("test"));
+            this->post_msg(0, BLOB_KEY, blob, _id);
         }
         return -1;
     }
