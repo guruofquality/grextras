@@ -80,10 +80,18 @@ class pmt_rpc(gr.block):
             err = 'cannot parse request for %s, expected tuple of args, kwargs'%fcn_name
             return request, None, err
 
+        #fly through dots to get the fcn pointer
+        try:
+            fcn_ptr = self._obj
+            for name in fcn_name.split('.'):
+                fcn_ptr = getattr(fcn_ptr, name)
+        except:
+            err = 'cannot find function %s in %s'%(fcn_name, self._obj)
+            return request, None, err
+
         #try to execute the request
         try:
-            fcn = getattr(self._obj, fcn_name)
-            ret = fcn(*args, **kwargs)
+            ret = fcn_ptr(*args, **kwargs)
         except:
             err = 'cannot execute request for %s, expected tuple of args, kwargs'%fcn_name
             return request, None, err
