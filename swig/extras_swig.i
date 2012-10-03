@@ -48,7 +48,6 @@ namespace std {
 %include <extras_ops.i>
 %include <extras_delay.i>
 %include <extras_sources.i>
-%include <extras_fir.i>
 %include <extras_stream_selector.i>
 %include <extras_blobs.i>
 %include <extras_block_gateway.i>

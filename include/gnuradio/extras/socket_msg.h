@@ -36,6 +36,9 @@ public:
      *
      * The TCP socket will listen on addr/port, and accept the first connection.
      *
+     * Run the flowgraph and type "netcat addr port" into the terminal
+     * to get a quick instant messenger interface into the flow graph.
+     *
      * \param proto the protocol "TCP" only for now
      * \param addr the resolvable interface address of the socket
      * \param port the resolvable interface port of the socket

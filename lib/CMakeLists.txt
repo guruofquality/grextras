@@ -46,7 +46,6 @@ list(APPEND gr_extras_sources
     subtract.cc
     stream_selector.cc
     block_gateway.cc
-    decim_fir.cc
     pmt_ext_blob.cc
     pmt_ext_mgr.cc
     blob_to_filedes.cc

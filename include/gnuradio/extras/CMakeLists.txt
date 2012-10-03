@@ -39,7 +39,6 @@ list(APPEND include_sources
     signal_source.h
     subtract.h
     stream_selector.h
-    decim_fir.h
     blob_to_filedes.h
     blob_to_socket.h
     blob_to_stream.h

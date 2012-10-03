@@ -37,7 +37,6 @@ list(APPEND grc_sources
     extras_delay.xml
     extras_multiply_const.xml
     extras_noise_source.xml
-    extras_decim_fir.xml
     extras_blob_to_socket.xml
     extras_blob_to_stream.xml
     extras_socket_to_blob.xml
