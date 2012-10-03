@@ -58,7 +58,7 @@ class pmt_rpc(gr.block):
             name = "pmt rpc",
             in_sig = None,
             out_sig = None,
-            has_msg_input=True,
+            num_msg_inputs=1,
             num_msg_outputs = 1 if result_msg else 0,
         )
 

@@ -37,6 +37,9 @@ public:
      * Use the Universal TUN/TAP device driver to move packets to/from kernel
      * See /usr/src/linux/Documentation/networking/tuntap.txt
      *
+     * Tuntap should not be used to create a MAC layer!
+     * https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_over_wireless_networks
+     *
      * \param dev the device name (depends on os, blank for automatic)
      * \return a new TUN/TAP interface block
      */
