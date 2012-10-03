@@ -22,6 +22,8 @@
 #ifndef INCLUDED_GR_EXTRAS_API_H
 #define INCLUDED_GR_EXTRAS_API_H
 
+#include <ciso646>
+
 #include <gruel/attributes.h>
 
 #ifdef gnuradio_extras_EXPORTS
