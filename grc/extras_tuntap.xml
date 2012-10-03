@@ -20,9 +20,11 @@
     <sink>
         <name>in</name>
         <type></type>
+        <optional>1</optional>
     </sink>
     <source>
         <name>out</name>
         <type></type>
+        <optional>1</optional>
     </source>
 </block>
