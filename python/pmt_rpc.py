@@ -43,6 +43,19 @@ class pmt_rpc(gr.block):
             Thats the same args, kwargs passed before.
             The result is the return value.
             Error is null or a string error message.
+
+    Special python exec programming arg:
+        If the arg is a string starting with #!,
+        the handler will execute the string,
+        and the new arg will get the value of
+        the "arg" variable. Example:
+
+        #!
+        import numpy
+        foo = numpy.array([1, 2, 3])
+        bar = sum(foo)
+        arg = max(bar, 0) #arg is the result
+
     """
 
     def __init__(self, obj, result_msg = True):
@@ -71,6 +84,16 @@ class pmt_rpc(gr.block):
             except Exception as ex: msg.value = pmt.from_python(str(ex))
             if self._result_msg: self.post_msg(0, msg)
 
+    @staticmethod
+    def _exec_arg(arg):
+        if isinstance(arg, str) and arg.startswith('#!'):
+            d = dict()
+            try: exec(arg, d)
+            except: pass
+            try: return d['arg']
+            except KeyError: pass
+        return arg
+
     def handle_request(self, fcn_name, request):
         #try to parse the request
         try:
@@ -80,6 +103,11 @@ class pmt_rpc(gr.block):
         except:
             err = 'cannot parse request for %s, expected tuple of args, kwargs'%fcn_name
             return request, None, err
+
+        #exec python code and squash down to objects
+        args = map(self._exec_arg, args)
+        for key, val in kwargs.iteritems():
+            kwargs[key] = self._exec_arg(val)
 
         #fly through dots to get the fcn pointer
         try:
