@@ -1,8 +1,0 @@
-/home/john/src/grextras/cmake/swig/CMakeFiles/_extras_swig.dir
-/home/john/src/grextras/cmake/swig/CMakeFiles/_extras_swig_swig_tag.dir
-/home/john/src/grextras/cmake/swig/CMakeFiles/extras_swig_swig_doc.dir
-/home/john/src/grextras/cmake/lib/CMakeFiles/gnuradio-extras.dir
-/home/john/src/grextras/cmake/python/CMakeFiles/pygen_python_98338.dir
-/home/john/src/grextras/cmake/scripts/CMakeFiles/pygen_scripts_9c01b.dir
-/home/john/src/grextras/cmake/swig/CMakeFiles/pygen_swig_1b07c.dir
-/home/john/src/grextras/cmake/CMakeFiles/uninstall.dir
