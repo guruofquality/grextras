@@ -48,6 +48,7 @@ list(APPEND include_sources
     tuntap.h
     msg_many_to_one.h
     socket_msg.h
+    tx_pacer.h
 )
 
 install(

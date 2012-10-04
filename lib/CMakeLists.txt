@@ -57,6 +57,7 @@ list(APPEND gr_extras_sources
     tuntap.cc
     msg_many_to_one.cc
     socket_msg.cc
+    tx_pacer.cc
 )
 
 list(APPEND gr_extras_libs
