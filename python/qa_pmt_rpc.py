@@ -40,6 +40,9 @@ class control_block(gr.block):
             has_msg_input = True,
         )
 
+    def test_print(self, arg):
+        print arg
+
     def work(self, input_items, output_items):
         self.post_msg(0, pmt.from_python("multx2"), pmt.from_python(((42,), None)))
 
@@ -51,6 +54,8 @@ class control_block(gr.block):
         assert(not error)
         print(result)
         assert(result == 42*2)
+
+        self.post_msg(0, pmt.from_python("_control_block.test_print"), pmt.from_python((('hello',), None)))
 
         return -1
 

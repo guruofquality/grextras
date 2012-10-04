@@ -67,7 +67,8 @@ class pmt_rpc(gr.block):
             try: msg = self.pop_msg_queue()
             except: return -1
             result = self.handle_request(pmt.to_python(msg.key), pmt.to_python(msg.value))
-            msg.value = pmt.from_python(result)
+            try: msg.value = pmt.from_python(result)
+            except Exception as ex: msg.value = pmt.from_python(str(ex))
             if self._result_msg: self.post_msg(0, msg)
 
     def handle_request(self, fcn_name, request):
@@ -92,8 +93,8 @@ class pmt_rpc(gr.block):
         #try to execute the request
         try:
             ret = fcn_ptr(*args, **kwargs)
-        except:
-            err = 'cannot execute request for %s, expected tuple of args, kwargs'%fcn_name
+        except Exception as ex:
+            err = 'cannot execute request for %s, got error %s'%(fcn_name, ex)
             return request, None, err
 
         #return the sucess result
