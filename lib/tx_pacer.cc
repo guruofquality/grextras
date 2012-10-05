@@ -21,9 +21,6 @@
 
 #include <gnuradio/extras/tx_pacer.h>
 #include <gr_io_signature.h>
-#include <boost/foreach.hpp>
-
-static const pmt::pmt_t TIME_KEY = pmt::pmt_string_to_symbol("rx_time");
 
 using namespace gnuradio::extras;
 
@@ -42,10 +39,6 @@ struct tx_pacer_impl : tx_pacer
         this->set_tx_window_duration(1.0);
 
         _tx_size = tx_size;
-        _rx_time_offset = 0;
-        _rx_time_at_offset = 0.0;
-        _tx_time_offset = 0;
-        _tx_time_at_offset = 0.0;
     }
 
     void set_tx_sample_rate(const double rate)
@@ -67,44 +60,21 @@ struct tx_pacer_impl : tx_pacer
         const InputItems &input_items,
         const OutputItems &output_items
     ){
-        /***************************************************************
-         * Step 0)
-         * Consume and process the RX input port (port 1).
-         * Time tags + consum -> update this block's concept of time.
-         **************************************************************/
-        //read all tags associated with port 1 for items in this work function
-        const uint64_t nread = this->nitems_read(1); //number of items read on port 1
-        this->get_tags_in_range(_tags, 1, nread, nread+input_items[1].size());
-        BOOST_FOREACH(const gr_tag_t &tag, _tags)
-        {
-            if (pmt::pmt_equal(tag.key, TIME_KEY))
-            {
-                _rx_time_offset = tag.offset;
-                uint64_t time_integer = pmt::pmt_to_uint64(pmt_tuple_ref(tag.value, 0));
-                double time_fractional = pmt::pmt_to_double(pmt_tuple_ref(tag.value, 1));
-                //double(time_integer) throws out some precision, this is approximate
-                _rx_time_at_offset = double(time_integer) + time_fractional;
-            }
-        }
-        this->consume(1, input_items[1].size()); //consume port 1 input
 
-        /***************************************************************
-         * Step 1)
-         * Calculate the time of the very last RX sample consumed
-         **************************************************************/
-        const double rx_time_last = _rx_time_at_offset + (nread+input_items[1].size() - _rx_time_offset)/_rx_rate;
-        const double tx_time_last = _tx_time_at_offset + (this->nitems_read(0) - _tx_time_offset)/_tx_rate;
+        const double rx_time_last = this->nitems_read(1)/_rx_rate;
+        const double tx_time_last = this->nitems_read(0)/_tx_rate;
 
         if (tx_time_last < rx_time_last + _duration)
         {
-            _tx_time_offset = this->nitems_read(0);
-            _tx_time_at_offset = tx_time_last;
-
             const size_t nitems = std::min(output_items[0].size(), input_items[0].size());
             std::memcpy(output_items[0].cast<void *>(), input_items[0].cast<const void *>(), nitems*_tx_size);
             this->consume(0, nitems);
             this->produce(0, nitems);
         }
+
+        //always consume all rx samples input,
+        //this gives us a concept of consumed time
+        this->consume(1, input_items[1].size());
 
         return 0;
     }
@@ -113,13 +83,6 @@ struct tx_pacer_impl : tx_pacer
     size_t _rx_rate;
     size_t _tx_rate;
     double _duration;
-    std::vector<gr_tag_t> _tags;
-
-    uint64_t _rx_time_offset;
-    double _rx_time_at_offset;
-
-    uint64_t _tx_time_offset;
-    double _tx_time_at_offset;
 
 };
 

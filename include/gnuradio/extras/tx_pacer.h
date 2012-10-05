@@ -28,7 +28,7 @@
 namespace gnuradio{ namespace extras{
 
 /*!
- * The TX pacer block uses a time-tagged RX stream
+ * The TX pacer block uses a continuous RX stream
  * to throttle a continuous stream of TX samples.
  *
  * Input port 0 - TX input
