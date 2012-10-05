@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+## Blocks delay block
+###################################################
+ -->
+<block>
+    <name>Extras: TX Pacer</name>
+    <key>extras_tx_pacer</key>
+    <import>import gnuradio.extras as gr_extras</import>
+    <make>gr_extras.tx_pacer($tx_item_size, $rx_item_size)
+self.$(id).set_tx_sample_rate($tx_rate)
+self.$(id).set_rx_sample_rate($rx_rate)
+self.$(id).set_tx_window_duration($duration)</make>
+    <callback>self.$(id).set_tx_sample_rate($tx_rate)</callback>
+    <callback>self.$(id).set_rx_sample_rate($rx_rate)</callback>
+    <callback>self.$(id).set_tx_window_duration($duration)</callback>
+    <param>
+        <name>TX Item Size</name>
+        <key>tx_item_size</key>
+        <value>8</value>
+        <type>int</type>
+    </param>
+    <param>
+        <name>RX Item Size</name>
+        <key>rx_item_size</key>
+        <value>8</value>
+        <type>int</type>
+    </param>
+    <param>
+        <name>TX Rate</name>
+        <key>tx_rate</key>
+        <value>1e6</value>
+        <type>real</type>
+    </param>
+    <param>
+        <name>RX Rate</name>
+        <key>rx_rate</key>
+        <value>1e6</value>
+        <type>real</type>
+    </param>
+    <param>
+        <name>Duration</name>
+        <key>duration</key>
+        <value>0.1</value>
+        <type>real</type>
+    </param>
+    <sink>
+        <name>tx in</name>
+        <type>byte</type>
+        <vlen>$tx_item_size</vlen>
+    </sink>
+    <sink>
+        <name>rx pacer</name>
+        <type>byte</type>
+        <vlen>$rx_item_size</vlen>
+    </sink>
+    <source>
+        <name>tx out</name>
+        <type>byte</type>
+        <vlen>$tx_item_size</vlen>
+    </source>
+</block>

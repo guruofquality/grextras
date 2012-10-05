@@ -48,6 +48,7 @@ list(APPEND grc_sources
     extras_pmt_rpc.xml
     extras_msg_many_to_one.xml
     extras_socket_msg.xml
+    extras_tx_pacer.xml
 )
 
 install(

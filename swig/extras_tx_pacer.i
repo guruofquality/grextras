@@ -1,7 +1,7 @@
 /*
- * Copyright 2011-2012 Free Software Foundation, Inc.
+ * Copyright 2012 Ettus Research LLC
  * 
- * This file is part of GNU Radio
+ * This file is part of GR Extras
  * 
  * GNU Radio is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,44 +19,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
+////////////////////////////////////////////////////////////////////////
+// block headers
+////////////////////////////////////////////////////////////////////////
+%{
+#include <gnuradio/extras/tx_pacer.h>
+%}
 
-#define GR_EXTRAS_API
-
-%ignore gr_hier_block2;
-
-%include <extras_swig_doc.i>
+%include <gnuradio/extras/tx_pacer.h>
 
 ////////////////////////////////////////////////////////////////////////
-// standard includes
+// block magic
 ////////////////////////////////////////////////////////////////////////
-%include <gnuradio.i>
-%include "extras_factory.i"
-
-//use a dummy block class to save on swig generation size
-//%include <gnuradio/block.h>
-namespace gnuradio {
-    class block : public gr_hier_block2{};
-}
-
-namespace std {
-    %template() vector< std::complex<double> >;
-}
-
-////////////////////////////////////////////////////////////////////////
-// block includes
-////////////////////////////////////////////////////////////////////////
-%include <extras_ops.i>
-%include <extras_delay.i>
-%include <extras_sources.i>
-%include <extras_stream_selector.i>
-%include <extras_blobs.i>
-%include <extras_block_gateway.i>
-%include <extras_tx_pacer.i>
-#ifdef HAVE_UHD
-%include <extras_uhd_amsg_source.i>
-#endif
-
-////////////////////////////////////////////////////////////////////////
-// this is not a block
-////////////////////////////////////////////////////////////////////////
-%include <extras_pmt.i>
+using namespace gnuradio::extras;
+GR_EXTRAS_SWIG_BLOCK_FACTORY(tx_pacer)

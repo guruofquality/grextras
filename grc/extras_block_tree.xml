@@ -51,5 +51,6 @@
         <block>extras_uhd_amsg_source</block>
         <block>extras_pmt_rpc</block>
         <block>extras_msg_many_to_one</block>
+        <block>extras_tx_pacer</block>
     </cat>
 </cat>

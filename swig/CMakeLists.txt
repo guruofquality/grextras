@@ -92,6 +92,7 @@ list(APPEND swig_sources
     extras_block_gateway.i
     extras_pmt.i
     extras_blobs.i
+    extras_tx_pacer.i
     ${CMAKE_CURRENT_BINARY_DIR}/extras_swig_doc.i
 )
 
