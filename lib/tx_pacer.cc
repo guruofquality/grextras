@@ -21,6 +21,10 @@
 
 #include <gnuradio/extras/tx_pacer.h>
 #include <gr_io_signature.h>
+#include <iostream>
+
+const size_t TX_PORT = 0;
+const size_t RX_PORT = 1;
 
 using namespace gnuradio::extras;
 
@@ -56,27 +60,33 @@ struct tx_pacer_impl : tx_pacer
         _duration = duration;
     }
 
+    void forecast(int, gr_vector_int &ninput_items_required)
+    {
+        ninput_items_required[TX_PORT] = 1; //expect at least some TX input
+        ninput_items_required[RX_PORT] = 0; //dont care if there is RX input
+    }
+
     int work(
         const InputItems &input_items,
         const OutputItems &output_items
     ){
 
-        const double rx_time_last = this->nitems_read(1)/_rx_rate;
-        const double tx_time_last = this->nitems_read(0)/_tx_rate;
+        const double rx_time_last = this->nitems_read(RX_PORT)/_rx_rate;
+        const double tx_time_last = this->nitems_read(TX_PORT)/_tx_rate;
 
-        if (tx_time_last < rx_time_last + _duration)
+        if (tx_time_last + _duration < rx_time_last)
         {
-            const size_t nitems = std::min(output_items[0].size(), input_items[0].size());
-            std::memcpy(output_items[0].cast<void *>(), input_items[0].cast<const void *>(), nitems*_tx_size);
-            this->consume(0, nitems);
-            this->produce(0, nitems);
+            const size_t nitems = std::min(output_items[TX_PORT].size(), input_items[TX_PORT].size());
+            std::memcpy(output_items[TX_PORT].cast<void *>(), input_items[TX_PORT].cast<const void *>(), nitems*_tx_size);
+            this->consume(TX_PORT, nitems);
+            this->produce(TX_PORT, nitems);
         }
 
         //always consume all rx samples input,
         //this gives us a concept of consumed time
-        this->consume(1, input_items[1].size());
+        this->consume(RX_PORT, input_items[RX_PORT].size());
 
-        return 0;
+        return -2; //work called produce
     }
 
     size_t _tx_size;
