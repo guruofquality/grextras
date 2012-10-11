@@ -4,7 +4,7 @@
     <key>extras_uhd_amsg_source</key>
     <import>from gnuradio import uhd</import>
     <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.uhd_amsg_source(device_addr=$dev_addr)</make>
+    <make>gr_extras.uhd_amsg_source(uhd.device_addr($dev_addr))</make>
     <param>
         <name>Device Addr</name>
         <key>dev_addr</key>
