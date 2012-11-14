@@ -73,7 +73,7 @@ add_custom_target(uninstall
 ########################################################################
 # Add subdirectories
 ########################################################################
-#add_subdirectory(include/grextras)
+add_subdirectory(include/grextras)
 #add_subdirectory(lib)
 #add_subdirectory(python)
 #add_subdirectory(grc)
