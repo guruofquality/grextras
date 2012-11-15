@@ -2,6 +2,7 @@
 # Setup library
 ########################################################################
 include_directories(${GREXTRAS_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 list(APPEND GREXTRAS_SOURCES
     delay.cpp
 )
