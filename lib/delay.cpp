@@ -10,13 +10,14 @@ struct DelayImpl : Delay
     DelayImpl(const size_t itemsize):
         gras::Block("GrExtras Delay")
     {
-        //TODO set signature
-        //this->
+        this->set_input_signature(gras::IOSignature(itemsize));
+        this->set_output_signature(gras::IOSignature(itemsize));
         _delay_items = 0;
     }
 
     void set_delay(const int num_items)
     {
+        //TODO not thread safe...
         _delay_items = -num_items;
     }
 
@@ -24,34 +25,34 @@ struct DelayImpl : Delay
         const InputItems &input_items,
         const OutputItems &output_items
     ){
-        /*
-        gruel::scoped_lock l(_delay_mutex);
         size_t noutput_items = output_items[0].size();
-        const int delta = int64_t(nitems_read(0)) - int64_t(nitems_written(0)) - _delay_items;
+        const int delta = int64_t(this->get_consumed(0)) - int64_t(this->get_produced(0)) - _delay_items;
 
         //consume but not produce (drops samples)
-        if (delta < 0){
-            this->consume_each(std::min(input_items[0].size(), size_t(-delta)));
-            return 0;
+        if (delta < 0)
+        {
+            //TODO tags here
+            this->consume(0, std::min(input_items[0].size(), size_t(-delta)));
+            return;
         }
 
         //produce but not consume (inserts zeros)
-        if (delta > 0){
+        if (delta > 0)
+        {
             noutput_items = std::min(noutput_items, size_t(delta));
-            std::memset(output_items[0].get(), 0, output_items[0].size()*_itemsize);
-            return noutput_items;
+            std::memset(output_items[0].get(), 0, output_items[0].size()*this->output_signature()[0]);
+            this->produce(0, noutput_items);
+            return;
         }
 
-        //otherwise just memcpy
-        noutput_items = std::min(noutput_items, input_items[0].size());
-        std::memcpy(output_items[0].get(), input_items[0].get(), noutput_items*_itemsize);
-        consume_each(noutput_items);
-        return noutput_items;
-        */
+        //otherwise just forward the buffer
+        //TODO tags here
+        const gras::SBuffer &buffer = this->get_input_buffer(0);
+        this->post_output_buffer(0, buffer);
+        this->consume(0, input_items[0].size());
     }
 
     int _delay_items;
-    //const size_t _itemsize;
 };
 
 Delay::sptr Delay::make(const size_t itemsize)

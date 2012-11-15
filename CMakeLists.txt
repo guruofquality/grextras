@@ -12,10 +12,6 @@ set(GREXTRAS_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 list(APPEND CMAKE_MODULE_PATH ${GREXTRAS_SOURCE_DIR}/cmake/Modules)
 include(CMakeDefsHelper)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_definitions(-DGREXTRAS_DEBUG)
-endif()
-
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall)
     add_definitions(-fvisibility=hidden)
@@ -26,9 +22,15 @@ endif()
 # Find GrExtras build dependencies
 ########################################################################
 find_package(GRAS)
-find_package(Boost)
 
-#TODO fail if missing
+if(NOT GRAS_FOUND)
+    message(FATAL_ERROR "GR Advanced Scheduler not found - required for GrExtras")
+endif()
+
+find_package(Boost)
+if(NOT Boost_FOUND)
+    message(FATAL_ERROR "Boost C++ headers not found - required for GrExtras")
+endif()
 
 ########################################################################
 # Optional req UHD
@@ -52,6 +54,6 @@ add_custom_target(uninstall
 ########################################################################
 add_subdirectory(include/grextras)
 add_subdirectory(lib)
-#add_subdirectory(python)
+add_subdirectory(python/grextras)
 #add_subdirectory(grc)
 add_subdirectory(scripts)
