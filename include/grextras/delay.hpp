@@ -20,7 +20,7 @@ struct GREXTRAS_API Delay : virtual gras::Block
      * Make a new delay block.
      * \param itemsize the size of an item in bytes
      */
-    sptr make(const size_t itemsize);
+    static sptr make(const size_t itemsize);
 
     /*!
      * The delay is measured in an exact count of items.
