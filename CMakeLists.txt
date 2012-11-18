@@ -32,6 +32,11 @@ if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost C++ headers not found - required for GrExtras")
 endif()
 
+find_package(Volk)
+if(NOT VOLK_FOUND)
+    message(FATAL_ERROR "VOLK vector library not found - required for GrExtras")
+endif()
+
 ########################################################################
 # Optional req UHD
 ########################################################################

@@ -5,6 +5,7 @@ include_directories(${GREXTRAS_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 list(APPEND GREXTRAS_SOURCES
     delay.cpp
+    add.cpp
 )
 
 ########################################################################
@@ -20,6 +21,13 @@ list(APPEND GREXTRAS_LIBRARIES ${GRAS_LIBRARIES})
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND GREXTRAS_LIBRARIES ${Boost_LIBRARIES})
+
+########################################################################
+# Setup Volk
+########################################################################
+include_directories(${VOLK_INCLUDE_DIRS})
+link_directories(${VOLK_LIBRARY_DIRS})
+list(APPEND GREXTRAS_LIBRARIES ${VOLK_LIBRARIES})
 
 ########################################################################
 # Optional UHD

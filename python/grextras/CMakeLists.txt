@@ -18,9 +18,11 @@ list(APPEND GR_SWIG_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
 set(GR_SWIG_LIBRARIES grextras ${GRAS_LIBRARIES})
 
 GR_SWIG_MAKE(GrExtras_Misc GrExtras_Misc.i)
+GR_SWIG_MAKE(GrExtras_Ops GrExtras_Ops.i)
 GR_SWIG_INSTALL(
     TARGETS
     GrExtras_Misc
+    GrExtras_Ops
     DESTINATION ${GR_PYTHON_DIR}/grextras
     COMPONENT "extras_python"
 )
