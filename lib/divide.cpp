@@ -23,10 +23,7 @@ struct DivideImpl : Divide
         this->set_output_signature(gras::IOSignature(sizeof(type)));
     }
 
-    void work(
-        const InputItems &input_items,
-        const OutputItems &output_items
-    );
+    void work(const InputItems &, const OutputItems &);
 
     const size_t _vlen;
 };
@@ -36,14 +33,13 @@ struct DivideImpl : Divide
  **********************************************************************/
 template <typename type>
 void DivideImpl<type>::work(
-    const InputItems &input_items,
-    const OutputItems &output_items
+    const InputItems &ins, const OutputItems &outs
 ){
-    const size_t n_nums = std::min(input_items.min(), output_items.min());
-    type *out = output_items[0].cast<type *>();
-    const type *in0 = input_items[0].cast<const type *>();
+    const size_t n_nums = std::min(ins.min(), outs.min());
+    type *out = outs[0].cast<type *>();
+    const type *in0 = ins[0].cast<const type *>();
 
-    if (input_items.size() == 1)
+    if (ins.size() == 1)
     {
         for (size_t i = 0; i < n_nums * _vlen; i++)
         {
@@ -51,9 +47,9 @@ void DivideImpl<type>::work(
         }
     }
 
-    else for (size_t n = 1; n < input_items.size(); n++)
+    else for (size_t n = 1; n < ins.size(); n++)
     {
-        const type *in = input_items[n].cast<const type *>();
+        const type *in = ins[n].cast<const type *>();
         for (size_t i = 0; i < n_nums * _vlen; i++)
         {
             out[i] = in0[i] / in[i];

@@ -23,10 +23,7 @@ struct MultiplyImpl : Multiply
         this->set_output_signature(gras::IOSignature(sizeof(type)));
     }
 
-    void work(
-        const InputItems &input_items,
-        const OutputItems &output_items
-    );
+    void work(const InputItems &, const OutputItems &);
 
     const size_t _vlen;
 };
@@ -36,16 +33,15 @@ struct MultiplyImpl : Multiply
  **********************************************************************/
 template <typename type>
 void MultiplyImpl<type>::work(
-    const InputItems &input_items,
-    const OutputItems &output_items
+    const InputItems &ins, const OutputItems &outs
 ){
-    const size_t n_nums = std::min(input_items.min(), output_items.min());
-    type *out = output_items[0].cast<type *>();
-    const type *in0 = input_items[0].cast<const type *>();
+    const size_t n_nums = std::min(ins.min(), outs.min());
+    type *out = outs[0].cast<type *>();
+    const type *in0 = ins[0].cast<const type *>();
 
-    for (size_t n = 1; n < input_items.size(); n++)
+    for (size_t n = 1; n < ins.size(); n++)
     {
-        const type *in = input_items[n].cast<const type *>();
+        const type *in = ins[n].cast<const type *>();
         for (size_t i = 0; i < n_nums * _vlen; i++)
         {
             out[i] = in0[i] * in[i];
@@ -62,16 +58,15 @@ void MultiplyImpl<type>::work(
  **********************************************************************/
 template <>
 void MultiplyImpl<std::complex<float> >::work(
-    const InputItems &input_items,
-    const OutputItems &output_items
+    const InputItems &ins, const OutputItems &outs
 ){
-    const size_t n_nums = std::min(input_items.min(), output_items.min());
-    std::complex<float> *out = output_items[0].cast<std::complex<float> *>();
-    const std::complex<float> *in0 = input_items[0].cast<const std::complex<float> *>();
+    const size_t n_nums = std::min(ins.min(), outs.min());
+    std::complex<float> *out = outs[0].cast<std::complex<float> *>();
+    const std::complex<float> *in0 = ins[0].cast<const std::complex<float> *>();
 
-    for (size_t n = 1; n < input_items.size(); n++)
+    for (size_t n = 1; n < ins.size(); n++)
     {
-        const std::complex<float> *in = input_items[n].cast<const std::complex<float> *>();
+        const std::complex<float> *in = ins[n].cast<const std::complex<float> *>();
         volk_32fc_x2_multiply_32fc(out, in0, in, n_nums * _vlen);
         in0 = out; //for next input, we do output *= input
     }
@@ -85,16 +80,15 @@ void MultiplyImpl<std::complex<float> >::work(
  **********************************************************************/
 template <>
 void MultiplyImpl<float>::work(
-    const InputItems &input_items,
-    const OutputItems &output_items
+    const InputItems &ins, const OutputItems &outs
 ){
-    const size_t n_nums = std::min(input_items.min(), output_items.min());
-    float *out = output_items[0].cast<float *>();
-    const float *in0 = input_items[0].cast<const float *>();
+    const size_t n_nums = std::min(ins.min(), outs.min());
+    float *out = outs[0].cast<float *>();
+    const float *in0 = ins[0].cast<const float *>();
 
-    for (size_t n = 1; n < input_items.size(); n++)
+    for (size_t n = 1; n < ins.size(); n++)
     {
-        const float *in = input_items[n].cast<const float *>();
+        const float *in = ins[n].cast<const float *>();
         volk_32f_x2_multiply_32f(out, in0, in, n_nums * _vlen);
         in0 = out; //for next input, we do output *= input
     }

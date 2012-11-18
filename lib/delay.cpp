@@ -22,33 +22,31 @@ struct DelayImpl : Delay
         _delay_items = -num_items;
     }
 
-    void work(
-        const InputItems &input_items,
-        const OutputItems &output_items
-    ){
-        size_t noutput_items = output_items[0].size();
+    void work(const InputItems &ins, const OutputItems &outs)
+    {
+        size_t nouts = outs[0].size();
         const int delta = int64_t(this->get_consumed(0)) - int64_t(this->get_produced(0)) - _delay_items;
 
         //consume but not produce (drops samples)
         if (delta < 0)
         {
-            this->consume(0, std::min(input_items[0].size(), size_t(-delta)));
+            this->consume(0, std::min(ins[0].size(), size_t(-delta)));
             return;
         }
 
         //produce but not consume (inserts zeros)
         if (delta > 0)
         {
-            noutput_items = std::min(noutput_items, size_t(delta));
-            std::memset(output_items[0].get(), 0, output_items[0].size()*this->output_signature()[0]);
-            this->produce(0, noutput_items);
+            nouts = std::min(nouts, size_t(delta));
+            std::memset(outs[0].get(), 0, outs[0].size()*this->output_signature()[0]);
+            this->produce(0, nouts);
             return;
         }
 
         //otherwise just forward the buffer
         const gras::SBuffer &buffer = this->get_input_buffer(0);
         this->post_output_buffer(0, buffer);
-        this->consume(0, input_items[0].size());
+        this->consume(0, ins[0].size());
     }
 
     void propagate_tags(const size_t, const gras::TagIter &iter)
