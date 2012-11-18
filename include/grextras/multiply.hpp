@@ -13,7 +13,7 @@ namespace grextras
  * Multiply block, one output, multiple outputs.
  * This block uses C++ templates to create multiple implementations.
  */
-struct GREXTRAS_API Multiply : virtual SyncBlock
+struct GREXTRAS_API Multiply : virtual gras::Block
 {
     typedef boost::shared_ptr<Multiply> sptr;
 

@@ -13,22 +13,21 @@ using namespace grextras;
  * Templated Subtractor class
  **********************************************************************/
 template <typename type>
-class SubtractImpl : public Subtract{
-public:
+struct SubtractImpl : Subtract
+{
     SubtractImpl(const size_t num_inputs, const size_t vlen):
-        SyncBlock("GrExtras Subtract"),
+        gras::Block("GrExtras Subtract"),
         _vlen(vlen)
     {
         this->set_input_signature(gras::IOSignature(sizeof(type)));
         this->set_output_signature(gras::IOSignature(sizeof(type)));
     }
 
-    size_t sync_work(
+    void work(
         const InputItems &input_items,
         const OutputItems &output_items
     );
 
-private:
     const size_t _vlen;
 };
 
@@ -36,17 +35,17 @@ private:
  * Generic Subtractor implementation
  **********************************************************************/
 template <typename type>
-size_t SubtractImpl<type>::sync_work(
+void SubtractImpl<type>::work(
     const InputItems &input_items,
     const OutputItems &output_items
 ){
-    const size_t n_nums = output_items[0].size() * _vlen;
+    const size_t n_nums = std::min(input_items.min(), output_items.min());
     type *out = output_items[0].cast<type *>();
     const type *in0 = input_items[0].cast<const type *>();
 
     if (input_items.size() == 1)
     {
-        for (size_t i = 0; i < n_nums; i++)
+        for (size_t i = 0; i < n_nums * _vlen; i++)
         {
             out[i] = - in0[i];
         }
@@ -55,14 +54,15 @@ size_t SubtractImpl<type>::sync_work(
     else for (size_t n = 1; n < input_items.size(); n++)
     {
         const type *in = input_items[n].cast<const type *>();
-        for (size_t i = 0; i < n_nums; i++)
+        for (size_t i = 0; i < n_nums * _vlen; i++)
         {
             out[i] = in0[i] - in[i];
         }
         in0 = out; //for next input, we do output -= input
     }
 
-    return output_items[0].size();
+    this->consume(n_nums);
+    this->produce(n_nums);
 }
 
 /***********************************************************************

@@ -13,22 +13,21 @@ using namespace grextras;
  * Templated Adder class
  **********************************************************************/
 template <typename type>
-class AddImpl : public Add{
-public:
+struct AddImpl : Add
+{
     AddImpl(const size_t num_inputs, const size_t vlen):
-        SyncBlock("GrExtras Add"),
+        gras::Block("GrExtras Add"),
         _vlen(vlen)
     {
         this->set_input_signature(gras::IOSignature(sizeof(type)));
         this->set_output_signature(gras::IOSignature(sizeof(type)));
     }
 
-    size_t sync_work(
+    void work(
         const InputItems &input_items,
         const OutputItems &output_items
     );
 
-private:
     const size_t _vlen;
 };
 
@@ -36,47 +35,49 @@ private:
  * Generic Adder implementation
  **********************************************************************/
 template <typename type>
-size_t AddImpl<type>::sync_work(
+void AddImpl<type>::work(
     const InputItems &input_items,
     const OutputItems &output_items
 ){
-    const size_t n_nums = output_items[0].size() * _vlen;
+    const size_t n_nums = std::min(input_items.min(), output_items.min());
     type *out = output_items[0].cast<type *>();
     const type *in0 = input_items[0].cast<const type *>();
 
     for (size_t n = 1; n < input_items.size(); n++)
     {
         const type *in = input_items[n].cast<const type *>();
-        for (size_t i = 0; i < n_nums; i++)
+        for (size_t i = 0; i < n_nums * _vlen; i++)
         {
             out[i] = in0[i] + in[i];
         }
         in0 = out; //for next input, we do output += input
     }
 
-    return output_items[0].size();
+    this->consume(n_nums);
+    this->produce(n_nums);
 }
 
 /***********************************************************************
  * Adder implementation with float32 - calls volk
  **********************************************************************/
 template <>
-size_t AddImpl<float>::sync_work(
+void AddImpl<float>::work(
     const InputItems &input_items,
     const OutputItems &output_items
 ){
-    const size_t n_nums = output_items[0].size() * _vlen;
+    const size_t n_nums = std::min(input_items.min(), output_items.min());
     float *out = output_items[0].cast<float *>();
     const float *in0 = input_items[0].cast<const float *>();
 
     for (size_t n = 1; n < input_items.size(); n++)
     {
         const float *in = input_items[n].cast<const float *>();
-        volk_32f_x2_add_32f(out, in0, in, n_nums);
+        volk_32f_x2_add_32f(out, in0, in, n_nums * _vlen);
         in0 = out; //for next input, we do output += input
     }
 
-    return output_items[0].size();
+    this->consume(n_nums);
+    this->produce(n_nums);
 }
 
 /***********************************************************************

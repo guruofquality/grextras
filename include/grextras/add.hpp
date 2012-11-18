@@ -13,7 +13,7 @@ namespace grextras
  * Adder block, one output, multiple outputs.
  * This block uses C++ templates to create multiple implementations.
  */
-struct GREXTRAS_API Add : virtual SyncBlock
+struct GREXTRAS_API Add : virtual gras::Block
 {
     typedef boost::shared_ptr<Add> sptr;
 
