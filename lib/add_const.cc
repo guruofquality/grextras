@@ -73,3 +73,4 @@ make_factory_function(s32_s32, int32_t, .real())
 make_factory_function(s16_s16, int16_t, .real())
 make_factory_function(s8_s8, int8_t, .real())
 
+z

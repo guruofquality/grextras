@@ -2,7 +2,6 @@
 
 #include <grextras/add.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/cstdint.hpp>
 #include <stdexcept>
 #include <complex>
 #include <volk/volk.h>
@@ -19,8 +18,8 @@ struct AddImpl : Add
         gras::Block("GrExtras Add"),
         _vlen(vlen)
     {
-        this->set_input_signature(gras::IOSignature(sizeof(type)));
-        this->set_output_signature(gras::IOSignature(sizeof(type)));
+        this->set_input_signature(gras::IOSignature(sizeof(type)*_vlen));
+        this->set_output_signature(gras::IOSignature(sizeof(type)*_vlen));
     }
 
     void work(const InputItems &, const OutputItems &);

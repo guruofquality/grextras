@@ -62,49 +62,49 @@ class test_add_and_friends(unittest.TestCase):
         self.tb.run ()
         result_data = dst.data ()
         self.assertEqual (exp_data, result_data)
-    '''
+
     def test_add_const_ii (self):
         src_data = (1, 2, 3, 4, 5)
         expected_result = (6, 7, 8, 9, 10)
-        op = extras.add_const_s32_s32(5)
+        op = grextras.AddConst.s32_s32(5)
         self.help_ii ((src_data,), expected_result, op)
 
     def test_add_const_cc (self):
         src_data = (1, 2, 3, 4, 5)
         expected_result = (1+5j, 2+5j, 3+5j, 4+5j, 5+5j)
-        op = extras.add_const_fc32_fc32(5j)
+        op = grextras.AddConst.fc32_fc32(5j)
         self.help_cc ((src_data,), expected_result, op)
 
     def test_add_const_cc_1 (self):
         src_data = (1, 2, 3, 4, 5)
         expected_result = (3+5j, 4+5j, 5+5j, 6+5j, 7+5j)
-        op = extras.add_const_fc32_fc32(2+5j)
+        op = grextras.AddConst.fc32_fc32(2+5j)
         self.help_cc ((src_data,), expected_result, op)
 
     def test_add_const_ff (self):
         src_data = (1, 2, 3, 4, 5)
         expected_result = (6, 7, 8, 9, 10)
-        op = extras.add_const_f32_f32(5)
+        op = grextras.AddConst.f32_f32(5)
         self.help_ff ((src_data,), expected_result, op)
 
     def test_mult_const_ii (self):
         src_data = (-1, 0, 1, 2, 3)
         expected_result = (-5, 0, 5, 10, 15)
-        op = grextras.Multiply.const_s32_s32(5)
+        op = grextras.MultiplyConst.s32_s32(5)
         self.help_ii ((src_data,), expected_result, op)
 
     def test_mult_const_cc (self):
         src_data = (-1-1j, 0+0j, 1+1j, 2+2j, 3+3j)
-        expected_result = (1-5j,  0+0j, -1+5j, -2+10j)
-        op = grextras.Multiply.const_fc32_fc32(2+3j)
+        expected_result = (1-5j,  0+0j, -1+5j, -2+10j, (-3+15j))
+        op = grextras.MultiplyConst.fc32_fc32(2+3j)
         self.help_cc ((src_data,), expected_result, op)
 
     def test_mult_const_ff (self):
         src_data = (-1, 0, 1, 2)
         expected_result = (-5., 0., 5., 10.)
-        op = grextras.Multiply.const_f32_f32(5)
+        op = grextras.MultiplyConst.f32_f32(5)
         self.help_ff ((src_data,), expected_result, op)
-    '''
+
     def test_add_ii (self):
         src1_data = (1,  2, 3, 4, 5)
         src2_data = (8, -3, 4, 8, 2)
