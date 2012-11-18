@@ -40,23 +40,21 @@ size_t AddImpl<type>::sync_work(
     const InputItems &input_items,
     const OutputItems &output_items
 ){
-
-    const size_t n_nums = output_items[0].size();
-
+    const size_t n_nums = output_items[0].size() * _vlen;
     type *out = output_items[0].cast<type *>();
     const type *in0 = input_items[0].cast<const type *>();
 
     for (size_t n = 1; n < input_items.size(); n++)
     {
         const type *in = input_items[n].cast<const type *>();
-        for (size_t i = 0; i < n_nums * _vlen; i++)
+        for (size_t i = 0; i < n_nums; i++)
         {
             out[i] = in0[i] + in[i];
         }
         in0 = out; //for next input, we do output += input
     }
 
-    return n_nums;
+    return output_items[0].size();
 }
 
 /***********************************************************************
@@ -67,19 +65,18 @@ size_t AddImpl<float>::sync_work(
     const InputItems &input_items,
     const OutputItems &output_items
 ){
-    const size_t n_nums = output_items[0].size();
-
+    const size_t n_nums = output_items[0].size() * _vlen;
     float *out = output_items[0].cast<float *>();
     const float *in0 = input_items[0].cast<const float *>();
 
     for (size_t n = 1; n < input_items.size(); n++)
     {
         const float *in = input_items[n].cast<const float *>();
-        volk_32f_x2_add_32f(out, in0, in, n_nums * _vlen);
+        volk_32f_x2_add_32f(out, in0, in, n_nums);
         in0 = out; //for next input, we do output += input
     }
 
-    return n_nums;
+    return output_items[0].size();
 }
 
 /***********************************************************************

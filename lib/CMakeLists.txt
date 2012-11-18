@@ -6,6 +6,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 list(APPEND GREXTRAS_SOURCES
     delay.cpp
     add.cpp
+    multiply.cpp
+    subtract.cpp
+    divide.cpp
 )
 
 ########################################################################
