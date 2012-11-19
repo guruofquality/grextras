@@ -5,6 +5,7 @@ include_directories(${GREXTRAS_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 list(APPEND GREXTRAS_SOURCES
     delay.cpp
+    stream_selector.cpp
     add.cpp
     add_const.cpp
     add_const_v.cpp

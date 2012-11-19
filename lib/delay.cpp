@@ -2,7 +2,6 @@
 
 #include <grextras/delay.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/foreach.hpp>
 
 using namespace grextras;
 
@@ -47,16 +46,6 @@ struct DelayImpl : Delay
         const gras::SBuffer &buffer = this->get_input_buffer(0);
         this->post_output_buffer(0, buffer);
         this->consume(0, ins[0].size());
-    }
-
-    void propagate_tags(const size_t, const gras::TagIter &iter)
-    {
-        BOOST_FOREACH(gras::Tag t, iter)
-        {
-            t.offset -= this->get_consumed(0);
-            t.offset += this->get_produced(0);
-            this->post_output_tag(0, t);
-        }
     }
 
     int _delay_items;
