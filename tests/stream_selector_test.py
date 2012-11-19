@@ -23,8 +23,6 @@ import unittest
 import gras
 import grextras
 import numpy
-from gnuradio import gr
-import time
 
 class test_stream_selector(unittest.TestCase):
 
@@ -34,11 +32,11 @@ class test_stream_selector(unittest.TestCase):
         ss.set_output_signature(gras.IOSignature([4, 4]))
         ss.set_paths([1, 0]) #in[0] -> out[1], in[1] -> out[0]
 
-        src0 = gr.vector_source_f([1, 2, 3, 4])
-        src1 = gr.vector_source_f([5, 6, 7, 8])
+        src0 = grextras.VectorSource(numpy.float32, [1, 2, 3, 4])
+        src1 = grextras.VectorSource(numpy.float32, [5, 6, 7, 8])
 
-        dst0 = gr.vector_sink_f()
-        dst1 = gr.vector_sink_f()
+        dst0 = grextras.VectorSink(numpy.float32)
+        dst1 = grextras.VectorSink(numpy.float32)
 
         tb = gras.TopBlock()
         tb.connect(src0, (ss, 0), dst0)

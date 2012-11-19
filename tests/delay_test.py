@@ -23,7 +23,6 @@ import unittest
 import gras
 import grextras
 import numpy
-from gnuradio import gr
 
 class test_delay(unittest.TestCase):
 
@@ -32,10 +31,10 @@ class test_delay(unittest.TestCase):
             src_data = [1, 2, 3, 4, 5, 6, 7, 8]
             expected_result = tuple([0]*delay + src_data)
 
-            src = gr.vector_source_f(src_data)
+            src = grextras.VectorSource(numpy.float32, src_data)
             op = grextras.Delay(numpy.dtype(numpy.float32).itemsize)
             op.set_delay(delay)
-            dst = gr.vector_sink_f()
+            dst = grextras.VectorSink(numpy.float32)
 
             tb = gras.TopBlock()
             tb.connect(src, op, dst)

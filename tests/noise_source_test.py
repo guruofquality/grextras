@@ -27,34 +27,29 @@ from gnuradio import gr
 
 class test_noise_source(unittest.TestCase):
 
-    def setUp (self):
-        self.tb = gr.top_block()
-
-    def tearDown (self):
-        self.tb = None
-
-    def test_001(self):
+    def test_float32(self):
         op = grextras.NoiseSource.f32(0)
         op.set_waveform("GAUSSIAN")
         op.set_amplitude(10)
 
         head = gr.head(gr.sizeof_float, 12)
-        dst = gr.vector_sink_f()
+        dst = grextras.VectorSink(numpy.float32)
 
-        tb = gr.top_block()
+        tb = gras.TopBlock()
         tb.connect(op, head, dst)
         tb.run()
+        tb = None
 
         # expected results for Gaussian with seed 0, ampl 10
-        expected_result = (-6.8885869979858398, 26.149959564208984,
+        expected_result =(-6.8885869979858398, 26.149959564208984,
                             20.575775146484375, -7.9340143203735352,
                             5.3359274864196777, -12.552099227905273,
                             6.333674430847168, -23.830753326416016,
                             -16.603046417236328, 2.9676761627197266,
                             1.2176077365875244, 15.100193977355957)
 
-        dst_data = dst.data ()
-        self.assertEqual (expected_result, dst_data)
+        dst_data = dst.data()
+        self.assertEqual(expected_result, dst_data)
 
 
 if __name__ == '__main__':

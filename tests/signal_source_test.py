@@ -26,26 +26,20 @@ from gnuradio import gr
 
 class test_signal_source(unittest.TestCase):
 
-    def setUp (self):
-        self.tb = gr.top_block()
-
-    def tearDown (self):
-        self.tb = None
-
-    def test_signal_source_f32 (self):
-        tb = self.tb
-        expected_result = (1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5)
+    def test_signal_source_f32(self):
+        expected_result =(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5)
         src1 = grextras.SignalSource.f32()
         src1.set_frequency(1e6, 0)
         src1.set_waveform("CONST")
         src1.set_amplitude(1.5)
-        op = gr.head (gr.sizeof_float, 10)
-        dst1 = gr.vector_sink_f ()
-        tb.connect (src1, op)
-        tb.connect (op, dst1)
-        tb.run ()
-        dst_data = dst1.data ()
-        self.assertEqual (expected_result, dst_data)
+        op = gr.head(gr.sizeof_float, 10)
+        dst1 = grextras.VectorSink(numpy.float32)
+        tb = gras.TopBlock()
+        tb.connect(src1, op, dst1)
+        tb.run()
+        tb = None
+        dst_data = dst1.data()
+        self.assertEqual(expected_result, dst_data)
 
 if __name__ == '__main__':
     unittest.main()
