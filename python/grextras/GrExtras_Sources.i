@@ -18,8 +18,11 @@
 
 %pythoncode %{
 
-SignalSource = SignalSource.make
-NoiseSource = NoiseSource.make
+#remove the make_ from the factory functions, it feels more pythonic
+for block in [SignalSource, NoiseSource]:
+    for attr in filter(lambda x: x.startswith('make_'), dir(block)):
+        make = getattr(block, attr)
+        setattr(block, attr[5:], make)
 
 __all__ = ["SignalSource", "NoiseSource"]
 
