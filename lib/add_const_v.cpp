@@ -3,7 +3,6 @@
 #include <grextras/add_const.hpp>
 #include <boost/make_shared.hpp>
 #include <stdexcept>
-#include <volk/volk.h>
 
 using namespace grextras;
 

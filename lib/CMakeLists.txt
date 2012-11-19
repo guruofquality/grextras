@@ -14,6 +14,8 @@ list(APPEND GREXTRAS_SOURCES
     multiply_const_v.cpp
     subtract.cpp
     divide.cpp
+    noise_source.cpp
+    signal_source.cpp
 )
 
 ########################################################################
@@ -33,9 +35,22 @@ list(APPEND GREXTRAS_LIBRARIES ${Boost_LIBRARIES})
 ########################################################################
 # Setup Volk
 ########################################################################
-include_directories(${VOLK_INCLUDE_DIRS})
-link_directories(${VOLK_LIBRARY_DIRS})
-list(APPEND GREXTRAS_LIBRARIES ${VOLK_LIBRARIES})
+if(VOLK_FOUND)
+    include_directories(${VOLK_INCLUDE_DIRS})
+    link_directories(${VOLK_LIBRARY_DIRS})
+    list(APPEND GREXTRAS_LIBRARIES ${VOLK_LIBRARIES})
+    add_definitions(-DHAVE_VOLK)
+endif()
+
+########################################################################
+# Setup GNU Radio Core
+########################################################################
+if(GNURADIO_CORE_FOUND)
+    include_directories(${GNURADIO_CORE_INCLUDE_DIRS})
+    link_directories(${GNURADIO_CORE_LIBRARY_DIRS})
+    list(APPEND GREXTRAS_LIBRARIES ${GNURADIO_CORE_LIBRARIES})
+    add_definitions(-DHAVE_GNURADIO_CORE)
+endif()
 
 ########################################################################
 # Optional UHD
@@ -44,6 +59,7 @@ if(UHD_FOUND)
     include_directories(${UHD_INCLUDE_DIRS})
     link_directories(${UHD_LIBRARY_DIRS})
     list(APPEND GREXTRAS_LIBRARIES ${UHD_LIBRARIES})
+    add_definitions(-DHAVE_UHD)
 endif()
 
 ########################################################################

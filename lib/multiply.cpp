@@ -4,7 +4,9 @@
 #include <boost/make_shared.hpp>
 #include <stdexcept>
 #include <complex>
+#ifdef HAVE_VOLK
 #include <volk/volk.h>
+#endif
 
 using namespace grextras;
 
@@ -52,6 +54,7 @@ void MultiplyImpl<type>::work(
     this->produce(n_nums);
 }
 
+#ifdef HAVE_VOLK
 /***********************************************************************
  * Multiplier implementation with complex complex float32 - calls volk
  **********************************************************************/
@@ -95,6 +98,7 @@ void MultiplyImpl<float>::work(
     this->consume(n_nums);
     this->produce(n_nums);
 }
+#endif
 
 /***********************************************************************
  * factory function

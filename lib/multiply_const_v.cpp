@@ -3,7 +3,9 @@
 #include <grextras/multiply_const.hpp>
 #include <boost/make_shared.hpp>
 #include <stdexcept>
+#ifdef HAVE_VOLK
 #include <volk/volk.h>
+#endif
 
 using namespace grextras;
 
@@ -86,6 +88,7 @@ void MultiplyConstVImpl<type>::work1(
     this->produce(n_nums);
 }
 
+#ifdef HAVE_VOLK
 /***********************************************************************
  * FC32 vlen == 1 multiplier implementation
  **********************************************************************/
@@ -121,6 +124,7 @@ void MultiplyConstVImpl<float>::work1(
     this->consume(n_nums);
     this->produce(n_nums);
 }
+#endif
 
 /***********************************************************************
  * factory function

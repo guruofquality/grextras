@@ -19,10 +19,12 @@ set(GR_SWIG_LIBRARIES grextras ${GRAS_LIBRARIES})
 
 GR_SWIG_MAKE(GrExtras_Misc GrExtras_Misc.i)
 GR_SWIG_MAKE(GrExtras_Ops GrExtras_Ops.i)
+GR_SWIG_MAKE(GrExtras_Sources GrExtras_Sources.i)
 GR_SWIG_INSTALL(
     TARGETS
     GrExtras_Misc
     GrExtras_Ops
+    GrExtras_Sources
     DESTINATION ${GR_PYTHON_DIR}/grextras
     COMPONENT "extras_python"
 )

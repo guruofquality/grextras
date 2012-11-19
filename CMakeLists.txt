@@ -34,13 +34,18 @@ endif()
 
 find_package(Volk)
 if(NOT VOLK_FOUND)
-    message(FATAL_ERROR "VOLK vector library not found - required for GrExtras")
+    message(WARNING "VOLK vector library not found - optional for math blocks")
 endif()
 
-########################################################################
-# Optional req UHD
-########################################################################
+find_package(GnuradioCore)
+if(NOT GNURADIO_CORE_FOUND)
+    message(WARNING "GNU Radio Core library not found - optional for noise source")
+endif()
+
 find_package(UHD)
+if(NOT UHD_FOUND)
+    message(WARNING "USRP hardware driver not found - optional for USRP async message")
+endif()
 
 ########################################################################
 # Create uninstall target

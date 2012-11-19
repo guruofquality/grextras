@@ -13,6 +13,8 @@ install(FILES
     multiply.hpp
     subtract.hpp
     stream_selector.hpp
+    noise_source.hpp
+    signal_source.hpp
 
     DESTINATION include/grextras
     COMPONENT "extras_devel"
