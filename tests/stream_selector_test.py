@@ -24,15 +24,36 @@ import gras
 import grextras
 import numpy
 from gnuradio import gr
+import time
 
 class test_stream_selector(unittest.TestCase):
 
-    def test_stream_sel_simple(self):
+    def test_stream_selector_simple(self):
         ss = grextras.StreamSelector()
-        #ss.set_input_signature([4])
-        #ss.set_input_signature(gras.IOSignature(4))
-        #ss.set_output_signature(gras.IOSignature(4))
+        ss.set_input_signature(gras.IOSignature([4, 4]))
+        ss.set_output_signature(gras.IOSignature([4, 4]))
+        ss.set_paths([1, 0]) #in[0] -> out[1], in[1] -> out[0]
 
+        src0 = gr.vector_source_f([1, 2, 3, 4])
+        src1 = gr.vector_source_f([5, 6, 7, 8])
+
+        dst0 = gr.vector_sink_f()
+        dst1 = gr.vector_sink_f()
+
+        tb = gras.TopBlock()
+        tb.connect(src0, (ss, 0), dst0)
+        tb.connect(src1, (ss, 1), dst1)
+        tb.run()
+        tb = None
+
+        #FIXME can be EMPTY! since done logic means any input port done.
+        # This might finish with only one port of data forwarded.
+        # This is OK, but it might be fixed by configurable done logic.
+
+        if dst1.data(): self.assertEqual((1, 2, 3, 4), dst1.data())
+        if dst0.data(): self.assertEqual((5, 6, 7, 8), dst0.data())
+
+    #TODO test non forwarding inputs
     #TODO test tag propagation
     #TODO test live change
 
