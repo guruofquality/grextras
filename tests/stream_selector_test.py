@@ -27,9 +27,7 @@ import numpy
 class test_stream_selector(unittest.TestCase):
 
     def test_stream_selector_simple(self):
-        ss = grextras.StreamSelector()
-        ss.set_input_signature(gras.IOSignature([4, 4]))
-        ss.set_output_signature(gras.IOSignature([4, 4]))
+        ss = grextras.StreamSelector(4)
         ss.set_paths([1, 0]) #in[0] -> out[1], in[1] -> out[0]
 
         src0 = grextras.VectorSource(numpy.float32, [1, 2, 3, 4])

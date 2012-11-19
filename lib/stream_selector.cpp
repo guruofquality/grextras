@@ -8,10 +8,11 @@ using namespace grextras;
 
 struct StreamSelectorImpl : StreamSelector
 {
-    StreamSelectorImpl(void):
+    StreamSelectorImpl(const size_t itemsize):
         gras::Block("GrExtras StreamSelector")
     {
-        //NOP
+        this->set_input_signature(gras::IOSignature(itemsize));
+        this->set_output_signature(gras::IOSignature(itemsize));
     }
 
     void work(const InputItems &ins, const OutputItems &outs)
@@ -70,7 +71,7 @@ struct StreamSelectorImpl : StreamSelector
     std::vector<int> _paths;
 };
 
-StreamSelector::sptr StreamSelector::make(void)
+StreamSelector::sptr StreamSelector::make(const size_t itemsize)
 {
-    return boost::make_shared<StreamSelectorImpl>();
+    return boost::make_shared<StreamSelectorImpl>(itemsize);
 }

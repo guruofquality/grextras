@@ -23,11 +23,9 @@ struct GREXTRAS_API StreamSelector : virtual gras::Block
 
     /*!
      * Make a new stream selector block.
-     * The user should initialize the IO signatures:
-     * my_stream_selector->set_input_signature(...)
-     * my_stream_selector->set_output_signature(...)
+     * All inputs and outputs are homogeneous in size.
      */
-    static sptr make(void);
+    static sptr make(const size_t itemsize);
 
     /*!
      * Set the path for samples for each input ports.
