@@ -14,7 +14,7 @@
 
 %include "grextras_shared_ptr.i"
 %include <gras/block.i>
-%include <gras/hier_block.hpp>
+%include <gras/hier_block.i>
 %include <grextras/config.hpp>
 %include <grextras/add.hpp>
 %include <grextras/add_const.hpp>
