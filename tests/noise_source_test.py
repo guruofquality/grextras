@@ -23,22 +23,25 @@ import unittest
 import gras
 import grextras
 import numpy
-from gnuradio import gr
 
 class test_noise_source(unittest.TestCase):
+
+    def setUp(self):
+        self.tb = gras.TopBlock()
+
+    def tearDown(self):
+        self.tb = None
 
     def test_float32(self):
         op = grextras.NoiseSource.f32(0)
         op.set_waveform("GAUSSIAN")
         op.set_amplitude(10)
 
-        head = gr.head(gr.sizeof_float, 12)
+        head = grextras.Head(numpy.float32, 12)
         dst = grextras.VectorSink(numpy.float32)
 
-        tb = gras.TopBlock()
-        tb.connect(op, head, dst)
-        tb.run()
-        tb = None
+        self.tb.connect(op, head, dst)
+        self.tb.run()
 
         # expected results for Gaussian with seed 0, ampl 10
         expected_result =(-6.8885869979858398, 26.149959564208984,

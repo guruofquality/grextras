@@ -18,26 +18,30 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
+
 import unittest
 import gras
 import grextras
 import numpy
-from gnuradio import gr
 
 class test_signal_source(unittest.TestCase):
 
+    def setUp(self):
+        self.tb = gras.TopBlock()
+
+    def tearDown(self):
+        self.tb = None
+
     def test_signal_source_f32(self):
-        expected_result =(1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5)
+        expected_result = (1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5)
         src1 = grextras.SignalSource.f32()
         src1.set_frequency(1e6, 0)
         src1.set_waveform("CONST")
         src1.set_amplitude(1.5)
-        op = gr.head(gr.sizeof_float, 10)
+        op = grextras.Head(numpy.float32, 10)
         dst1 = grextras.VectorSink(numpy.float32)
-        tb = gras.TopBlock()
-        tb.connect(src1, op, dst1)
-        tb.run()
-        tb = None
+        self.tb.connect(src1, op, dst1)
+        self.tb.run()
         dst_data = dst1.data()
         self.assertEqual(expected_result, dst_data)
 

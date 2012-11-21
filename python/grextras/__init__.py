@@ -30,3 +30,17 @@ class VectorSink(gras.Block):
     def work(self, ins, outs):
         self._vec.extend(ins[0].copy())
         self.consume(0, len(ins[0]))
+
+class Head(gras.Block):
+    def __init__(self, sig, num_items):
+        gras.Block.__init__(self, name='Head', in_sig=[sig], out_sig=[sig])
+        self._num_items = num_items
+
+    def work(self, ins, outs):
+        n = min(len(ins[0]), len(outs[0]), self._num_items)
+        outs[0][:n] = ins[0][:n]
+        self.consume(0, n)
+        self.produce(0, n)
+        self._num_items -= n
+        if not self._num_items:
+            self.mark_done()

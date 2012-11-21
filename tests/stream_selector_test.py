@@ -40,7 +40,6 @@ class test_stream_selector(unittest.TestCase):
         tb.connect(src0, (ss, 0), dst0)
         tb.connect(src1, (ss, 1), dst1)
         tb.run()
-        tb = None
 
         #FIXME can be EMPTY! since done logic means any input port done.
         # This might finish with only one port of data forwarded.

@@ -35,34 +35,31 @@ class test_add_and_friends(unittest.TestCase):
 
     def help_ii(self, src_data, exp_data, op):
         for s in zip(range(len(src_data)), src_data):
-            src = gr.vector_source_i(s[1])
+            src = grextras.VectorSource(numpy.int32, s[1])
             self.tb.connect(src,(op, s[0]))
         dst = grextras.VectorSink(numpy.int32)
         self.tb.connect(op, dst)
         self.tb.run()
-        self.tb = None
         result_data = dst.data()
         self.assertEqual(exp_data, result_data)
 
     def help_ff(self, src_data, exp_data, op):
         for s in zip(range(len(src_data)), src_data):
-            src = gr.vector_source_f(s[1])
+            src = grextras.VectorSource(numpy.float32, s[1])
             self.tb.connect(src,(op, s[0]))
         dst = grextras.VectorSink(numpy.float32)
         self.tb.connect(op, dst)
         self.tb.run()
-        self.tb = None
         result_data = dst.data()
         self.assertEqual(exp_data, result_data)
 
     def help_cc(self, src_data, exp_data, op):
         for s in zip(range(len(src_data)), src_data):
-            src = gr.vector_source_c(s[1])
+            src = grextras.VectorSource(numpy.complex64, s[1])
             self.tb.connect(src,(op, s[0]))
         dst = grextras.VectorSink(numpy.complex64)
         self.tb.connect(op, dst)
         self.tb.run()
-        self.tb = None
         result_data = dst.data()
         self.assertEqual(exp_data, result_data)
 

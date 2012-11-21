@@ -39,7 +39,6 @@ class test_delay(unittest.TestCase):
             tb = gras.TopBlock()
             tb.connect(src, op, dst)
             tb.run()
-            tb = None
 
             dst_data = dst.data()
             self.assertEqual(expected_result, dst_data)
