@@ -7,12 +7,8 @@
 <block>
     <name>Extras: Stream Selector</name>
     <key>extras_stream_selector</key>
-    <import>from gnuradio import gr</import>
-    <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.stream_selector(
-    gr.io_signature($num_inputs, $num_inputs, $item_size),
-    gr.io_signature($num_outputs, $num_outputs, $item_size),
-)
+    <import>import grextras</import>
+    <make>grextras.StreamSelector($item_size)
 self.$(id).set_paths($paths)
 </make>
     <callback>self.$(id).set_paths($paths)</callback>

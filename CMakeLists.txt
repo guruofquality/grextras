@@ -65,6 +65,6 @@ add_custom_target(uninstall
 add_subdirectory(include/grextras)
 add_subdirectory(lib)
 add_subdirectory(python/grextras)
-#add_subdirectory(grc)
+add_subdirectory(grc)
 add_subdirectory(scripts)
 add_subdirectory(tests)

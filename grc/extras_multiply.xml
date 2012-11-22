@@ -8,8 +8,8 @@
 <block>
     <name>Extras: Multiply</name>
     <key>extras_multiply</key>
-    <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.multiply_$(type)($num_inputs, $vlen)</make>
+    <import>import grextras</import>
+    <make>grextras.Multiply.$(type)($num_inputs, $vlen)</make>
     <param>
         <name>IO Type</name>
         <key>type</key>

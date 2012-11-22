@@ -7,8 +7,8 @@
 <block>
     <name>Extras: Add Const</name>
     <key>extras_add_const</key>
-    <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.add_const_v_$(type)($value)</make>
+    <import>import grextras</import>
+    <make>grextras.AddConstV.$(type)($value)</make>
     <callback>set_const($value)</callback>
     <param>
         <name>IO Type</name>

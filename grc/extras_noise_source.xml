@@ -7,8 +7,8 @@
 <block>
     <name>Extras: Noise Source</name>
     <key>extras_noise_source</key>
-    <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.noise_source_$(type)($seed)
+    <import>import grextras</import>
+    <make>grextras.NoiseSource.$(type)($seed)
 self.$(id).set_waveform($wave)
 self.$(id).set_offset($off)
 self.$(id).set_amplitude($scalar)

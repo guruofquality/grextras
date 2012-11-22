@@ -8,8 +8,8 @@
 <block>
     <name>Extras: Add</name>
     <key>extras_add</key>
-    <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.add_$(type)($num_inputs, $vlen)</make>
+    <import>import grextras</import>
+    <make>grextras.Add.$(type)($num_inputs, $vlen)</make>
     <param>
         <name>IO Type</name>
         <key>type</key>

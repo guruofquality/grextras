@@ -7,8 +7,8 @@
 <block>
     <name>Extras: Multiply Const</name>
     <key>extras_multiply_const</key>
-    <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.multiply_const_v_$(type)($value)</make>
+    <import>import grextras</import>
+    <make>grextras.MultiplyConstV$(type)($value)</make>
     <callback>set_const($value)</callback>
     <param>
         <name>IO Type</name>

@@ -8,8 +8,8 @@
     <name>Extras: TUN/TAP</name>
     <key>extras_tuntap</key>
     <throttle>1</throttle>
-    <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.tuntap($dev)</make>
+    <import>import grextras</import>
+    <make>grextras.TunTap($dev)</make>
     <param>
         <name>Device</name>
         <key>dev</key>

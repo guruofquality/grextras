@@ -8,8 +8,8 @@
 <block>
     <name>Extras: Divide</name>
     <key>extras_divide</key>
-    <import>import gnuradio.extras as gr_extras</import>
-    <make>gr_extras.divide_$(type)($num_inputs, $vlen)</make>
+    <import>import grextras</import>
+    <make>grextras.Divide.$(type)($num_inputs, $vlen)</make>
     <param>
         <name>IO Type</name>
         <key>type</key>
