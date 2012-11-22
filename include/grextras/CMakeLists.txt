@@ -15,6 +15,8 @@ install(FILES
     stream_selector.hpp
     noise_source.hpp
     signal_source.hpp
+    datagram_to_stream.hpp
+    stream_to_datagram.hpp
 
     DESTINATION include/grextras
     COMPONENT "extras_devel"

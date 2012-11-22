@@ -15,7 +15,7 @@ struct StreamSelectorImpl : StreamSelector
         this->set_output_signature(gras::IOSignature(itemsize));
     }
 
-    void work(const InputItems &ins, const OutputItems &outs)
+    void work(const InputItems &ins, const OutputItems &)
     {
         for (size_t i = 0; i < ins.size(); i++)
         {

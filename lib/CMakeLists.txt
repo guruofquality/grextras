@@ -16,6 +16,8 @@ list(APPEND GREXTRAS_SOURCES
     divide.cpp
     noise_source.cpp
     signal_source.cpp
+    datagram_to_stream.cpp
+    stream_to_datagram.cpp
 )
 
 ########################################################################

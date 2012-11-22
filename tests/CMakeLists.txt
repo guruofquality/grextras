@@ -15,3 +15,4 @@ GR_ADD_TEST(stream_selector_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR
 GR_ADD_TEST(math_ops_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/math_ops_test.py)
 GR_ADD_TEST(signal_source_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/signal_source_test.py)
 GR_ADD_TEST(noise_source_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/noise_source_test.py)
+GR_ADD_TEST(datagram_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/datagram_test.py)

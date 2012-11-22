@@ -7,16 +7,18 @@ from GrExtras_Sources import *
 import gras
 
 class VectorSource(gras.Block):
-    def __init__(self, out_sig, vec):
+    def __init__(self, out_sig, vec, autodone=True):
         gras.Block.__init__(self, name='VectorSource', out_sig=[out_sig])
         self._vec = vec
+        self._autodone = autodone
 
     def work(self, ins, outs):
         num = min(len(outs[0]), len(self._vec))
         outs[0][:num] = self._vec[:num]
         self.produce(0, num)
         self._vec = self._vec[num:]
-        if not self._vec:
+        if not self._vec and self._autodone:
+            print "vector source marks done"
             self.mark_done()
 
 class VectorSink(gras.Block):
