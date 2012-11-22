@@ -31,7 +31,6 @@ list(APPEND GREXTRAS_LIBRARIES ${GRAS_LIBRARIES})
 ########################################################################
 # Setup Boost
 ########################################################################
-find_package(Boost COMPONENTS thread) #add thread dependency
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND GREXTRAS_LIBRARIES ${Boost_LIBRARIES})

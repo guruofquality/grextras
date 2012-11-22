@@ -17,7 +17,7 @@ struct UDPSocketReceiver : gras::Block
     void work(const InputItems &, const OutputItems &)
     {
         //wait for a packet to become available
-        if (not wait_for_recv_ready(socket->native())) return;
+        if (not this->wait_for_recv_ready()) return;
 
         //TODO use pool
         gras::SBufferConfig config;
@@ -32,6 +32,22 @@ struct UDPSocketReceiver : gras::Block
 
         //post the output tag downstream
         this->post_output_tag(0, t);
+    }
+
+    bool wait_for_recv_ready(void)
+    {
+        //setup timeval for timeout
+        timeval tv;
+        tv.tv_sec = 0;
+        tv.tv_usec = timeout_us;
+
+        //setup rset for timeout
+        fd_set rset;
+        FD_ZERO(&rset);
+        FD_SET(socket->native(), &rset);
+
+        //call select with timeout on receive socket
+        return ::select(socket->native()+1, &rset, NULL, NULL, &tv) > 0;
     }
 
     const size_t _mtu;

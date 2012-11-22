@@ -4,7 +4,6 @@
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp>
-#include <boost/thread.hpp>
 #include <gras/block.hpp>
 #include <stdexcept>
 #include <iostream>
@@ -14,26 +13,7 @@ using namespace grextras;
 
 static const PMCC DATAGRAM_KEY = PMC::make(std::string("datagram"));
 
-/***********************************************************************
- * cross platform select code for socket
- **********************************************************************/
 static const long timeout_us = 100*1000; //100ms
-
-static bool wait_for_recv_ready(int sock_fd)
-{
-    //setup timeval for timeout
-    timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = timeout_us;
-
-    //setup rset for timeout
-    fd_set rset;
-    FD_ZERO(&rset);
-    FD_SET(sock_fd, &rset);
-
-    //call select with timeout on receive socket
-    return ::select(sock_fd+1, &rset, NULL, NULL, &tv) > 0;
-}
 
 #include "udp_socket_message.hpp"
 #include "tcp_socket_message.hpp"
