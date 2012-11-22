@@ -18,6 +18,7 @@ list(APPEND GREXTRAS_SOURCES
     signal_source.cpp
     datagram_to_stream.cpp
     stream_to_datagram.cpp
+    socket_message.cpp
 )
 
 ########################################################################

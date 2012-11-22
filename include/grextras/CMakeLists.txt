@@ -17,6 +17,7 @@ install(FILES
     signal_source.hpp
     datagram_to_stream.hpp
     stream_to_datagram.hpp
+    socket_message.hpp
 
     DESTINATION include/grextras
     COMPONENT "extras_devel"

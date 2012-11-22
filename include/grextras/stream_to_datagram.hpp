@@ -16,8 +16,8 @@ namespace grextras
  * The output port is a message port.
  *
  * Each outgoing message is a tag where
- *  * key is set to "datagram"
- *  * the value is a gras::SBuffer
+ *  - key is set to "datagram"
+ *  - the value is a gras::SBuffer
  *
  * For each call of work(), the default behaviour is to post 
  * the entire input buffer as the value of the output tag.
@@ -27,6 +27,8 @@ namespace grextras
  *
  * If the input stream also contains item tags as well,
  * these tags will also be posted to the output port.
+ *
+ * The implementation of this block is totally zero-copy.
  */
 struct GREXTRAS_API Stream2Datagram : virtual gras::Block
 {

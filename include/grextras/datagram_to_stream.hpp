@@ -16,11 +16,13 @@ namespace grextras
  * The output port is a stream of items.
  *
  * Each incoming message is a tag where
- *  * key is set to "datagram"
- *  * the value is a gras::SBuffer
+ *  - key is set to "datagram"
+ *  - the value is a gras::SBuffer
  *
  * If an input message does not match this criteria,
  * it will simply be forwarded to the output port.
+ *
+ * The implementation of this block is totally zero-copy.
  */
 struct GREXTRAS_API Datagram2Stream : virtual gras::Block
 {
