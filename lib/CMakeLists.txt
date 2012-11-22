@@ -19,6 +19,7 @@ list(APPEND GREXTRAS_SOURCES
     datagram_to_stream.cpp
     stream_to_datagram.cpp
     socket_message.cpp
+    tuntap.cpp
 )
 
 ########################################################################

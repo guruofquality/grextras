@@ -18,6 +18,7 @@ install(FILES
     datagram_to_stream.hpp
     stream_to_datagram.hpp
     socket_message.hpp
+    tuntap.hpp
 
     DESTINATION include/grextras
     COMPONENT "extras_devel"
