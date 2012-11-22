@@ -116,6 +116,7 @@ struct UDPSocketMessage : SocketMessage
 
         if (type == "UDP_SERVER")
         {
+            std::cout << "Creating UDP server..." << std::endl;
             socket.reset(new asio::ip::udp::socket(_io_service, _endpoint));
             //TODO sender and receiver share endpoint - but no locking...
 
@@ -127,6 +128,7 @@ struct UDPSocketMessage : SocketMessage
 
         if (type == "UDP_CLIENT")
         {
+            std::cout << "Creating UDP client..." << std::endl;
             socket.reset(new asio::ip::udp::socket(_io_service));
             socket->open(asio::ip::udp::v4());
             socket->connect(_endpoint);
@@ -139,10 +141,8 @@ struct UDPSocketMessage : SocketMessage
 
         this->connect(*this, 0, _sender, 0);
         this->connect(_receiver, 0, *this, 0);
-
     }
 
-    asio::io_service _io_service;
     asio::ip::udp::endpoint _endpoint, _recv_ep;
     boost::shared_ptr<UDPSocketReceiver> _receiver;
     boost::shared_ptr<UDPSocketSender> _sender;

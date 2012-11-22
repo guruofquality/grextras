@@ -2,6 +2,53 @@
 //! This is not a real header file, only include it in socket_message.cpp
 
 /***********************************************************************
+ * Receive from a TCP socket and post tag to output
+ **********************************************************************/
+struct TCPSocketReceiver : gras::Block
+{
+    TCPSocketReceiver(const size_t mtu):
+        gras::Block("GrExtras TCPSocketReceiver"),
+        _mtu(mtu)
+    {
+        this->set_output_signature(gras::IOSignature(1));
+        //TODO allocate pool
+    }
+
+    void work(const InputItems &, const OutputItems &)
+    {
+        //wait for a packet to become available
+        if (not this->waiter()) return;
+
+        //TODO use pool
+        gras::SBufferConfig config;
+        config.length = _mtu;
+        gras::SBuffer b(config);
+
+        //receive into the buffer
+        try
+        {
+            b.length = socket->receive(asio::buffer(b.get(), b.get_actual_length()));
+        }
+        catch(...)
+        {
+            std::cerr << "TCPSocketReceiver: socket receive error, continuing..." << std::endl;
+            socket.reset();
+            return;
+        }
+
+        //create a tag for this buffer
+        const gras::Tag t(0, DATAGRAM_KEY, PMC::make(b));
+
+        //post the output tag downstream
+        this->post_output_tag(0, t);
+    }
+
+    const size_t _mtu;
+    boost::shared_ptr<asio::ip::tcp::socket> socket;
+    boost::function<bool(void)> waiter;
+};
+
+/***********************************************************************
  * Read input tags and send to a UDP socket.
  **********************************************************************/
 struct TCPSocketSender : gras::Block
@@ -18,6 +65,8 @@ struct TCPSocketSender : gras::Block
 
     void work(const InputItems &ins, const OutputItems &)
     {
+        if (not socket) this->waiter();
+
         //iterate through all input tags, and post
         BOOST_FOREACH(const gras::Tag &t, this->get_input_tags(0))
         {
@@ -47,105 +96,15 @@ struct TCPSocketSender : gras::Block
         }
         catch(...)
         {
-            std::cerr << "TCPSocketSender: socket receive error, continuing..." << std::endl;
+            std::cerr << "TCPSocketSender: socket send error, continuing..." << std::endl;
             socket.reset();
         }
     }
 
     boost::shared_ptr<asio::ip::tcp::socket> socket;
+    boost::function<bool(void)> waiter;
 };
 
-
-/***********************************************************************
- * Receive from a TCP socket and post tag to output
- **********************************************************************/
-struct TCPSocketReceiver : gras::Block
-{
-    TCPSocketReceiver(const size_t mtu):
-        gras::Block("GrExtras TCPSocketReceiver"),
-        _mtu(mtu)
-    {
-        this->set_output_signature(gras::IOSignature(1));
-        //TODO allocate pool
-    }
-
-    void work(const InputItems &, const OutputItems &)
-    {
-        //wait for a packet to become available
-        if (not this->wait_for_recv_ready()) return;
-
-        //TODO use pool
-        gras::SBufferConfig config;
-        config.length = _mtu;
-        gras::SBuffer b(config);
-
-        //receive into the buffer
-        try
-        {
-            b.length = socket->receive(asio::buffer(b.get(), b.get_actual_length()));
-        }
-        catch(...)
-        {
-            std::cerr << "TCPSocketReceiver: socket receive error, continuing..." << std::endl;
-            socket.reset();
-            sender->socket.reset();
-            return;
-        }
-
-        //create a tag for this buffer
-        const gras::Tag t(0, DATAGRAM_KEY, PMC::make(b));
-
-        //post the output tag downstream
-        this->post_output_tag(0, t);
-    }
-
-    bool wait_for_recv_ready(void)
-    {
-        //setup timeval for timeout
-        timeval tv;
-        tv.tv_sec = 0;
-        tv.tv_usec = timeout_us;
-
-        //setup rset for timeout
-        fd_set rset;
-        FD_ZERO(&rset);
-        int max_sock_fd = 0;
-        if (acceptor)
-        {
-            FD_SET(acceptor->native(), &rset);
-            max_sock_fd = std::max(max_sock_fd, acceptor->native());
-        }
-        if (socket)
-        {
-            FD_SET(socket->native(), &rset);
-            max_sock_fd = std::max(max_sock_fd, socket->native());
-        }
-
-        //call select with timeout on receive socket
-        ::select(max_sock_fd+1, &rset, NULL, NULL, &tv);
-
-        if (acceptor and FD_ISSET(acceptor->native(), &rset))
-        {
-            socket.reset(new asio::ip::tcp::socket(*io_service));
-            acceptor->accept(*socket);
-            sender->socket = socket;
-            return false; //its a new socket, call again
-        }
-
-        if (socket)
-        {
-            return FD_ISSET(socket->native(), &rset);
-        }
-
-        return false;
-    }
-
-    const size_t _mtu;
-    asio::io_service *io_service;
-    boost::shared_ptr<asio::ip::tcp::acceptor> acceptor;
-    boost::shared_ptr<asio::ip::tcp::socket> socket;
-    boost::shared_ptr<TCPSocketSender> sender;
-};
 
 /***********************************************************************
  * TCPSocketMessage - hier block with sender and receiver
@@ -162,31 +121,91 @@ struct TCPSocketMessage : SocketMessage
     {
         asio::ip::tcp::resolver resolver(_io_service);
         asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), addr, port);
-        asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
+        _endpoint = *resolver.resolve(query);
 
         _receiver = boost::make_shared<TCPSocketReceiver>(mtu);
+        _receiver->waiter = boost::bind(&TCPSocketMessage::wait, this);
         _sender = boost::make_shared<TCPSocketSender>();
+        _sender->waiter = boost::bind(&TCPSocketMessage::wait, this);
 
         if (type == "TCP_SERVER")
         {
-            _receiver->acceptor.reset(new asio::ip::tcp::acceptor(_io_service, endpoint));
-            _receiver->sender = _sender;
+            std::cout << "Creating TCP server..." << std::endl;
+            _acceptor.reset(new asio::ip::tcp::acceptor(_io_service, _endpoint));
         }
 
         if (type == "TCP_CLIENT")
         {
-            boost::shared_ptr<asio::ip::tcp::socket> socket;
-            socket.reset(new asio::ip::tcp::socket(_io_service));
-            socket->connect(endpoint);
-            _receiver->socket = socket;
-            _sender->socket = socket;
+            std::cout << "Creating TCP client..." << std::endl;
+            this->do_connect = true;
         }
 
         this->connect(*this, 0, _sender, 0);
         this->connect(_receiver, 0, *this, 0);
     }
 
-    asio::io_service _io_service;
+    bool wait(void)
+    {
+        boost::mutex::scoped_lock l(_mutex);
+
+        if (this->do_connect)
+        {
+            std::cout << "TCP client connecting... " << std::flush;
+            _socket.reset(new asio::ip::tcp::socket(_io_service));
+            _socket->connect(_endpoint);
+            std::cout << "done" << std::endl;
+            _receiver->socket = _socket;
+            _sender->socket = _socket;
+            this->do_connect = false;
+        }
+
+        //setup timeval for timeout
+        timeval tv;
+        tv.tv_sec = 0;
+        tv.tv_usec = timeout_us;
+
+        //setup rset for timeout
+        fd_set rset;
+        FD_ZERO(&rset);
+        int max_sock_fd = 0;
+        if (_acceptor)
+        {
+            FD_SET(_acceptor->native(), &rset);
+            max_sock_fd = std::max(max_sock_fd, _acceptor->native());
+        }
+        if (_socket)
+        {
+            FD_SET(_socket->native(), &rset);
+            max_sock_fd = std::max(max_sock_fd, _socket->native());
+        }
+
+        //call select with timeout on receive socket
+        ::select(max_sock_fd+1, &rset, NULL, NULL, &tv);
+
+        if (_acceptor and FD_ISSET(_acceptor->native(), &rset))
+        {
+            std::cout << "TCP server accepting... " << std::flush;
+            _socket.reset(new asio::ip::tcp::socket(_io_service));
+            _acceptor->accept(*_socket);
+            std::cout << "done" << std::endl;
+            _receiver->socket = _socket;
+            _sender->socket = _socket;
+            return false; //its a new socket, call again
+        }
+
+        if (_socket)
+        {
+            return FD_ISSET(_socket->native(), &rset);
+        }
+
+        return false;
+    }
+
+    asio::ip::tcp::endpoint _endpoint;
+    bool do_connect;
+    boost::mutex _mutex;
+    boost::shared_ptr<asio::ip::tcp::acceptor> _acceptor;
+    boost::shared_ptr<asio::ip::tcp::socket> _socket;
     boost::shared_ptr<TCPSocketReceiver> _receiver;
     boost::shared_ptr<TCPSocketSender> _sender;
 };

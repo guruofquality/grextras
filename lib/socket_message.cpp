@@ -4,6 +4,8 @@
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/thread/mutex.hpp>
 #include <gras/block.hpp>
 #include <stdexcept>
 #include <iostream>
@@ -11,9 +13,11 @@
 namespace asio = boost::asio;
 using namespace grextras;
 
+static asio::io_service _io_service;
+
 static const PMCC DATAGRAM_KEY = PMC::make(std::string("datagram"));
 
-static const long timeout_us = 100*1000; //100ms
+static const long timeout_us = 10*1000; //10ms
 
 #include "udp_socket_message.hpp"
 #include "tcp_socket_message.hpp"
