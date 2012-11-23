@@ -22,6 +22,16 @@ public:
         this->set_const(vec);
     }
 
+    void notify_topology(const size_t num_inputs, const size_t num_outputs)
+    {
+        for (size_t i = 0; i < num_inputs; i++)
+        {
+            gras::InputPortConfig config = this->get_input_config(i);
+            config.inline_buffer = (i == 0);
+            this->set_input_config(i, config);
+        }
+    }
+
     void work1(const InputItems &, const OutputItems &);
 
     void work(
