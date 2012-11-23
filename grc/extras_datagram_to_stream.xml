@@ -5,9 +5,9 @@
 ###################################################
  -->
 <block>
-    <name>Extras: DGram to Stream</name>
+    <name>Ex: DGram2Stream</name>
     <key>extras_datagram_to_stream</key>
-    <import>import gnuradio.extras as gr_extras</import>
+    <import>import grextras</import>
     <make>grextras.Datagram2Stream($item_size)</make>
     <param>
         <name>Output Item Size</name>

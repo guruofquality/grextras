@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Socket Msg</name>
+    <name>Ex: Socket Msg</name>
     <key>extras_socket_message</key>
     <import>import grextras</import>
     <make>grextras.SocketMessage($type, $addr, $port, $mtu)</make>

@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Signal Source</name>
+    <name>Ex: Signal Source</name>
     <key>extras_signal_source</key>
     <import>import grextras</import>
     <make>grextras.SignalSource.$(type)()

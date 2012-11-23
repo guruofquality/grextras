@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Delay</name>
+    <name>Ex: Delay</name>
     <key>extras_delay</key>
     <import>import grextras</import>
     <make>grextras.Delay($item_size)

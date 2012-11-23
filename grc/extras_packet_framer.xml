@@ -5,7 +5,7 @@
 ###################################################
 -->
 <block>
-    <name>Extras: Packet Framer</name>
+    <name>Ex: Packet Framer</name>
     <key>extras_packet_framer</key>
     <import>import grextras</import>
     <make>grextras.PacketFramer(

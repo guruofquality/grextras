@@ -6,7 +6,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Subtract</name>
+    <name>Ex: Subtract</name>
     <key>extras_subtract</key>
     <import>import grextras</import>
     <make>grextras.Subtract.$(type)($num_inputs, $vlen)</make>

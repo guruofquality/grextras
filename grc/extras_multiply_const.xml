@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Multiply Const</name>
+    <name>Ex: Multiply Const</name>
     <key>extras_multiply_const</key>
     <import>import grextras</import>
     <make>grextras.MultiplyConstV$(type)($value)</make>

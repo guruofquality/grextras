@@ -5,7 +5,7 @@
 ###################################################
 -->
 <block>
-    <name>Extras: Packet Deframer</name>
+    <name>Ex: Packet Deframer</name>
     <key>extras_packet_deframer</key>
     <import>import grextras</import>
     <make>grextras.PacketDeframer(

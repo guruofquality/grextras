@@ -6,7 +6,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Divide</name>
+    <name>Ex: Divide</name>
     <key>extras_divide</key>
     <import>import grextras</import>
     <make>grextras.Divide.$(type)($num_inputs, $vlen)</make>

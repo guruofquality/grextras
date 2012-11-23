@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Add Const</name>
+    <name>Ex: Add Const</name>
     <key>extras_add_const</key>
     <import>import grextras</import>
     <make>grextras.AddConstV.$(type)($value)</make>

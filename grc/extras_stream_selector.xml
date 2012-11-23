@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Stream Selector</name>
+    <name>Ex: Stream Selector</name>
     <key>extras_stream_selector</key>
     <import>import grextras</import>
     <make>grextras.StreamSelector($item_size)

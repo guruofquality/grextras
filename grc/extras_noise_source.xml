@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Noise Source</name>
+    <name>Ex: Noise Source</name>
     <key>extras_noise_source</key>
     <import>import grextras</import>
     <make>grextras.NoiseSource.$(type)($seed)

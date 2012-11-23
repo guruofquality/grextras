@@ -6,7 +6,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Add</name>
+    <name>Ex: Add</name>
     <key>extras_add</key>
     <import>import grextras</import>
     <make>grextras.Add.$(type)($num_inputs, $vlen)</make>

@@ -6,7 +6,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Multiply</name>
+    <name>Ex: Multiply</name>
     <key>extras_multiply</key>
     <import>import grextras</import>
     <make>grextras.Multiply.$(type)($num_inputs, $vlen)</make>

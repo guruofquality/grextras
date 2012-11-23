@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: TUN/TAP</name>
+    <name>Ex: TUN/TAP</name>
     <key>extras_tuntap</key>
     <throttle>1</throttle>
     <import>import grextras</import>

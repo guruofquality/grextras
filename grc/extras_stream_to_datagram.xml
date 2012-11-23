@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Extras: Stream to DGram</name>
+    <name>Ex: Stream2DGram</name>
     <key>extras_stream_to_datagram</key>
     <import>import grextras</import>
     <make>grextras.Stream2Datagram($item_size, $mtu)</make>
