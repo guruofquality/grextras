@@ -65,7 +65,7 @@ class PacketFramer(gras.Block):
         self._whitener_offset = 0
 
         config = self.get_input_config(0)
-        config.reserve = 0
+        config.reserve_items = 0
         self.set_input_config(0, config)
 
         if not access_code:
@@ -74,37 +74,32 @@ class PacketFramer(gras.Block):
             raise ValueError, "Invalid access_code %r. Must be string of 1's and 0's" % (access_code,)
         self._access_code = access_code
 
-    def start(self):
-        print 'PacketFramer start()'
-        return True
-
     def work(self, ins, outs):
-        print 'PacketFramer work!'
-        for t in self.get_input_tags():
+        for t in self.get_input_tags(0):
             if t.key == "datagram" and isinstance(t.value, gras.SBuffer):
+                self.handle_datagram(t.value)
+        self.erase_input_tags(0)
 
-                print 'packet framer got a pkt!!'
+    def handle_datagram(self, b):
+        pkt = packet_utils.make_packet(
+            b.get().tostring(),
+            self._samples_per_symbol,
+            self._bits_per_symbol,
+            self._access_code,
+            False, #pad_for_usrp,
+            self._whitener_offset,
+        )
 
-                pkt = packet_utils.make_packet(
-                    pmt.pmt_datagram_data(msg.value).tostring(),
-                    self._samples_per_symbol,
-                    self._bits_per_symbol,
-                    self._access_code,
-                    False, #pad_for_usrp,
-                    self._whitener_offset,
-                )
+        if self._use_whitener_offset:
+            self._whitener_offset = (self._whitener_offset + 1) % 16
 
-                if self._use_whitener_offset:
-                    self._whitener_offset = (self._whitener_offset + 1) % 16
+        #allocate a reference counted buffer to pass downstream
+        config = gras.SBufferConfig();
+        config.length = len(pkt)
+        buff = gras.SBuffer(config)
+        buff.get()[:] = numpy.fromstring(pkt, numpy.uint8)
 
-                #allocate a reference counted buffer to pass downstream
-                config = gras.SBufferConfig();
-                config.length = len(pkt)
-                buff = gras.SBuffer(config)
-                buff.get()[:] = numpy.fromstring(pkt, numpy.uint8)
-
-                self.post_output_buffer(0, buff)
-        self.erase_input_tags()
+        self.post_output_buffer(0, buff)
 
 class PacketDeframer(gras.HierBlock):
     """
@@ -163,10 +158,11 @@ class _queue_to_datagram(gras.Block):
     def work(self, ins, outs):
         print '_queue_to_datagram work'
         try: msg = self._msgq.delete_head()
-        except Exception as e:
-            print '_queue_to_datagram except!!', e
+        except Exception:
+            print 'staph!!'
             return
         ok, payload = packet_utils.unmake_packet(msg.to_string(), int(msg.arg1()))
+        print 'got a msg', ok, payload
         if ok:
             payload = numpy.fromstring(payload, numpy.uint8)
 

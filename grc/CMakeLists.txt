@@ -22,6 +22,9 @@ list(APPEND grc_sources
     extras_tuntap.xml
     extras_stream_selector.xml
     extras_socket_message.xml
+
+    extras_packet_framer.xml
+    extras_packet_deframer.xml
 )
 
 install(

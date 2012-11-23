@@ -44,5 +44,7 @@
         <block>extras_stream_selector</block>
         <block>extras_delay</block>
         <block>extras_tuntap</block>
+        <block>extras_packet_framer</block>
+        <block>extras_packet_deframer</block>
     </cat>
 </cat>
