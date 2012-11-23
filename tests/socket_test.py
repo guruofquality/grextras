@@ -19,8 +19,8 @@ class test_socket_message(unittest.TestCase):
         src = grextras.VectorSource(numpy.int32, src_data, autodone=False)
         dst = grextras.VectorSink(numpy.int32)
 
-        s2d = grextras.Stream2Datagram(numpy.dtype(numpy.float32).itemsize)
-        d2s = grextras.Datagram2Stream(numpy.dtype(numpy.float32).itemsize)
+        s2d = grextras.Stream2Datagram(numpy.dtype(numpy.int32).itemsize)
+        d2s = grextras.Datagram2Stream(numpy.dtype(numpy.int32).itemsize)
 
         self.tb.connect(src, s2d, to_socket)
         self.tb.connect(from_socket, d2s, dst)

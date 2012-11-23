@@ -33,7 +33,11 @@ GR_SWIG_INSTALL(
 # Install rules
 ########################################################################
 GR_PYTHON_INSTALL(
-    FILES __init__.py
+    FILES
+
+    __init__.py
+    GrExtras_Packet.py
+
     DESTINATION ${GR_PYTHON_DIR}/grextras
     COMPONENT "extras_python"
 )
