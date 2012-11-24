@@ -98,9 +98,7 @@ class PacketFramer(gras.Block):
 
         self.erase_input_tags(0)
 
-        if not len(self._pkts):
-            time.sleep(0.01)
-            return
+        if not len(self._pkts): return
 
         n = min(len(outs[0]), len(self._pkts))
         outs[0][:n] = self._pkts[:n]
@@ -170,23 +168,23 @@ class _queue_to_datagram(gras.Block):
             self._pool.append(Py2PMC(buff))
 
     def work(self, ins, outs):
-        if not self._pool.get():
-            time.sleep(0.01)
-            return
-        print '_queue_to_datagram work'
+        if not self._pool.get(): return
+        #print '_queue_to_datagram work'
         try: msg = self._msgq.delete_head()
         except Exception:
             print 'staph!!'
             return
         ok, payload = packet_utils.unmake_packet(msg.to_string(), int(msg.arg1()))
-        print 'got a msg', ok, len(payload)
+        #print 'got a msg', ok, len(payload)
         if ok:
             payload = numpy.fromstring(payload, numpy.uint8)
 
             #get a reference counted buffer to pass downstream
             p = self._pool.get()
             buff = PMC2Py(p)
-            buff.get()[:len(payload)] = numpy.fromstring(payload, numpy.uint8)
+            buff.offset = 0
+            buff.length = len(payload)
+            buff.get()[:] = numpy.fromstring(payload, numpy.uint8)
 
             self.post_output_tag(0, gras.Tag(0, "datagram", p))
         else:
