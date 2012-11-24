@@ -180,7 +180,7 @@ class _queue_to_datagram(gras.Block):
             payload = numpy.fromstring(payload, numpy.uint8)
 
             #get a reference counted buffer to pass downstream
-            buff = self.get_output_buffer(0)
+            buff = self.pop_output_buffer(0)
             buff.offset = 0
             buff.length = len(payload)
             buff.get()[:] = numpy.fromstring(payload, numpy.uint8)
