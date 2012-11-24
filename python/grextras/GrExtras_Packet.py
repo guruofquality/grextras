@@ -157,36 +157,35 @@ class _queue_to_datagram(gras.Block):
         )
         self._msgq = msgq
 
+        #set the output reserve to the max expected pkt size
+        config = self.get_output_config(0)
+        config.reserve_items = 4096
+        self.set_output_config(0, config)
+
+        self.x = 0
+
         #we are going to block in work on a interruptible call
         self.set_interruptible_work(True)
 
-        self._pool = PMCPool()
-        for i in range(16):
-            config = gras.SBufferConfig()
-            config.length = 4096
-            buff = gras.SBuffer(config)
-            self._pool.append(Py2PMC(buff))
-
     def work(self, ins, outs):
-        if not self._pool.get(): return
         #print '_queue_to_datagram work'
         try: msg = self._msgq.delete_head()
         except Exception:
             print 'staph!!'
             return
         ok, payload = packet_utils.unmake_packet(msg.to_string(), int(msg.arg1()))
-        #print 'got a msg', ok, len(payload)
+        print 'got a msg', self.x, len(payload)
+        self.x +=1
         if ok:
             payload = numpy.fromstring(payload, numpy.uint8)
 
             #get a reference counted buffer to pass downstream
-            p = self._pool.get()
-            buff = PMC2Py(p)
+            buff = self.get_output_buffer(0)
             buff.offset = 0
             buff.length = len(payload)
             buff.get()[:] = numpy.fromstring(payload, numpy.uint8)
 
-            self.post_output_tag(0, gras.Tag(0, "datagram", p))
+            self.post_output_tag(0, gras.Tag(0, "datagram", buff))
         else:
             print 'f',
             self.post_output_tag(0, gras.Tag(0, "fail", None))

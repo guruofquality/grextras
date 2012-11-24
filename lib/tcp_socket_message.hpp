@@ -7,11 +7,12 @@
 struct TCPSocketReceiver : gras::Block
 {
     TCPSocketReceiver(const size_t mtu):
-        gras::Block("GrExtras TCPSocketReceiver"),
-        _mtu(mtu)
+        gras::Block("GrExtras TCPSocketReceiver")
     {
         this->set_output_signature(gras::IOSignature(1));
-        //TODO allocate pool
+        gras::OutputPortConfig config = this->get_output_config(0);
+        config.reserve_items = mtu;
+        this->set_output_config(0, config);
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -19,10 +20,8 @@ struct TCPSocketReceiver : gras::Block
         //wait for a packet to become available
         if (not this->waiter()) return;
 
-        //TODO use pool
-        gras::SBufferConfig config;
-        config.length = _mtu;
-        gras::SBuffer b(config);
+        //grab the output buffer to pass downstream as a tag
+        gras::SBuffer b = this->get_output_buffer(0);
 
         //receive into the buffer
         try
@@ -43,7 +42,6 @@ struct TCPSocketReceiver : gras::Block
         this->post_output_tag(0, t);
     }
 
-    const size_t _mtu;
     boost::shared_ptr<asio::ip::tcp::socket> socket;
     boost::function<bool(void)> waiter;
 };

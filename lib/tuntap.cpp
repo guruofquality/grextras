@@ -126,6 +126,9 @@ struct Filedes2Datagram : gras::Block
     {
         //setup the output for messages only
         this->set_output_signature(gras::IOSignature(1));
+        gras::OutputPortConfig config = this->get_output_config(0);
+        config.reserve_items = 4096; //reasonably high mtu...
+        this->set_output_config(0, config);
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -133,10 +136,8 @@ struct Filedes2Datagram : gras::Block
         //wait for a packet to become available
         if (not this->wait_ready()) return;
 
-        //TODO use pool
-        gras::SBufferConfig config;
-        config.length = 1500;
-        gras::SBuffer b(config);
+        //grab the output buffer to pass downstream as a tag
+        gras::SBuffer b = this->get_output_buffer(0);
 
         //receive into the buffer
         const int result = read(_fd, b.get(), b.get_actual_length());

@@ -7,11 +7,12 @@
 struct UDPSocketReceiver : gras::Block
 {
     UDPSocketReceiver(const size_t mtu):
-        gras::Block("GrExtras UDPSocketReceiver"),
-        _mtu(mtu)
+        gras::Block("GrExtras UDPSocketReceiver")
     {
         this->set_output_signature(gras::IOSignature(1));
-        //TODO allocate pool
+        gras::OutputPortConfig config = this->get_output_config(0);
+        config.reserve_items = mtu;
+        this->set_output_config(0, config);
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -19,10 +20,8 @@ struct UDPSocketReceiver : gras::Block
         //wait for a packet to become available
         if (not this->wait_for_recv_ready()) return;
 
-        //TODO use pool
-        gras::SBufferConfig config;
-        config.length = _mtu;
-        gras::SBuffer b(config);
+        //grab the output buffer to pass downstream as a tag
+        gras::SBuffer b = this->get_output_buffer(0);
 
         //receive into the buffer
         b.length = socket->receive_from(asio::buffer(b.get(), b.get_actual_length()), *endpoint);
@@ -50,7 +49,6 @@ struct UDPSocketReceiver : gras::Block
         return ::select(socket->native()+1, &rset, NULL, NULL, &tv) > 0;
     }
 
-    const size_t _mtu;
     boost::shared_ptr<asio::ip::udp::socket> socket;
     asio::ip::udp::endpoint *endpoint;
 };
