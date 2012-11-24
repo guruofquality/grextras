@@ -4,8 +4,6 @@
 include_directories(${GREXTRAS_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 list(APPEND GREXTRAS_SOURCES
-    delay.cpp
-    stream_selector.cpp
     add.cpp
     add_const.cpp
     add_const_v.cpp
@@ -14,12 +12,20 @@ list(APPEND GREXTRAS_SOURCES
     multiply_const_v.cpp
     subtract.cpp
     divide.cpp
+
     noise_source.cpp
     signal_source.cpp
+
     datagram_to_stream.cpp
     stream_to_datagram.cpp
     socket_message.cpp
     tuntap.cpp
+
+    delay.cpp
+    stream_selector.cpp
+
+    uhd_status_port.cpp
+    uhd_control_port.cpp
 )
 
 ########################################################################

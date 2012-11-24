@@ -1,5 +1,7 @@
 # Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
+import gras
+
 from GrExtras_Misc import *
 from GrExtras_Ops import *
 from GrExtras_Sources import *
@@ -8,7 +10,7 @@ try:
 except ImportError:
     pass
 
-import gras
+from GrExtras_UHDPorts import *
 
 class VectorSource(gras.Block):
     def __init__(self, out_sig, vec, autodone=True):
