@@ -7,8 +7,10 @@
 
 %include <std_complex.i>
 
-%include "grextras_shared_ptr.i"
-%include <gras/block.i>
+namespace boost{template<class T>struct shared_ptr{T*operator->();};}
+
+%include <gras/element.i>
+%import <gras/block.i>
 %include <grextras/config.hpp>
 %include <grextras/signal_source.hpp>
 %include <grextras/noise_source.hpp>

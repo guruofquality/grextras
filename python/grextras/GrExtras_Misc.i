@@ -16,9 +16,11 @@
 %include <std_vector.i>
 %template (std_vector_int) std::vector<int>;
 
-%include "grextras_shared_ptr.i"
-%include <gras/block.i>
-%include <gras/hier_block.i>
+namespace boost{template<class T>struct shared_ptr{T*operator->();};}
+
+%include <gras/element.i>
+%import <gras/block.i>
+%import <gras/hier_block.i>
 %include <grextras/config.hpp>
 %include <grextras/delay.hpp>
 %include <grextras/stream_selector.hpp>

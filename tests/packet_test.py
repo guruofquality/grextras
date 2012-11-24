@@ -16,7 +16,7 @@ class test_packet(unittest.TestCase):
 
     def test_simple_loopback(self):
         framer = grextras.PacketFramer(
-            samples_per_symbol = 1,
+            samples_per_symbol = 2,
             bits_per_symbol = 1,
         )
         deframer = grextras.PacketDeframer()

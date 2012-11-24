@@ -12,9 +12,11 @@
 %include <stdint.i>
 %include <std_complex.i>
 
-%include "grextras_shared_ptr.i"
-%include <gras/block.i>
-%include <gras/hier_block.i>
+namespace boost{template<class T>struct shared_ptr{T*operator->();};}
+
+%include <gras/element.i>
+%import <gras/block.i>
+%import <gras/hier_block.i>
 %include <grextras/config.hpp>
 %include <grextras/add.hpp>
 %include <grextras/add_const.hpp>

@@ -21,6 +21,8 @@
 
 import numpy
 import gras
+import time
+from PMC import *
 from math import pi
 from gnuradio import gr
 from gnuradio.digital import packet_utils
@@ -74,32 +76,37 @@ class PacketFramer(gras.Block):
             raise ValueError, "Invalid access_code %r. Must be string of 1's and 0's" % (access_code,)
         self._access_code = access_code
 
+        self._pkts = numpy.array([], numpy.uint8)
+
     def work(self, ins, outs):
         for t in self.get_input_tags(0):
             if t.key == "datagram" and isinstance(t.value, gras.SBuffer):
-                self.handle_datagram(t.value)
+                pkt = packet_utils.make_packet(
+                    t.value.get().tostring(),
+                    self._samples_per_symbol,
+                    self._bits_per_symbol,
+                    self._access_code,
+                    False, #pad_for_usrp,
+                    self._whitener_offset,
+                )
+                #print 'len buff', t.value.length
+                #print 'len pkt', len(pkt)
+                self._pkts = numpy.append(self._pkts, numpy.fromstring(pkt, numpy.uint8))
+
+                if self._use_whitener_offset:
+                    self._whitener_offset = (self._whitener_offset + 1) % 16
+
         self.erase_input_tags(0)
 
-    def handle_datagram(self, b):
-        pkt = packet_utils.make_packet(
-            b.get().tostring(),
-            self._samples_per_symbol,
-            self._bits_per_symbol,
-            self._access_code,
-            False, #pad_for_usrp,
-            self._whitener_offset,
-        )
+        if not len(self._pkts):
+            time.sleep(0.01)
+            return
 
-        if self._use_whitener_offset:
-            self._whitener_offset = (self._whitener_offset + 1) % 16
-
-        #allocate a reference counted buffer to pass downstream
-        config = gras.SBufferConfig();
-        config.length = len(pkt)
-        buff = gras.SBuffer(config)
-        buff.get()[:] = numpy.fromstring(pkt, numpy.uint8)
-
-        self.post_output_buffer(0, buff)
+        n = min(len(outs[0]), len(self._pkts))
+        outs[0][:n] = self._pkts[:n]
+        self._pkts = self._pkts[n:]
+        self.produce(0, n)
+        #print 'produce', n
 
 class PacketDeframer(gras.HierBlock):
     """
@@ -155,23 +162,33 @@ class _queue_to_datagram(gras.Block):
         #we are going to block in work on a interruptible call
         self.set_interruptible_work(True)
 
+        self._pool = PMCPool()
+        for i in range(16):
+            config = gras.SBufferConfig()
+            config.length = 4096
+            buff = gras.SBuffer(config)
+            self._pool.append(Py2PMC(buff))
+
     def work(self, ins, outs):
+        if not self._pool.get():
+            time.sleep(0.01)
+            return
         print '_queue_to_datagram work'
         try: msg = self._msgq.delete_head()
         except Exception:
             print 'staph!!'
             return
         ok, payload = packet_utils.unmake_packet(msg.to_string(), int(msg.arg1()))
-        print 'got a msg', ok, payload
+        print 'got a msg', ok, len(payload)
         if ok:
             payload = numpy.fromstring(payload, numpy.uint8)
 
-            #allocate a reference counted buffer to pass downstream
-            config = gras.SBufferConfig();
-            config.length = len(pkt)
-            buff = gras.SBuffer(config)
-            buff.get()[:] = numpy.fromstring(payload, numpy.uint8)
+            #get a reference counted buffer to pass downstream
+            p = self._pool.get()
+            buff = PMC2Py(p)
+            buff.get()[:len(payload)] = numpy.fromstring(payload, numpy.uint8)
 
-            self.post_output_tag(0, gras.Tag(0, "datagram", buff))
+            self.post_output_tag(0, gras.Tag(0, "datagram", p))
         else:
+            print 'f',
             self.post_output_tag(0, gras.Tag(0, "fail", None))

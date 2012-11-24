@@ -137,7 +137,6 @@ struct TCPSocketMessage : SocketMessage
         if (type == "TCP_CLIENT")
         {
             std::cout << "Creating TCP client..." << std::endl;
-            this->do_connect = true;
         }
 
         this->connect(*this, 0, _sender, 0);
@@ -148,7 +147,7 @@ struct TCPSocketMessage : SocketMessage
     {
         boost::mutex::scoped_lock l(_mutex);
 
-        if (this->do_connect)
+        if (not _acceptor and not _socket) //must be a client...
         {
             std::cout << "TCP client connecting... " << std::flush;
             _socket.reset(new asio::ip::tcp::socket(_io_service));
@@ -156,7 +155,6 @@ struct TCPSocketMessage : SocketMessage
             std::cout << "done" << std::endl;
             _receiver->socket = _socket;
             _sender->socket = _socket;
-            this->do_connect = false;
         }
 
         //setup timeval for timeout
@@ -202,7 +200,6 @@ struct TCPSocketMessage : SocketMessage
     }
 
     asio::ip::tcp::endpoint _endpoint;
-    bool do_connect;
     boost::mutex _mutex;
     boost::shared_ptr<asio::ip::tcp::acceptor> _acceptor;
     boost::shared_ptr<asio::ip::tcp::socket> _socket;
