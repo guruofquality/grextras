@@ -21,8 +21,9 @@ endif()
 ########################################################################
 # Find GrExtras build dependencies
 ########################################################################
-find_package(GRAS)
-
+if(NOT GRAS_FOUND)
+    find_package(GRAS)
+endif()
 if(NOT GRAS_FOUND)
     message(FATAL_ERROR "GR Advanced Scheduler not found - required for GrExtras")
 endif()
@@ -32,12 +33,16 @@ if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost C++ headers not found - required for GrExtras")
 endif()
 
-find_package(Volk)
+if(NOT VOLK_FOUND)
+    find_package(Volk)
+endif()
 if(NOT VOLK_FOUND)
     message(WARNING "VOLK vector library not found - optional for math blocks")
 endif()
 
-find_package(GnuradioCore)
+if(NOT GNURADIO_CORE_FOUND)
+    find_package(GnuradioCore)
+endif()
 if(NOT GNURADIO_CORE_FOUND)
     message(WARNING "GNU Radio Core library not found - optional for noise source")
 endif()
@@ -50,14 +55,16 @@ endif()
 ########################################################################
 # Create uninstall target
 ########################################################################
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-@ONLY)
+if("${GREXTRAS_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+    @ONLY)
 
-add_custom_target(uninstall
-    ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-)
+    add_custom_target(uninstall
+        ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+    )
+endif()
 
 ########################################################################
 # Add subdirectories

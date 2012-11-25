@@ -24,7 +24,6 @@ class VectorSource(gras.Block):
         self.produce(0, num)
         self._vec = self._vec[num:]
         if not self._vec and self._autodone:
-            print "vector source marks done"
             self.mark_done()
 
 class VectorSink(gras.Block):

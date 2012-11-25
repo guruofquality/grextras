@@ -25,8 +25,12 @@ import time
 from PMC import *
 from math import pi
 from gnuradio import gr
-from gnuradio.digital import packet_utils
-import gnuradio.digital as gr_digital
+try:
+    import digital_swig as gr_digital
+    import packet_utils
+except ImportError:
+    from gnuradio.digital import packet_utils
+    import gnuradio.digital as gr_digital
 
 # /////////////////////////////////////////////////////////////////////////////
 #                   mod/demod with packets as i/o

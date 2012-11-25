@@ -23,7 +23,6 @@ import unittest
 import gras
 import grextras
 import numpy
-from gnuradio import gr
 
 class test_add_and_friends(unittest.TestCase):
 
