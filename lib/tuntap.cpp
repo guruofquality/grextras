@@ -9,7 +9,7 @@
 
 using namespace grextras;
 
-static const PMCC DATAGRAM_KEY = PMC::make(std::string("datagram"));
+static const PMCC DATAGRAM_KEY = PMC::make("datagram");
 
 static const long timeout_us = 100*1000; //100ms
 

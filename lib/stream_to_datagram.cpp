@@ -5,7 +5,7 @@
 
 using namespace grextras;
 
-static const PMCC DATAGRAM_KEY = PMC::make(std::string("datagram"));
+static const PMCC DATAGRAM_KEY = PMC::make("datagram");
 
 struct Stream2DatagramImpl : Stream2Datagram
 {
