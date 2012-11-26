@@ -28,7 +28,9 @@ namespace grextras
 /*!
  * The UHD control port block acts on asynchronous control messages.
  * This block has one input port that accepts messages.
- * TODO: message format
+ * The following commands are supported (more can be added):
+ *
+ * TODO
  */
 struct GREXTRAS_API UHDControlPort : virtual gras::Block
 {

@@ -61,6 +61,21 @@ struct GREXTRAS_API UHDStatusPort : virtual gras::Block
 
     /*!
      * Add to the list of sensors to query.
+     * See the special formatting below for sensor names.
+     * When the formatting with the : is not used,
+     * a motherboard sensor for mboard 0 is assumed.
+     *
+     * For a motherboard sensor use the format:
+     * MB<n>:<name>, where n is the mboard number.
+     * Example: ref_locked on mboard 0: MB0:ref_locked
+     *
+     * For a RX channel sensor use the format:
+     * RX<ch>:<name>, where ch is the channel number.
+     * Example: lo_locked on channel 0: RX0:lo_locked
+     *
+     * For a TX channel sensor use the format:
+     * TX<ch>:<name>, where ch is the channel number.
+     * Example: lo_locked on channel 0: TX0:lo_locked
      */
     virtual void add_sensor(const std::string &name) = 0;
 };

@@ -16,17 +16,51 @@
 //
 
 #include <grextras/uhd_control_port.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/lexical_cast.hpp>
+#include <uhd/usrp/multi_usrp.hpp>
+#include <PMC/Containers.hpp>
 #include <stdexcept>
 
 using namespace grextras;
 
 #ifdef HAVE_UHD
 
-#else //HAVE_UHD
+struct UHDControlPortImpl : public UHDControlPort
+{
+    UHDControlPortImpl(uhd::usrp::multi_usrp::sptr usrp):
+        gras::Block("GrExtras UHDControlPort")
+    {
+        _usrp = usrp;
+        //setup the input for messages only
+        this->set_input_signature(gras::IOSignature(1));
+        gras::InputPortConfig config = this->get_input_config(0);
+        config.reserve_items = 0;
+        this->set_input_config(0, config);
+    }
 
-#endif //HAVE_UHD
+    void work(const InputItems &, const OutputItems &)
+    {
+        BOOST_FOREACH(const gras::Tag &t, this->get_input_tags(0))
+        {
+            //TODO
+        }
+    }
+
+    uhd::usrp::multi_usrp::sptr _usrp;
+};
+
+UHDControlPort::sptr UHDControlPort::make(const std::string &addr)
+{
+    uhd::usrp::multi_usrp::sptr u = uhd::usrp::multi_usrp::make(addr);
+    return boost::make_shared<UHDControlPortImpl>(u);
+}
+
+#else //HAVE_UHD
 
 UHDControlPort::sptr UHDControlPort::make(const std::string &)
 {
     throw std::runtime_error("UHDControlPort::make - GrExtras not build with UHD support");
 }
+
+#endif //HAVE_UHD

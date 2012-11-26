@@ -16,17 +16,110 @@
 //
 
 #include <grextras/uhd_status_port.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/lexical_cast.hpp>
+#include <uhd/usrp/multi_usrp.hpp>
+#include <PMC/Containers.hpp>
 #include <stdexcept>
 
 using namespace grextras;
 
 #ifdef HAVE_UHD
 
-#else //HAVE_UHD
+static const PMC CHANNEL_KEY = PMC::make("channel");
+static const PMC TIMESPEC_KEY = PMC::make("time_spec");
+static const PMC EVENT_CODE_KEY = PMC::make("event_code");
+static const PMC USER_PAYLOAD_KEY = PMC::make("user_payload");
+static const PMC ASYNC_MD_KEY = PMC::make("async_metadata");
+const double MD_TIMEOUT = 1.0; //seconds
 
-#endif //HAVE_UHD
+struct UHDStatusPortImpl : public UHDStatusPort
+{
+    UHDStatusPortImpl(uhd::usrp::multi_usrp::sptr usrp):
+        gras::Block("GrExtras UHDStatusPort")
+    {
+        _usrp = usrp;
+        this->set_output_signature(gras::IOSignature(1));
+    }
+
+    void work(const InputItems &, const OutputItems &)
+    {
+        uhd::async_metadata_t async_md;
+        if (_usrp->get_device()->recv_async_msg(async_md, MD_TIMEOUT))
+        {
+            PMCDict d;
+            d[CHANNEL_KEY] = PMC_(async_md.channel);
+            if (async_md.has_time_spec)
+            {
+                PMCTuple<2> t;
+                t[0] = PMC_(boost::uint64_t(async_md.time_spec.get_full_secs()));
+                t[1] = PMC_(async_md.time_spec.get_frac_secs());
+                d[TIMESPEC_KEY] = PMC_(t);
+            }
+            d[EVENT_CODE_KEY] = PMC_(int(async_md.event_code));
+            const boost::uint32_t *payload = async_md.user_payload;
+            d[USER_PAYLOAD_KEY] = PMC_(std::vector<boost::uint32_t>(payload, payload+4));
+            this->post_output_tag(0, gras::Tag(0, ASYNC_MD_KEY, PMC_(d)));
+        }
+        else //timeout, poll all the sensors
+        {
+            BOOST_FOREACH(const std::string &name, _sensors)
+            {
+                const PMC sensor_value = do_sensor(name);
+                this->post_output_tag(0, gras::Tag(0, PMC_(name), sensor_value));
+            }
+        }
+    }
+
+    PMC do_sensor(const std::string &name)
+    {
+        const size_t pos = name.find(":");
+        if (pos != std::string::npos)
+        {
+            const std::string action = name.substr(0, pos);
+            const std::string what = name.substr(0, 2);
+            const std::string which = name.substr(2, pos-2);
+            const std::string name_only = name.substr(pos+1);
+            const size_t which_num = boost::lexical_cast<size_t>(which);
+            if (what == "MB") return sensor_value_to_pmc(_usrp->get_mboard_sensor(name, which_num));
+            if (what == "RX") return sensor_value_to_pmc(_usrp->get_rx_sensor(name, which_num));
+            if (what == "TX") return sensor_value_to_pmc(_usrp->get_tx_sensor(name, which_num));
+        }
+        return sensor_value_to_pmc(_usrp->get_mboard_sensor(name));
+    }
+
+    PMC sensor_value_to_pmc(const uhd::sensor_value_t &s)
+    {
+        switch(s.type)
+        {
+        case uhd::sensor_value_t::BOOLEAN: return PMC_(s.to_bool());
+        case uhd::sensor_value_t::INTEGER: return PMC_(s.to_int());
+        case uhd::sensor_value_t::REALNUM: return PMC_(s.to_real());
+        case uhd::sensor_value_t::STRING:  return PMC_(s.value);
+        }
+        return PMC_(s.value);
+    }
+
+    void add_sensor(const std::string &name)
+    {
+        _sensors.push_back(name);
+    }
+
+    uhd::usrp::multi_usrp::sptr _usrp;
+    std::vector<std::string> _sensors;
+};
+
+UHDStatusPort::sptr UHDStatusPort::make(const std::string &addr)
+{
+    uhd::usrp::multi_usrp::sptr u = uhd::usrp::multi_usrp::make(addr);
+    return boost::make_shared<UHDStatusPortImpl>(u);
+}
+
+#else //HAVE_UHD
 
 UHDStatusPort::sptr UHDStatusPort::make(const std::string &)
 {
     throw std::runtime_error("UHDStatusPort::make - GrExtras not build with UHD support");
 }
+
+#endif //HAVE_UHD
