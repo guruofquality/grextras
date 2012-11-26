@@ -18,13 +18,14 @@
 #include <grextras/uhd_status_port.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/lexical_cast.hpp>
-#include <uhd/usrp/multi_usrp.hpp>
 #include <PMC/Containers.hpp>
 #include <stdexcept>
 
 using namespace grextras;
 
 #ifdef HAVE_UHD
+
+#include <uhd/usrp/multi_usrp.hpp>
 
 static const PMC CHANNEL_KEY = PMC::make("channel");
 static const PMC TIMESPEC_KEY = PMC::make("time_spec");

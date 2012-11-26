@@ -18,13 +18,14 @@
 #include <grextras/uhd_control_port.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/lexical_cast.hpp>
-#include <uhd/usrp/multi_usrp.hpp>
 #include <PMC/Containers.hpp>
 #include <stdexcept>
 
 using namespace grextras;
 
 #ifdef HAVE_UHD
+
+#include <uhd/usrp/multi_usrp.hpp>
 
 struct UHDControlPortImpl : public UHDControlPort
 {

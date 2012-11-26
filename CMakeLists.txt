@@ -18,10 +18,16 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-fvisibility-inlines-hidden)
 endif()
 
+if(MSVC)
+    add_definitions(-D_WIN32_WINNT=0x0501) #minimum version required is windows xp
+    add_definitions(-DNOMINMAX) #disables stupidity and enables std::min and std::max
+    add_definitions(-DBOOST_ALL_DYN_LINK) #setup boost auto-linking in msvc
+endif(MSVC)
+
 ########################################################################
 # Find GrExtras build dependencies
 ########################################################################
-if(NOT GRAS_FOUND)
+if(NOT DEFINED GRAS_FOUND)
     find_package(GRAS)
 endif()
 if(NOT GRAS_FOUND)
@@ -33,14 +39,14 @@ if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost C++ headers not found - required for GrExtras")
 endif()
 
-if(NOT VOLK_FOUND)
+if(NOT DEFINED VOLK_FOUND)
     find_package(Volk)
 endif()
 if(NOT VOLK_FOUND)
     message(WARNING "VOLK vector library not found - optional for math blocks")
 endif()
 
-if(NOT GNURADIO_CORE_FOUND)
+if(NOT DEFINED GNURADIO_CORE_FOUND)
     find_package(GnuradioCore)
 endif()
 if(NOT GNURADIO_CORE_FOUND)

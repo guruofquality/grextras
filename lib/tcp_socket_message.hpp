@@ -167,12 +167,12 @@ struct TCPSocketMessage : SocketMessage
         if (_acceptor)
         {
             FD_SET(_acceptor->native(), &rset);
-            max_sock_fd = std::max(max_sock_fd, _acceptor->native());
+            max_sock_fd = std::max<int>(max_sock_fd, _acceptor->native());
         }
         if (_socket)
         {
             FD_SET(_socket->native(), &rset);
-            max_sock_fd = std::max(max_sock_fd, _socket->native());
+            max_sock_fd = std::max<int>(max_sock_fd, _socket->native());
         }
 
         //call select with timeout on receive socket

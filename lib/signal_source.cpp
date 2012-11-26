@@ -93,7 +93,7 @@ struct SignalSourceImpl : public SignalSource
         else if (_wave == "COSINE")
         {
             for (size_t i = 0; i < _table.size(); i++){
-                this->set_elem(i, std::pow(M_E, std::complex<double>(0, M_PI*2*i/_table.size())));
+                this->set_elem(i, std::pow(2.718281828459, std::complex<double>(0, 6.28318530718*i/_table.size())));
             }
         }
         else if (_wave == "RAMP")
