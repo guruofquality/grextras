@@ -29,6 +29,13 @@ list(APPEND GREXTRAS_SOURCES
 )
 
 ########################################################################
+# Setup PMC
+########################################################################
+include_directories(${PMC_INCLUDE_DIRS})
+link_directories(${PMC_LIBRARY_DIRS})
+list(APPEND GREXTRAS_LIBRARIES ${PMC_LIBRARIES})
+
+########################################################################
 # Setup GRAS
 ########################################################################
 include_directories(${GRAS_INCLUDE_DIRS})

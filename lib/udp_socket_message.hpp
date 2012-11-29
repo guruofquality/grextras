@@ -27,7 +27,7 @@ struct UDPSocketReceiver : gras::Block
         b.length = socket->receive_from(asio::buffer(b.get(), b.get_actual_length()), *endpoint);
 
         //create a tag for this buffer
-        const gras::Tag t(0, DATAGRAM_KEY, PMC::make(b));
+        const gras::Tag t(0, DATAGRAM_KEY, PMC_M(b));
 
         //post the output tag downstream
         this->post_output_tag(0, t);

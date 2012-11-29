@@ -15,7 +15,7 @@ using namespace grextras;
 
 static asio::io_service _io_service;
 
-static const PMCC DATAGRAM_KEY = PMC::make("datagram");
+static const PMCC DATAGRAM_KEY = PMC_M("datagram");
 
 static const long timeout_us = 10*1000; //10ms
 

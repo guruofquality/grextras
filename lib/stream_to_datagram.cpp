@@ -5,7 +5,7 @@
 
 using namespace grextras;
 
-static const PMCC DATAGRAM_KEY = PMC::make("datagram");
+static const PMCC DATAGRAM_KEY = PMC_M("datagram");
 
 struct Stream2DatagramImpl : Stream2Datagram
 {
@@ -29,7 +29,7 @@ struct Stream2DatagramImpl : Stream2Datagram
         if (_mtu) b.length = std::min(b.length, _mtu);
 
         //create a tag for this buffer
-        const gras::Tag t(0, DATAGRAM_KEY, PMC::make(b));
+        const gras::Tag t(0, DATAGRAM_KEY, PMC_M(b));
 
         //post the output tag downstream
         this->post_output_tag(0, t);

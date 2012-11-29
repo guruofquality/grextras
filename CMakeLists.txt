@@ -34,6 +34,13 @@ if(NOT GRAS_FOUND)
     message(FATAL_ERROR "GR Advanced Scheduler not found - required for GrExtras")
 endif()
 
+if(NOT DEFINED PMC_FOUND)
+    find_package(PMC)
+endif()
+if(NOT PMC_FOUND)
+    message(FATAL_ERROR "Polymorphic container library not found - required for GrExtras")
+endif()
+
 find_package(Boost)
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost C++ headers not found - required for GrExtras")

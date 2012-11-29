@@ -9,7 +9,7 @@
 
 using namespace grextras;
 
-static const PMCC DATAGRAM_KEY = PMC::make("datagram");
+static const PMCC DATAGRAM_KEY = PMC_M("datagram");
 
 static const long timeout_us = 100*1000; //100ms
 
@@ -148,7 +148,7 @@ struct Filedes2Datagram : gras::Block
         }
 
         //create a tag for this buffer
-        const gras::Tag t(0, DATAGRAM_KEY, PMC::make(b));
+        const gras::Tag t(0, DATAGRAM_KEY, PMC_M(b));
 
         //post the output tag downstream
         this->post_output_tag(0, t);

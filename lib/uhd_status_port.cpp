@@ -27,11 +27,11 @@ using namespace grextras;
 
 #include <uhd/usrp/multi_usrp.hpp>
 
-static const PMC CHANNEL_KEY = PMC::make("channel");
-static const PMC TIMESPEC_KEY = PMC::make("time_spec");
-static const PMC EVENT_CODE_KEY = PMC::make("event_code");
-static const PMC USER_PAYLOAD_KEY = PMC::make("user_payload");
-static const PMC ASYNC_MD_KEY = PMC::make("async_metadata");
+static const PMCC CHANNEL_KEY = PMC_M("channel");
+static const PMCC TIMESPEC_KEY = PMC_M("time_spec");
+static const PMCC EVENT_CODE_KEY = PMC_M("event_code");
+static const PMCC USER_PAYLOAD_KEY = PMC_M("user_payload");
+static const PMCC ASYNC_MD_KEY = PMC_M("async_metadata");
 const double MD_TIMEOUT = 1.0; //seconds
 
 struct UHDStatusPortImpl : public UHDStatusPort
@@ -49,25 +49,25 @@ struct UHDStatusPortImpl : public UHDStatusPort
         if (_usrp->get_device()->recv_async_msg(async_md, MD_TIMEOUT))
         {
             PMCDict d;
-            d[CHANNEL_KEY] = PMC_(async_md.channel);
+            d[CHANNEL_KEY] = PMC_M(async_md.channel);
             if (async_md.has_time_spec)
             {
                 PMCTuple<2> t;
-                t[0] = PMC_(boost::uint64_t(async_md.time_spec.get_full_secs()));
-                t[1] = PMC_(async_md.time_spec.get_frac_secs());
-                d[TIMESPEC_KEY] = PMC_(t);
+                t[0] = PMC_M(boost::uint64_t(async_md.time_spec.get_full_secs()));
+                t[1] = PMC_M(async_md.time_spec.get_frac_secs());
+                d[TIMESPEC_KEY] = PMC_M(t);
             }
-            d[EVENT_CODE_KEY] = PMC_(int(async_md.event_code));
+            d[EVENT_CODE_KEY] = PMC_M(int(async_md.event_code));
             const boost::uint32_t *payload = async_md.user_payload;
-            d[USER_PAYLOAD_KEY] = PMC_(std::vector<boost::uint32_t>(payload, payload+4));
-            this->post_output_tag(0, gras::Tag(0, ASYNC_MD_KEY, PMC_(d)));
+            d[USER_PAYLOAD_KEY] = PMC_M(std::vector<boost::uint32_t>(payload, payload+4));
+            this->post_output_tag(0, gras::Tag(0, ASYNC_MD_KEY, PMC_M(d)));
         }
         else //timeout, poll all the sensors
         {
             BOOST_FOREACH(const std::string &name, _sensors)
             {
                 const PMC sensor_value = do_sensor(name);
-                this->post_output_tag(0, gras::Tag(0, PMC_(name), sensor_value));
+                this->post_output_tag(0, gras::Tag(0, PMC_M(name), sensor_value));
             }
         }
     }
@@ -93,12 +93,12 @@ struct UHDStatusPortImpl : public UHDStatusPort
     {
         switch(s.type)
         {
-        case uhd::sensor_value_t::BOOLEAN: return PMC_(s.to_bool());
-        case uhd::sensor_value_t::INTEGER: return PMC_(s.to_int());
-        case uhd::sensor_value_t::REALNUM: return PMC_(s.to_real());
-        case uhd::sensor_value_t::STRING:  return PMC_(s.value);
+        case uhd::sensor_value_t::BOOLEAN: return PMC_M(s.to_bool());
+        case uhd::sensor_value_t::INTEGER: return PMC_M(s.to_int());
+        case uhd::sensor_value_t::REALNUM: return PMC_M(s.to_real());
+        case uhd::sensor_value_t::STRING:  return PMC_M(s.value);
         }
-        return PMC_(s.value);
+        return PMC_M(s.value);
     }
 
     void add_sensor(const std::string &name)
