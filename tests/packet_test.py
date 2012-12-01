@@ -34,7 +34,7 @@ class test_packet(unittest.TestCase):
         self.tb.connect(src, s2d, framer, unpack, deframer, d2s, dst)
 
         self.tb.start()
-        time.sleep(0.1)
+        time.sleep(1.0)
         self.tb.stop()
         self.tb.wait()
         self.tb.disconnect_all()
