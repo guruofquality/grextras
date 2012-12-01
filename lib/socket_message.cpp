@@ -2,7 +2,6 @@
 
 #include <grextras/socket_message.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/foreach.hpp>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread/mutex.hpp>

@@ -83,24 +83,32 @@ class PacketFramer(gras.Block):
         self._pkts = numpy.array([], numpy.uint8)
 
     def work(self, ins, outs):
-        for t in self.get_input_tags(0):
-            if t.key == "datagram" and isinstance(t.value, gras.SBuffer):
-                pkt = packet_utils.make_packet(
-                    t.value.get().tostring(),
-                    self._samples_per_symbol,
-                    self._bits_per_symbol,
-                    self._access_code,
-                    False, #pad_for_usrp,
-                    self._whitener_offset,
-                )
-                #print 'len buff', t.value.length
-                #print 'len pkt', len(pkt)
-                self._pkts = numpy.append(self._pkts, numpy.fromstring(pkt, numpy.uint8))
+        self.consume(0, len(ins[0]))
+        print 'pop msg'
+        msg = self.pop_input_msg(0)
+        if msg.key == "datagram":
+            #if not msg.key: return
+            #if msg.key != "datagram": return
+            #if not isinstance(msg.value, gras.SBuffer): return
+            print 'msg.value.use_count()', msg.value.use_count()
+            print 'msg.value.offset', msg.value.offset
+            print 'msg.value.length', msg.value.length
+            print 'packet_utils go'
+            pkt = packet_utils.make_packet(
+                msg.value.get().tostring(),
+                self._samples_per_symbol,
+                self._bits_per_symbol,
+                self._access_code,
+                False, #pad_for_usrp,
+                self._whitener_offset,
+            )
+            print 'packet_utils done'
+            #print 'len buff', t.value.length
+            #print 'len pkt', len(pkt)
+            self._pkts = numpy.append(self._pkts, numpy.fromstring(pkt, numpy.uint8))
 
-                if self._use_whitener_offset:
-                    self._whitener_offset = (self._whitener_offset + 1) % 16
-
-        self.erase_input_tags(0)
+            if self._use_whitener_offset:
+                self._whitener_offset = (self._whitener_offset + 1) % 16
 
         if not len(self._pkts): return
 

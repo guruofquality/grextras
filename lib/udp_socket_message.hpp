@@ -70,21 +70,16 @@ struct UDPSocketSender : gras::Block
 
     void work(const InputItems &ins, const OutputItems &)
     {
-        //iterate through all input tags, and post
-        BOOST_FOREACH(const gras::Tag &t, this->get_input_tags(0))
-        {
-            if (t.key == DATAGRAM_KEY and t.value.is<gras::SBuffer>())
-            {
-                const gras::SBuffer &b = t.value.as<gras::SBuffer>();
-                socket->send_to(asio::buffer(b.get(), b.length), *endpoint);
-            }
-        }
+        this->consume(0, ins[0].size()); //consume unwanted input
 
-        //erase all input tags from block
-        this->erase_input_tags(0);
+        //read the input message, and check it
+        const gras::Tag msg = this->pop_input_msg(0);
+        if (msg.key != DATAGRAM_KEY) return;
+        if (not msg.value.is<gras::SBuffer>()) return;
 
-        //there should be no input items, consume all just in-case
-        if (ins[0].size()) this->consume(0, ins[0].size());
+        //write the buffer into the socket
+        const gras::SBuffer &b = msg.value.as<gras::SBuffer>();
+        socket->send_to(asio::buffer(b.get(), b.length), *endpoint);
     }
 
     boost::shared_ptr<asio::ip::udp::socket> socket;

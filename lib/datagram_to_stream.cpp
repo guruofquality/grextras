@@ -2,7 +2,6 @@
 
 #include <grextras/datagram_to_stream.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/foreach.hpp>
 
 using namespace grextras;
 
@@ -25,24 +24,18 @@ struct Datagram2StreamImpl : Datagram2Stream
 
     void work(const InputItems &ins, const OutputItems &)
     {
-        //iterate through all input tags, and post
-        BOOST_FOREACH(const gras::Tag &t, this->get_input_tags(0))
+        this->consume(0, ins[0].size()); //consume unwanted input
+
+        //read the input message, and post
+        const gras::Tag msg = this->pop_input_msg(0);
+        if (msg.key == DATAGRAM_KEY and msg.value.is<gras::SBuffer>())
         {
-            if (t.key == DATAGRAM_KEY and t.value.is<gras::SBuffer>())
-            {
-                this->post_output_buffer(0, t.value.as<gras::SBuffer>());
-            }
-            else
-            {
-                this->post_output_tag(0, t); //not a buffer! post as inline tag
-            }
+            this->post_output_buffer(0, msg.value.as<gras::SBuffer>());
         }
-
-        //erase all input tags from block
-        this->erase_input_tags(0);
-
-        //there should be no input items, consume all just in-case
-        if (ins[0].size()) this->consume(0, ins[0].size());
+        else
+        {
+            this->post_output_tag(0, msg); //not a buffer! post as inline tag
+        }
     }
 };
 
