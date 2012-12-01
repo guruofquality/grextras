@@ -2,7 +2,6 @@
 
 #include <grextras/tuntap.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/foreach.hpp>
 #include <gras/block.hpp>
 #include <stdexcept>
 #include <iostream>
@@ -89,24 +88,15 @@ struct Datagram2Filedes : gras::Block
 
     void work(const InputItems &ins, const OutputItems &)
     {
-        //iterate through all input tags, and post
-        BOOST_FOREACH(const gras::Tag &t, this->get_input_tags(0))
-        {
-            if (t.key == DATAGRAM_KEY and t.value.is<gras::SBuffer>())
-            {
-                this->write_to_fd(t.value.as<gras::SBuffer>());
-            }
-        }
+        this->consume(0, ins[0].size()); //consume unwanted input
 
-        //erase all input tags from block
-        this->erase_input_tags(0);
+        //read the input message, and check it
+        const gras::Tag msg = this->pop_input_msg(0);
+        if (msg.key != DATAGRAM_KEY) return;
+        if (not msg.value.is<gras::SBuffer>()) return;
 
-        //there should be no input items, consume all just in-case
-        if (ins[0].size()) this->consume(0, ins[0].size());
-    }
-
-    void write_to_fd(const gras::SBuffer &b)
-    {
+        //write the buffer into the file descriptor
+        const gras::SBuffer &b = msg.value.as<gras::SBuffer>();
         const int result = write(_fd, b.get(), b.length);
         //std::cout << "wrote " << result << std::endl;
         if (result <= 0) std::cerr << "fildes -> write error " << result << std::endl;

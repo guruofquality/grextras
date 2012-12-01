@@ -67,12 +67,18 @@ class PacketFramer(gras.Block):
             out_sig = [numpy.uint8],
         )
 
-        self._use_whitener_offset = use_whitener_offset
-        self._whitener_offset = 0
-
+        #setup input config for messages
         config = self.get_input_config(0)
         config.reserve_items = 0
         self.set_input_config(0, config)
+
+        #setup output config for max packet MTU
+        config = self.get_output_config(0)
+        config.reserve_items = 4096 #max pkt frame possible
+        self.set_output_config(0, config)
+
+        self._use_whitener_offset = use_whitener_offset
+        self._whitener_offset = 0
 
         if not access_code:
             access_code = packet_utils.default_access_code
@@ -80,35 +86,36 @@ class PacketFramer(gras.Block):
             raise ValueError, "Invalid access_code %r. Must be string of 1's and 0's" % (access_code,)
         self._access_code = access_code
 
-        self._pkts = numpy.array([], numpy.uint8)
-
     def work(self, ins, outs):
-        for t in self.get_input_tags(0):
-            if t.key == "datagram" and isinstance(t.value, gras.SBuffer):
-                pkt = packet_utils.make_packet(
-                    t.value.get().tostring(),
-                    self._samples_per_symbol,
-                    self._bits_per_symbol,
-                    self._access_code,
-                    False, #pad_for_usrp,
-                    self._whitener_offset,
-                )
-                #print 'len buff', t.value.length
-                #print 'len pkt', len(pkt)
-                self._pkts = numpy.append(self._pkts, numpy.fromstring(pkt, numpy.uint8))
+        self.consume(0, len(ins[0]))
+        print 'pop msg'
+        msg = self.pop_input_msg(0)
+        if not msg.key: return
+        if msg.key != "datagram": return
+        if not isinstance(msg.value, gras.SBuffer): return
+        print 'msg.value.use_count()', msg.value.use_count()
+        print 'msg.value.offset', msg.value.offset
+        print 'msg.value.length', msg.value.length
+        print 'packet_utils go'
+        pkt = packet_utils.make_packet(
+            msg.value.get().tostring(),
+            self._samples_per_symbol,
+            self._bits_per_symbol,
+            self._access_code,
+            False, #pad_for_usrp,
+            self._whitener_offset,
+        )
+        print 'packet_utils done'
+        #print 'len buff', t.value.length
+        #print 'len pkt', len(pkt)
 
-                if self._use_whitener_offset:
-                    self._whitener_offset = (self._whitener_offset + 1) % 16
+        if self._use_whitener_offset:
+            self._whitener_offset = (self._whitener_offset + 1) % 16
 
-        self.erase_input_tags(0)
-
-        if not len(self._pkts): return
-
-        n = min(len(outs[0]), len(self._pkts))
-        outs[0][:n] = self._pkts[:n]
-        self._pkts = self._pkts[n:]
-        self.produce(0, n)
-        #print 'produce', n
+        assert len(outs[0]) >= len(pkt)
+        outs[0][:len(pkt)] = numpy.fromstring(pkt, numpy.uint8)
+        self.produce(0, len(pkt))
+        #print 'produce', len(pkt)
 
 class PacketDeframer(gras.HierBlock):
     """

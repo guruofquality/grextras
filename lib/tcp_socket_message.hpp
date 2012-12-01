@@ -63,26 +63,17 @@ struct TCPSocketSender : gras::Block
 
     void work(const InputItems &ins, const OutputItems &)
     {
+        this->consume(0, ins[0].size()); //consume unwanted input
+
         if (not socket) this->waiter();
 
-        //iterate through all input tags, and post
-        BOOST_FOREACH(const gras::Tag &t, this->get_input_tags(0))
-        {
-            if (t.key == DATAGRAM_KEY and t.value.is<gras::SBuffer>())
-            {
-                this->send(t.value.as<gras::SBuffer>());
-            }
-        }
+        //read the input message, and check it
+        const gras::Tag msg = this->pop_input_msg(0);
+        if (msg.key != DATAGRAM_KEY) return;
+        if (not msg.value.is<gras::SBuffer>()) return;
 
-        //erase all input tags from block
-        this->erase_input_tags(0);
-
-        //there should be no input items, consume all just in-case
-        if (ins[0].size()) this->consume(0, ins[0].size());
-    }
-
-    void send(const gras::SBuffer &b)
-    {
+        //write the buffer into the socket
+        const gras::SBuffer &b = msg.value.as<gras::SBuffer>();
         if (not socket)
         {
             std::cerr << "sD" << std::flush;
