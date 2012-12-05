@@ -31,16 +31,17 @@ namespace grextras
  * The format of the messages is independent from UHD types.
  * The following information is provided by a message:
  * 
- * The key = "async_metadata".
  * This is a USRP message read from recv_async_msg().
- * The value will be a PMCDict where the key-values are:
+ * The message will be a PMCDict where the key-values are:
  *  - "channel" : size_t
  *  - "time_spec" : PMCTuple(uint64, double)
  *  - "event_code" : int
  *  - "user_payload" : std::vector<uint32_t>
  * Note: time_spec will not be present if have_time_spec == False
- * 
- * The key = <name of a sensor>
+ *
+ * The message will be a PMCTuple<2>
+ * The element0 = <name of a sensor>
+ * The element1 = <value of a sensor>
  * These values are polled from get_sensor().
  * The value can be a string, bool, signed, or double.
  * This block will not automatically poll the sensors.

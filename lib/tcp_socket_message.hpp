@@ -35,11 +35,11 @@ struct TCPSocketReceiver : gras::Block
             return;
         }
 
-        //create a tag for this buffer
-        const gras::Tag t(0, DATAGRAM_KEY, PMC_M(b));
+        //create a message for this buffer
+        const gras::PacketMsg msg(b);
 
-        //post the output tag downstream
-        this->post_output_tag(0, t);
+        //post the output message downstream
+        this->post_output_msg(0, PMC_M(msg));
     }
 
     boost::shared_ptr<asio::ip::tcp::socket> socket;
@@ -63,17 +63,14 @@ struct TCPSocketSender : gras::Block
 
     void work(const InputItems &ins, const OutputItems &)
     {
-        this->consume(0, ins[0].size()); //consume unwanted input
-
         if (not socket) this->waiter();
 
         //read the input message, and check it
-        const gras::Tag msg = this->pop_input_msg(0);
-        if (msg.key != DATAGRAM_KEY) return;
-        if (not msg.value.is<gras::SBuffer>()) return;
+        const PMCC msg = this->pop_input_msg(0);
+        if (not msg.is<gras::PacketMsg>()) return;
 
         //write the buffer into the socket
-        const gras::SBuffer &b = msg.value.as<gras::SBuffer>();
+        const gras::SBuffer &b = msg.as<gras::PacketMsg>().buff;
         if (not socket)
         {
             std::cerr << "sD" << std::flush;

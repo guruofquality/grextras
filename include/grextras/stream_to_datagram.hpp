@@ -15,9 +15,7 @@ namespace grextras
  * The input port is a stream of items.
  * The output port is a message port.
  *
- * Each outgoing message is a tag where
- *  - key is set to "datagram"
- *  - the value is a gras::SBuffer
+ * Each outgoing message is a gras::PacketMsg
  *
  * For each call of work(), the default behaviour is to post 
  * the entire input buffer as the value of the output tag.

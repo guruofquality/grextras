@@ -23,15 +23,11 @@ namespace grextras
  * https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_over_wireless_networks
  *
  * The input port is a message port.
- * Each incoming message is a tag where
- *  - key is set to "datagram"
- *  - the value is a gras::SBuffer
+ * Each incoming message is a gras::PacketMsg
  * Other Input messages are dropped.
  *
  * The output port is a message port.
- * Each outgoing message is a tag where
- *  - key is set to "datagram"
- *  - the value is a gras::SBuffer
+ * Each outgoing message is a gras::PacketMsg
  */
 struct GREXTRAS_API TunTap : virtual gras::HierBlock
 {

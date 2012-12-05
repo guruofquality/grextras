@@ -31,7 +31,6 @@ static const PMCC CHANNEL_KEY = PMC_M("channel");
 static const PMCC TIMESPEC_KEY = PMC_M("time_spec");
 static const PMCC EVENT_CODE_KEY = PMC_M("event_code");
 static const PMCC USER_PAYLOAD_KEY = PMC_M("user_payload");
-static const PMCC ASYNC_MD_KEY = PMC_M("async_metadata");
 const double MD_TIMEOUT = 1.0; //seconds
 
 struct UHDStatusPortImpl : public UHDStatusPort
@@ -60,14 +59,17 @@ struct UHDStatusPortImpl : public UHDStatusPort
             d[EVENT_CODE_KEY] = PMC_M(int(async_md.event_code));
             const boost::uint32_t *payload = async_md.user_payload;
             d[USER_PAYLOAD_KEY] = PMC_M(std::vector<boost::uint32_t>(payload, payload+4));
-            this->post_output_tag(0, gras::Tag(0, ASYNC_MD_KEY, PMC_M(d)));
+            this->post_output_msg(0, PMC_M(d));
         }
         else //timeout, poll all the sensors
         {
             BOOST_FOREACH(const std::string &name, _sensors)
             {
                 const PMC sensor_value = do_sensor(name);
-                this->post_output_tag(0, gras::Tag(0, PMC_M(name), sensor_value));
+                PMCTuple<2> t;
+                t[0] = PMC_M(name);
+                t[1] = sensor_value;
+                this->post_output_msg(0, PMC_M(t));
             }
         }
     }

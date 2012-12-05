@@ -88,24 +88,18 @@ class PacketFramer(gras.Block):
 
     def work(self, ins, outs):
         self.consume(0, len(ins[0]))
-        print 'pop msg'
         msg = self.pop_input_msg(0)
-        if not msg.key: return
-        if msg.key != "datagram": return
-        if not isinstance(msg.value, gras.SBuffer): return
-        print 'msg.value.use_count()', msg.value.use_count()
-        print 'msg.value.offset', msg.value.offset
-        print 'msg.value.length', msg.value.length
-        print 'packet_utils go'
+        msg = PMC2Py(msg)
+        print 'pop msg', msg, type(msg)
+        if not isinstance(msg, gras.PacketMsg): return
         pkt = packet_utils.make_packet(
-            msg.value.get().tostring(),
+            msg.buff.get().tostring(),
             self._samples_per_symbol,
             self._bits_per_symbol,
             self._access_code,
             False, #pad_for_usrp,
             self._whitener_offset,
         )
-        print 'packet_utils done'
         #print 'len buff', t.value.length
         #print 'len pkt', len(pkt)
 
@@ -196,7 +190,7 @@ class _queue_to_datagram(gras.Block):
             buff.length = len(payload)
             buff.get()[:] = numpy.fromstring(payload, numpy.uint8)
 
-            self.post_output_tag(0, gras.Tag(0, "datagram", buff))
+            self.post_output_msg(0, Py2PMC(gras.PacketMsg(buff)))
         else:
             print 'f',
-            self.post_output_tag(0, gras.Tag(0, "fail", None))
+            self.post_output_tag(0, Py2PMC(gras.PacketMsg()))

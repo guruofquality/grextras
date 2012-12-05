@@ -5,8 +5,6 @@
 
 using namespace grextras;
 
-static const PMCC DATAGRAM_KEY = PMC_M("datagram");
-
 struct Datagram2StreamImpl : Datagram2Stream
 {
     Datagram2StreamImpl(const size_t itemsize):
@@ -24,18 +22,10 @@ struct Datagram2StreamImpl : Datagram2Stream
 
     void work(const InputItems &ins, const OutputItems &)
     {
-        this->consume(0, ins[0].size()); //consume unwanted input
-
         //read the input message, and post
-        const gras::Tag msg = this->pop_input_msg(0);
-        if (msg.key == DATAGRAM_KEY and msg.value.is<gras::SBuffer>())
-        {
-            this->post_output_buffer(0, msg.value.as<gras::SBuffer>());
-        }
-        else
-        {
-            this->post_output_tag(0, msg); //not a buffer! post as inline tag
-        }
+        const PMCC msg = this->pop_input_msg(0);
+        if (not msg.is<gras::PacketMsg>()) return;
+        this->post_output_buffer(0, msg.as<gras::PacketMsg>().buff);
     }
 };
 

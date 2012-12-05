@@ -18,15 +18,11 @@ namespace grextras
  * The socket can be a UDP/TCP client/server.
  *
  * The input port is a message port.
- * Each incoming message is a tag where
- *  - key is set to "datagram"
- *  - the value is a gras::SBuffer
+ * Each incoming message is a gras::PacketMsg
  * Other Input messages are dropped.
  *
  * The output port is a message port.
- * Each outgoing message is a tag where
- *  - key is set to "datagram"
- *  - the value is a gras::SBuffer
+ * Each outgoing message is a gras::PacketMsg
  *
  * The following socket types are supported:
  *

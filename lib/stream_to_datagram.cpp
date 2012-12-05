@@ -5,8 +5,6 @@
 
 using namespace grextras;
 
-static const PMCC DATAGRAM_KEY = PMC_M("datagram");
-
 struct Stream2DatagramImpl : Stream2Datagram
 {
     Stream2DatagramImpl(const size_t itemsize, const size_t mtu):
@@ -28,11 +26,11 @@ struct Stream2DatagramImpl : Stream2Datagram
         //clip the buffer length to the mtu
         if (_mtu) b.length = std::min(b.length, _mtu);
 
-        //create a tag for this buffer
-        const gras::Tag t(0, DATAGRAM_KEY, PMC_M(b));
+        //create a message for this buffer
+        const gras::PacketMsg msg(b);
 
-        //post the output tag downstream
-        this->post_output_tag(0, t);
+        //post the output message downstream
+        this->post_output_msg(0, PMC_M(msg));
 
         //consume the number of items in b
         this->consume(0, b.length/this->input_signature()[0]);

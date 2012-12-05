@@ -8,8 +8,6 @@
 
 using namespace grextras;
 
-static const PMCC DATAGRAM_KEY = PMC_M("datagram");
-
 static const long timeout_us = 100*1000; //100ms
 
 #if defined(linux) || defined(__linux) || defined(__linux__)
@@ -88,15 +86,12 @@ struct Datagram2Filedes : gras::Block
 
     void work(const InputItems &ins, const OutputItems &)
     {
-        this->consume(0, ins[0].size()); //consume unwanted input
-
         //read the input message, and check it
-        const gras::Tag msg = this->pop_input_msg(0);
-        if (msg.key != DATAGRAM_KEY) return;
-        if (not msg.value.is<gras::SBuffer>()) return;
+        const PMCC msg = this->pop_input_msg(0);
+        if (not msg.is<gras::PacketMsg>()) return;
 
         //write the buffer into the file descriptor
-        const gras::SBuffer &b = msg.value.as<gras::SBuffer>();
+        const gras::SBuffer &b = msg.as<gras::PacketMsg>().buff;
         const int result = write(_fd, b.get(), b.length);
         //std::cout << "wrote " << result << std::endl;
         if (result <= 0) std::cerr << "fildes -> write error " << result << std::endl;
@@ -106,7 +101,7 @@ struct Datagram2Filedes : gras::Block
 };
 
 /***********************************************************************
- * Read from fd and post to downstream tag
+ * Read from fd and post to downstream port
  **********************************************************************/
 struct Filedes2Datagram : gras::Block
 {
@@ -126,7 +121,7 @@ struct Filedes2Datagram : gras::Block
         //wait for a packet to become available
         if (not this->wait_ready()) return;
 
-        //grab the output buffer to pass downstream as a tag
+        //grab the output buffer to pass downstream as a msg
         gras::SBuffer b = this->pop_output_buffer(0);
 
         //receive into the buffer
@@ -137,11 +132,11 @@ struct Filedes2Datagram : gras::Block
             return;
         }
 
-        //create a tag for this buffer
-        const gras::Tag t(0, DATAGRAM_KEY, PMC_M(b));
+        //create a message for this buffer
+        const gras::PacketMsg msg(b);
 
-        //post the output tag downstream
-        this->post_output_tag(0, t);
+        //post the output message downstream
+        this->post_output_msg(0, PMC_M(msg));
     }
 
     bool wait_ready(void)
