@@ -88,8 +88,7 @@ class PacketFramer(gras.Block):
 
     def work(self, ins, outs):
         self.consume(0, len(ins[0]))
-        msg = self.pop_input_msg(0)
-        msg = PMC2Py(msg)
+        msg = self.pop_input_msg(0)()
         print 'pop msg', msg, type(msg)
         if not isinstance(msg, gras.PacketMsg): return
         pkt = packet_utils.make_packet(
@@ -190,7 +189,7 @@ class _queue_to_datagram(gras.Block):
             buff.length = len(payload)
             buff.get()[:] = numpy.fromstring(payload, numpy.uint8)
 
-            self.post_output_msg(0, Py2PMC(gras.PacketMsg(buff)))
+            self.post_output_msg(0, PMC_M(gras.PacketMsg(buff)))
         else:
             print 'f',
-            self.post_output_tag(0, Py2PMC(gras.PacketMsg()))
+            self.post_output_tag(0, PMC_M(gras.PacketMsg()))
