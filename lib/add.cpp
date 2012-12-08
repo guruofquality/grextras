@@ -16,7 +16,7 @@ using namespace grextras;
 template <typename type>
 struct AddImpl : Add
 {
-    AddImpl(const size_t num_inputs, const size_t vlen):
+    AddImpl(const size_t vlen):
         gras::Block("GrExtras Add"),
         _vlen(vlen)
     {
@@ -91,43 +91,43 @@ void AddImpl<float>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-Add::sptr Add::make_fc32_fc32(const size_t num_inputs, const size_t vlen)
+Add::sptr Add::make_fc32_fc32(const size_t vlen)
 {
-    return sptr(new AddImpl<float>(num_inputs, 2*vlen));
+    return sptr(new AddImpl<float>(2*vlen));
 }
 
-Add::sptr Add::make_sc32_sc32(const size_t num_inputs, const size_t vlen)
+Add::sptr Add::make_sc32_sc32(const size_t vlen)
 {
-    return sptr(new AddImpl<boost::int32_t>(num_inputs, 2*vlen));
+    return sptr(new AddImpl<boost::int32_t>(2*vlen));
 }
 
-Add::sptr Add::make_sc16_sc16(const size_t num_inputs, const size_t vlen)
+Add::sptr Add::make_sc16_sc16(const size_t vlen)
 {
-    return sptr(new AddImpl<boost::int16_t>(num_inputs, 2*vlen));
+    return sptr(new AddImpl<boost::int16_t>(2*vlen));
 }
 
-Add::sptr Add::make_sc8_sc8(const size_t num_inputs, const size_t vlen)
+Add::sptr Add::make_sc8_sc8(const size_t vlen)
 {
-    return sptr(new AddImpl<boost::int8_t>(num_inputs, 2*vlen));
+    return sptr(new AddImpl<boost::int8_t>(2*vlen));
 }
 
-Add::sptr Add::make_f32_f32(const size_t num_inputs, const size_t vlen)
+Add::sptr Add::make_f32_f32(const size_t vlen)
 {
-    return sptr(new AddImpl<float>(num_inputs, vlen));
+    return sptr(new AddImpl<float>(vlen));
 }
 
-Add::sptr Add::make_s32_s32(const size_t num_inputs, const size_t vlen)
+Add::sptr Add::make_s32_s32(const size_t vlen)
 {
-    return sptr(new AddImpl<boost::int32_t>(num_inputs, vlen));
+    return sptr(new AddImpl<boost::int32_t>(vlen));
 }
 
-Add::sptr Add::make_s16_s16(const size_t num_inputs, const size_t vlen)
+Add::sptr Add::make_s16_s16(const size_t vlen)
 {
-    return sptr(new AddImpl<boost::int16_t>(num_inputs, vlen));
+    return sptr(new AddImpl<boost::int16_t>(vlen));
 }
 
-Add::sptr Add::make_s8_s8(const size_t num_inputs, const size_t vlen)
+Add::sptr Add::make_s8_s8(const size_t vlen)
 {
-    return sptr(new AddImpl<boost::int8_t>(num_inputs, vlen));
+    return sptr(new AddImpl<boost::int8_t>(vlen));
 }
 

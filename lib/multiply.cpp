@@ -16,7 +16,7 @@ using namespace grextras;
 template <typename type>
 struct MultiplyImpl : Multiply
 {
-    MultiplyImpl(const size_t num_inputs, const size_t vlen):
+    MultiplyImpl(const size_t vlen):
         gras::Block("GrExtras Multiply"),
         _vlen(vlen)
     {
@@ -113,43 +113,43 @@ void MultiplyImpl<float>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-Multiply::sptr Multiply::make_fc32_fc32(const size_t num_inputs, const size_t vlen)
+Multiply::sptr Multiply::make_fc32_fc32(const size_t vlen)
 {
-    return sptr(new MultiplyImpl<std::complex<float> >(num_inputs, vlen));
+    return sptr(new MultiplyImpl<std::complex<float> >(vlen));
 }
 
-Multiply::sptr Multiply::make_sc32_sc32(const size_t num_inputs, const size_t vlen)
+Multiply::sptr Multiply::make_sc32_sc32(const size_t vlen)
 {
-    return sptr(new MultiplyImpl<std::complex<boost::int32_t> >(num_inputs, vlen));
+    return sptr(new MultiplyImpl<std::complex<boost::int32_t> >(vlen));
 }
 
-Multiply::sptr Multiply::make_sc16_sc16(const size_t num_inputs, const size_t vlen)
+Multiply::sptr Multiply::make_sc16_sc16(const size_t vlen)
 {
-    return sptr(new MultiplyImpl<std::complex<boost::int16_t> >(num_inputs, vlen));
+    return sptr(new MultiplyImpl<std::complex<boost::int16_t> >(vlen));
 }
 
-Multiply::sptr Multiply::make_sc8_sc8(const size_t num_inputs, const size_t vlen)
+Multiply::sptr Multiply::make_sc8_sc8(const size_t vlen)
 {
-    return sptr(new MultiplyImpl<std::complex<boost::int8_t> >(num_inputs, vlen));
+    return sptr(new MultiplyImpl<std::complex<boost::int8_t> >(vlen));
 }
 
-Multiply::sptr Multiply::make_f32_f32(const size_t num_inputs, const size_t vlen)
+Multiply::sptr Multiply::make_f32_f32(const size_t vlen)
 {
-    return sptr(new MultiplyImpl<float>(num_inputs, vlen));
+    return sptr(new MultiplyImpl<float>(vlen));
 }
 
-Multiply::sptr Multiply::make_s32_s32(const size_t num_inputs, const size_t vlen)
+Multiply::sptr Multiply::make_s32_s32(const size_t vlen)
 {
-    return sptr(new MultiplyImpl<boost::int32_t>(num_inputs, vlen));
+    return sptr(new MultiplyImpl<boost::int32_t>(vlen));
 }
 
-Multiply::sptr Multiply::make_s16_s16(const size_t num_inputs, const size_t vlen)
+Multiply::sptr Multiply::make_s16_s16(const size_t vlen)
 {
-    return sptr(new MultiplyImpl<boost::int16_t>(num_inputs, vlen));
+    return sptr(new MultiplyImpl<boost::int16_t>(vlen));
 }
 
-Multiply::sptr Multiply::make_s8_s8(const size_t num_inputs, const size_t vlen)
+Multiply::sptr Multiply::make_s8_s8(const size_t vlen)
 {
-    return sptr(new MultiplyImpl<boost::int8_t>(num_inputs, vlen));
+    return sptr(new MultiplyImpl<boost::int8_t>(vlen));
 }
 

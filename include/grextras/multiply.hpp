@@ -17,14 +17,14 @@ struct GREXTRAS_API Multiply : virtual gras::Block
 {
     typedef boost::shared_ptr<Multiply> sptr;
 
-    static sptr make_fc32_fc32(const size_t num_inputs, const size_t vlen = 1);
-    static sptr make_sc32_sc32(const size_t num_inputs, const size_t vlen = 1);
-    static sptr make_sc16_sc16(const size_t num_inputs, const size_t vlen = 1);
-    static sptr make_sc8_sc8(const size_t num_inputs, const size_t vlen = 1);
-    static sptr make_f32_f32(const size_t num_inputs, const size_t vlen = 1);
-    static sptr make_s32_s32(const size_t num_inputs, const size_t vlen = 1);
-    static sptr make_s16_s16(const size_t num_inputs, const size_t vlen = 1);
-    static sptr make_s8_s8(const size_t num_inputs, const size_t vlen = 1);
+    static sptr make_fc32_fc32(const size_t vlen = 1);
+    static sptr make_sc32_sc32(const size_t vlen = 1);
+    static sptr make_sc16_sc16(const size_t vlen = 1);
+    static sptr make_sc8_sc8(const size_t vlen = 1);
+    static sptr make_f32_f32(const size_t vlen = 1);
+    static sptr make_s32_s32(const size_t vlen = 1);
+    static sptr make_s16_s16(const size_t vlen = 1);
+    static sptr make_s8_s8(const size_t vlen = 1);
 };
 
 }

@@ -14,7 +14,7 @@ using namespace grextras;
 template <typename type>
 struct DivideImpl : Divide
 {
-    DivideImpl(const size_t num_inputs, const size_t vlen):
+    DivideImpl(const size_t vlen):
         gras::Block("GrExtras Divide"),
         _vlen(vlen)
     {
@@ -73,43 +73,43 @@ void DivideImpl<type>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-Divide::sptr Divide::make_fc32_fc32(const size_t num_inputs, const size_t vlen)
+Divide::sptr Divide::make_fc32_fc32(const size_t vlen)
 {
-    return sptr(new DivideImpl<std::complex<float> >(num_inputs, vlen));
+    return sptr(new DivideImpl<std::complex<float> >(vlen));
 }
 
-Divide::sptr Divide::make_sc32_sc32(const size_t num_inputs, const size_t vlen)
+Divide::sptr Divide::make_sc32_sc32(const size_t vlen)
 {
-    return sptr(new DivideImpl<std::complex<boost::int32_t> >(num_inputs, vlen));
+    return sptr(new DivideImpl<std::complex<boost::int32_t> >(vlen));
 }
 
-Divide::sptr Divide::make_sc16_sc16(const size_t num_inputs, const size_t vlen)
+Divide::sptr Divide::make_sc16_sc16(const size_t vlen)
 {
-    return sptr(new DivideImpl<std::complex<boost::int16_t> >(num_inputs, vlen));
+    return sptr(new DivideImpl<std::complex<boost::int16_t> >(vlen));
 }
 
-Divide::sptr Divide::make_sc8_sc8(const size_t num_inputs, const size_t vlen)
+Divide::sptr Divide::make_sc8_sc8(const size_t vlen)
 {
-    return sptr(new DivideImpl<std::complex<boost::int8_t> >(num_inputs, vlen));
+    return sptr(new DivideImpl<std::complex<boost::int8_t> >(vlen));
 }
 
-Divide::sptr Divide::make_f32_f32(const size_t num_inputs, const size_t vlen)
+Divide::sptr Divide::make_f32_f32(const size_t vlen)
 {
-    return sptr(new DivideImpl<float>(num_inputs, vlen));
+    return sptr(new DivideImpl<float>(vlen));
 }
 
-Divide::sptr Divide::make_s32_s32(const size_t num_inputs, const size_t vlen)
+Divide::sptr Divide::make_s32_s32(const size_t vlen)
 {
-    return sptr(new DivideImpl<boost::int32_t>(num_inputs, vlen));
+    return sptr(new DivideImpl<boost::int32_t>(vlen));
 }
 
-Divide::sptr Divide::make_s16_s16(const size_t num_inputs, const size_t vlen)
+Divide::sptr Divide::make_s16_s16(const size_t vlen)
 {
-    return sptr(new DivideImpl<boost::int16_t>(num_inputs, vlen));
+    return sptr(new DivideImpl<boost::int16_t>(vlen));
 }
 
-Divide::sptr Divide::make_s8_s8(const size_t num_inputs, const size_t vlen)
+Divide::sptr Divide::make_s8_s8(const size_t vlen)
 {
-    return sptr(new DivideImpl<boost::int8_t>(num_inputs, vlen));
+    return sptr(new DivideImpl<boost::int8_t>(vlen));
 }
 

@@ -14,7 +14,7 @@ using namespace grextras;
 template <typename type>
 struct SubtractImpl : Subtract
 {
-    SubtractImpl(const size_t num_inputs, const size_t vlen):
+    SubtractImpl(const size_t vlen):
         gras::Block("GrExtras Subtract"),
         _vlen(vlen)
     {
@@ -73,43 +73,43 @@ void SubtractImpl<type>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-Subtract::sptr Subtract::make_fc32_fc32(const size_t num_inputs, const size_t vlen)
+Subtract::sptr Subtract::make_fc32_fc32(const size_t vlen)
 {
-    return sptr(new SubtractImpl<std::complex<float> >(num_inputs, vlen));
+    return sptr(new SubtractImpl<std::complex<float> >(vlen));
 }
 
-Subtract::sptr Subtract::make_sc32_sc32(const size_t num_inputs, const size_t vlen)
+Subtract::sptr Subtract::make_sc32_sc32(const size_t vlen)
 {
-    return sptr(new SubtractImpl<std::complex<boost::int32_t> >(num_inputs, vlen));
+    return sptr(new SubtractImpl<std::complex<boost::int32_t> >(vlen));
 }
 
-Subtract::sptr Subtract::make_sc16_sc16(const size_t num_inputs, const size_t vlen)
+Subtract::sptr Subtract::make_sc16_sc16(const size_t vlen)
 {
-    return sptr(new SubtractImpl<std::complex<boost::int16_t> >(num_inputs, vlen));
+    return sptr(new SubtractImpl<std::complex<boost::int16_t> >(vlen));
 }
 
-Subtract::sptr Subtract::make_sc8_sc8(const size_t num_inputs, const size_t vlen)
+Subtract::sptr Subtract::make_sc8_sc8(const size_t vlen)
 {
-    return sptr(new SubtractImpl<std::complex<boost::int8_t> >(num_inputs, vlen));
+    return sptr(new SubtractImpl<std::complex<boost::int8_t> >(vlen));
 }
 
-Subtract::sptr Subtract::make_f32_f32(const size_t num_inputs, const size_t vlen)
+Subtract::sptr Subtract::make_f32_f32(const size_t vlen)
 {
-    return sptr(new SubtractImpl<float>(num_inputs, vlen));
+    return sptr(new SubtractImpl<float>(vlen));
 }
 
-Subtract::sptr Subtract::make_s32_s32(const size_t num_inputs, const size_t vlen)
+Subtract::sptr Subtract::make_s32_s32(const size_t vlen)
 {
-    return sptr(new SubtractImpl<boost::int32_t>(num_inputs, vlen));
+    return sptr(new SubtractImpl<boost::int32_t>(vlen));
 }
 
-Subtract::sptr Subtract::make_s16_s16(const size_t num_inputs, const size_t vlen)
+Subtract::sptr Subtract::make_s16_s16(const size_t vlen)
 {
-    return sptr(new SubtractImpl<boost::int16_t>(num_inputs, vlen));
+    return sptr(new SubtractImpl<boost::int16_t>(vlen));
 }
 
-Subtract::sptr Subtract::make_s8_s8(const size_t num_inputs, const size_t vlen)
+Subtract::sptr Subtract::make_s8_s8(const size_t vlen)
 {
-    return sptr(new SubtractImpl<boost::int8_t>(num_inputs, vlen));
+    return sptr(new SubtractImpl<boost::int8_t>(vlen));
 }
 
