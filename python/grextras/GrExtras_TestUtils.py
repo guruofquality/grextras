@@ -1,6 +1,7 @@
 # Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
 import gras
+import time
 
 class VectorSource(gras.Block):
     def __init__(self, out_sig, vec, autodone=True):
@@ -13,8 +14,13 @@ class VectorSource(gras.Block):
         outs[0][:num] = self._vec[:num]
         self.produce(0, num)
         self._vec = self._vec[num:]
-        if not self._vec and self._autodone:
-            self.mark_done()
+        if not self._vec:
+            if self._autodone: self.mark_done()
+            #TODO auto done is a hack so we dont mark done for some of the tests
+            #so we sleep here when not marking done so we dont suck cpu
+            #Is there a better way to avoid this for a source block?
+            #Also having a more configurable done policy could help the issue.
+            else: time.sleep(0.1)
 
 class VectorSink(gras.Block):
     def __init__(self, in_sig):
