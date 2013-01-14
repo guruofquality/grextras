@@ -45,7 +45,7 @@ def __pointer_to_ndarray(addr, nitems):
 
 #re-create the blob data functions, but yield a numpy array instead
 def pmt_blob_data(blob):
-    return __pointer_to_ndarray(extras_swig.pmt_blob_rw_data(blob), extras_swig.pmt_blob_length(blob))
+    return __pointer_to_ndarray(extras_swig.pmt_blob_rw_data(blob), pmt.pmt_blob_length(blob))
 
 #re-create mgr acquire by calling into python GIL-safe version
 class pmt_mgr:
