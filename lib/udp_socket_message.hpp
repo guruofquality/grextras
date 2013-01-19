@@ -21,7 +21,7 @@ struct UDPSocketReceiver : gras::Block
         if (not this->wait_for_recv_ready()) return;
 
         //grab the output buffer to pass downstream as a tag
-        gras::SBuffer b = this->pop_output_buffer(0);
+        gras::SBuffer b = this->get_output_buffer(0);
 
         //receive into the buffer
         b.length = socket->receive_from(asio::buffer(b.get(), b.get_actual_length()), *endpoint);

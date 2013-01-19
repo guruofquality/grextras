@@ -122,7 +122,7 @@ struct Filedes2Datagram : gras::Block
         if (not this->wait_ready()) return;
 
         //grab the output buffer to pass downstream as a msg
-        gras::SBuffer b = this->pop_output_buffer(0);
+        gras::SBuffer b = this->get_output_buffer(0);
 
         //receive into the buffer
         const int result = read(_fd, b.get(), b.get_actual_length());

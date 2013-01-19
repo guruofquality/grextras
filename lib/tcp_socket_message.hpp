@@ -21,7 +21,7 @@ struct TCPSocketReceiver : gras::Block
         if (not this->waiter()) return;
 
         //grab the output buffer to pass downstream as a tag
-        gras::SBuffer b = this->pop_output_buffer(0);
+        gras::SBuffer b = this->get_output_buffer(0);
 
         //receive into the buffer
         try
