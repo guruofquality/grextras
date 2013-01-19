@@ -43,7 +43,7 @@ struct DelayImpl : Delay
         }
 
         //otherwise just forward the buffer
-        const gras::SBuffer &buffer = this->get_input_buffer(0);
+        gras::SBuffer buffer = this->get_input_buffer(0);
         this->post_output_buffer(0, buffer);
         this->consume(0, ins[0].size());
     }

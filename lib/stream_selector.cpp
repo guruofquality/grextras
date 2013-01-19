@@ -30,7 +30,7 @@ struct StreamSelectorImpl : StreamSelector
                 break;
 
             default: //forward the buffer
-                const gras::SBuffer &buffer = this->get_input_buffer(i);
+                gras::SBuffer buffer = this->get_input_buffer(i);
                 this->post_output_buffer(_paths[i], buffer);
                 this->consume(i, ins[i].size());
                 break;
