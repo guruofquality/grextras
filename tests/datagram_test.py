@@ -16,17 +16,14 @@ class test_datagram(unittest.TestCase):
 
     def test_simple_loopback(self):
         src_data = (8, 3, 32, 18, -53)
-        src = grextras.VectorSource(numpy.int32, src_data, autodone=False)
+        src = grextras.VectorSource(numpy.int32, src_data)
         dst = grextras.VectorSink(numpy.int32)
 
         s2d = grextras.Stream2Datagram(numpy.dtype(numpy.float32).itemsize)
         d2s = grextras.Datagram2Stream(numpy.dtype(numpy.float32).itemsize)
 
         self.tb.connect(src, s2d, d2s, dst)
-        self.tb.start()
-        time.sleep(0.1)
-        self.tb.stop()
-        self.tb.wait()
+        self.tb.run()
 
         self.assertEqual(src_data, dst.data())
 

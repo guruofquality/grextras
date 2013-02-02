@@ -22,7 +22,7 @@ class test_stream_selector(unittest.TestCase):
         tb.connect(src0, (ss, 0), dst0)
         tb.connect(src1, (ss, 1), dst1)
         tb.start()
-        time.sleep(0.1)
+        time.sleep(0.5)
         tb.stop()
         tb.wait()
 
