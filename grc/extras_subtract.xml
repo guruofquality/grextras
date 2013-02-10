@@ -9,7 +9,7 @@
     <name>Ex: Subtract</name>
     <key>extras_subtract</key>
     <import>import grextras</import>
-    <make>grextras.Subtract.$(type)($num_inputs, $vlen)</make>
+    <make>grextras.Subtract.$(type)($vlen)</make>
     <param>
         <name>IO Type</name>
         <key>type</key>

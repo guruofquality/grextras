@@ -9,7 +9,7 @@
     <name>Ex: Divide</name>
     <key>extras_divide</key>
     <import>import grextras</import>
-    <make>grextras.Divide.$(type)($num_inputs, $vlen)</make>
+    <make>grextras.Divide.$(type)($vlen)</make>
     <param>
         <name>IO Type</name>
         <key>type</key>

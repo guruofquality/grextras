@@ -9,7 +9,7 @@
     <name>Ex: Add</name>
     <key>extras_add</key>
     <import>import grextras</import>
-    <make>grextras.Add.$(type)($num_inputs, $vlen)</make>
+    <make>grextras.Add.$(type)($vlen)</make>
     <param>
         <name>IO Type</name>
         <key>type</key>
