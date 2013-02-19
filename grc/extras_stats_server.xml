@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Simple HTTP Stats Server
+###################################################
+ -->
+<block>
+    <name>Ex: Stats Server</name>
+    <key>extras_stats_server</key>
+    <import>import gras.stats</import>
+    <import>import threading</import>
+    <make>self.$(id) = gras.stats.http_server(($addr, $port), self.get_stats_xml)
+thread = threading.Thread(target=self.$(id).serve_forever)
+thread.daemon = True
+thread.start()</make>
+    <param>
+        <name>Address</name>
+        <key>addr</key>
+        <value>localhost</value>
+        <type>string</type>
+    </param>
+    <param>
+        <name>Port</name>
+        <key>port</key>
+        <value>8080</value>
+        <type>int</type>
+    </param>
+    <doc>
+This block will start a simple HTTP server for querying the top block stats.
+    </doc>
+</block>
