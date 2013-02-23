@@ -16,8 +16,8 @@ public:
     AddConstVImpl(const std::vector<type> &vec):
         gras::Block("GrExtras AddConst")
     {
-        this->set_input_signature(gras::IOSignature(sizeof(type)*vec.size()));
-        this->set_output_signature(gras::IOSignature(sizeof(type)*vec.size()));
+        this->set_input_size(0, sizeof(type)*vec.size());
+        this->set_output_size(0, sizeof(type)*vec.size());
         _val.resize(vec.size());
         this->set_const(vec);
     }

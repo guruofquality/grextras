@@ -23,7 +23,7 @@ struct SignalSourceImpl : public SignalSource
         _offset(0.0), _scalar(1.0),
         _wave("CONST")
     {
-        this->set_output_signature(gras::IOSignature(sizeof(type)));
+        this->set_output_size(0, sizeof(type));
         this->update_table();
     }
 

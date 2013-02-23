@@ -29,7 +29,7 @@ public:
         _wave("GAUSSIAN"),
         _random(seed)
     {
-        this->set_output_signature(gras::IOSignature(sizeof(type)));
+        this->set_output_size(0, sizeof(type));
         this->update_table();
     }
 

@@ -20,8 +20,8 @@ struct AddImpl : Add
         gras::Block("GrExtras Add"),
         _vlen(vlen)
     {
-        this->set_input_signature(gras::IOSignature(sizeof(type)*_vlen));
-        this->set_output_signature(gras::IOSignature(sizeof(type)*_vlen));
+        this->set_input_size(0, sizeof(type)*_vlen);
+        this->set_output_size(0, sizeof(type)*_vlen);
     }
 
     void notify_topology(const size_t num_inputs, const size_t num_outputs)

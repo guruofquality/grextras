@@ -78,7 +78,6 @@ struct Datagram2Filedes : gras::Block
         _fd(fd)
     {
         //setup the input for messages only
-        this->set_input_signature(gras::IOSignature(1));
         gras::InputPortConfig config = this->get_input_config(0);
         config.reserve_items = 0;
         this->set_input_config(0, config);
@@ -110,7 +109,6 @@ struct Filedes2Datagram : gras::Block
         _fd(fd)
     {
         //setup the output for messages only
-        this->set_output_signature(gras::IOSignature(1));
         gras::OutputPortConfig config = this->get_output_config(0);
         config.reserve_items = 4096; //reasonably high mtu...
         this->set_output_config(0, config);

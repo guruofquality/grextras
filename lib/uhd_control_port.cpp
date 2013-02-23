@@ -34,7 +34,6 @@ struct UHDControlPortImpl : public UHDControlPort
     {
         _usrp = usrp;
         //setup the input for messages only
-        this->set_input_signature(gras::IOSignature(1));
         gras::InputPortConfig config = this->get_input_config(0);
         config.reserve_items = 0;
         this->set_input_config(0, config);

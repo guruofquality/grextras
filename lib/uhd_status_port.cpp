@@ -39,7 +39,6 @@ struct UHDStatusPortImpl : public UHDStatusPort
         gras::Block("GrExtras UHDStatusPort")
     {
         _usrp = usrp;
-        this->set_output_signature(gras::IOSignature(1));
     }
 
     void work(const InputItems &, const OutputItems &)

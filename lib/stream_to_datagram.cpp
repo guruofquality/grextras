@@ -12,10 +12,7 @@ struct Stream2DatagramImpl : Stream2Datagram
         _mtu(itemsize*(mtu/itemsize)) //ensure mtu is a multiple
     {
         //setup the input for streaming
-        this->set_input_signature(gras::IOSignature(itemsize));
-
-        //setup the output for messages only
-        this->set_output_signature(gras::IOSignature(1));
+        this->set_input_size(0, itemsize);
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -33,7 +30,7 @@ struct Stream2DatagramImpl : Stream2Datagram
         this->post_output_msg(0, PMC_M(msg));
 
         //consume the number of items in b
-        this->consume(0, b.length/this->input_signature()[0]);
+        this->consume(0, b.length/this->get_input_size(0));
     }
 
     const size_t _mtu;

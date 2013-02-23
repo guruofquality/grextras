@@ -10,8 +10,8 @@ struct DelayImpl : Delay
     DelayImpl(const size_t itemsize):
         gras::Block("GrExtras Delay")
     {
-        this->set_input_signature(gras::IOSignature(itemsize));
-        this->set_output_signature(gras::IOSignature(itemsize));
+        this->set_input_size(0, itemsize);
+        this->set_output_size(0, itemsize);
         _delay_items = 0;
     }
 
@@ -37,7 +37,7 @@ struct DelayImpl : Delay
         if (delta > 0)
         {
             nouts = std::min(nouts, size_t(delta));
-            std::memset(outs[0].get(), 0, outs[0].size()*this->output_signature()[0]);
+            std::memset(outs[0].get(), 0, outs[0].size()*this->get_output_size(0));
             this->produce(0, nouts);
             return;
         }

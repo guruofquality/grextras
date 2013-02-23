@@ -11,13 +11,12 @@ struct Datagram2StreamImpl : Datagram2Stream
         gras::Block("GrExtras Datagram2Stream")
     {
         //setup the input for messages only
-        this->set_input_signature(gras::IOSignature(1));
         gras::InputPortConfig config = this->get_input_config(0);
         config.reserve_items = 0;
         this->set_input_config(0, config);
 
         //setup the output for streaming
-        this->set_output_signature(gras::IOSignature(itemsize));
+        this->set_output_size(0, itemsize);
     }
 
     void work(const InputItems &ins, const OutputItems &)

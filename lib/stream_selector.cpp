@@ -11,8 +11,8 @@ struct StreamSelectorImpl : StreamSelector
     StreamSelectorImpl(const size_t itemsize):
         gras::Block("GrExtras StreamSelector")
     {
-        this->set_input_signature(gras::IOSignature(itemsize));
-        this->set_output_signature(gras::IOSignature(itemsize));
+        this->set_input_size(0, itemsize);
+        this->set_output_size(0, itemsize);
     }
 
     void work(const InputItems &ins, const OutputItems &)
