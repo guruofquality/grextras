@@ -121,7 +121,7 @@ struct UDPSocketMessage : SocketMessage
             std::cout << "Creating UDP client..." << std::endl;
             socket.reset(new asio::ip::udp::socket(_io_service));
             socket->open(asio::ip::udp::v4());
-            socket->connect(_endpoint);
+            //socket->connect(_endpoint);
 
             _receiver->socket = socket;
             _receiver->endpoint = &_recv_ep;
