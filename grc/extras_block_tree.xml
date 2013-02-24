@@ -46,5 +46,6 @@
         <block>extras_tuntap</block>
         <block>extras_packet_framer</block>
         <block>extras_packet_deframer</block>
+        <block>extras_stats_server</block>
     </cat>
 </cat>

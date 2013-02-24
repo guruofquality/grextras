@@ -25,6 +25,8 @@ list(APPEND grc_sources
 
     extras_packet_framer.xml
     extras_packet_deframer.xml
+
+    extras_stats_server.xml
 )
 
 install(
