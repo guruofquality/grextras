@@ -19,8 +19,8 @@ public:
     MultiplyConstVImpl(const std::vector<type> &vec):
         gras::Block("GrExtras MultiplyConst")
     {
-        this->set_input_size(0, sizeof(type)*vec.size());
-        this->set_output_size(0, sizeof(type)*vec.size());
+        this->input_config(0).item_size = sizeof(type)*vec.size();
+        this->output_config(0).item_size = sizeof(type)*vec.size();
         _val.resize(vec.size());
         this->set_const(vec);
     }
@@ -29,9 +29,7 @@ public:
     {
         for (size_t i = 0; i < num_inputs; i++)
         {
-            gras::InputPortConfig config = this->get_input_config(i);
-            config.inline_buffer = (i == 0);
-            this->set_input_config(i, config);
+            this->input_config(i).inline_buffer = (i == 0);
         }
     }
 

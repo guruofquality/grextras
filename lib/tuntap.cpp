@@ -78,9 +78,7 @@ struct Datagram2Filedes : gras::Block
         _fd(fd)
     {
         //setup the input for messages only
-        gras::InputPortConfig config = this->get_input_config(0);
-        config.reserve_items = 0;
-        this->set_input_config(0, config);
+        this->input_config(0).reserve_items = 0;
     }
 
     void work(const InputItems &ins, const OutputItems &)
@@ -109,9 +107,7 @@ struct Filedes2Datagram : gras::Block
         _fd(fd)
     {
         //setup the output for messages only
-        gras::OutputPortConfig config = this->get_output_config(0);
-        config.reserve_items = 4096; //reasonably high mtu...
-        this->set_output_config(0, config);
+        this->output_config(0).reserve_items = 4096; //reasonably high mtu...
     }
 
     void work(const InputItems &, const OutputItems &)

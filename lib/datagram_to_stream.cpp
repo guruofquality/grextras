@@ -11,12 +11,10 @@ struct Datagram2StreamImpl : Datagram2Stream
         gras::Block("GrExtras Datagram2Stream")
     {
         //setup the input for messages only
-        gras::InputPortConfig config = this->get_input_config(0);
-        config.reserve_items = 0;
-        this->set_input_config(0, config);
+        this->input_config(0).reserve_items = 0;
 
         //setup the output for streaming
-        this->set_output_size(0, itemsize);
+        this->output_config(0).item_size = itemsize;
     }
 
     void work(const InputItems &ins, const OutputItems &)

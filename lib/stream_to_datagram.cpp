@@ -12,7 +12,7 @@ struct Stream2DatagramImpl : Stream2Datagram
         _mtu(itemsize*(mtu/itemsize)) //ensure mtu is a multiple
     {
         //setup the input for streaming
-        this->set_input_size(0, itemsize);
+        this->input_config(0).item_size = itemsize;
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -30,7 +30,7 @@ struct Stream2DatagramImpl : Stream2Datagram
         this->post_output_msg(0, PMC_M(msg));
 
         //consume the number of items in b
-        this->consume(0, b.length/this->get_input_size(0));
+        this->consume(0, b.length/this->input_config(0).item_size);
     }
 
     const size_t _mtu;

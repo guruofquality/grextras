@@ -18,17 +18,15 @@ struct SubtractImpl : Subtract
         gras::Block("GrExtras Subtract"),
         _vlen(vlen)
     {
-        this->set_input_size(0, sizeof(type)*_vlen);
-        this->set_output_size(0, sizeof(type)*_vlen);
+        this->input_config(0).item_size = sizeof(type)*_vlen;
+        this->output_config(0).item_size = sizeof(type)*_vlen;
     }
 
     void notify_topology(const size_t num_inputs, const size_t num_outputs)
     {
         for (size_t i = 0; i < num_inputs; i++)
         {
-            gras::InputPortConfig config = this->get_input_config(i);
-            config.inline_buffer = (i == 0);
-            this->set_input_config(i, config);
+            this->input_config(i).inline_buffer = (i == 0);
         }
     }
 

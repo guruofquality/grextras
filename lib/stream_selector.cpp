@@ -11,8 +11,8 @@ struct StreamSelectorImpl : StreamSelector
     StreamSelectorImpl(const size_t itemsize):
         gras::Block("GrExtras StreamSelector")
     {
-        this->set_input_size(0, itemsize);
-        this->set_output_size(0, itemsize);
+        this->input_config(0).item_size = itemsize;
+        this->output_config(0).item_size = itemsize;
     }
 
     void work(const InputItems &ins, const OutputItems &)
@@ -57,9 +57,7 @@ struct StreamSelectorImpl : StreamSelector
         {
             //set the reserve_items to zero:
             //work gets called when not all inputs are fed
-            gras::InputPortConfig config = this->get_input_config(i);
-            config.reserve_items = 0;
-            this->set_input_config(i, config);
+            this->input_config(i).reserve_items = 0;
         }
     }
 

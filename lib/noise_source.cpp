@@ -29,7 +29,7 @@ public:
         _wave("GAUSSIAN"),
         _random(seed)
     {
-        this->set_output_size(0, sizeof(type));
+        this->output_config(0).item_size = sizeof(type);
         this->update_table();
     }
 

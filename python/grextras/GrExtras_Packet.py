@@ -68,14 +68,10 @@ class PacketFramer(gras.Block):
         )
 
         #setup input config for messages
-        config = self.get_input_config(0)
-        config.reserve_items = 0
-        self.set_input_config(0, config)
+        self.input_config(0).reserve_items = 0
 
         #setup output config for max packet MTU
-        config = self.get_output_config(0)
-        config.reserve_items = 4096 #max pkt frame possible
-        self.set_output_config(0, config)
+        self.output_config(0).reserve_items = 4096 #max pkt frame possible
 
         self._use_whitener_offset = use_whitener_offset
         self._whitener_offset = 0
@@ -87,6 +83,7 @@ class PacketFramer(gras.Block):
         self._access_code = access_code
 
     def work(self, ins, outs):
+        print 'len(ins[0])', len(ins[0])
         self.consume(0, len(ins[0]))
         msg = self.pop_input_msg(0)()
         print 'pop msg', msg, type(msg)
@@ -99,7 +96,6 @@ class PacketFramer(gras.Block):
             False, #pad_for_usrp,
             self._whitener_offset,
         )
-        #print 'len buff', t.value.length
         #print 'len pkt', len(pkt)
 
         if self._use_whitener_offset:
@@ -162,9 +158,7 @@ class _queue_to_datagram(gras.Block):
         self._msgq = msgq
 
         #set the output reserve to the max expected pkt size
-        config = self.get_output_config(0)
-        config.reserve_items = 4096
-        self.set_output_config(0, config)
+        self.output_config(0).reserve_items = 4096
 
         self.x = 0
 
@@ -192,4 +186,4 @@ class _queue_to_datagram(gras.Block):
             self.post_output_msg(0, PMC_M(gras.PacketMsg(buff)))
         else:
             print 'f',
-            self.post_output_tag(0, PMC_M(gras.PacketMsg()))
+            self.post_output_msg(0, PMC_M(gras.PacketMsg()))

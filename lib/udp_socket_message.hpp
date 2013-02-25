@@ -9,9 +9,7 @@ struct UDPSocketReceiver : gras::Block
     UDPSocketReceiver(const size_t mtu):
         gras::Block("GrExtras UDPSocketReceiver")
     {
-        gras::OutputPortConfig config = this->get_output_config(0);
-        config.reserve_items = mtu;
-        this->set_output_config(0, config);
+        this->output_config(0).reserve_items = mtu;
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -61,9 +59,7 @@ struct UDPSocketSender : gras::Block
         gras::Block("GrExtras UDPSocketSender")
     {
         //setup the input for messages only
-        gras::InputPortConfig config = this->get_input_config(0);
-        config.reserve_items = 0;
-        this->set_input_config(0, config);
+        this->input_config(0).reserve_items = 0;
     }
 
     void work(const InputItems &ins, const OutputItems &)
