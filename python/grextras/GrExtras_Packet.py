@@ -83,11 +83,12 @@ class PacketFramer(gras.Block):
         self._access_code = access_code
 
     def work(self, ins, outs):
-        print 'len(ins[0])', len(ins[0])
-        self.consume(0, len(ins[0]))
+        assert (len(ins[0]) == 0)
+
         msg = self.pop_input_msg(0)()
-        print 'pop msg', msg, type(msg)
+        #print 'pop msg', msg, type(msg)
         if not isinstance(msg, gras.PacketMsg): return
+
         pkt = packet_utils.make_packet(
             msg.buff.get().tostring(),
             self._samples_per_symbol,
@@ -133,13 +134,10 @@ class PacketDeframer(gras.HierBlock):
         if threshold == -1:
             threshold = 12              # FIXME raise exception
 
-        msgq = gr.msg_queue(4)          # holds packets from the PHY
         self.correlator = gr_digital.correlate_access_code_bb(access_code, threshold)
-
-        self.framer_sink = gr_digital.framer_sink_1(msgq)
-        self.connect(self, self.correlator, self.framer_sink)
-        self._queue_to_datagram = _queue_to_datagram(msgq)
-        self.connect(self._queue_to_datagram, self)
+        self.framer_sink = gr_digital.framer_sink_1()
+        self._queue_to_datagram = _queue_to_datagram()
+        self.connect(self, self.correlator, self.framer_sink, self._queue_to_datagram, self)
 
 
 
@@ -150,30 +148,30 @@ class _queue_to_datagram(gras.Block):
     Helper for the deframer, reads queue, unpacks packets, posts.
     It would be nicer if the framer_sink output'd messages.
     """
-    def __init__(self, msgq):
+    def __init__(self):
         gras.Block.__init__(
             self, name = "_queue_to_datagram",
-            in_sig = None, out_sig = [numpy.uint8],
+            in_sig = [numpy.uint8], out_sig = [numpy.uint8],
         )
-        self._msgq = msgq
+
+        #setup input config for messages
+        self.input_config(0).reserve_items = 0
 
         #set the output reserve to the max expected pkt size
         self.output_config(0).reserve_items = 4096
 
-        self.x = 0
-
-        #we are going to block in work on a interruptible call
-        self.set_interruptible_work(True)
-
     def work(self, ins, outs):
-        #print '_queue_to_datagram work'
-        try: msg = self._msgq.delete_head()
-        except Exception:
-            print 'staph!!'
-            return
-        ok, payload = packet_utils.unmake_packet(msg.to_string(), int(msg.arg1()))
-        print 'got a msg', self.x, len(payload)
-        self.x +=1
+        assert (len(ins[0]) == 0)
+
+        msg = self.pop_input_msg(0)()
+        #print 'pop msg', msg, type(msg)
+        if not isinstance(msg, gras.PacketMsg): return
+        whitener = msg.info()
+        assert (isinstance(whitener, int))
+
+        ok, payload = packet_utils.unmake_packet(msg.buff.get().tostring(), whitener)
+        #print 'got a msg', self.x, len(payload)
+
         if ok:
             payload = numpy.fromstring(payload, numpy.uint8)
 
