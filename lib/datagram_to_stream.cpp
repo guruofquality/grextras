@@ -22,7 +22,9 @@ struct Datagram2StreamImpl : Datagram2Stream
         //read the input message, and post
         const PMCC msg = this->pop_input_msg(0);
         if (not msg.is<gras::PacketMsg>()) return;
-        this->post_output_buffer(0, msg.as<gras::PacketMsg>().buff);
+        gras::SBuffer buff = msg.as<gras::PacketMsg>().buff;
+        buff.length -= buff.length % this->output_config(0).item_size;
+        this->post_output_buffer(0, buff);
     }
 };
 
