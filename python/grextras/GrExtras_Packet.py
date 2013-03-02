@@ -85,12 +85,13 @@ class PacketFramer(gras.Block):
     def work(self, ins, outs):
         assert (len(ins[0]) == 0)
 
-        msg = self.pop_input_msg(0)()
-        #print 'pop msg', msg, type(msg)
-        if not isinstance(msg, gras.PacketMsg): return
+        msg = self.pop_input_msg(0)
+        pkt_msg = msg()
+        #print 'pop msg', msg, type(pkt_msg)
+        if not isinstance(pkt_msg, gras.PacketMsg): return
 
         pkt = packet_utils.make_packet(
-            msg.buff.get().tostring(),
+            pkt_msg.buff.get().tostring(),
             self._samples_per_symbol,
             self._bits_per_symbol,
             self._access_code,
@@ -163,15 +164,14 @@ class _queue_to_datagram(gras.Block):
     def work(self, ins, outs):
         assert (len(ins[0]) == 0)
 
-        msg = self.pop_input_msg(0)()
-        #print 'pop msg', msg, type(msg)
-        if not isinstance(msg, gras.PacketMsg): return
-        whitener = msg.info()
+        msg = self.pop_input_msg(0)
+        pkt_msg = msg()
+        #print 'pop msg', msg, type(pkt_msg)
+        if not isinstance(pkt_msg, gras.PacketMsg): return
+        whitener = pkt_msg.info()
         assert (isinstance(whitener, int))
 
-        ok, payload = packet_utils.unmake_packet(msg.buff.get().tostring(), whitener)
-        #print 'got a msg', self.x, len(payload)
-
+        ok, payload = packet_utils.unmake_packet(pkt_msg.buff.get().tostring(), whitener)
         if ok:
             payload = numpy.fromstring(payload, numpy.uint8)
 
