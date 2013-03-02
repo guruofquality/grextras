@@ -9,7 +9,7 @@
     <key>extras_stats_server</key>
     <import>import gras.stats</import>
     <import>import threading</import>
-    <make>self.$(id) = gras.stats.http_server(($addr, $port), self.get_stats_xml)
+    <make>self.$(id) = gras.stats.http_server(($addr, $port), self)
 thread = threading.Thread(target=self.$(id).serve_forever)
 thread.daemon = True
 thread.start()</make>
