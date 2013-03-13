@@ -58,7 +58,7 @@ foreach(incdir ${GRUEL_INCLUDE_DIRS})
     list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/gruel/swig)
 endforeach(incdir)
 
-set(GR_SWIG_LIBRARIES gnuradio-extras)
+list(APPEND GR_SWIG_LIBRARIES gnuradio-extras ${GNURADIO_CORE_LIBRARIES} ${GRUEL_LIBRARIES})
 set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/extras_swig_doc.i)
 set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include/gnuradio/extras)
 
