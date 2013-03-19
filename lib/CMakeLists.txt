@@ -59,6 +59,17 @@ list(APPEND gr_extras_sources
     socket_msg.cc
 )
 
+if(MSVC AND ENABLE_EXTRAS)
+    include(GrVersion)
+
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/gnuradio-extras.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/gnuradio-extras.rc
+    @ONLY)
+
+    list(APPEND gr_extras_sources ${CMAKE_CURRENT_BINARY_DIR}/gnuradio-extras.rc)
+endif()
+
 list(APPEND gr_extras_libs
     ${Boost_LIBRARIES}
     ${VOLK_LIBRARIES}
