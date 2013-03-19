@@ -51,8 +51,7 @@ struct TCPSocketSender : gras::Block
     TCPSocketSender(void):
         gras::Block("GrExtras TCPSocketSender")
     {
-        //setup the input for messages only
-        this->input_config(0).reserve_items = 0;
+        //NOP
     }
 
     void work(const InputItems &ins, const OutputItems &)

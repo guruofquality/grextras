@@ -10,9 +10,6 @@ struct Datagram2StreamImpl : Datagram2Stream
     Datagram2StreamImpl(const size_t itemsize):
         gras::Block("GrExtras Datagram2Stream")
     {
-        //setup the input for messages only
-        this->input_config(0).reserve_items = 0;
-
         //setup the output for streaming
         this->output_config(0).item_size = itemsize;
     }

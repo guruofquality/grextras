@@ -67,9 +67,6 @@ class PacketFramer(gras.Block):
             out_sig = [numpy.uint8],
         )
 
-        #setup input config for messages
-        self.input_config(0).reserve_items = 0
-
         #setup output config for max packet MTU
         self.output_config(0).reserve_items = 4096 #max pkt frame possible
 
@@ -154,9 +151,6 @@ class _queue_to_datagram(gras.Block):
             self, name = "_queue_to_datagram",
             in_sig = [numpy.uint8], out_sig = [numpy.uint8],
         )
-
-        #setup input config for messages
-        self.input_config(0).reserve_items = 0
 
         #set the output reserve to the max expected pkt size
         self.output_config(0).reserve_items = 4096

@@ -33,8 +33,6 @@ struct UHDControlPortImpl : public UHDControlPort
         gras::Block("GrExtras UHDControlPort")
     {
         _usrp = usrp;
-        //setup the input for messages only
-        this->input_config(0).reserve_items = 0;
     }
 
     void work(const InputItems &, const OutputItems &)
