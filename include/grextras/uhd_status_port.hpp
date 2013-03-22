@@ -30,14 +30,6 @@ namespace grextras
  * This block has one output port that produces message.
  * The format of the messages is independent from UHD types.
  * The following information is provided by a message:
- * 
- * This is a USRP message read from recv_async_msg().
- * The message will be a PMCDict where the key-values are:
- *  - "channel" : size_t
- *  - "time_spec" : PMCTuple(uint64, double)
- *  - "event_code" : int
- *  - "user_payload" : std::vector<uint32_t>
- * Note: time_spec will not be present if have_time_spec == False
  *
  * The message will be a PMCTuple<2>
  * The element0 = <name of a sensor>

@@ -25,7 +25,6 @@ list(APPEND GREXTRAS_SOURCES
     stream_selector.cpp
 
     uhd_status_port.cpp
-    uhd_control_port.cpp
 )
 
 ########################################################################

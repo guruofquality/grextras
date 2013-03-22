@@ -27,12 +27,6 @@ using namespace grextras;
 
 #include <uhd/usrp/multi_usrp.hpp>
 
-static const PMCC CHANNEL_KEY = PMC_M("channel");
-static const PMCC TIMESPEC_KEY = PMC_M("time_spec");
-static const PMCC EVENT_CODE_KEY = PMC_M("event_code");
-static const PMCC USER_PAYLOAD_KEY = PMC_M("user_payload");
-const double MD_TIMEOUT = 1.0; //seconds
-
 struct UHDStatusPortImpl : public UHDStatusPort
 {
     UHDStatusPortImpl(uhd::usrp::multi_usrp::sptr usrp):
@@ -43,33 +37,13 @@ struct UHDStatusPortImpl : public UHDStatusPort
 
     void work(const InputItems &, const OutputItems &)
     {
-        uhd::async_metadata_t async_md;
-        if (_usrp->get_device()->recv_async_msg(async_md, MD_TIMEOUT))
+        BOOST_FOREACH(const std::string &name, _sensors)
         {
-            PMCDict d;
-            d[CHANNEL_KEY] = PMC_M(async_md.channel);
-            if (async_md.has_time_spec)
-            {
-                PMCTuple<2> t;
-                t[0] = PMC_M(boost::uint64_t(async_md.time_spec.get_full_secs()));
-                t[1] = PMC_M(async_md.time_spec.get_frac_secs());
-                d[TIMESPEC_KEY] = PMC_M(t);
-            }
-            d[EVENT_CODE_KEY] = PMC_M(int(async_md.event_code));
-            const boost::uint32_t *payload = async_md.user_payload;
-            d[USER_PAYLOAD_KEY] = PMC_M(std::vector<boost::uint32_t>(payload, payload+4));
-            this->post_output_msg(0, PMC_M(d));
-        }
-        else //timeout, poll all the sensors
-        {
-            BOOST_FOREACH(const std::string &name, _sensors)
-            {
-                const PMC sensor_value = do_sensor(name);
-                PMCTuple<2> t;
-                t[0] = PMC_M(name);
-                t[1] = sensor_value;
-                this->post_output_msg(0, PMC_M(t));
-            }
+            const PMC sensor_value = do_sensor(name);
+            PMCTuple<2> t;
+            t[0] = PMC_M(name);
+            t[1] = sensor_value;
+            this->post_output_msg(0, PMC_M(t));
         }
     }
 
