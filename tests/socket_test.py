@@ -16,7 +16,7 @@ class test_socket_message(unittest.TestCase):
 
     def do_loop(self, to_socket, from_socket):
         src_data = tuple(numpy.random.randint(-1024, 1024, 10))
-        src = grextras.VectorSource(numpy.int32, src_data, autodone=False)
+        src = grextras.VectorSource(numpy.int32, src_data)
         dst = grextras.VectorSink(numpy.int32)
 
         s2d = grextras.Stream2Datagram(numpy.dtype(numpy.int32).itemsize)

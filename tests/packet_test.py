@@ -22,7 +22,7 @@ class test_packet(unittest.TestCase):
         deframer = grextras.PacketDeframer()
 
         src_data = tuple(numpy.random.randint(-1024, 1024, 11)) #40 bytes + padding
-        src = grextras.VectorSource(numpy.int32, src_data, autodone=False)
+        src = grextras.VectorSource(numpy.int32, src_data)
         dst = grextras.VectorSink(numpy.int32)
 
         from gnuradio import gr
