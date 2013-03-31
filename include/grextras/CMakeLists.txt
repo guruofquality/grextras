@@ -23,6 +23,7 @@ install(FILES
     socket_message.hpp
     tuntap.hpp
 
+    uhd_control_port.hpp
     uhd_status_port.hpp
 
     DESTINATION include/grextras
