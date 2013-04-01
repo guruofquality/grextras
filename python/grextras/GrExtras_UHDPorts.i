@@ -1,5 +1,5 @@
 //
-// Copyright 2012 Ettus Research LLC
+// Copyright 2012-2013 Ettus Research LLC
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 //
 
 %{
+#include <grextras/uhd_control_port.hpp>
 #include <grextras/uhd_status_port.hpp>
 %}
 
@@ -26,14 +27,17 @@ namespace boost{template<class T>struct shared_ptr{T*operator->();};}
 %include <gras/element.i>
 %import <gras/block.i>
 %include <grextras/config.hpp>
+%include <grextras/uhd_control_port.hpp>
 %include <grextras/uhd_status_port.hpp>
 
+%template(grextras_UHDControlPort) boost::shared_ptr<grextras::UHDControlPort>;
 %template(grextras_UHDStatusPort) boost::shared_ptr<grextras::UHDStatusPort>;
 
 %pythoncode %{
 
+UHDControlPort = UHDStatusPort.make
 UHDStatusPort = UHDStatusPort.make
 
-__all__ = ["UHDStatusPort"]
+__all__ = ["UHDControlPort", "UHDStatusPort"]
 
 %}

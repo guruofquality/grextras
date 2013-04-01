@@ -26,6 +26,9 @@ list(APPEND grc_sources
     extras_packet_framer.xml
     extras_packet_deframer.xml
 
+    extras_uhd_status_port.xml
+    extras_uhd_control_port.xml
+
     extras_query_server.xml
 )
 
