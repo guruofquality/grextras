@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##UHD status port
+###################################################
+ -->
+<block>
+    <name>UHD: Status Port</name>
+    <key>extras_uhd_status_port</key>
+    <import>import grextras</import>
+    <import>from gnuradio import uhd</import>
+    <make>grextras.UHDStatusPort($addr)</make>
+    <param>
+        <name>Device Address</name>
+        <key>addr</key>
+        <value>addr=192.168.10.2</value>
+        <type>string</type>
+    </param>
+    <source>
+        <name>out</name>
+        <type></type>
+    </source>
+</block>
