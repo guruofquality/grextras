@@ -29,6 +29,14 @@ namespace grextras
  * The UHD control port block gives property tree access to a USRP object.
  * This allows other user blocks to programmatically access USRP properties,
  * through the GRAS properties interface and element tree API.
+ *
+ * Available properties:
+ * - "command_time" of type uhd::time_spec_t
+ *   (note, set to time_spec_t(0.0) to clear command time)
+ * - "rx_freq" of type uhd::tune_request
+ * - "tx_freq" of type uhd::tune_request
+ * - "rx_gain" of type double
+ * - "tx_gain" of type double
  */
 struct GREXTRAS_API UHDControlPort : virtual gras::Block
 {

@@ -33,12 +33,6 @@ inline bool operator==(const uhd::tune_request_t &, const uhd::tune_request_t &)
     return false;
 }
 
-//! dummy == operator so we can use this type in PMC
-inline bool operator==(const uhd::tune_result_t &, const uhd::tune_result_t &)
-{
-    return false;
-}
-
 struct UHDControlPortImpl : public UHDControlPort
 {
     UHDControlPortImpl(uhd::usrp::multi_usrp::sptr usrp):

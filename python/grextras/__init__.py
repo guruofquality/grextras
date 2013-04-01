@@ -12,3 +12,8 @@ except ImportError:
     pass
 
 from GrExtras_UHDPorts import *
+
+try:
+    import GrExtras_UHDTypes
+except ImportError:
+    pass
