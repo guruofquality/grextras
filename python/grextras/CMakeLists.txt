@@ -10,6 +10,12 @@ include(GrSwig)
 include(GrPython)
 
 ########################################################################
+# local headers
+########################################################################
+list(APPEND GR_SWIG_INCLUDE_DIRS ${GREXTRAS_SOURCE_DIR}/include)
+list(APPEND GR_SWIG_INCLUDE_DIRS ${GRAS_INCLUDE_DIRS})
+
+########################################################################
 # Optional UHD
 ########################################################################
 if(UHD_FOUND AND GNURADIO_CORE_FOUND)
@@ -27,8 +33,6 @@ endif()
 ########################################################################
 # setup SWIG build
 ########################################################################
-list(APPEND GR_SWIG_INCLUDE_DIRS ${GREXTRAS_SOURCE_DIR}/include)
-list(APPEND GR_SWIG_INCLUDE_DIRS ${GRAS_INCLUDE_DIRS})
 list(APPEND GR_SWIG_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
 set(GR_SWIG_LIBRARIES grextras ${GRAS_LIBRARIES})
 
