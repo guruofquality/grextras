@@ -19,12 +19,6 @@ list(APPEND GR_SWIG_INCLUDE_DIRS ${GRAS_INCLUDE_DIRS})
 # Optional UHD
 ########################################################################
 if(UHD_FOUND AND GNURADIO_CORE_FOUND)
-    foreach(incdir ${GNURADIO_CORE_INCLUDE_DIRS})
-        list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/swig)
-    endforeach(incdir)
-    if (DEFINED GRAS_SOURCE_DIR)
-        list(APPEND GR_SWIG_INCLUDE_DIRS ${GRAS_SOURCE_DIR}/gnuradio/gr-uhd/swig)
-    endif()
     list(APPEND GR_SWIG_INCLUDE_DIRS ${UHD_INCLUDE_DIRS})
     list(APPEND GR_SWIG_LIBRARIES ${UHD_LIBRARIES})
     list(APPEND GR_SWIG_FLAGS "-DHAVE_UHD")
@@ -42,6 +36,7 @@ list(APPEND grextras_swig_targets
     GrExtras_Sources
     GrExtras_UHDPorts
     GrExtras_UHDTypes
+    GrExtras_FramerSink
 )
 
 foreach(target ${grextras_swig_targets})
@@ -63,6 +58,7 @@ GR_PYTHON_INSTALL(
     __init__.py
     GrExtras_TestUtils.py
     GrExtras_Packet.py
+    GrExtras_PacketUtils.py
 
     DESTINATION ${GR_PYTHON_DIR}/grextras
     COMPONENT "extras_python"

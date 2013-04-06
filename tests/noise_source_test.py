@@ -56,9 +56,5 @@ class test_noise_source(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    try: #noise source has a gnuradio dependency, check import before failing the test
-        import gnuradio
-        unittest.main()
-    except ImportError:
-        exit()
+    unittest.main()
 

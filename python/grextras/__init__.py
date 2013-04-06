@@ -6,11 +6,7 @@ from GrExtras_TestUtils import *
 from GrExtras_Misc import *
 from GrExtras_Ops import *
 from GrExtras_Sources import *
-try:
-    from GrExtras_Packet import PacketFramer, PacketDeframer
-except ImportError:
-    pass
-
+from GrExtras_Packet import PacketFramer, PacketDeframer
 from GrExtras_UHDPorts import *
 
 try:

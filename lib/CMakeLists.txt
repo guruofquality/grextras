@@ -61,16 +61,6 @@ if(VOLK_FOUND)
 endif()
 
 ########################################################################
-# Setup GNU Radio Core
-########################################################################
-if(GNURADIO_CORE_FOUND)
-    include_directories(${GNURADIO_CORE_INCLUDE_DIRS})
-    link_directories(${GNURADIO_CORE_LIBRARY_DIRS})
-    list(APPEND GREXTRAS_LIBRARIES ${GNURADIO_CORE_LIBRARIES})
-    add_definitions(-DHAVE_GNURADIO_CORE)
-endif()
-
-########################################################################
 # Optional UHD
 ########################################################################
 if(UHD_FOUND)

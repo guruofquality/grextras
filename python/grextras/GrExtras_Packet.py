@@ -24,13 +24,13 @@ import gras
 import time
 from PMC import *
 from math import pi
-from gnuradio import gr
 try:
     import digital_swig as gr_digital
-    import packet_utils
 except ImportError:
-    from gnuradio.digital import packet_utils
     import gnuradio.digital as gr_digital
+
+import GrExtras_PacketUtils as packet_utils
+from GrExtras_FramerSink import make_digital_framer_sink_1
 
 # /////////////////////////////////////////////////////////////////////////////
 #                   mod/demod with packets as i/o
@@ -133,7 +133,7 @@ class PacketDeframer(gras.HierBlock):
             threshold = 12              # FIXME raise exception
 
         self.correlator = gr_digital.correlate_access_code_bb(access_code, threshold)
-        self.framer_sink = gr_digital.framer_sink_1()
+        self.framer_sink = make_digital_framer_sink_1()
         self._queue_to_datagram = _queue_to_datagram()
         self.connect(self, self.correlator, self.framer_sink, self._queue_to_datagram, self)
 

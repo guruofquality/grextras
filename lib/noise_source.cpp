@@ -2,11 +2,7 @@
 
 #include <grextras/noise_source.hpp>
 #include <boost/make_shared.hpp>
-#ifdef HAVE_GNURADIO_CORE
-#include <gr_random.h>
-#else
-typedef long gr_random;
-#endif
+#include "noise_source_random.hpp"
 #include <stdexcept>
 #include <cmath>
 #include <boost/math/special_functions/round.hpp>
@@ -35,9 +31,7 @@ public:
 
     void work(const InputItems &, const OutputItems &outs)
     {
-        #ifdef HAVE_GNURADIO_CORE
         _index += size_t(_random.ran1()*wave_table_size); //lookup into table is random each work()
-        #endif
 
         type *out = outs[0].cast<type *>();
         for (size_t i = 0; i < outs[0].size(); i++)
@@ -94,9 +88,6 @@ public:
 
     void update_table(void)
     {
-        #ifndef HAVE_GNURADIO_CORE
-        throw std::runtime_error("noise source needs gr_random, but was build without GNU Radio core support!");
-        #else
         if (_wave == "UNIFORM")
         {
             for (size_t i = 0; i < _table.size(); i++)
@@ -127,7 +118,6 @@ public:
             }
         }
         else throw std::invalid_argument("noise source got unknown wave type: " + _wave);
-        #endif
     }
 
     inline void set_elem(const size_t index, const std::complex<double> &val)

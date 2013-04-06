@@ -53,16 +53,9 @@ if(NOT VOLK_FOUND)
     message(WARNING "VOLK vector library not found - optional for math blocks")
 endif()
 
-if(NOT DEFINED GNURADIO_CORE_FOUND)
-    find_package(GnuradioCore)
-endif()
-if(NOT GNURADIO_CORE_FOUND)
-    message(WARNING "GNU Radio Core library not found - optional for noise source")
-endif()
-
 find_package(UHD)
 if(NOT UHD_FOUND)
-    message(WARNING "USRP hardware driver not found - optional for USRP async message")
+    message(WARNING "USRP hardware driver not found - optional for USRP port blocks")
 endif()
 
 ########################################################################
