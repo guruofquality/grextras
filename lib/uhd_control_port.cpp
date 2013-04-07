@@ -40,11 +40,15 @@ struct UHDControlPortImpl : public UHDControlPort
     {
         _usrp = usrp;
         //register handlers
-        this->register_property("command_time", &UHDControlPortImpl::get_command_time, &UHDControlPortImpl::set_command_time);
-        this->register_property("rx_gain", &UHDControlPortImpl::get_rx_gain, &UHDControlPortImpl::set_rx_gain);
-        this->register_property("tx_gain", &UHDControlPortImpl::get_tx_gain, &UHDControlPortImpl::set_tx_gain);
-        this->register_property("rx_freq", &UHDControlPortImpl::get_rx_freq, &UHDControlPortImpl::set_rx_freq);
-        this->register_property("tx_freq", &UHDControlPortImpl::get_tx_freq, &UHDControlPortImpl::set_tx_freq);
+        this->register_setter("command_time", &UHDControlPortImpl::set_command_time);
+        this->register_getter("rx_gain", &UHDControlPortImpl::get_rx_gain);
+        this->register_setter("rx_gain", &UHDControlPortImpl::set_rx_gain);
+        this->register_getter("tx_gain", &UHDControlPortImpl::get_tx_gain);
+        this->register_setter("tx_gain", &UHDControlPortImpl::set_tx_gain);
+        this->register_getter("rx_freq", &UHDControlPortImpl::get_rx_freq);
+        this->register_setter("rx_freq", &UHDControlPortImpl::set_rx_freq);
+        this->register_getter("tx_freq", &UHDControlPortImpl::get_tx_freq);
+        this->register_setter("tx_freq", &UHDControlPortImpl::set_tx_freq);
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -81,57 +85,38 @@ struct UHDControlPortImpl : public UHDControlPort
     /*******************************************************************
      * The RX freq
      ******************************************************************/
-    uhd::tune_request_t _rx_tr;
-    uhd::tune_result_t _rx_tres;
     void set_rx_freq(const uhd::tune_request_t &tr)
     {
-        _rx_tr = tr;
-        _rx_tres = _usrp->set_rx_freq(tr);
+        _usrp->set_rx_freq(tr);
     }
 
-    uhd::tune_request_t get_rx_freq(void)
+    double get_rx_freq(void)
     {
-        uhd::tune_request_t tr = _rx_tr;
-        tr.rf_freq = _rx_tres.actual_rf_freq;
-        tr.dsp_freq = _rx_tres.actual_dsp_freq;
-        return tr;
+        return _usrp->get_rx_freq();
     }
 
     /*******************************************************************
      * The TX freq
      ******************************************************************/
-    uhd::tune_request_t _tx_tr;
-    uhd::tune_result_t _tx_tres;
     void set_tx_freq(const uhd::tune_request_t &tr)
     {
-        _tx_tr = tr;
-        _tx_tres = _usrp->set_tx_freq(tr);
+        _usrp->set_tx_freq(tr);
     }
 
     uhd::tune_request_t get_tx_freq(void)
     {
-        uhd::tune_request_t tr = _tx_tr;
-        tr.rf_freq = _tx_tres.actual_rf_freq;
-        tr.dsp_freq = _tx_tres.actual_dsp_freq;
-        return tr;
+        return _usrp->get_tx_freq();
     }
 
     /*******************************************************************
      * Command time
      ******************************************************************/
-    uhd::time_spec_t _cmd_time;
-    uhd::time_spec_t get_command_time(void)
-    {
-        return _cmd_time;
-    }
-
     void set_command_time(const uhd::time_spec_t &time_spec)
     {
-        _cmd_time = time_spec;
-        if (_cmd_time == uhd::time_spec_t(0.0))
+        if (time_spec == uhd::time_spec_t(0.0))
             _usrp->clear_command_time();
         else
-            _usrp->set_command_time(_cmd_time);
+            _usrp->set_command_time(time_spec);
     }
 
     uhd::usrp::multi_usrp::sptr _usrp;
