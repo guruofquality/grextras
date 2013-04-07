@@ -27,11 +27,8 @@ using namespace grextras;
 
 #include <uhd/usrp/multi_usrp.hpp>
 
-//! dummy == operator so we can use this type in PMC
-inline bool operator==(const uhd::tune_request_t &, const uhd::tune_request_t &)
-{
-    return false;
-}
+//declare false equality operator to use tune req
+PMC_DECL_FALSE_EQUALITY(uhd::tune_request_t)
 
 struct UHDControlPortImpl : public UHDControlPort
 {

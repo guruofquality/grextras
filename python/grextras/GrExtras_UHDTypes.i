@@ -22,11 +22,10 @@
 #include <uhd/types/time_spec.hpp>
 #include <uhd/types/tune_request.hpp>
 
-//! dummy == operator so we can use this type in PMC
-inline bool operator==(const uhd::tune_request_t &, const uhd::tune_request_t &)
-{
-    return false;
-}
+#include <PMC/PMC.hpp>
+
+//declare false equality operator to use tune req
+PMC_DECL_FALSE_EQUALITY(uhd::tune_request_t)
 
 %}
 
