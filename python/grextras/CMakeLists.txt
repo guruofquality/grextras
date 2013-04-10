@@ -58,7 +58,6 @@ GR_PYTHON_INSTALL(
     __init__.py
     GrExtras_TestUtils.py
     GrExtras_Packet.py
-    GrExtras_PacketUtils.py
 
     DESTINATION ${GR_PYTHON_DIR}/grextras
     COMPONENT "extras_python"

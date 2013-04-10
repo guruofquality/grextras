@@ -26,10 +26,11 @@ from PMC import *
 from math import pi
 try:
     import digital_swig as gr_digital
+    import packet_utils
 except ImportError:
+    from gnuradio.digital import packet_utils
     import gnuradio.digital as gr_digital
 
-import GrExtras_PacketUtils as packet_utils
 from GrExtras_FramerSink import make_digital_framer_sink_1
 
 # /////////////////////////////////////////////////////////////////////////////

@@ -46,8 +46,8 @@ RegisterPy2PMC(
 )
 
 RegisterPMC2Py(
-    is_pmc = pmc_is_uhd_time_spec,
-    pmc2py = pmc_to_uhd_time_spec,
+    is_pmc = pmc_is_swig_uhd_time_spec,
+    pmc2py = pmc_to_swig_uhd_time_spec,
 )
 
 RegisterPy2PMC(
@@ -56,8 +56,8 @@ RegisterPy2PMC(
 )
 
 RegisterPMC2Py(
-    is_pmc = pmc_is_uhd_tune_request,
-    pmc2py = pmc_to_uhd_tune_request,
+    is_pmc = pmc_is_swig_uhd_tune_request,
+    pmc2py = pmc_to_swig_uhd_tune_request,
 )
 
 %}
