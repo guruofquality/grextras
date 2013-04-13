@@ -26,6 +26,9 @@ install(FILES
     uhd_control_port.hpp
     uhd_status_port.hpp
 
+    serialize_port.hpp
+    deserialize_port.hpp
+
     DESTINATION include/grextras
     COMPONENT "extras_devel"
 )
