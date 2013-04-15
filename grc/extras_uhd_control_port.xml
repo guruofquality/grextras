@@ -7,6 +7,7 @@
 <block>
     <name>UHD: Control Port</name>
     <key>extras_uhd_control_port</key>
+    <category>UHD</category>
     <import>import grextras</import>
     <import>from gnuradio import uhd</import>
     <make>grextras.UHDControlPort($addr)

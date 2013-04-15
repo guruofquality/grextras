@@ -7,6 +7,7 @@
 <block>
     <name>UHD: Status Port</name>
     <key>extras_uhd_status_port</key>
+    <category>UHD</category>
     <import>import grextras</import>
     <import>from gnuradio import uhd</import>
     <make>grextras.UHDStatusPort($addr)</make>
