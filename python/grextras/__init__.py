@@ -8,6 +8,7 @@ from GrExtras_Ops import *
 from GrExtras_Sources import *
 from GrExtras_Packet import PacketFramer, PacketDeframer
 from GrExtras_UHDPorts import *
+from GrExtras_OpenCL import *
 
 try:
     import GrExtras_UHDTypes

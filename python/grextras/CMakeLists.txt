@@ -37,6 +37,7 @@ list(APPEND grextras_swig_targets
     GrExtras_UHDPorts
     GrExtras_UHDTypes
     GrExtras_FramerSink
+    GrExtras_OpenCL
 )
 
 foreach(target ${grextras_swig_targets})

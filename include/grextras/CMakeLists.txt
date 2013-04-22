@@ -23,6 +23,8 @@ install(FILES
     socket_message.hpp
     tuntap.hpp
 
+    opencl_block.hpp
+
     uhd_control_port.hpp
     uhd_status_port.hpp
 
