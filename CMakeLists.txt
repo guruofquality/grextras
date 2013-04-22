@@ -58,6 +58,11 @@ if(NOT UHD_FOUND)
     message(WARNING "USRP hardware driver not found - optional for USRP port blocks")
 endif()
 
+find_package(OpenCL)
+if (NOT OPENCL_FOUND)
+    message(WARNING "OpenCL library not found - optional for OpenCL block")
+endif()
+
 ########################################################################
 # Add subdirectories
 ########################################################################

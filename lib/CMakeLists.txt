@@ -24,6 +24,8 @@ list(APPEND GREXTRAS_SOURCES
     delay.cpp
     stream_selector.cpp
 
+    opencl_block.cpp
+
     uhd_status_port.cpp
     uhd_control_port.cpp
 )
@@ -68,6 +70,15 @@ if(UHD_FOUND)
     link_directories(${UHD_LIBRARY_DIRS})
     list(APPEND GREXTRAS_LIBRARIES ${UHD_LIBRARIES})
     add_definitions(-DHAVE_UHD)
+endif()
+
+########################################################################
+# Optional OpenCL
+########################################################################
+if(OPENCL_FOUND)
+    include_directories(${OPENCL_INCLUDE_DIRS})
+    list(APPEND GREXTRAS_LIBRARIES ${OPENCL_LIBRARIES})
+    add_definitions(-DHAVE_OPENCL)
 endif()
 
 ########################################################################
