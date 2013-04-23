@@ -26,6 +26,22 @@ struct GREXTRAS_API OpenClBlock : virtual gras::Block
      * \return a new shared ptr for the block
      */
     static sptr make(const std::string &dev_type = "GPU");
+
+    /*!
+     * Set the source code to be run by this block.
+     * The source code is a cl program as a string.
+     * Documentation for the possible options:
+     * http://www.khronos.org/registry/cl/sdk/1.0/docs/man/xhtml/clBuildProgram.html
+     *
+     * \param name name of a kernel in the source
+     * \param source the cl source code to compile
+     * \param options optional options, see docs
+     */
+    virtual void set_program(
+        const std::string &name,
+        const std::string &source,
+        const std::string &options = ""
+    ) = 0;
 };
 
 }

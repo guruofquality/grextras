@@ -7,6 +7,10 @@
 #include <utility>
 #include <boost/make_shared.hpp>
 
+//http://www.codeproject.com/Articles/92788/Introductory-Tutorial-to-OpenCL
+//http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/introductory-tutorial-to-opencl/
+//http://www.khronos.org/registry/cl/specs/opencl-cplusplus-1.1.pdf
+
 using namespace grextras;
 
 #ifdef HAVE_OPENCL
@@ -73,18 +77,32 @@ struct OpenClBlockImpl : OpenClBlock
          * enumerate devices
          **************************************************************/
         {
-            cl::vector<cl::Device> _cl_devices;
             _cl_devices = _cl_context.getInfo<CL_CONTEXT_DEVICES>();
             checkErr(_cl_devices.size() > 0 ? CL_SUCCESS : -1, "devices.size() > 0");
         }
-
     }
 
     ~OpenClBlockImpl(void)
     {
-        
+        //NOP
     }
 
+    void set_program(const std::string &name, const std::string &source, const std::string &options)
+    {
+        cl::Program::Sources cl_source(1,
+            std::make_pair(source.c_str(), source.length()+1));
+        _cl_program = cl::Program(_cl_context, cl_source);
+        cl_int err = _cl_program.build(_cl_devices, options.c_str());
+        checkErr(err, "Program::build");
+
+        _cl_kernel = cl::Kernel(_cl_program, name.c_str(), &err);
+        checkErr(err, "Kernel create");
+    }
+
+    void notify_topology(const size_t num_inputs, const size_t num_outputs)
+    {
+        
+    }
 
     void work(const InputItems &ins, const OutputItems &outs)
     {
@@ -110,6 +128,8 @@ struct OpenClBlockImpl : OpenClBlock
     cl::vector<cl::Platform> _cl_platforms;
     cl::Platform _cl_platform;
     cl::vector<cl::Device> _cl_devices;
+    cl::Program _cl_program;
+    cl::Kernel _cl_kernel;
 
 };
 
