@@ -79,6 +79,9 @@ if(OPENCL_FOUND)
     include_directories(${OPENCL_INCLUDE_DIRS})
     list(APPEND GREXTRAS_LIBRARIES ${OPENCL_LIBRARIES})
     add_definitions(-DHAVE_OPENCL)
+    #the following definition is supposed to be a harmless fix
+    #http://www.khronos.org/message_boards/showthread.php/7931
+    add_definitions(-DCL_USE_DEPRECATED_OPENCL_1_1_APIS)
 endif()
 
 ########################################################################

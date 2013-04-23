@@ -14,77 +14,6 @@ using namespace grextras;
 #define __NO_STD_VECTOR // Use cl::vector instead of STL version
 #include <CL/cl.hpp>
 
-/*
-    #include <cstdio>
-    #include <cstdlib>
-    #include <fstream>
-    #include <iostream>
-    #include <string>
-    #include <iterator>
-
-    inline void
-    checkErr(cl_int err, const char * name)
-    {
-        if (err != CL_SUCCESS) throw std::runtime_error(str(
-            boost::format("ERROR: %s (err)") % name % err));
-    }
-
-        int
-    foobarz(void)
-    {
-    cl_int err;
-    cl::vector< cl::Platform > platformList;
-    cl::Platform::get(&platformList);
-    checkErr(platformList.size()!=0 ? CL_SUCCESS : -1, "cl::Platform::get");
-    std::cerr << "Platform number is: " << platformList.size() << std::endl;std::string platformVendor;
-    platformList[0].getInfo((cl_platform_info)CL_PLATFORM_VENDOR, &platformVendor);
-    std::cerr << "Platform is by: " << platformVendor << "\n";
-    cl_context_properties cprops[3] =
-    {CL_CONTEXT_PLATFORM, (cl_context_properties)(platformList[0])(), 0};cl::Context context(
-    CL_DEVICE_TYPE_CPU,
-    cprops,
-    NULL,
-    NULL,
-    &err);
-    checkErr(err, "Conext::Context()"); 
-}
-* */
-
-#include <stdio.h>
-#include <stdlib.h>
- 
-int fark()
-{
-    int err;
-    cl_uint platforms;
-    cl_platform_id platform = NULL;
-    char cBuffer[1024];
- 
-    err = clGetPlatformIDs( 1, &platform, &platforms );
-    if (err != CL_SUCCESS)
-    {
-        printf("Error in OpenCL call!\n");
-        return EXIT_FAILURE;
-    }
-    printf("Number of platforms: %d\n", platforms);
- 
-    err = clGetPlatformInfo( platform, CL_PLATFORM_NAME, sizeof(cBuffer), cBuffer, NULL );
-    if (err != CL_SUCCESS)
-    {
-        printf("Error in OpenCL call!\n");
-        return EXIT_FAILURE;
-    }
-    printf("CL_PLATFORM_NAME :\t %s\n", cBuffer);
- 
-    err = clGetPlatformInfo( platform, CL_PLATFORM_VERSION,     sizeof(cBuffer), cBuffer, NULL );
-    if (err != CL_SUCCESS)
-    {
-        printf("Error in OpenCL call!\n");
-        return EXIT_FAILURE;
-    }
-    printf("CL_PLATFORM_VERSION :\t %s\n", cBuffer);
-}
-
 inline void checkErr(cl_int err, const char * name)
 {
     if (err != CL_SUCCESS) throw std::runtime_error(str(
@@ -97,75 +26,58 @@ struct OpenClBlockImpl : OpenClBlock
         gras::Block("GrExtras OpenClBlock")
     {
 
-        fark();
-        return;
-
         /***************************************************************
          * Determine device type
          **************************************************************/
-        cl_device_type my_device_type = CL_DEVICE_TYPE_CPU;
-        if (dev_type == "CPU") my_device_type = CL_DEVICE_TYPE_CPU;
-        else if (dev_type == "GPU") my_device_type = CL_DEVICE_TYPE_GPU;
+        if (dev_type == "CPU") _cl_dev_type = CL_DEVICE_TYPE_CPU;
+        else if (dev_type == "GPU") _cl_dev_type = CL_DEVICE_TYPE_GPU;
         else throw std::runtime_error("OpenClBlock unknown device type: " + dev_type);
 
         /***************************************************************
          * Enumerate platforms
          **************************************************************/
-
-        #define OCLB_ASSERT(call) \
-        { \
-            const cl_int __err = (call); \
-            if (__err != CL_SUCCESS) throw std::runtime_error(str(boost::format("Error %s = %d") % #call % __err)); \
-        }
-
-        cl_platform_id my_platform_ids[64];
-        cl_uint my_num_platforms = 0;
-        OCLB_ASSERT(clGetPlatformIDs(64, my_platform_ids, &my_num_platforms));
-
-        std::cout << "my_num_platforms " << my_num_platforms << std::endl;
-
-
         {
-                int gpu = 1;
-                cl_device_id device_id;             // compute device id 
-                cl_int err;
-
-            err = clGetDeviceIDs(NULL, gpu ? CL_DEVICE_TYPE_GPU : CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
-
-            if (err != CL_SUCCESS)
-
-            {
-
-                std::cout << ("Error: Failed to create a device group!\n");
-
-                throw EXIT_FAILURE;
-
-            }
+            cl::Platform::get(&_cl_platforms);
+            checkErr(_cl_platforms.size() != 0 ? CL_SUCCESS : -1, "cl::Platform::get");
+            std::cerr << "Number of platforms: " << _cl_platforms.size() << ", "
+                      << "selecting 0 ..." << std::endl;
+            _cl_platform = _cl_platforms[0];
+            std::string platformStr;
+            _cl_platform.getInfo((cl_platform_info)CL_PLATFORM_NAME, &platformStr);
+            std::cerr << "    name: " << platformStr << std::endl;
+            _cl_platform.getInfo((cl_platform_info)CL_PLATFORM_VENDOR, &platformStr);
+            std::cerr << "    vendor: " << platformStr << std::endl;
+            _cl_platform.getInfo((cl_platform_info)CL_PLATFORM_VERSION, &platformStr);
+            std::cerr << "    version: " << platformStr << std::endl;
         }
-        
-        cl::vector<cl::Platform> platformList;
-        cl::Platform::get(&platformList);
-        checkErr(platformList.size() != 0 ? CL_SUCCESS : -1, "cl::Platform::get");
-        std::cerr << "Platform number is: " << platformList.size() << std::endl;
-        std::string platformVendor;
-        platformList[0].getInfo((cl_platform_info)CL_PLATFORM_VENDOR, &platformVendor);
-        std::cerr << "Platform is by: " << platformVendor << "\n";
 
         /***************************************************************
          * create context
          **************************************************************/
-        cl_context_properties cprops[3] =
-            {CL_CONTEXT_PLATFORM, (cl_context_properties)(platformList[0])(), 0};
+        {
+            cl_context_properties cprops[3] =
+                {CL_CONTEXT_PLATFORM, (cl_context_properties)(_cl_platform)(), 0};
 
-        cl_int err = CL_SUCCESS;
-        _cl_context = cl::Context(
-            my_device_type,
-            cprops,
-            NULL,
-            NULL,
-            &err
-        );
-        checkErr(err, "cl::Context"); 
+            cl_int err = CL_SUCCESS;
+            _cl_context = cl::Context(
+                _cl_dev_type,
+                cprops,
+                NULL,
+                NULL,
+                &err
+            );
+            checkErr(err, "cl::Context");
+        }
+
+        /***************************************************************
+         * enumerate devices
+         **************************************************************/
+        {
+            cl::vector<cl::Device> _cl_devices;
+            _cl_devices = _cl_context.getInfo<CL_CONTEXT_DEVICES>();
+            checkErr(_cl_devices.size() > 0 ? CL_SUCCESS : -1, "devices.size() > 0");
+        }
+
     }
 
     ~OpenClBlockImpl(void)
@@ -193,7 +105,11 @@ struct OpenClBlockImpl : OpenClBlock
         
     }
 
+    cl_device_type _cl_dev_type;
     cl::Context _cl_context;
+    cl::vector<cl::Platform> _cl_platforms;
+    cl::Platform _cl_platform;
+    cl::vector<cl::Device> _cl_devices;
 
 };
 
