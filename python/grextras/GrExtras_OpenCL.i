@@ -4,6 +4,11 @@
 #include <grextras/opencl_block.hpp>
 %}
 
+%include <std_string.i>
+%include <std_vector.i>
+
+%template (opencl_block_vector_of_string) std::vector<std::string>;
+
 namespace boost{template<class T>struct shared_ptr{T*operator->();};}
 
 %include <gras/element.i>

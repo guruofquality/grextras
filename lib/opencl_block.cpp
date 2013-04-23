@@ -24,6 +24,31 @@ inline void checkErr(cl_int err, const char * name)
         boost::format("ERROR: %s (%d)") % name % err));
 }
 
+static std::string my_vec_get(const std::vector<std::string> &v, const size_t index, const std::string &def)
+{
+    if (v.empty()) return def;
+    if (index < v.size()) return v[index];
+    return v.back();
+}
+
+static int mode_str_to_flags(const std::string &hmode, const std::string &dmode)
+{
+    int flags = 0;
+
+    if (hmode == "RW") flags |= CL_MEM_ALLOC_HOST_PTR;
+    else if (hmode == "RO") flags |= CL_MEM_ALLOC_HOST_PTR | CL_MEM_HOST_READ_ONLY;
+    else if (hmode == "WO") flags |= CL_MEM_ALLOC_HOST_PTR | CL_MEM_HOST_WRITE_ONLY;
+    else if (hmode == "XX") flags |= CL_MEM_HOST_NO_ACCESS;
+    else throw std::runtime_error("opencl block unknown host mode: " + hmode);
+
+    if (dmode == "RW") flags |= CL_MEM_READ_WRITE;
+    else if (dmode == "RO") flags |= CL_MEM_READ_ONLY;
+    else if (dmode == "WO") flags |= CL_MEM_WRITE_ONLY;
+    else throw std::runtime_error("opencl block unknown device mode: " + dmode);
+
+    return flags;
+}
+
 struct OpenClBlockImpl : OpenClBlock
 {
     OpenClBlockImpl(const std::string &dev_type):
@@ -109,19 +134,44 @@ struct OpenClBlockImpl : OpenClBlock
         
     }
 
+    void set_host_access_mode(const std::string &direction, const std::vector<std::string> &modes)
+    {
+        if (direction == "INPUT") _input_host_modes = modes;
+        else if (direction == "OUTPUT") _output_host_modes = modes;
+        else throw std::runtime_error("set_host_access_mode unknown direction " + direction);
+    }
+
+    void set_device_access_mode(const std::string &direction, const std::vector<std::string> &modes)
+    {
+        if (direction == "INPUT") _input_device_modes = modes;
+        else if (direction == "OUTPUT") _output_device_modes = modes;
+        else throw std::runtime_error("set_device_access_mode unknown direction " + direction);
+    }
+
     gras::BufferQueueSptr output_buffer_allocator(
         const size_t which_output,
         const gras::SBufferConfig &config
     ){
-        
+        const int flags = mode_str_to_flags(
+            my_vec_get(_output_host_modes, which_output, "RO"),
+            my_vec_get(_output_device_modes, which_output, "WO")
+        );
     }
 
     gras::BufferQueueSptr input_buffer_allocator(
         const size_t which_input,
         const gras::SBufferConfig &config
     ){
-        
+        const int flags = mode_str_to_flags(
+            my_vec_get(_input_host_modes, which_input, "WO"),
+            my_vec_get(_input_device_modes, which_input, "RO")
+        );
     }
+
+    std::vector<std::string> _input_host_modes;
+    std::vector<std::string> _output_host_modes;
+    std::vector<std::string> _input_device_modes;
+    std::vector<std::string> _output_device_modes;
 
     cl_device_type _cl_dev_type;
     cl::Context _cl_context;
