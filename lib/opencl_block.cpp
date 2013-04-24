@@ -5,6 +5,7 @@
 #include <boost/format.hpp>
 #include <iostream>
 #include <utility>
+#include <vector>
 #include <boost/make_shared.hpp>
 
 //http://www.codeproject.com/Articles/92788/Introductory-Tutorial-to-OpenCL
@@ -15,9 +16,11 @@ using namespace grextras;
 
 #ifdef HAVE_OPENCL
 
-#define __NO_STD_VECTOR // Use cl::vector instead of STL version
 #include <CL/cl.hpp>
 
+/***********************************************************************
+ * Helper functions
+ **********************************************************************/
 inline void checkErr(cl_int err, const char * name)
 {
     if (err != CL_SUCCESS) throw std::runtime_error(str(
@@ -49,6 +52,21 @@ static int mode_str_to_flags(const std::string &hmode, const std::string &dmode)
     return flags;
 }
 
+/***********************************************************************
+ * shared buffer table
+ **********************************************************************/
+//boost::mutex _shared_buffer_table_write_mutex;
+struct BufferTableEntry
+{
+    
+    cl::Buffer cl_buffer;
+};
+static std::vector<BufferTableEntry> shared_buffer_table;
+
+
+/***********************************************************************
+ * Block implementation
+ **********************************************************************/
 struct OpenClBlockImpl : OpenClBlock
 {
     OpenClBlockImpl(const std::string &dev_type):
@@ -104,7 +122,18 @@ struct OpenClBlockImpl : OpenClBlock
         {
             _cl_devices = _cl_context.getInfo<CL_CONTEXT_DEVICES>();
             checkErr(_cl_devices.size() > 0 ? CL_SUCCESS : -1, "devices.size() > 0");
+            _cl_device = _cl_devices[0];
         }
+
+        /***************************************************************
+         * command queue
+         **************************************************************/
+        {
+            cl_int err = CL_SUCCESS;
+            _cl_cmd_queue = cl::CommandQueue(_cl_context, _cl_device, 0, &err);
+            checkErr(err, "cl::CommandQueue");
+        }
+
     }
 
     ~OpenClBlockImpl(void)
@@ -131,7 +160,27 @@ struct OpenClBlockImpl : OpenClBlock
 
     void work(const InputItems &ins, const OutputItems &outs)
     {
-        
+        //http://streamcomputing.eu/blog/2013-02-03/opencl-basics-flags-for-the-creating-memory-objects/
+        //inputs
+        /*
+        cl_mem input = clCreateBuffer(context, CL_MEM_READ_ONLY | 
+            CL_MEM_USE_HOST_PTR, sizeof(float) * count, &data_in, NULL);
+        void* data_in_ptr = clEnqueueMapBuffer(queue, input, CL_TRUE, 
+            CL_MAP_READ, 0, sizeof(float) * count, 0, NULL, NULL, &err);
+        err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &input)
+        clEnqueueUnmapMemObject(queue, input, data_in_ptr, 0, NULL, NULL);
+        err = clReleaseMemObject(input);
+        */
+        //outputs
+        /*
+        cl_mem output = clCreateBuffer(context, CL_MEM_WRITE_ONLY | 
+            CL_MEM_USE_HOST_PTR, sizeof(float) * count, &data_out, NULL);
+        void* data_out_ptr = clEnqueueMapBuffer(queue, output, CL_TRUE, 
+            CL_MAP_WRITE, 0, sizeof(float) * count, 0, NULL, NULL, &err);
+        err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &output)
+        clEnqueueUnmapMemObject(queue, output, data_out_ptr, 0, NULL, NULL); 
+        err = clReleaseMemObject(output);
+        */
     }
 
     void set_host_access_mode(const std::string &direction, const std::vector<std::string> &modes)
@@ -175,11 +224,13 @@ struct OpenClBlockImpl : OpenClBlock
 
     cl_device_type _cl_dev_type;
     cl::Context _cl_context;
-    cl::vector<cl::Platform> _cl_platforms;
+    std::vector<cl::Platform> _cl_platforms;
     cl::Platform _cl_platform;
-    cl::vector<cl::Device> _cl_devices;
+    std::vector<cl::Device> _cl_devices;
+    cl::Device _cl_device;
     cl::Program _cl_program;
     cl::Kernel _cl_kernel;
+    cl::CommandQueue _cl_cmd_queue;
 
 };
 
