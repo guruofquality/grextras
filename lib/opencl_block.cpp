@@ -11,6 +11,7 @@
 //http://www.codeproject.com/Articles/92788/Introductory-Tutorial-to-OpenCL
 //http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/introductory-tutorial-to-opencl/
 //http://www.khronos.org/registry/cl/specs/opencl-cplusplus-1.1.pdf
+//http://streamcomputing.eu/blog/2013-02-03/opencl-basics-flags-for-the-creating-memory-objects/
 
 using namespace grextras;
 
@@ -18,9 +19,9 @@ using namespace grextras;
 
 #include <CL/cl.hpp>
 
-static void checkErr(cl_int err, const char * name)
+static GRAS_FORCE_INLINE void checkErr(cl_int err, const char * name)
 {
-    if (err != CL_SUCCESS) throw std::runtime_error(str(
+    if GRAS_UNLIKELY(err != CL_SUCCESS) throw std::runtime_error(str(
         boost::format("ERROR: %s (%d)") % name % err));
 }
 
@@ -67,6 +68,15 @@ struct OpenClBlockImpl : OpenClBlock
     cl::Program _cl_program;
     cl::Kernel _cl_kernel;
     cl::CommandQueue _cl_cmd_queue;
+
+    //temp work containers for unmap
+    std::vector<const cl::Buffer *> _work_input_buffs;
+    std::vector<const cl::Buffer *> _work_output_buffs;
+    std::vector<void *> _work_input_ptrs;
+    std::vector<void *> _work_output_ptrs;
+    cl::Buffer _work_consume_buffer;
+    cl::Buffer _work_produce_buffer;
+    cl_uint *_work_consume_ptr, *_work_produce_ptr;
 };
 
 /***********************************************************************
@@ -163,32 +173,119 @@ void OpenClBlockImpl::set_program(const std::string &name, const std::string &so
  **********************************************************************/
 void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_outputs)
 {
-    
+    cl_int err = CL_SUCCESS;
+    _work_input_buffs.resize(num_inputs);
+    _work_input_ptrs.resize(num_inputs);
+    _work_consume_buffer = cl::Buffer(
+        _cl_context,
+        CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
+        num_inputs * sizeof(cl_uint),
+        NULL, &err
+    );
+    checkErr(err, "_work_consume_buffer alloc");
+    err = _work_consume_buffer.getInfo(CL_MEM_HOST_PTR, &_work_consume_ptr);
+    checkErr(err, "_work_consume_buffer.getInfo(CL_MEM_HOST_PTR)");
+
+    _work_output_buffs.resize(num_outputs);
+    _work_output_ptrs.resize(num_outputs);
+    _work_produce_buffer = cl::Buffer(
+        _cl_context,
+        CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
+        num_outputs * sizeof(cl_uint),
+        NULL, &err
+    );
+    checkErr(err, "_work_produce_buffer alloc");
+    err = _work_produce_buffer.getInfo(CL_MEM_HOST_PTR, &_work_produce_ptr);
+    checkErr(err, "_work_produce_buffer.getInfo(CL_MEM_HOST_PTR)");
 }
 
 void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
 {
-    //http://streamcomputing.eu/blog/2013-02-03/opencl-basics-flags-for-the-creating-memory-objects/
-    //inputs
-    /*
-    cl_mem input = clCreateBuffer(context, CL_MEM_READ_ONLY | 
-        CL_MEM_USE_HOST_PTR, sizeof(float) * count, &data_in, NULL);
-    void* data_in_ptr = clEnqueueMapBuffer(queue, input, CL_TRUE, 
-        CL_MAP_READ, 0, sizeof(float) * count, 0, NULL, NULL, &err);
-    err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &input)
-    clEnqueueUnmapMemObject(queue, input, data_in_ptr, 0, NULL, NULL);
-    err = clReleaseMemObject(input);
-    */
-    //outputs
-    /*
-    cl_mem output = clCreateBuffer(context, CL_MEM_WRITE_ONLY | 
-        CL_MEM_USE_HOST_PTR, sizeof(float) * count, &data_out, NULL);
-    void* data_out_ptr = clEnqueueMapBuffer(queue, output, CL_TRUE, 
-        CL_MAP_WRITE, 0, sizeof(float) * count, 0, NULL, NULL, &err);
-    err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &output)
-    clEnqueueUnmapMemObject(queue, output, data_out_ptr, 0, NULL, NULL); 
-    err = clReleaseMemObject(output);
-    */
+    cl_int err = CL_SUCCESS;
+    size_t arg_index = 0;
+
+    //map input buffers
+    for (size_t i = 0; i < ins.size(); i++)
+    {
+        gras::SBuffer buffer = get_input_buffer(i);
+        _work_input_buffs[i] = reinterpret_cast<const cl::Buffer *>(buffer.get_user_index());
+        _work_input_ptrs[i] = _cl_cmd_queue.enqueueMapBuffer(
+            *_work_input_buffs[i], //buffer
+            CL_TRUE,// blocking_map
+            CL_MEM_READ_ONLY, //cl_map_map_flags
+            buffer.offset, //offset
+            buffer.length //size
+        );
+        _work_consume_ptr[i] = ins[i].size();
+        _cl_kernel.setArg(arg_index++, _work_input_ptrs[i]);
+    }
+
+    //map output buffers
+    for (size_t i = 0; i < outs.size(); i++)
+    {
+        gras::SBuffer buffer = get_output_buffer(i);
+        _work_output_buffs[i] = reinterpret_cast<const cl::Buffer *>(buffer.get_user_index());
+        _work_output_ptrs[i] = _cl_cmd_queue.enqueueMapBuffer(
+            *_work_output_buffs[i], //buffer
+            CL_TRUE,// blocking_map
+            CL_MEM_WRITE_ONLY, //cl_map_map_flags
+            buffer.offset, //offset
+            buffer.length //size
+        );
+        _work_produce_ptr[i] = outs[i].size();
+        _cl_kernel.setArg(arg_index++, _work_output_ptrs[i]);
+    }
+
+    //set kernel args for consume and produce item counts
+    _cl_kernel.setArg(arg_index++, _work_consume_buffer);
+    _cl_kernel.setArg(arg_index++, _work_produce_buffer);
+
+    //enqueue work
+    err = _cl_cmd_queue.enqueueNDRangeKernel(
+        _cl_kernel, //kernel
+        cl::NullRange, //offset
+        cl::NDRange(1)/*TODO*/, //global
+        cl::NDRange(1)/*TODO*/ //local
+    );
+    checkErr(err, "enqueueNDRangeKernel");
+
+    //read back consume and produce results
+    err = _cl_cmd_queue.enqueueReadBuffer(
+        _work_consume_buffer, //buffer
+        CL_TRUE, //blocking_read
+        0, //offset
+        ins.size()*sizeof(cl_uint), //size
+        _work_consume_ptr //pointer
+    );
+    checkErr(err, "_work_consume_buffer enqueueReadBuffer");
+    err = _cl_cmd_queue.enqueueReadBuffer(
+        _work_produce_buffer, //buffer
+        CL_TRUE, //blocking_read
+        0, //offset
+        outs.size()*sizeof(cl_uint), //size
+        _work_produce_ptr //pointer
+    );
+    checkErr(err, "_work_produce_buffer enqueueReadBuffer");
+
+    //wait for work to complete
+    err = _cl_cmd_queue.enqueueBarrier();
+    checkErr(err, "wait work enqueueBarrier");
+
+    //unmap buffers
+    for (size_t i = 0; i < ins.size(); i++)
+    {
+        this->consume(i, _work_consume_ptr[i]);
+        _cl_cmd_queue.enqueueUnmapMemObject(*_work_input_buffs[i], _work_input_ptrs[i]);
+    }
+    for (size_t i = 0; i < outs.size(); i++)
+    {
+        this->produce(i, _work_produce_ptr[i]);
+        _cl_cmd_queue.enqueueUnmapMemObject(*_work_output_buffs[i], _work_output_ptrs[i]);
+    }
+
+    //wait for unmap to complete
+    err = _cl_cmd_queue.enqueueBarrier();
+    checkErr(err, "wait unmap enqueueBarrier");
 }
 
 /***********************************************************************

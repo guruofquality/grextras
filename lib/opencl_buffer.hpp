@@ -5,6 +5,12 @@
 
 #include <gras/buffer_queue.hpp>
 #include <boost/circular_buffer.hpp>
+#include <boost/bind.hpp>
+
+static void opencl_buffer_delete(gras::SBuffer &, cl::Buffer *cl_buffer)
+{
+    delete cl_buffer;
+}
 
 struct OpenClBufferQueue : gras::BufferQueue
 {
@@ -29,7 +35,6 @@ struct OpenClBufferQueue : gras::BufferQueue
     //! Is the queue empty?
     bool empty(void) const;
 
-    std::vector<cl::Buffer> _buffers;
     gras::SBufferToken _token;
     boost::circular_buffer<gras::SBuffer> _queue;
 };
@@ -45,8 +50,9 @@ OpenClBufferQueue::OpenClBufferQueue(
 {
     for (size_t i = 0; i < num_buffs; i++)
     {
+        //actually bind buffer to sbuffer destructor
         cl_int err = CL_SUCCESS;
-        cl::Buffer buffer(
+        cl::Buffer *cl_buffer = new cl::Buffer(
             context,
             flags,
             config.length,
@@ -54,7 +60,16 @@ OpenClBufferQueue::OpenClBufferQueue(
             &err
         );
         checkErr(err, "cl::Buffer");
-        _buffers.push_back(buffer);
+        void *host_ptr = NULL;
+        err = cl_buffer->getInfo(CL_MEM_HOST_PTR, &host_ptr);
+        checkErr(err, "buffer.getInfo(CL_MEM_HOST_PTR)");
+
+        gras::SBufferConfig sconfig = config;
+        sconfig.user_index = size_t(cl_buffer); //where to get cl buffer
+        sconfig.memory = host_ptr;
+        sconfig.deleter = boost::bind(&opencl_buffer_delete, _1, cl_buffer);
+        gras::SBuffer buff(sconfig);
+        //buffer derefs and returns to this queue thru token callback
     }
 }
 
@@ -66,12 +81,13 @@ OpenClBufferQueue::~OpenClBufferQueue(void)
 
 gras::SBuffer &OpenClBufferQueue::front(void)
 {
-    
+    return _queue.front();
 }
 
 void OpenClBufferQueue::pop(void)
 {
-    
+    _queue.front().reset();
+    _queue.pop_front();
 }
 
 void OpenClBufferQueue::push(const gras::SBuffer &buff)
@@ -84,7 +100,7 @@ void OpenClBufferQueue::push(const gras::SBuffer &buff)
 
 bool OpenClBufferQueue::empty(void) const
 {
-    
+    return _queue.empty();
 }
 
 #endif //INCLUDED_GREXTRAS_LIB_OPENCL_BUFFER_HPP
