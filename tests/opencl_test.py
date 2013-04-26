@@ -6,21 +6,31 @@ import grextras
 import numpy
 
 vector_add_gpu_SOURCE = """
-__kernel void vector_add_gpu (__global const float* src_a,
-                     __global const float* src_b,
-                     __global float* res,
-                    __global uint *num_input_items,
-                    __global uint *num_output_items)
+__kernel void vector_add_gpu(
+    __global const float* in0,
+    __global const float* in1,
+    __global float* out,
+    __global uint *num_in_items,
+    __global uint *num_out_items
+)
 {
-   /* get_global_id(0) returns the ID of the thread in execution.
-   As many threads are launched at the same time, executing the same kernel,
-   each one will receive a different ID, and consequently perform a different computation.*/
-   const int idx = get_global_id(0);
+    const uint i = get_global_id(0);
 
-   /* Now each work-item asks itself: "is my ID inside the vector's range?"
-   If the answer is YES, the work-item performs the corresponding computation*/
-   if (idx < num_input_items[0])
-      res[idx] = src_a[idx] + src_b[idx];
+    if (i < num_out_items[0])
+    {
+        out[i] = in0[i] + in1[i];
+    }
+
+    //set minimum
+    if (i == 0)
+    {
+        __private uint n = num_in_items[0];
+        n = min(n, num_in_items[1]);
+        n = min(n, num_out_items[0]);
+        num_in_items[0] = n;
+        num_in_items[1] = n;
+        num_out_items[0] = n;
+    }
 }
 """
 

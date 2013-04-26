@@ -8,6 +8,7 @@
 #include <vector>
 #include <boost/make_shared.hpp>
 
+//http://www.cc.gatech.edu/~vetter/keeneland/tutorial-2011-04-14/06-intro_to_opencl.pdf
 //http://www.codeproject.com/Articles/92788/Introductory-Tutorial-to-OpenCL
 //http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/introductory-tutorial-to-opencl/
 //http://www.khronos.org/registry/cl/specs/opencl-cplusplus-1.1.pdf
@@ -74,9 +75,10 @@ struct OpenClBlockImpl : OpenClBlock
     std::vector<const cl::Buffer *> _work_output_buffs;
     std::vector<void *> _work_input_ptrs;
     std::vector<void *> _work_output_ptrs;
-    cl::Buffer _work_consume_buffer;
-    cl::Buffer _work_produce_buffer;
-    cl_uint *_work_consume_ptr, *_work_produce_ptr;
+    cl::Buffer _work_input_sizes_buffer;
+    cl::Buffer _work_output_sizes_buffer;
+    cl_uint *_work_input_sizes;
+    cl_uint *_work_output_sizes;
 };
 
 /***********************************************************************
@@ -176,27 +178,27 @@ void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_
     cl_int err = CL_SUCCESS;
     _work_input_buffs.resize(num_inputs);
     _work_input_ptrs.resize(num_inputs);
-    _work_consume_buffer = cl::Buffer(
+    _work_input_sizes_buffer = cl::Buffer(
         _cl_context,
         CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
         num_inputs * sizeof(cl_uint),
         NULL, &err
     );
-    checkErr(err, "_work_consume_buffer alloc");
-    err = _work_consume_buffer.getInfo(CL_MEM_HOST_PTR, &_work_consume_ptr);
-    checkErr(err, "_work_consume_buffer.getInfo(CL_MEM_HOST_PTR)");
+    checkErr(err, "_work_input_sizes_buffer alloc");
+    err = _work_input_sizes_buffer.getInfo(CL_MEM_HOST_PTR, &_work_input_sizes);
+    checkErr(err, "_work_input_sizes_buffer.getInfo(CL_MEM_HOST_PTR)");
 
     _work_output_buffs.resize(num_outputs);
     _work_output_ptrs.resize(num_outputs);
-    _work_produce_buffer = cl::Buffer(
+    _work_output_sizes_buffer = cl::Buffer(
         _cl_context,
         CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
         num_outputs * sizeof(cl_uint),
         NULL, &err
     );
-    checkErr(err, "_work_produce_buffer alloc");
-    err = _work_produce_buffer.getInfo(CL_MEM_HOST_PTR, &_work_produce_ptr);
-    checkErr(err, "_work_produce_buffer.getInfo(CL_MEM_HOST_PTR)");
+    checkErr(err, "_work_output_sizes_buffer alloc");
+    err = _work_output_sizes_buffer.getInfo(CL_MEM_HOST_PTR, &_work_output_sizes);
+    checkErr(err, "_work_output_sizes_buffer.getInfo(CL_MEM_HOST_PTR)");
 }
 
 void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
@@ -216,7 +218,7 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
             buffer.offset, //offset
             buffer.length //size
         );
-        _work_consume_ptr[i] = ins[i].size();
+        _work_input_sizes[i] = ins[i].size();
         _cl_kernel.setArg(arg_index++, _work_input_ptrs[i]);
     }
 
@@ -232,60 +234,60 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
             buffer.offset, //offset
             buffer.length //size
         );
-        _work_produce_ptr[i] = outs[i].size();
+        _work_output_sizes[i] = outs[i].size();
         _cl_kernel.setArg(arg_index++, _work_output_ptrs[i]);
     }
 
     //set kernel args for consume and produce item counts
-    _cl_kernel.setArg(arg_index++, _work_consume_buffer);
-    _cl_kernel.setArg(arg_index++, _work_produce_buffer);
+    _cl_kernel.setArg(arg_index++, _work_input_sizes_buffer);
+    _cl_kernel.setArg(arg_index++, _work_output_sizes_buffer);
 
     //enqueue work
     err = _cl_cmd_queue.enqueueNDRangeKernel(
         _cl_kernel, //kernel
         cl::NullRange, //offset
-        cl::NDRange(1)/*TODO*/, //global
+        cl::NDRange(std::max(ins.max(), outs.max()))/*TODO*/, //global
         cl::NDRange(1)/*TODO*/ //local
     );
     checkErr(err, "enqueueNDRangeKernel");
 
     //read back consume and produce results
     err = _cl_cmd_queue.enqueueReadBuffer(
-        _work_consume_buffer, //buffer
+        _work_input_sizes_buffer, //buffer
         CL_TRUE, //blocking_read
         0, //offset
         ins.size()*sizeof(cl_uint), //size
-        _work_consume_ptr //pointer
+        _work_input_sizes //pointer
     );
-    checkErr(err, "_work_consume_buffer enqueueReadBuffer");
+    checkErr(err, "_work_input_sizes_buffer enqueueReadBuffer");
     err = _cl_cmd_queue.enqueueReadBuffer(
-        _work_produce_buffer, //buffer
+        _work_output_sizes_buffer, //buffer
         CL_TRUE, //blocking_read
         0, //offset
         outs.size()*sizeof(cl_uint), //size
-        _work_produce_ptr //pointer
+        _work_output_sizes //pointer
     );
-    checkErr(err, "_work_produce_buffer enqueueReadBuffer");
+    checkErr(err, "_work_output_sizes_buffer enqueueReadBuffer");
 
     //wait for work to complete
-    err = _cl_cmd_queue.enqueueBarrier();
-    checkErr(err, "wait work enqueueBarrier");
+    err = _cl_cmd_queue.finish();
+    checkErr(err, "wait work finish");
 
     //unmap buffers
     for (size_t i = 0; i < ins.size(); i++)
     {
-        this->consume(i, _work_consume_ptr[i]);
+        this->consume(i, _work_input_sizes[i]);
         _cl_cmd_queue.enqueueUnmapMemObject(*_work_input_buffs[i], _work_input_ptrs[i]);
     }
     for (size_t i = 0; i < outs.size(); i++)
     {
-        this->produce(i, _work_produce_ptr[i]);
+        this->produce(i, _work_output_sizes[i]);
         _cl_cmd_queue.enqueueUnmapMemObject(*_work_output_buffs[i], _work_output_ptrs[i]);
     }
 
     //wait for unmap to complete
-    err = _cl_cmd_queue.enqueueBarrier();
-    checkErr(err, "wait unmap enqueueBarrier");
+    err = _cl_cmd_queue.finish();
+    checkErr(err, "wait unmap finish");
 }
 
 /***********************************************************************
