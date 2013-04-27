@@ -17,7 +17,7 @@ typedef boost::weak_ptr<cl::Buffer> clBufferWeak;
 struct OpenClBufferTableEntry
 {
     clBufferWeak buffer;
-    void *host_ptr;
+    gras::SBufferTokenWeak token;
 };
 
 static std::vector<OpenClBufferTableEntry> opencl_buffer_table;
@@ -43,7 +43,7 @@ static inline clBufferSptr get_opencl_buffer(const gras::SBuffer &buff)
     if (index >=  opencl_buffer_table.size()) return clBufferSptr();
     const OpenClBufferTableEntry &entry = opencl_buffer_table[index];
     clBufferSptr cl_buffer = entry.buffer.lock();
-    if (cl_buffer and entry.host_ptr == buff.get_actual_memory()) return cl_buffer;
+    if (cl_buffer and entry.token.lock() == buff->config.token.lock()) return cl_buffer;
     return clBufferSptr();
 }
 
@@ -53,6 +53,13 @@ static inline clBufferSptr get_opencl_buffer(const gras::SBuffer &buff)
 #include <gras/buffer_queue.hpp>
 #include <boost/circular_buffer.hpp>
 #include <boost/bind.hpp>
+
+enum OpenClBufferPushAction
+{
+    OPENCL_BUFFER_PUSH_NONE,
+    OPENCL_BUFFER_PUSH_MAP,
+    OPENCL_BUFFER_PUSH_UNMAP,
+};
 
 static void opencl_buffer_delete(gras::SBuffer &, clBufferSptr /*holds ref*/)
 {
@@ -65,7 +72,9 @@ struct OpenClBufferQueue : gras::BufferQueue
         const gras::SBufferConfig &config,
         const size_t num_buffs,
         const cl::Context &context,
-        const cl_mem_flags flags
+        const cl::CommandQueue &cmd_queue,
+        const cl_mem_flags flags,
+        const OpenClBufferPushAction action
     );
 
     ~OpenClBufferQueue(void);
@@ -82,6 +91,8 @@ struct OpenClBufferQueue : gras::BufferQueue
     //! Is the queue empty?
     bool empty(void) const;
 
+    const OpenClBufferPushAction _action;
+    cl::CommandQueue _cmd_queue;
     gras::SBufferToken _token;
     boost::circular_buffer<gras::SBuffer> _queue;
 };
@@ -90,8 +101,12 @@ OpenClBufferQueue::OpenClBufferQueue(
     const gras::SBufferConfig &config,
     const size_t num_buffs,
     const cl::Context &context,
-    const cl_mem_flags flags
+    const cl::CommandQueue &cmd_queue,
+    const cl_mem_flags flags,
+    const OpenClBufferPushAction action
 ):
+    _action(action),
+    _cmd_queue(cmd_queue),
     _token(config.token), //save config, its holds token
     _queue(boost::circular_buffer<gras::SBuffer>(num_buffs))
 {
@@ -102,24 +117,17 @@ OpenClBufferQueue::OpenClBufferQueue(
 
         //actually bind buffer to sbuffer destructor
         cl_int err = CL_SUCCESS;
-        cl_buffer.reset(new cl::Buffer(
-            context,
-            flags,
-            config.length,
-            NULL,
-            &err
-        ));
+        cl_buffer.reset(new cl::Buffer(context, flags, config.length, NULL, &err));
         entry.buffer = cl_buffer;
+        entry.token = _token;
         checkErr(err, "OpenClBufferQueue - cl::Buffer");
-        err = cl_buffer->getInfo(CL_MEM_HOST_PTR, &entry.host_ptr);
-        checkErr(err, "buffer.getInfo(CL_MEM_HOST_PTR)");
 
         gras::SBufferConfig sconfig = config;
         sconfig.user_index = store_buffer(entry);
-        sconfig.memory = entry.host_ptr;
+        sconfig.memory = (void *)(~0); //needs something to avoid malloc
         sconfig.deleter = boost::bind(&opencl_buffer_delete, _1, cl_buffer);
         gras::SBuffer buff(sconfig);
-        std::memset(buff.get_actual_memory(), 0, buff.get_actual_length());
+        buff->config.memory = NULL;
         //buffer derefs and returns to this queue thru token callback
     }
 }
@@ -145,6 +153,26 @@ void OpenClBufferQueue::push(const gras::SBuffer &buff)
 {
     //is it my buffer? otherwise dont keep it
     if GRAS_UNLIKELY(buff->config.token.lock() != _token) return;
+
+    //find the buffer from table
+    clBufferSptr cl_buff = get_opencl_buffer(buff);
+
+    if (_action == OPENCL_BUFFER_PUSH_MAP)
+    {
+        buff->config.memory = _cmd_queue.enqueueMapBuffer(
+            *cl_buff, //buffer
+            CL_TRUE, // blocking_map
+            CL_MAP_WRITE, //cl_map_map_flags
+            0, //offset
+            buff.get_actual_length() //size
+        );
+    }
+
+    if (_action == OPENCL_BUFFER_PUSH_UNMAP and buff->config.memory)
+    {
+        _cmd_queue.enqueueUnmapMemObject(*cl_buff, buff->config.memory);
+        buff->config.memory = NULL;
+    }
 
     _queue.push_back(buff);
 }

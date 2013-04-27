@@ -18,6 +18,8 @@ using namespace grextras;
 
 #ifdef HAVE_OPENCL
 
+#define MY_HERE() std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
+
 static const size_t OPENCL_BLOCK_NUM_BUFFS = 2;
 
 #include <CL/cl.hpp>
@@ -43,15 +45,12 @@ struct OpenClBlockImpl : OpenClBlock
     void set_program(const std::string &name, const std::string &source, const std::string &options);
     void notify_topology(const size_t num_inputs, const size_t num_outputs);
     void work(const InputItems &ins, const OutputItems &outs);
-    void set_host_access_mode(const std::string &direction, const std::vector<std::string> &modes);
-    void set_device_access_mode(const std::string &direction, const std::vector<std::string> &modes);
+    void set_access_mode(const std::string &direction, const std::vector<std::string> &modes);
     gras::BufferQueueSptr output_buffer_allocator(const size_t which_output, const gras::SBufferConfig &config);
     gras::BufferQueueSptr input_buffer_allocator(const size_t which_input, const gras::SBufferConfig &config);
 
-    std::vector<std::string> _input_host_modes;
-    std::vector<std::string> _output_host_modes;
-    std::vector<std::string> _input_device_modes;
-    std::vector<std::string> _output_device_modes;
+    std::vector<std::string> _input_access_modes;
+    std::vector<std::string> _output_access_modes;
 
     cl_device_type _cl_dev_type;
     cl::Context _cl_context;
@@ -63,15 +62,9 @@ struct OpenClBlockImpl : OpenClBlock
     cl::Kernel _cl_kernel;
     cl::CommandQueue _cl_cmd_queue;
 
-    //temp work containers for unmap
+    //temp work containers for map/unmap
     std::vector<clBufferSptr> _work_input_buffs;
     std::vector<clBufferSptr> _work_output_buffs;
-    std::vector<void *> _work_input_ptrs;
-    std::vector<void *> _work_output_ptrs;
-    cl::Buffer _work_input_sizes_buffer;
-    cl::Buffer _work_output_sizes_buffer;
-    cl_uint *_work_input_sizes;
-    cl_uint *_work_output_sizes;
 };
 
 /***********************************************************************
@@ -170,31 +163,8 @@ void OpenClBlockImpl::set_program(const std::string &name, const std::string &so
  **********************************************************************/
 void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_outputs)
 {
-    cl_int err = CL_SUCCESS;
     _work_input_buffs.resize(num_inputs);
-    _work_input_ptrs.resize(num_inputs);
-    _work_input_sizes_buffer = cl::Buffer(
-        _cl_context,
-        CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
-        std::max<size_t>(num_inputs, 1) * sizeof(cl_uint),
-        NULL, &err
-    );
-    checkErr(err, "_work_input_sizes_buffer alloc");
-    err = _work_input_sizes_buffer.getInfo(CL_MEM_HOST_PTR, &_work_input_sizes);
-    std::cout << "_work_input_sizes " << size_t(_work_input_sizes) << std::endl;
-    checkErr(err, "_work_input_sizes_buffer.getInfo(CL_MEM_HOST_PTR)");
-
     _work_output_buffs.resize(num_outputs);
-    _work_output_ptrs.resize(num_outputs);
-    _work_output_sizes_buffer = cl::Buffer(
-        _cl_context,
-        CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
-        std::max<size_t>(num_outputs, 1) * sizeof(cl_uint),
-        NULL, &err
-    );
-    checkErr(err, "_work_output_sizes_buffer alloc");
-    err = _work_output_sizes_buffer.getInfo(CL_MEM_HOST_PTR, &_work_output_sizes);
-    checkErr(err, "_work_output_sizes_buffer.getInfo(CL_MEM_HOST_PTR)");
 }
 
 void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
@@ -202,145 +172,91 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     cl_int err = CL_SUCCESS;
     size_t arg_index = 0;
 
+        MY_HERE();
     //TODO input buffers could be from another queue - needs conditional check and handle
 
-    //map input buffers
+    //pre-work input buffers
+    MY_HERE();
     for (size_t i = 0; i < ins.size(); i++)
     {
         gras::SBuffer buffer = get_input_buffer(i);
         _work_input_buffs[i] = get_opencl_buffer(buffer);
-        std::cout << __LINE__ << std::endl;
-        if (not _work_input_buffs[i]) _work_input_buffs[i].reset(new cl::Buffer(
-            _cl_context,
-            CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-            buffer.length, buffer.get()
-        ));
-        std::cout << __LINE__ << std::endl;
-        _work_input_ptrs[i] = _cl_cmd_queue.enqueueMapBuffer(
-            *_work_input_buffs[i], //buffer
-            CL_TRUE,// blocking_map
-            CL_MAP_READ, //cl_map_map_flags
-            buffer.offset, //offset
-            buffer.length //size
-        );
-        std::cout << __LINE__ << std::endl;
-        _work_input_sizes[i] = ins[i].size();
-        std::cout << __LINE__ << std::endl;
-        _cl_kernel.setArg(arg_index++, _work_input_ptrs[i]);
-        std::cout << __LINE__ << std::endl;
+        _cl_cmd_queue.enqueueUnmapMemObject(*_work_input_buffs[i], buffer.get_actual_memory());
+        _cl_kernel.setArg(arg_index++, *_work_input_buffs[i]);
     }
 
-    //map output buffers
+    //pre-work output buffers
+    MY_HERE();
     for (size_t i = 0; i < outs.size(); i++)
     {
-        std::cout << __LINE__ << std::endl;
         gras::SBuffer buffer = get_output_buffer(i);
         _work_output_buffs[i] = get_opencl_buffer(buffer);
-        _work_output_ptrs[i] = _cl_cmd_queue.enqueueMapBuffer(
-            *_work_output_buffs[i], //buffer
-            CL_TRUE,// blocking_map
-            CL_MAP_WRITE, //cl_map_map_flags
-            buffer.offset, //offset
-            buffer.length //size
-        );
-        _work_output_sizes[i] = outs[i].size();
-        _cl_kernel.setArg(arg_index++, _work_output_ptrs[i]);
+        _cl_kernel.setArg(arg_index++, *_work_output_buffs[i]);
     }
 
-    //set kernel args for consume and produce item counts
-    _cl_kernel.setArg(arg_index++, _work_input_sizes_buffer);
-    _cl_kernel.setArg(arg_index++, _work_output_sizes_buffer);
+    const cl_uint num = std::min(ins.min(), outs.min());
 
     //enqueue work
     err = _cl_cmd_queue.enqueueNDRangeKernel(
         _cl_kernel, //kernel
         cl::NullRange, //offset
-        cl::NDRange(std::max(ins.max(), outs.max()))/*TODO*/, //global
+        cl::NDRange(num)/*TODO*/, //global
         cl::NDRange(1)/*TODO*/ //local
     );
     checkErr(err, "enqueueNDRangeKernel");
 
-    //read back consume and produce results
-    err = _cl_cmd_queue.enqueueReadBuffer(
-        _work_input_sizes_buffer, //buffer
-        CL_TRUE, //blocking_read
-        0, //offset
-        ins.size()*sizeof(cl_uint), //size
-        _work_input_sizes //pointer
-    );
-    checkErr(err, "_work_input_sizes_buffer enqueueReadBuffer");
-    err = _cl_cmd_queue.enqueueReadBuffer(
-        _work_output_sizes_buffer, //buffer
-        CL_TRUE, //blocking_read
-        0, //offset
-        outs.size()*sizeof(cl_uint), //size
-        _work_output_sizes //pointer
-    );
-    checkErr(err, "_work_output_sizes_buffer enqueueReadBuffer");
-
-    //wait for work to complete
+    //wait for unmap to complete
     err = _cl_cmd_queue.finish();
     checkErr(err, "wait work finish");
 
-    //unmap buffers
+    //post-work output buffers
+    MY_HERE();
     for (size_t i = 0; i < ins.size(); i++)
     {
-        this->consume(i, _work_input_sizes[i]);
-        _cl_cmd_queue.enqueueUnmapMemObject(*_work_input_buffs[i], _work_input_ptrs[i]);
         _work_input_buffs[i].reset();
     }
+
+    //post-work output buffers
+    MY_HERE();
     for (size_t i = 0; i < outs.size(); i++)
     {
-        this->produce(i, _work_output_sizes[i]);
-        _cl_cmd_queue.enqueueUnmapMemObject(*_work_output_buffs[i], _work_output_ptrs[i]);
+        gras::SBuffer buffer = get_output_buffer(i);
+        buffer->config.memory = _cl_cmd_queue.enqueueMapBuffer(
+            *_work_output_buffs[i], //buffer
+            CL_TRUE, // blocking_map
+            CL_MAP_READ, //cl_map_map_flags
+            0, //offset
+            buffer.get_actual_length() //size
+        );
         _work_output_buffs[i].reset();
     }
 
-    //wait for unmap to complete
-    err = _cl_cmd_queue.finish();
-    checkErr(err, "wait unmap finish");
+    //produce consume fixed
+    this->consume(0, num);
+    this->produce(0, num);
 }
 
 /***********************************************************************
  * Buffering and access modes
  **********************************************************************/
-void OpenClBlockImpl::set_host_access_mode(const std::string &direction, const std::vector<std::string> &modes)
+void OpenClBlockImpl::set_access_mode(const std::string &direction, const std::vector<std::string> &modes)
 {
-    if (direction == "INPUT") _input_host_modes = modes;
-    else if (direction == "OUTPUT") _output_host_modes = modes;
-    else throw std::runtime_error("set_host_access_mode unknown direction " + direction);
-}
-
-void OpenClBlockImpl::set_device_access_mode(const std::string &direction, const std::vector<std::string> &modes)
-{
-    if (direction == "INPUT") _input_device_modes = modes;
-    else if (direction == "OUTPUT") _output_device_modes = modes;
-    else throw std::runtime_error("set_device_access_mode unknown direction " + direction);
+    if (direction == "INPUT") _input_access_modes = modes;
+    else if (direction == "OUTPUT") _output_access_modes = modes;
+    else throw std::runtime_error("set_access_mode unknown direction " + direction);
 }
 
 static cl_mem_flags mode_str_to_flags(
-    const std::string &direction, const size_t which,
-    const std::string &hmode, const std::string &dmode
+    const std::string &direction, const size_t which, const std::string &mode
 )
 {
-    std::cout << boost::format(
-        "Making buffers for %s port %u:\n"
-        "    host access mode: %s\n"
-        "    device access mode: %s\n"
-    ) % direction % which % hmode % dmode;
+    std::cout << boost::format("Making %s buffers for %s port %u...\n") % mode % direction % which;
 
-    cl_mem_flags flags = 0;
-
-    if (hmode == "RW") flags |= CL_MEM_ALLOC_HOST_PTR;
-    else if (hmode == "RO") flags |= CL_MEM_ALLOC_HOST_PTR | CL_MEM_HOST_READ_ONLY;
-    else if (hmode == "WO") flags |= CL_MEM_ALLOC_HOST_PTR | CL_MEM_HOST_WRITE_ONLY;
-    else if (hmode == "XX") flags |= CL_MEM_HOST_NO_ACCESS;
-    else throw std::runtime_error("opencl block unknown host mode: " + hmode);
-
-    if (dmode == "RW") flags |= CL_MEM_READ_WRITE;
-    else if (dmode == "RO") flags |= CL_MEM_READ_ONLY;
-    else if (dmode == "WO") flags |= CL_MEM_WRITE_ONLY;
-    else throw std::runtime_error("opencl block unknown device mode: " + dmode);
+    cl_mem_flags flags = CL_MEM_ALLOC_HOST_PTR;
+    if      (mode == "RW") flags |= CL_MEM_READ_WRITE;
+    else if (mode == "RO") flags |= CL_MEM_READ_ONLY;
+    else if (mode == "WO") flags |= CL_MEM_WRITE_ONLY;
+    else throw std::runtime_error("opencl block unknown device mode: " + mode);
 
     return flags;
 }
@@ -356,22 +272,18 @@ gras::BufferQueueSptr OpenClBlockImpl::output_buffer_allocator(
     const size_t which_output, const gras::SBufferConfig &config
 ){
     const cl_mem_flags flags = mode_str_to_flags(
-        "output", which_output,
-        my_vec_get(_output_host_modes, which_output, "RW"),
-        my_vec_get(_output_device_modes, which_output, "WO"));
-    return gras::BufferQueueSptr(
-        new OpenClBufferQueue(config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, flags));
+        "output", which_output, my_vec_get(_output_access_modes, which_output, "WO"));
+    return gras::BufferQueueSptr(new OpenClBufferQueue(
+        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, OPENCL_BUFFER_PUSH_UNMAP));
 }
 
 gras::BufferQueueSptr OpenClBlockImpl::input_buffer_allocator(
     const size_t which_input, const gras::SBufferConfig &config
 ){
     const cl_mem_flags flags = mode_str_to_flags(
-        "input", which_input,
-        my_vec_get(_input_host_modes, which_input, "RW"),
-        my_vec_get(_input_device_modes, which_input, "RO"));
-    return gras::BufferQueueSptr(
-        new OpenClBufferQueue(config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, flags));
+        "input", which_input, my_vec_get(_input_access_modes, which_input, "RO"));
+    return gras::BufferQueueSptr(new OpenClBufferQueue(
+        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, OPENCL_BUFFER_PUSH_MAP));
 }
 
 /***********************************************************************

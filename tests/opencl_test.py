@@ -9,28 +9,11 @@ vector_add_gpu_SOURCE = """
 __kernel void vector_add_gpu(
     __global const float* in0,
     __global const float* in1,
-    __global float* out,
-    __global uint *num_in_items,
-    __global uint *num_out_items
+    __global float* out
 )
 {
     const uint i = get_global_id(0);
-
-    if (i < num_out_items[0])
-    {
-        out[i] = in0[i] + in1[i];
-    }
-
-    //set minimum
-    if (i == 0)
-    {
-        __private uint n = num_in_items[0];
-        n = min(n, num_in_items[1]);
-        n = min(n, num_out_items[0]);
-        num_in_items[0] = n;
-        num_in_items[1] = n;
-        num_out_items[0] = n;
-    }
+    out[i] = in0[i] + in1[i];
 }
 """
 

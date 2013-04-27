@@ -45,24 +45,6 @@ struct GREXTRAS_API OpenClBlock : virtual gras::Block
     ) = 0;
 
     /*!
-     * Set the access mode for host memory in this block.
-     * The parameter is a vector of strings; each string represents
-     * the host buffer access mode for a port of the same index.
-     * The parameter will be stretched from the back of the vector.
-     * Therefore, homogeneous configurations require only one element.
-     *
-     * Possible options for an access mode:
-     *  - "RW" = host reads and writes (default)
-     *  - "RO" = host reads only
-     *  - "WO" = host writes only
-     *  - "XX" = no host access (pass device memory between blocks)
-     *
-     * \param direction "INPUT" or "OUTPUT" for port direction
-     * \param modes the the vector of access modes
-     */
-    virtual void set_host_access_mode(const std::string &direction, const std::vector<std::string> &modes) = 0;
-
-    /*!
      * Set the access mode for device memory in this block.
      * The parameter is a vector of strings; each string represents
      * the host buffer access mode for a port of the same index.
@@ -77,7 +59,7 @@ struct GREXTRAS_API OpenClBlock : virtual gras::Block
      * \param direction "INPUT" or "OUTPUT" for port direction
      * \param modes the the vector of access modes
      */
-    virtual void set_device_access_mode(const std::string &direction, const std::vector<std::string> &modes) = 0;
+    virtual void set_access_mode(const std::string &direction, const std::vector<std::string> &modes) = 0;
 };
 
 }
