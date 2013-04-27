@@ -14,7 +14,7 @@ class VectorSource(gras.Block):
         outs[0][:num] = self._vec[:num]
         self.produce(0, num)
         self._vec = self._vec[num:]
-        if not self._vec:
+        if not len(self._vec):
             if self._autodone: self.mark_done()
             #TODO auto done is a hack so we dont mark done for some of the tests
             #so we sleep here when not marking done so we dont suck cpu

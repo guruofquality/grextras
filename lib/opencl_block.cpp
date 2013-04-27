@@ -140,7 +140,8 @@ OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
 
 OpenClBlockImpl::~OpenClBlockImpl(void)
 {
-    //NOP
+    _work_input_buffs.clear();
+    _work_output_buffs.clear();
 }
 
 /***********************************************************************
@@ -172,21 +173,26 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     cl_int err = CL_SUCCESS;
     size_t arg_index = 0;
 
-        MY_HERE();
-    //TODO input buffers could be from another queue - needs conditional check and handle
-
     //pre-work input buffers
-    MY_HERE();
     for (size_t i = 0; i < ins.size(); i++)
     {
         gras::SBuffer buffer = get_input_buffer(i);
         _work_input_buffs[i] = get_opencl_buffer(buffer);
-        _cl_cmd_queue.enqueueUnmapMemObject(*_work_input_buffs[i], buffer.get_actual_memory());
+        if (_work_input_buffs[i])
+        {
+            _cl_cmd_queue.enqueueUnmapMemObject(*_work_input_buffs[i], buffer.get_actual_memory());
+        }
+        else //not our cl buffer, just copy into a new one so things work
+        {
+            const cl_mem_flags flags = CL_MEM_COPY_HOST_PTR | CL_MEM_READ_WRITE;
+            _work_input_buffs[i].reset(new cl::Buffer(_cl_context, flags, buffer.length, buffer.get(), &err));
+            checkErr(err, "tmp input buffer - cl::Buffer");
+            std::cout << "x" << std::flush;
+        }
         _cl_kernel.setArg(arg_index++, *_work_input_buffs[i]);
     }
 
     //pre-work output buffers
-    MY_HERE();
     for (size_t i = 0; i < outs.size(); i++)
     {
         gras::SBuffer buffer = get_output_buffer(i);
@@ -195,6 +201,7 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     }
 
     const cl_uint num = std::min(ins.min(), outs.min());
+    //std::cout << "num " << num << std::endl;
 
     //enqueue work
     err = _cl_cmd_queue.enqueueNDRangeKernel(
@@ -210,17 +217,16 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     checkErr(err, "wait work finish");
 
     //post-work output buffers
-    MY_HERE();
     for (size_t i = 0; i < ins.size(); i++)
     {
         _work_input_buffs[i].reset();
     }
 
     //post-work output buffers
-    MY_HERE();
     for (size_t i = 0; i < outs.size(); i++)
     {
         gras::SBuffer buffer = get_output_buffer(i);
+        this->pop_output_buffer(i, 0); //clear auto popping - we use produce
         buffer->config.memory = _cl_cmd_queue.enqueueMapBuffer(
             *_work_output_buffs[i], //buffer
             CL_TRUE, // blocking_map
@@ -232,8 +238,8 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     }
 
     //produce consume fixed
-    this->consume(0, num);
-    this->produce(0, num);
+    this->consume(num);
+    this->produce(num);
 }
 
 /***********************************************************************

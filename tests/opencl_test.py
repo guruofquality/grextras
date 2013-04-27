@@ -31,15 +31,22 @@ class test_opencl_block(unittest.TestCase):
         op.input_config(0).item_size = 4
         op.output_config(0).item_size = 4
 
-        src0 = grextras.VectorSource(numpy.float32, [1.0, 2.0, 3.0, 4.0, 5.0])
-        src1 = grextras.VectorSource(numpy.float32, [6.0, 6.0, 8.0, 9.0, 0.0])
+        vec0 = numpy.array(numpy.random.randint(-150, +150, 1e6), numpy.float32)
+        vec1 = numpy.array(numpy.random.randint(-150, +150, 1e6), numpy.float32)
+
+        src0 = grextras.VectorSource(numpy.float32, vec0)
+        src1 = grextras.VectorSource(numpy.float32, vec1)
         dst = grextras.VectorSink(numpy.float32)
 
         self.tb.connect(src0, (op, 0))
         self.tb.connect(src1, (op, 1))
         self.tb.connect(op, dst)
         self.tb.run()
-        print "dst.data()", dst.data()
+
+        expected_result = list(vec0 + vec1)
+        actual_result = list(dst.data())
+
+        self.assertEqual(expected_result, actual_result)
 
 if __name__ == '__main__':
     unittest.main()
