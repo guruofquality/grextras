@@ -64,8 +64,8 @@ struct OpenClBlockImpl : OpenClBlock
     cl::CommandQueue _cl_cmd_queue;
 
     //temp work containers for unmap
-    std::vector<const cl::Buffer *> _work_input_buffs;
-    std::vector<const cl::Buffer *> _work_output_buffs;
+    std::vector<clBufferSptr> _work_input_buffs;
+    std::vector<clBufferSptr> _work_output_buffs;
     std::vector<void *> _work_input_ptrs;
     std::vector<void *> _work_output_ptrs;
     cl::Buffer _work_input_sizes_buffer;
@@ -181,6 +181,7 @@ void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_
     );
     checkErr(err, "_work_input_sizes_buffer alloc");
     err = _work_input_sizes_buffer.getInfo(CL_MEM_HOST_PTR, &_work_input_sizes);
+    std::cout << "_work_input_sizes " << size_t(_work_input_sizes) << std::endl;
     checkErr(err, "_work_input_sizes_buffer.getInfo(CL_MEM_HOST_PTR)");
 
     _work_output_buffs.resize(num_outputs);
@@ -207,27 +208,38 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     for (size_t i = 0; i < ins.size(); i++)
     {
         gras::SBuffer buffer = get_input_buffer(i);
-        _work_input_buffs[i] = reinterpret_cast<const cl::Buffer *>(buffer.get_user_index());
+        _work_input_buffs[i] = get_opencl_buffer(buffer);
+        std::cout << __LINE__ << std::endl;
+        if (not _work_input_buffs[i]) _work_input_buffs[i].reset(new cl::Buffer(
+            _cl_context,
+            CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+            buffer.length, buffer.get()
+        ));
+        std::cout << __LINE__ << std::endl;
         _work_input_ptrs[i] = _cl_cmd_queue.enqueueMapBuffer(
             *_work_input_buffs[i], //buffer
             CL_TRUE,// blocking_map
-            CL_MEM_READ_ONLY, //cl_map_map_flags
+            CL_MAP_READ, //cl_map_map_flags
             buffer.offset, //offset
             buffer.length //size
         );
+        std::cout << __LINE__ << std::endl;
         _work_input_sizes[i] = ins[i].size();
+        std::cout << __LINE__ << std::endl;
         _cl_kernel.setArg(arg_index++, _work_input_ptrs[i]);
+        std::cout << __LINE__ << std::endl;
     }
 
     //map output buffers
     for (size_t i = 0; i < outs.size(); i++)
     {
+        std::cout << __LINE__ << std::endl;
         gras::SBuffer buffer = get_output_buffer(i);
-        _work_output_buffs[i] = reinterpret_cast<const cl::Buffer *>(buffer.get_user_index());
+        _work_output_buffs[i] = get_opencl_buffer(buffer);
         _work_output_ptrs[i] = _cl_cmd_queue.enqueueMapBuffer(
             *_work_output_buffs[i], //buffer
             CL_TRUE,// blocking_map
-            CL_MEM_WRITE_ONLY, //cl_map_map_flags
+            CL_MAP_WRITE, //cl_map_map_flags
             buffer.offset, //offset
             buffer.length //size
         );
@@ -275,11 +287,13 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     {
         this->consume(i, _work_input_sizes[i]);
         _cl_cmd_queue.enqueueUnmapMemObject(*_work_input_buffs[i], _work_input_ptrs[i]);
+        _work_input_buffs[i].reset();
     }
     for (size_t i = 0; i < outs.size(); i++)
     {
         this->produce(i, _work_output_sizes[i]);
         _cl_cmd_queue.enqueueUnmapMemObject(*_work_output_buffs[i], _work_output_ptrs[i]);
+        _work_output_buffs[i].reset();
     }
 
     //wait for unmap to complete
