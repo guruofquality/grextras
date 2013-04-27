@@ -52,9 +52,9 @@ struct GREXTRAS_API OpenClBlock : virtual gras::Block
      * Therefore, homogeneous configurations require only one element.
      *
      * Possible options for an access mode:
-     *  - "RW" = host reads and writes
-     *  - "RO" = host reads only (default for output)
-     *  - "WO" = host writes only (default for input)
+     *  - "RW" = host reads and writes (default)
+     *  - "RO" = host reads only
+     *  - "WO" = host writes only
      *  - "XX" = no host access (pass device memory between blocks)
      *
      * \param direction "INPUT" or "OUTPUT" for port direction

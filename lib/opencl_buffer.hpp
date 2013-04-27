@@ -59,7 +59,7 @@ OpenClBufferQueue::OpenClBufferQueue(
             NULL,
             &err
         );
-        checkErr(err, "cl::Buffer");
+        checkErr(err, "OpenClBufferQueue - cl::Buffer");
         void *host_ptr = NULL;
         err = cl_buffer->getInfo(CL_MEM_HOST_PTR, &host_ptr);
         checkErr(err, "buffer.getInfo(CL_MEM_HOST_PTR)");
@@ -69,6 +69,7 @@ OpenClBufferQueue::OpenClBufferQueue(
         sconfig.memory = host_ptr;
         sconfig.deleter = boost::bind(&opencl_buffer_delete, _1, cl_buffer);
         gras::SBuffer buff(sconfig);
+        std::memset(buff.get_actual_memory(), 0, buff.get_actual_length());
         //buffer derefs and returns to this queue thru token callback
     }
 }

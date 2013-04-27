@@ -18,6 +18,8 @@ using namespace grextras;
 
 #ifdef HAVE_OPENCL
 
+static const size_t OPENCL_BLOCK_NUM_BUFFS = 2;
+
 #include <CL/cl.hpp>
 
 static GRAS_FORCE_INLINE void checkErr(cl_int err, const char * name)
@@ -30,15 +32,6 @@ static GRAS_FORCE_INLINE void checkErr(cl_int err, const char * name)
  * buffer implementation
  **********************************************************************/
 #include "opencl_buffer.hpp"
-
-//boost::mutex _shared_buffer_table_write_mutex;
-struct BufferTableEntry
-{
-    
-    cl::Buffer cl_buffer;
-};
-static std::vector<BufferTableEntry> shared_buffer_table;
-
 
 /***********************************************************************
  * impl class definition
@@ -137,6 +130,8 @@ OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
     {
         _cl_devices = _cl_context.getInfo<CL_CONTEXT_DEVICES>();
         checkErr(_cl_devices.size() > 0 ? CL_SUCCESS : -1, "devices.size() > 0");
+        std::cerr << "Number of devices: " << _cl_devices.size() << ", "
+                  << "selecting 0 ..." << std::endl;
         _cl_device = _cl_devices[0];
     }
 
@@ -181,7 +176,7 @@ void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_
     _work_input_sizes_buffer = cl::Buffer(
         _cl_context,
         CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
-        num_inputs * sizeof(cl_uint),
+        std::max<size_t>(num_inputs, 1) * sizeof(cl_uint),
         NULL, &err
     );
     checkErr(err, "_work_input_sizes_buffer alloc");
@@ -193,7 +188,7 @@ void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_
     _work_output_sizes_buffer = cl::Buffer(
         _cl_context,
         CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
-        num_outputs * sizeof(cl_uint),
+        std::max<size_t>(num_outputs, 1) * sizeof(cl_uint),
         NULL, &err
     );
     checkErr(err, "_work_output_sizes_buffer alloc");
@@ -205,6 +200,8 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
 {
     cl_int err = CL_SUCCESS;
     size_t arg_index = 0;
+
+    //TODO input buffers could be from another queue - needs conditional check and handle
 
     //map input buffers
     for (size_t i = 0; i < ins.size(); i++)
@@ -307,8 +304,17 @@ void OpenClBlockImpl::set_device_access_mode(const std::string &direction, const
     else throw std::runtime_error("set_device_access_mode unknown direction " + direction);
 }
 
-static cl_mem_flags mode_str_to_flags(const std::string &hmode, const std::string &dmode)
+static cl_mem_flags mode_str_to_flags(
+    const std::string &direction, const size_t which,
+    const std::string &hmode, const std::string &dmode
+)
 {
+    std::cout << boost::format(
+        "Making buffers for %s port %u:\n"
+        "    host access mode: %s\n"
+        "    device access mode: %s\n"
+    ) % direction % which % hmode % dmode;
+
     cl_mem_flags flags = 0;
 
     if (hmode == "RW") flags |= CL_MEM_ALLOC_HOST_PTR;
@@ -336,20 +342,22 @@ gras::BufferQueueSptr OpenClBlockImpl::output_buffer_allocator(
     const size_t which_output, const gras::SBufferConfig &config
 ){
     const cl_mem_flags flags = mode_str_to_flags(
-        my_vec_get(_output_host_modes, which_output, "RO"),
+        "output", which_output,
+        my_vec_get(_output_host_modes, which_output, "RW"),
         my_vec_get(_output_device_modes, which_output, "WO"));
     return gras::BufferQueueSptr(
-        new OpenClBufferQueue(config, 2, _cl_context, flags));
+        new OpenClBufferQueue(config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, flags));
 }
 
 gras::BufferQueueSptr OpenClBlockImpl::input_buffer_allocator(
     const size_t which_input, const gras::SBufferConfig &config
 ){
     const cl_mem_flags flags = mode_str_to_flags(
-        my_vec_get(_input_host_modes, which_input, "WO"),
+        "input", which_input,
+        my_vec_get(_input_host_modes, which_input, "RW"),
         my_vec_get(_input_device_modes, which_input, "RO"));
     return gras::BufferQueueSptr(
-        new OpenClBufferQueue(config, 2, _cl_context, flags));
+        new OpenClBufferQueue(config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, flags));
 }
 
 /***********************************************************************

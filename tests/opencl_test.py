@@ -43,8 +43,20 @@ class test_opencl_block(unittest.TestCase):
         self.tb = None
 
     def test_making_block(self):
-        o = grextras.OpenClBlock("GPU")
-        o.set_program("vector_add_gpu", vector_add_gpu_SOURCE)
+        op = grextras.OpenClBlock("GPU")
+        op.set_program("vector_add_gpu", vector_add_gpu_SOURCE)
+        op.input_config(0).item_size = 4
+        op.output_config(0).item_size = 4
+
+        src0 = grextras.VectorSource(numpy.float32, [1.0, 2.0, 3.0, 4.0, 5.0])
+        src1 = grextras.VectorSource(numpy.float32, [6.0, 6.0, 8.0, 9.0, 0.0])
+        dst = grextras.VectorSink(numpy.float32)
+
+        self.tb.connect(src0, (op, 0))
+        self.tb.connect(src1, (op, 1))
+        self.tb.connect(op, dst)
+        self.tb.run()
+        print "dst.data()", dst.data()
 
 if __name__ == '__main__':
     unittest.main()
