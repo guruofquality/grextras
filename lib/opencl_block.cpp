@@ -62,9 +62,8 @@ struct OpenClBlockImpl : OpenClBlock
     cl::Kernel _cl_kernel;
     cl::CommandQueue _cl_cmd_queue;
 
-    //temp work containers for map/unmap
-    std::vector<clBufferSptr> _work_input_buffs;
-    std::vector<clBufferSptr> _work_output_buffs;
+    std::vector<clBufferSptr> _temp_input_buffs;
+    std::vector<clBufferSptr> _temp_output_buffs;
 };
 
 /***********************************************************************
@@ -140,8 +139,8 @@ OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
 
 OpenClBlockImpl::~OpenClBlockImpl(void)
 {
-    _work_input_buffs.clear();
-    _work_output_buffs.clear();
+    _temp_input_buffs.clear();
+    _temp_output_buffs.clear();
 }
 
 /***********************************************************************
@@ -164,8 +163,8 @@ void OpenClBlockImpl::set_program(const std::string &name, const std::string &so
  **********************************************************************/
 void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_outputs)
 {
-    _work_input_buffs.resize(num_inputs);
-    _work_output_buffs.resize(num_outputs);
+    _temp_input_buffs.resize(num_inputs);
+    _temp_output_buffs.resize(num_outputs);
 }
 
 void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
@@ -177,27 +176,26 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     for (size_t i = 0; i < ins.size(); i++)
     {
         gras::SBuffer buffer = get_input_buffer(i);
-        _work_input_buffs[i] = get_opencl_buffer(buffer);
-        if (_work_input_buffs[i])
-        {
-            _cl_cmd_queue.enqueueUnmapMemObject(*_work_input_buffs[i], buffer.get_actual_memory());
-        }
-        else //not our cl buffer, just copy into a new one so things work
+        clBufferSptr cl_buff = get_opencl_buffer(buffer);
+        if GRAS_UNLIKELY(not cl_buff) //not our cl buffer, just copy into a new one so things work
         {
             const cl_mem_flags flags = CL_MEM_COPY_HOST_PTR | CL_MEM_READ_WRITE;
-            _work_input_buffs[i].reset(new cl::Buffer(_cl_context, flags, buffer.length, buffer.get(), &err));
+            _temp_input_buffs[i].reset(new cl::Buffer(_cl_context, flags, buffer.length, buffer.get(), &err));
             checkErr(err, "tmp input buffer - cl::Buffer");
             std::cout << "x" << std::flush;
+            cl_buff = _temp_input_buffs[i];
         }
-        _cl_kernel.setArg(arg_index++, *_work_input_buffs[i]);
+        _cl_kernel.setArg(arg_index++, *cl_buff);
     }
 
     //pre-work output buffers
     for (size_t i = 0; i < outs.size(); i++)
     {
         gras::SBuffer buffer = get_output_buffer(i);
-        _work_output_buffs[i] = get_opencl_buffer(buffer);
-        _cl_kernel.setArg(arg_index++, *_work_output_buffs[i]);
+        this->pop_output_buffer(i, 0); //clear auto popping - we use produce
+        clBufferSptr cl_buff = get_opencl_buffer(buffer);
+        if GRAS_UNLIKELY(not cl_buff) throw std::runtime_error("output was not a cl buffer");
+        _cl_kernel.setArg(arg_index++, *cl_buff);
     }
 
     const cl_uint num = std::min(ins.min(), outs.min());
@@ -215,27 +213,6 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     //wait for unmap to complete
     err = _cl_cmd_queue.finish();
     checkErr(err, "wait work finish");
-
-    //post-work output buffers
-    for (size_t i = 0; i < ins.size(); i++)
-    {
-        _work_input_buffs[i].reset();
-    }
-
-    //post-work output buffers
-    for (size_t i = 0; i < outs.size(); i++)
-    {
-        gras::SBuffer buffer = get_output_buffer(i);
-        this->pop_output_buffer(i, 0); //clear auto popping - we use produce
-        buffer->config.memory = _cl_cmd_queue.enqueueMapBuffer(
-            *_work_output_buffs[i], //buffer
-            CL_TRUE, // blocking_map
-            CL_MAP_READ, //cl_map_map_flags
-            0, //offset
-            buffer.get_actual_length() //size
-        );
-        _work_output_buffs[i].reset();
-    }
 
     //produce consume fixed
     this->consume(num);
@@ -280,7 +257,7 @@ gras::BufferQueueSptr OpenClBlockImpl::output_buffer_allocator(
     const cl_mem_flags flags = mode_str_to_flags(
         "output", which_output, my_vec_get(_output_access_modes, which_output, "WO"));
     return gras::BufferQueueSptr(new OpenClBufferQueue(
-        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, OPENCL_BUFFER_PUSH_UNMAP));
+        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, CL_MAP_READ));
 }
 
 gras::BufferQueueSptr OpenClBlockImpl::input_buffer_allocator(
@@ -289,7 +266,7 @@ gras::BufferQueueSptr OpenClBlockImpl::input_buffer_allocator(
     const cl_mem_flags flags = mode_str_to_flags(
         "input", which_input, my_vec_get(_input_access_modes, which_input, "RO"));
     return gras::BufferQueueSptr(new OpenClBufferQueue(
-        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, OPENCL_BUFFER_PUSH_MAP));
+        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, CL_MAP_WRITE));
 }
 
 /***********************************************************************

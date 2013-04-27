@@ -54,13 +54,6 @@ static inline clBufferSptr get_opencl_buffer(const gras::SBuffer &buff)
 #include <boost/circular_buffer.hpp>
 #include <boost/bind.hpp>
 
-enum OpenClBufferPushAction
-{
-    OPENCL_BUFFER_PUSH_NONE,
-    OPENCL_BUFFER_PUSH_MAP,
-    OPENCL_BUFFER_PUSH_UNMAP,
-};
-
 static void opencl_buffer_delete(gras::SBuffer &, clBufferSptr /*holds ref*/)
 {
     //NOP
@@ -74,7 +67,7 @@ struct OpenClBufferQueue : gras::BufferQueue
         const cl::Context &context,
         const cl::CommandQueue &cmd_queue,
         const cl_mem_flags flags,
-        const OpenClBufferPushAction action
+        const cl_map_flags mflags
     );
 
     ~OpenClBufferQueue(void);
@@ -91,7 +84,7 @@ struct OpenClBufferQueue : gras::BufferQueue
     //! Is the queue empty?
     bool empty(void) const;
 
-    const OpenClBufferPushAction _action;
+    const cl_map_flags _mflags;
     cl::CommandQueue _cmd_queue;
     gras::SBufferToken _token;
     boost::circular_buffer<gras::SBuffer> _queue;
@@ -103,9 +96,9 @@ OpenClBufferQueue::OpenClBufferQueue(
     const cl::Context &context,
     const cl::CommandQueue &cmd_queue,
     const cl_mem_flags flags,
-    const OpenClBufferPushAction action
+    const cl_map_flags mflags
 ):
-    _action(action),
+    _mflags(mflags),
     _cmd_queue(cmd_queue),
     _token(config.token), //save config, its holds token
     _queue(boost::circular_buffer<gras::SBuffer>(num_buffs))
@@ -145,7 +138,29 @@ gras::SBuffer &OpenClBufferQueue::front(void)
 
 void OpenClBufferQueue::pop(void)
 {
-    _queue.front().reset();
+    gras::SBuffer &buff = _queue.front();
+
+    //find the buffer from table
+    clBufferSptr cl_buff = get_opencl_buffer(buff);
+
+    if (_mflags == CL_MAP_READ)
+    {
+        buff->config.memory = _cmd_queue.enqueueMapBuffer(
+            *cl_buff, //buffer
+            CL_TRUE, // blocking_map
+            CL_MAP_READ, //cl_map_flags
+            0, //offset
+            buff.get_actual_length() //size
+        );
+    }
+
+    else if (_mflags == CL_MAP_WRITE and buff->config.memory)
+    {
+        _cmd_queue.enqueueUnmapMemObject(*cl_buff, buff->config.memory);
+        buff->config.memory = NULL;
+    }
+
+    buff.reset();
     _queue.pop_front();
 }
 
@@ -157,18 +172,18 @@ void OpenClBufferQueue::push(const gras::SBuffer &buff)
     //find the buffer from table
     clBufferSptr cl_buff = get_opencl_buffer(buff);
 
-    if (_action == OPENCL_BUFFER_PUSH_MAP)
+    if (_mflags == CL_MAP_WRITE)
     {
         buff->config.memory = _cmd_queue.enqueueMapBuffer(
             *cl_buff, //buffer
             CL_TRUE, // blocking_map
-            CL_MAP_WRITE, //cl_map_map_flags
+            CL_MAP_WRITE, //cl_map_flags
             0, //offset
             buff.get_actual_length() //size
         );
     }
 
-    if (_action == OPENCL_BUFFER_PUSH_UNMAP and buff->config.memory)
+    else if (_mflags == CL_MAP_READ and buff->config.memory)
     {
         _cmd_queue.enqueueUnmapMemObject(*cl_buff, buff->config.memory);
         buff->config.memory = NULL;
