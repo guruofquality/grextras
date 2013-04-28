@@ -21,7 +21,7 @@ struct GREXTRAS_API OpenClBlockParams
     /*!
      * The global size factor - a kenel execution parameter.
      * This factor controls how get_global_size() is calculated
-     * based on the mimimum number of items at each input port.
+     * based on the minimum number of items at each input port.
      * The global size value obeys the following calculation:
      *
      * get_global_size() = num_input_items*global_size_factor
@@ -33,7 +33,7 @@ struct GREXTRAS_API OpenClBlockParams
     /*!
      * Local size - a kernel execution parameter.
      * Local size controls the local work size dimension.
-     * The kernel will be called with this man work groups:
+     * The kernel will be called with this many work groups:
      * get_global_size()/get_local_size()
      *
      * Default is 1
@@ -41,9 +41,9 @@ struct GREXTRAS_API OpenClBlockParams
     size_t local_size;
 
     /*!
-     * The production factor - a production/consumtion parameter.
+     * The production factor - a production/consumption parameter.
      * This factor controls how items get produced from this block
-     * based on the mimimum number of items at each input port.
+     * based on the minimum number of items at each input port.
      * The production value obeys the following calculation:
      *
      * items_produced = num_input_items*production_factor
@@ -51,6 +51,18 @@ struct GREXTRAS_API OpenClBlockParams
      * Default is 1.0
      */
     double production_factor;
+
+    /*!
+     * The consumption offset - a production/consumption parameter.
+     * This value controls how items get consumed from this block
+     * based on the minimum number of items at each input port.
+     * The consumption value obeys the following calculation:
+     *
+     * items_consumed = num_input_items-consumption_offset
+     *
+     * Default is 0
+     */
+    size_t consumption_offset;
 };
 
 /*!

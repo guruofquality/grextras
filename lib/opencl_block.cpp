@@ -21,6 +21,7 @@ OpenClBlockParams::OpenClBlockParams(void)
     global_factor = 1.0;
     local_size = 1;
     production_factor = 1.0;
+    consumption_offset = 0;
 }
 
 #ifdef HAVE_OPENCL
@@ -185,6 +186,11 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     //pre-work input buffers
     for (size_t i = 0; i < ins.size(); i++)
     {
+        if (ins[i].size() <= _params.consumption_offset)
+        {
+            this->mark_input_fail(i);
+            return;
+        }
         gras::SBuffer buffer = get_input_buffer(i);
         clBufferSptr cl_buff = get_opencl_buffer(buffer);
         if GRAS_UNLIKELY(not cl_buff) //not our cl buffer, just copy into a new one so things work
@@ -239,7 +245,7 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     checkErr(err, "wait work finish");
 
     //produce consume fixed
-    this->consume(num_input_items);
+    this->consume(num_input_items-_params.consumption_offset);
     this->produce(num_output_items);
 }
 

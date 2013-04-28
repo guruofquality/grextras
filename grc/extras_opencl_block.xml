@@ -15,6 +15,7 @@ self.$(id).set_program($kernel_name, open($program_source).read(), $build_option
 self.$(id).params().global_factor = $global_factor
 self.$(id).params().local_size = $local_size
 self.$(id).params().production_factor = $production_factor
+self.$(id).params().consumption_offset = $consumption_offset
 </make>
     <param>
         <name>Device type</name>
@@ -88,6 +89,13 @@ self.$(id).params().production_factor = $production_factor
         <key>production_factor</key>
         <value>1.0</value>
         <type>real</type>
+        <hide>part</hide>
+    </param>
+    <param>
+        <name>Consumption offset</name>
+        <key>consumption_offset</key>
+        <value>1.0</value>
+        <type>int</type>
         <hide>part</hide>
     </param>
     <sink>
