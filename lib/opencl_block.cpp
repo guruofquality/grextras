@@ -8,12 +8,6 @@
 #include <vector>
 #include <boost/make_shared.hpp>
 
-//http://www.cc.gatech.edu/~vetter/keeneland/tutorial-2011-04-14/06-intro_to_opencl.pdf
-//http://www.codeproject.com/Articles/92788/Introductory-Tutorial-to-OpenCL
-//http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/introductory-tutorial-to-opencl/
-//http://www.khronos.org/registry/cl/specs/opencl-cplusplus-1.1.pdf
-//http://streamcomputing.eu/blog/2013-02-03/opencl-basics-flags-for-the-creating-memory-objects/
-
 using namespace grextras;
 
 OpenClBlockParams::OpenClBlockParams(void)
@@ -239,10 +233,6 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
         cl::NDRange(local) //local
     );
     checkErr(err, "enqueueNDRangeKernel");
-
-    //wait for unmap to complete
-    err = _cl_cmd_queue.finish();
-    checkErr(err, "wait work finish");
 
     //produce consume fixed
     this->consume(num_input_items-_params.consumption_offset);

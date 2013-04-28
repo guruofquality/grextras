@@ -20,8 +20,10 @@ struct OpenClBufferTableEntry
     gras::SBufferTokenWeak token;
 };
 
+//table mapping buffers to OpenCL buffers
 static std::vector<OpenClBufferTableEntry> opencl_buffer_table;
 
+//storing a buffer into the table is a mutex-locked thread-safe operation
 static size_t store_buffer(const OpenClBufferTableEntry &entry)
 {
     static boost::mutex mutex;
@@ -37,7 +39,8 @@ static size_t store_buffer(const OpenClBufferTableEntry &entry)
     return opencl_buffer_table.size()-1;
 }
 
-static inline clBufferSptr get_opencl_buffer(const gras::SBuffer &buff)
+//get the OpenCL buffer given an SBuffer - thread safe, but no locking required
+static GRAS_FORCE_INLINE clBufferSptr get_opencl_buffer(const gras::SBuffer &buff)
 {
     const size_t index = buff.get_user_index();
     if (index >=  opencl_buffer_table.size()) return clBufferSptr();
@@ -54,9 +57,9 @@ static inline clBufferSptr get_opencl_buffer(const gras::SBuffer &buff)
 #include <boost/circular_buffer.hpp>
 #include <boost/bind.hpp>
 
-static void opencl_buffer_delete(gras::SBuffer &, clBufferSptr /*holds ref*/)
+static void opencl_buffer_delete(gras::SBuffer &buffer, clBufferSptr cl_buffer, const cl::CommandQueue &cmd_queue)
 {
-    //NOP
+    cmd_queue.enqueueUnmapMemObject(*cl_buffer, buffer.get_actual_memory());
 }
 
 struct OpenClBufferQueue : gras::BufferQueue
@@ -115,12 +118,19 @@ OpenClBufferQueue::OpenClBufferQueue(
         entry.token = _token;
         checkErr(err, "OpenClBufferQueue - cl::Buffer");
 
+        //create SBufferConfig for this buffer
         gras::SBufferConfig sconfig = config;
         sconfig.user_index = store_buffer(entry);
-        sconfig.memory = (void *)(~0); //needs something to avoid malloc
-        sconfig.deleter = boost::bind(&opencl_buffer_delete, _1, cl_buffer);
+        sconfig.memory = _cmd_queue.enqueueMapBuffer(
+            *cl_buffer, //buffer
+            CL_TRUE, // blocking_map
+            mflags, //cl_map_flags
+            0, //offset
+            sconfig.length //size
+        );
+        //bind the unmap to reverse this map operation at destruction
+        sconfig.deleter = boost::bind(&opencl_buffer_delete, _1, cl_buffer, _cmd_queue);
         gras::SBuffer buff(sconfig);
-        buff->config.memory = NULL;
         //buffer derefs and returns to this queue thru token callback
     }
 }
@@ -143,21 +153,28 @@ void OpenClBufferQueue::pop(void)
     //find the buffer from table
     clBufferSptr cl_buff = get_opencl_buffer(buff);
 
-    if (_mflags == CL_MAP_READ)
+    //perform non blocking write
+    //kernel will be enqueued after this
+    if (_mflags == CL_MAP_WRITE)
     {
-        buff->config.memory = _cmd_queue.enqueueMapBuffer(
-            *cl_buff, //buffer
-            CL_TRUE, // blocking_map
-            CL_MAP_READ, //cl_map_flags
-            0, //offset
-            buff.get_actual_length() //size
+        const cl_int err = _cmd_queue.enqueueWriteBuffer(
+            *cl_buff, CL_FALSE, 0,
+            buff.get_actual_length(),
+            buff.get_actual_memory()
         );
+        checkErr(err, "enqueueWriteBuffer");
     }
 
-    else if (_mflags == CL_MAP_WRITE and buff->config.memory)
+    //perform blocking read
+    //must block before giving downstream memory
+    if (_mflags == CL_MAP_READ)
     {
-        _cmd_queue.enqueueUnmapMemObject(*cl_buff, buff->config.memory);
-        buff->config.memory = NULL;
+        const cl_int err = _cmd_queue.enqueueReadBuffer(
+            *cl_buff, CL_TRUE, 0,
+            buff.get_actual_length(),
+            buff.get_actual_memory()
+        );
+        checkErr(err, "enqueueReadBuffer");
     }
 
     buff.reset();
@@ -168,26 +185,6 @@ void OpenClBufferQueue::push(const gras::SBuffer &buff)
 {
     //is it my buffer? otherwise dont keep it
     if GRAS_UNLIKELY(buff->config.token.lock() != _token) return;
-
-    //find the buffer from table
-    clBufferSptr cl_buff = get_opencl_buffer(buff);
-
-    if (_mflags == CL_MAP_WRITE)
-    {
-        buff->config.memory = _cmd_queue.enqueueMapBuffer(
-            *cl_buff, //buffer
-            CL_TRUE, // blocking_map
-            CL_MAP_WRITE, //cl_map_flags
-            0, //offset
-            buff.get_actual_length() //size
-        );
-    }
-
-    else if (_mflags == CL_MAP_READ and buff->config.memory)
-    {
-        _cmd_queue.enqueueUnmapMemObject(*cl_buff, buff->config.memory);
-        buff->config.memory = NULL;
-    }
 
     _queue.push_back(buff);
 }
