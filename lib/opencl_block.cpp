@@ -69,13 +69,16 @@ struct OpenClBlockImpl : OpenClBlock
 
     std::vector<clBufferSptr> _temp_input_buffs;
     std::vector<clBufferSptr> _temp_output_buffs;
+
+    size_t _extra_cl_buffer_allocs;
 };
 
 /***********************************************************************
  * Block constructor
  **********************************************************************/
 OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
-    gras::Block("GrExtras OpenClBlock")
+    gras::Block("GrExtras OpenClBlock"),
+    _extra_cl_buffer_allocs(0)
 {
 
     /***************************************************************
@@ -146,6 +149,10 @@ OpenClBlockImpl::~OpenClBlockImpl(void)
 {
     _temp_input_buffs.clear();
     _temp_output_buffs.clear();
+    if (_extra_cl_buffer_allocs != 0)
+    {
+        std::cerr << "~OpenClBlock extra buffer allocs: " << _extra_cl_buffer_allocs << std::endl;
+    }
 }
 
 /***********************************************************************
@@ -192,7 +199,7 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
             const cl_mem_flags flags = CL_MEM_COPY_HOST_PTR | CL_MEM_READ_WRITE;
             _temp_input_buffs[i].reset(new cl::Buffer(_cl_context, flags, buffer.length, buffer.get(), &err));
             checkErr(err, "tmp input buffer - cl::Buffer");
-            std::cout << "x" << std::flush;
+            _extra_cl_buffer_allocs++;
             cl_buff = _temp_input_buffs[i];
         }
         _cl_kernel.setArg(arg_index++, *cl_buff);
