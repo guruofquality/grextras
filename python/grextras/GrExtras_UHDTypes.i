@@ -37,29 +37,10 @@ DECL_PMC_SWIG_TYPE(uhd::time_spec_t, swig_uhd_time_spec)
 DECL_PMC_SWIG_TYPE(uhd::tune_request_t, swig_uhd_tune_request)
 
 %pythoncode %{
-
 from gnuradio import uhd
-
-RegisterPy2PMC(
-    is_py = lambda x: isinstance(x, uhd.time_spec_t),
-    py2pmc = swig_uhd_time_spec_to_pmc,
-)
-
-RegisterPMC2Py(
-    is_pmc = pmc_is_swig_uhd_time_spec,
-    pmc2py = pmc_to_swig_uhd_time_spec,
-)
-
-RegisterPy2PMC(
-    is_py = lambda x: isinstance(x, uhd.tune_request_t),
-    py2pmc = swig_uhd_tune_request_to_pmc,
-)
-
-RegisterPMC2Py(
-    is_pmc = pmc_is_swig_uhd_tune_request,
-    pmc2py = pmc_to_swig_uhd_tune_request,
-)
-
 %}
+
+REG_PMC_SWIG_TYPE(swig_uhd_time_spec, uhd.time_spec_t)
+REG_PMC_SWIG_TYPE(swig_uhd_tune_request, uhd.tune_request_t)
 
 #endif
