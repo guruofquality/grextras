@@ -30,6 +30,8 @@ list(APPEND grc_sources
     extras_uhd_control_port.xml
 
     extras_query_server.xml
+
+    extras_opencl_block.xml
 )
 
 install(

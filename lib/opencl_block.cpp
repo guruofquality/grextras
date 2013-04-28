@@ -16,6 +16,13 @@
 
 using namespace grextras;
 
+OpenClBlockParams::OpenClBlockParams(void)
+{
+    global_factor = 1.0;
+    local_size = 1;
+    production_factor = 1.0;
+}
+
 #ifdef HAVE_OPENCL
 
 #define MY_HERE() std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
@@ -48,6 +55,9 @@ struct OpenClBlockImpl : OpenClBlock
     void set_access_mode(const std::string &direction, const std::vector<std::string> &modes);
     gras::BufferQueueSptr output_buffer_allocator(const size_t which_output, const gras::SBufferConfig &config);
     gras::BufferQueueSptr input_buffer_allocator(const size_t which_input, const gras::SBufferConfig &config);
+
+    OpenClBlockParams &params(void){return _params;}
+    OpenClBlockParams _params;
 
     std::vector<std::string> _input_access_modes;
     std::vector<std::string> _output_access_modes;
@@ -198,15 +208,29 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
         _cl_kernel.setArg(arg_index++, *cl_buff);
     }
 
-    const cl_uint num = std::min(ins.min(), outs.min());
-    //std::cout << "num " << num << std::endl;
+    //calculate production/consumption params
+    size_t num_input_items, num_output_items;
+    if (_params.production_factor > 1.0)
+    {
+        num_output_items = std::min(size_t(ins.min()*_params.production_factor), outs.min());
+        num_input_items = size_t(num_output_items/_params.production_factor);
+    }
+    else
+    {
+        num_input_items = std::min(size_t(outs.min()/_params.production_factor), ins.min());
+        num_output_items = size_t(num_input_items*_params.production_factor);
+    }
+
+    //calculate kernel execution params
+    const size_t global = size_t(_params.global_factor*num_input_items);
+    const size_t local = _params.local_size;
 
     //enqueue work
     err = _cl_cmd_queue.enqueueNDRangeKernel(
         _cl_kernel, //kernel
         cl::NullRange, //offset
-        cl::NDRange(num)/*TODO*/, //global
-        cl::NDRange(1)/*TODO*/ //local
+        cl::NDRange(global), //global
+        cl::NDRange(local) //local
     );
     checkErr(err, "enqueueNDRangeKernel");
 
@@ -215,8 +239,8 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     checkErr(err, "wait work finish");
 
     //produce consume fixed
-    this->consume(num);
-    this->produce(num);
+    this->consume(num_input_items);
+    this->produce(num_output_items);
 }
 
 /***********************************************************************

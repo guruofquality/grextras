@@ -12,6 +12,48 @@ namespace grextras
 {
 
 /*!
+ * Parameters to control production/consumption and kernel execution.
+ */
+struct GREXTRAS_API OpenClBlockParams
+{
+    OpenClBlockParams(void);
+
+    /*!
+     * The global size factor - a kenel execution parameter.
+     * This factor controls how get_global_size() is calculated
+     * based on the mimimum number of items at each input port.
+     * The global size value obeys the following calculation:
+     *
+     * get_global_size() = num_input_items*global_size_factor
+     *
+     * Default is 1.0
+     */
+    double global_factor;
+
+    /*!
+     * Local size - a kernel execution parameter.
+     * Local size controls the local work size dimension.
+     * The kernel will be called with this man work groups:
+     * get_global_size()/get_local_size()
+     *
+     * Default is 1
+     */
+    size_t local_size;
+
+    /*!
+     * The production factor - a production/consumtion parameter.
+     * This factor controls how items get produced from this block
+     * based on the mimimum number of items at each input port.
+     * The production value obeys the following calculation:
+     *
+     * items_produced = num_input_items*production_factor
+     *
+     * Default is 1.0
+     */
+    double production_factor;
+};
+
+/*!
  * The OpenCL Block creates a wrapper for using Open CL
  * within the GRAS buffering framework for maximum efficiency.
  * GRAS buffers are flexible, memory can be allocated such that
@@ -27,6 +69,11 @@ struct GREXTRAS_API OpenClBlock : virtual gras::Block
      * \return a new shared ptr for the block
      */
     static sptr make(const std::string &dev_type = "GPU");
+
+    /*!
+     * Get access to the special block parameters.
+     */
+    virtual OpenClBlockParams &params(void) = 0;
 
     /*!
      * Set the source code to be run by this block.

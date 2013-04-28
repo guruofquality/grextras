@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##OpenCL block:
+###################################################
+ -->
+<block>
+    <name>Ex: OpenCL</name>
+    <key>extras_opencl_block</key>
+    <import>import grextras</import>
+    <make>grextras.OpenClBlock($dev_type)
+for i, s in enumerate($input_sizes) self.$(id).input_config(i).item_size = s
+for i, s in enumerate($output_sizes) self.$(id).output_config(i).item_size = s
+self.$(id).set_program($kernel_name, open($program_source).read(), $build_options)
+self.$(id).params().global_factor = $global_factor
+self.$(id).params().local_size = $local_size
+self.$(id).params().production_factor = $production_factor
+</make>
+    <param>
+        <name>Device type</name>
+        <key>dev_type</key>
+        <value>GPU</value>
+        <type>string</type>
+        <option><name>GPU</name><key>GPU</key></option>
+        <option><name>CPU</name><key>CPU</key></option>
+    </param>
+    <param>
+        <name>Num inputs</name>
+        <key>num_inputs</key>
+        <value>2</value>
+        <type>int</type>
+        <hide>part</hide>
+    </param>
+    <param>
+        <name>Input sizes</name>
+        <key>input_sizes</key>
+        <value>[8, 8]</value>
+        <type>int_vector</type>
+    </param>
+    <param>
+        <name>Num outputs</name>
+        <key>num_outputs</key>
+        <value>1</value>
+        <type>int</type>
+        <hide>part</hide>
+    </param>
+    <param>
+        <name>Output sizes</name>
+        <key>output_sizes</key>
+        <value>[8]</value>
+        <type>int_vector</type>
+    </param>
+    <param>
+        <name>Program source</name>
+        <key>program_source</key>
+        <value></value>
+        <type>file_open</type>
+    </param>
+    <param>
+        <name>Kernel name</name>
+        <key>kernel_name</key>
+        <value>my_kernels_name</value>
+        <type>string</type>
+    </param>
+    <param>
+        <name>Build options</name>
+        <key>build_options</key>
+        <value></value>
+        <type>string</type>
+        <hide>part</hide>
+    </param>
+    <param>
+        <name>Global factor</name>
+        <key>global_factor</key>
+        <value>1.0</value>
+        <type>real</type>
+        <hide>part</hide>
+    </param>
+    <param>
+        <name>Local size</name>
+        <key>local_size</key>
+        <value>1</value>
+        <type>int</type>
+        <hide>part</hide>
+    </param>
+    <param>
+        <name>Production factor</name>
+        <key>production_factor</key>
+        <value>1.0</value>
+        <type>real</type>
+        <hide>part</hide>
+    </param>
+    <sink>
+        <name>in</name>
+        <type></type>
+        <nports>$num_inputs</nports>
+    </sink>
+    <source>
+        <name>out</name>
+        <type></type>
+        <nports>$num_outputs</nports>
+    </source>
+    <doc>
+See parameter documentation in grextras/opencl_block.hpp
+    </doc>
+</block>
