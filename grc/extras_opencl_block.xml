@@ -94,7 +94,7 @@ self.$(id).params().consumption_offset = $consumption_offset
     <param>
         <name>Consumption offset</name>
         <key>consumption_offset</key>
-        <value>1.0</value>
+        <value>1</value>
         <type>int</type>
         <hide>part</hide>
     </param>
