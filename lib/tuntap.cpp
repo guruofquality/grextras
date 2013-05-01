@@ -201,7 +201,7 @@ private:
 TunTap::sptr TunTap::make(const std::string &dev)
 {
     //make the TunTap
-    char dev_cstr[1024];
+    char dev_cstr[1024] = {};
     strncpy(dev_cstr, dev.c_str(), std::min(sizeof(dev_cstr), dev.size()));
     const int fd = tun_alloc(dev_cstr);
     if (fd <= 0)
