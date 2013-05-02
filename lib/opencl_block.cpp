@@ -241,6 +241,10 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     );
     checkErr(err, "enqueueNDRangeKernel");
 
+    //wait on kernel
+    err = _cl_cmd_queue.finish();
+    checkErr(err, "cmd queue kernel finish");
+
     //produce consume fixed
     this->consume(num_input_items-_params.consumption_offset);
     this->produce(num_output_items);
