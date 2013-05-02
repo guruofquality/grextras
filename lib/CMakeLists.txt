@@ -81,7 +81,7 @@ if(OPENCL_FOUND)
     add_definitions(-DHAVE_OPENCL)
     #the following definition is supposed to be a harmless fix
     #http://www.khronos.org/message_boards/showthread.php/7931
-    add_definitions(-DCL_USE_DEPRECATED_OPENCL_1_1_APIS)
+    #add_definitions(-DCL_USE_DEPRECATED_OPENCL_1_1_APIS)
 endif()
 
 ########################################################################

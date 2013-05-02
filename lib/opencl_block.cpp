@@ -233,6 +233,7 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     const size_t local = _params.local_size;
 
     //enqueue work
+    std::cout << "outs.size() " << outs.size() << std::endl;
     err = _cl_cmd_queue.enqueueNDRangeKernel(
         _cl_kernel, //kernel
         cl::NullRange, //offset
@@ -262,10 +263,11 @@ static cl_mem_flags mode_str_to_flags(
 {
     std::cout << boost::format("Making %s buffers for %s port %u...\n") % mode % direction % which;
 
-    cl_mem_flags flags = CL_MEM_ALLOC_HOST_PTR;
-    if      (mode == "RW") flags |= CL_MEM_READ_WRITE;
-    else if (mode == "RO") flags |= CL_MEM_READ_ONLY;
-    else if (mode == "WO") flags |= CL_MEM_WRITE_ONLY;
+    cl_mem_flags flags = 0;
+    if      (mode == "RW") flags |= CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR;
+    else if (mode == "RO") flags |= CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR;
+    else if (mode == "WO") flags |= CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR;
+    else if (mode == "DO") flags |= CL_MEM_READ_WRITE | CL_MEM_HOST_NO_ACCESS;
     else throw std::runtime_error("opencl block unknown device mode: " + mode);
 
     return flags;
@@ -281,19 +283,25 @@ static std::string my_vec_get(const std::vector<std::string> &v, const size_t in
 gras::BufferQueueSptr OpenClBlockImpl::output_buffer_allocator(
     const size_t which_output, const gras::SBufferConfig &config
 ){
-    const cl_mem_flags flags = mode_str_to_flags(
-        "output", which_output, my_vec_get(_output_access_modes, which_output, "WO"));
+    const std::string access_mode = my_vec_get(_output_access_modes, which_output, "WO");
+    const cl_mem_flags flags = mode_str_to_flags("output", which_output, access_mode);
+    const cl_map_flags mflags = (access_mode == "DO")? 0 : CL_MAP_READ;
     return gras::BufferQueueSptr(new OpenClBufferQueue(
-        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, CL_MAP_READ));
+        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, mflags));
 }
 
 gras::BufferQueueSptr OpenClBlockImpl::input_buffer_allocator(
     const size_t which_input, const gras::SBufferConfig &config
 ){
-    const cl_mem_flags flags = mode_str_to_flags(
-        "input", which_input, my_vec_get(_input_access_modes, which_input, "RO"));
+    const std::string access_mode = my_vec_get(_input_access_modes, which_input, "RO");
+
+    //device only mode, dont create an input queue - use the upstreams queue
+    if (access_mode == "DO") return gras::BufferQueueSptr();
+
+    const cl_mem_flags flags = mode_str_to_flags("input", which_input, access_mode);
+    const cl_map_flags mflags = CL_MAP_WRITE;
     return gras::BufferQueueSptr(new OpenClBufferQueue(
-        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, CL_MAP_WRITE));
+        config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, mflags));
 }
 
 /***********************************************************************

@@ -114,6 +114,7 @@ struct GREXTRAS_API OpenClBlock : virtual gras::Block
      *  - "RW" = device reads and writes
      *  - "RO" = device reads only (default for input)
      *  - "WO" = device writes only (default for output)
+     *  - "DO" = device only - no host access
      *
      * \param direction "INPUT" or "OUTPUT" for port direction
      * \param modes the the vector of access modes

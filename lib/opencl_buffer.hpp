@@ -57,9 +57,14 @@ static GRAS_FORCE_INLINE clBufferSptr get_opencl_buffer(const gras::SBuffer &buf
 #include <boost/circular_buffer.hpp>
 #include <boost/bind.hpp>
 
-static void opencl_buffer_delete(gras::SBuffer &buffer, clBufferSptr cl_buffer, const cl::CommandQueue &cmd_queue)
+static void opencl_buffer_delete(
+    gras::SBuffer &buffer,
+    clBufferSptr cl_buffer,
+    const cl::CommandQueue &cmd_queue,
+    const cl_map_flags mflags
+)
 {
-    cmd_queue.enqueueUnmapMemObject(*cl_buffer, buffer.get_actual_memory());
+    if (mflags) cmd_queue.enqueueUnmapMemObject(*cl_buffer, buffer.get_actual_memory());
 }
 
 struct OpenClBufferQueue : gras::BufferQueue
@@ -121,15 +126,17 @@ OpenClBufferQueue::OpenClBufferQueue(
         //create SBufferConfig for this buffer
         gras::SBufferConfig sconfig = config;
         sconfig.user_index = store_buffer(entry);
-        sconfig.memory = _cmd_queue.enqueueMapBuffer(
+        void *host_ptr = cl_buffer.get(); //not NULL so SBuffer wont malloc
+        if (mflags) host_ptr = _cmd_queue.enqueueMapBuffer(
             *cl_buffer, //buffer
             CL_TRUE, // blocking_map
             mflags, //cl_map_flags
             0, //offset
             sconfig.length //size
         );
+        sconfig.memory = host_ptr;
         //bind the unmap to reverse this map operation at destruction
-        sconfig.deleter = boost::bind(&opencl_buffer_delete, _1, cl_buffer, _cmd_queue);
+        sconfig.deleter = boost::bind(&opencl_buffer_delete, _1, cl_buffer, _cmd_queue, mflags);
         gras::SBuffer buff(sconfig);
         //buffer derefs and returns to this queue thru token callback
     }
