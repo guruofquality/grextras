@@ -285,8 +285,8 @@ static std::string my_vec_get(const std::vector<std::string> &v, const size_t in
 gras::BufferQueueSptr OpenClBlockImpl::output_buffer_allocator(
     const size_t which_output, const gras::SBufferConfig &config
 ){
-    const cl_mem_flags flags = mode_str_to_flags(
-        "output", which_output, my_vec_get(_output_access_modes, which_output, "WO"));
+    const std::string access_mode = my_vec_get(_output_access_modes, which_output, "WO");
+    const cl_mem_flags flags = mode_str_to_flags("output", which_output, access_mode);
     return gras::BufferQueueSptr(new OpenClBufferQueue(
         config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, CL_MAP_READ));
 }
@@ -294,8 +294,8 @@ gras::BufferQueueSptr OpenClBlockImpl::output_buffer_allocator(
 gras::BufferQueueSptr OpenClBlockImpl::input_buffer_allocator(
     const size_t which_input, const gras::SBufferConfig &config
 ){
-    const cl_mem_flags flags = mode_str_to_flags(
-        "input", which_input, my_vec_get(_input_access_modes, which_input, "RO"));
+    const std::string access_mode = my_vec_get(_input_access_modes, which_input, "RO");
+    const cl_mem_flags flags = mode_str_to_flags("input", which_input, access_mode);
     return gras::BufferQueueSptr(new OpenClBufferQueue(
         config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, CL_MAP_WRITE));
 }

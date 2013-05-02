@@ -4,6 +4,9 @@ import unittest
 import gras
 import grextras
 import numpy
+import os
+
+DEVICE_TYPE = os.getenv("CL_DEVICE_TYPE", "GPU")
 
 vector_add_gpu_SOURCE = """
 __kernel void add_2x_float32(
@@ -36,7 +39,7 @@ class test_opencl_block(unittest.TestCase):
         self.tb = None
 
     def test_add_float32(self):
-        op = grextras.OpenClBlock("GPU")
+        op = grextras.OpenClBlock(DEVICE_TYPE)
         op.set_program("add_2x_float32", vector_add_gpu_SOURCE)
         op.input_config(0).item_size = 4
         op.output_config(0).item_size = 4
@@ -59,7 +62,7 @@ class test_opencl_block(unittest.TestCase):
         self.assertEqual(expected_result, actual_result)
 
     def test_add_complex64(self):
-        op = grextras.OpenClBlock("GPU")
+        op = grextras.OpenClBlock(DEVICE_TYPE)
         op.set_program("add_2x_complex64", vector_add_gpu_SOURCE)
         op.input_config(0).item_size = 8
         op.output_config(0).item_size = 8
