@@ -76,7 +76,7 @@ struct OpenClBlockImpl : OpenClBlock
 /***********************************************************************
  * Block constructor
  **********************************************************************/
-OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
+OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type_):
     gras::Block("GrExtras OpenClBlock"),
     _extra_cl_buffer_allocs(0)
 {
@@ -84,6 +84,9 @@ OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
     /***************************************************************
      * Determine device type
      **************************************************************/
+    std::string dev_type = dev_type_;
+    const char *cl_dev_type_env = getenv("CL_DEVICE_TYPE");
+    if (dev_type.empty()) dev_type = (cl_dev_type_env)? cl_dev_type_env : "GPU";
     if (dev_type == "CPU") _cl_dev_type = CL_DEVICE_TYPE_CPU;
     else if (dev_type == "GPU") _cl_dev_type = CL_DEVICE_TYPE_GPU;
     else throw std::runtime_error("OpenClBlock unknown device type: " + dev_type);

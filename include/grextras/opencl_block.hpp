@@ -77,10 +77,12 @@ struct GREXTRAS_API OpenClBlock : virtual gras::Block
 
     /*!
      * Make a new OpenClBlock.
-     * \param dev_type device type "CPU" or "CPU"
+     * If device type parameter is not specified,
+     * the CL_DEVICE_TYPE environment variable is used.
+     * \param dev_type device type "CPU", "GPU"
      * \return a new shared ptr for the block
      */
-    static sptr make(const std::string &dev_type = "GPU");
+    static sptr make(const std::string &dev_type = "");
 
     /*!
      * Get access to the special block parameters.
