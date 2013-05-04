@@ -23,7 +23,7 @@ struct GREXTRAS_API SerializePort : virtual gras::Block
 
     /*!
      * Create a new serialize port block.
-     * An MTU of zero means unconstrained output payload sizes.
+     * An MTU of zero means default ethernet payload sizes.
      * \param mtu max output payload size
      */
     static sptr make(const size_t mtu = 0);

@@ -5,6 +5,8 @@
 #include <grextras/deserialize_port.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <sstream>
 
 using namespace grextras;
 
