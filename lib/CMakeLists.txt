@@ -29,6 +29,7 @@ list(APPEND GREXTRAS_SOURCES
     uhd_status_port.cpp
     uhd_control_port.cpp
  
+    serialize_common.cpp
     serialize_port.cpp
     deserialize_port.cpp
 )
@@ -50,7 +51,7 @@ list(APPEND GREXTRAS_LIBRARIES ${GRAS_LIBRARIES})
 ########################################################################
 # Setup Boost
 ########################################################################
-find_package(Boost COMPONENTS thread) #add thread dependency
+find_package(Boost COMPONENTS thread serialization)
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND GREXTRAS_LIBRARIES ${Boost_LIBRARIES})

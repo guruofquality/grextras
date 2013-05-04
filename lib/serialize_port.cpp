@@ -1,12 +1,13 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#define PMC_SERIALIZE_IMPLEMENT
+#define PMC_SERIALIZE_DECLARE
 #include "serialize_common.hpp"
 #include <grextras/serialize_port.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me htonl
 #include <boost/archive/text_oarchive.hpp>
+#include <boost/assert.hpp>
 #include <sstream>
 
 using namespace grextras;
@@ -14,7 +15,7 @@ using namespace grextras;
 static gras::SBuffer pmc_to_buffer(const size_t offset_words32, const PMCC &pmc)
 {
     //serialize the pmc into a stringstream
-    std::stringstream ss;
+    std::ostringstream ss;
     boost::archive::text_oarchive oa(ss);
     oa << pmc;
     const std::string s = ss.str();
@@ -32,7 +33,9 @@ static gras::SBuffer pmc_to_buffer(const size_t offset_words32, const PMCC &pmc)
 
 static void pack_buffer(const size_t seq, const size_t sid, const bool has_tsf, const gras::item_index_t tsf, gras::SBuffer &buff)
 {
+    BOOST_VERIFY(buff.length > 0);
     const size_t hdr_words32 = 4 + has_tsf? 2 : 0;
+    BOOST_VERIFY(buff.offset*4 == hdr_words32);
     const size_t pkt_words32 = hdr_words32 + buff.length/4 + 1;
     const size_t vita_words32 = pkt_words32 - 3;
     boost::uint32_t *p = (boost::uint32_t *)buff.get_actual_memory();
