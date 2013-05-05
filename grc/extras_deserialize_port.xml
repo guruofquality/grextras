@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Deserialize port
+###################################################
+-->
+<block>
+    <name>Ex: Deserialize</name>
+    <key>extras_deserialize_port</key>
+    <import>import grextras</import>
+    <make>grextras.DeserializePort()</make>
+    <param>
+        <name>Num Outputs</name>
+        <key>num_outputs</key>
+        <value>1</value>
+        <type>int</type>
+    </param>
+    <sink>
+        <name>ser</name>
+        <type></type>
+    </sink>
+    <source>
+        <name>out</name>
+        <type></type>
+        <nports>$num_outputs</nports>
+    </source>
+</block>

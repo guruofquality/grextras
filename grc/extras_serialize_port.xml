@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Serialize port
+###################################################
+-->
+<block>
+    <name>Ex: Serialize</name>
+    <key>extras_serialize_port</key>
+    <import>import grextras</import>
+    <make>grextras.SerializePort($mtu)</make>
+    <param>
+        <name>MTU Bytes</name>
+        <key>mtu</key>
+        <value>0</value>
+        <type>int</type>
+    </param>
+    <param>
+        <name>Num Inputs</name>
+        <key>num_inputs</key>
+        <value>1</value>
+        <type>int</type>
+    </param>
+    <sink>
+        <name>in</name>
+        <type></type>
+        <nports>$num_inputs</nports>
+    </sink>
+    <source>
+        <name>ser</name>
+        <type></type>
+    </source>
+</block>
