@@ -12,8 +12,8 @@ class test_stream_selector(unittest.TestCase):
         ss = grextras.StreamSelector(numpy.dtype(numpy.float32).itemsize)
         ss.set_paths([1, 0]) #in[0] -> out[1], in[1] -> out[0]
 
-        src0 = grextras.VectorSource(numpy.float32, [1, 2, 3, 4], autodone=False)
-        src1 = grextras.VectorSource(numpy.float32, [5, 6, 7, 8], autodone=False)
+        src0 = grextras.VectorSource(numpy.float32, [1, 2, 3, 4])
+        src1 = grextras.VectorSource(numpy.float32, [5, 6, 7, 8])
 
         dst0 = grextras.VectorSink(numpy.float32)
         dst1 = grextras.VectorSink(numpy.float32)
