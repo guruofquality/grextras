@@ -37,30 +37,30 @@ static void unpack_buffer(const gras::SBuffer &packet, size_t &seq, size_t &sid,
     const boost::uint32_t *p = (const boost::uint32_t *)packet.get();
 
     //validate vrlp
-    BOOST_VERIFY(ntohl(p[0]) == VRLP);
+    ASSERT(ntohl(p[0]) == VRLP);
     const size_t pkt_words32 = ntohl(p[1]) & 0xfffff;
-    BOOST_VERIFY(pkt_words32*4 <= packet.length);
+    ASSERT(pkt_words32*4 <= packet.length);
     const size_t seq12 = ntohl(p[1]) >> 20;
 
     //validate vita
     const boost::uint32_t vita_hdr = ntohl(p[2]);
     const size_t vita_words32 = vita_hdr & 0xffff;
-    BOOST_VERIFY(vita_words32 == pkt_words32 - 3);
+    ASSERT(vita_words32 == pkt_words32 - 3);
 
     //validate seq
     const size_t seq4 = (vita_hdr >> 16) & 0xf;
-    BOOST_VERIFY((seq12 & 0x4) == seq4);
+    ASSERT((seq12 & 0x4) == seq4);
 
     has_tsf = bool(vita_hdr & VITA_TSF);
-    BOOST_VERIFY(bool(vita_hdr & VITA_SID));
+    ASSERT(bool(vita_hdr & VITA_SID));
     is_ext = bool(vita_hdr & VITA_EXT);
 
     //assert other fields are blank - expected
-    BOOST_VERIFY((vita_hdr & (1 << 30)) == 0);
-    BOOST_VERIFY((vita_hdr & (1 << 27)) == 0);
-    BOOST_VERIFY((vita_hdr & (1 << 26)) == 0);
-    BOOST_VERIFY((vita_hdr & (1 << 23)) == 0);
-    BOOST_VERIFY((vita_hdr & (1 << 22)) == 0);
+    ASSERT((vita_hdr & (1 << 30)) == 0);
+    ASSERT((vita_hdr & (1 << 27)) == 0);
+    ASSERT((vita_hdr & (1 << 26)) == 0);
+    ASSERT((vita_hdr & (1 << 23)) == 0);
+    ASSERT((vita_hdr & (1 << 22)) == 0);
 
     //extract seq and sid
     seq = seq12;
@@ -70,7 +70,7 @@ static void unpack_buffer(const gras::SBuffer &packet, size_t &seq, size_t &sid,
     tsf = (gras::item_index_t(ntohl(p[4])) << 32) | ntohl(p[5]);
 
     //vend too
-    BOOST_VERIFY(ntohl(p[pkt_words32-1]) == VEND);
+    ASSERT(ntohl(p[pkt_words32-1]) == VEND);
 
     //set out buff
     const size_t hdr_words32 = has_tsf? 6 : 4;
@@ -104,13 +104,13 @@ struct DeserializePortImpl : DeserializePort
         bool is_ext = false;
         gras::SBuffer out_buff;
         unpack_buffer(pkt_msg.buff, seq, sid, has_tsf, tsf, is_ext, out_buff);
-        BOOST_VERIFY(sid < outs.size());
+        ASSERT(sid < outs.size());
 
         //handle buffs
         if (not is_ext)
         {
             const size_t item_size = this->output_config(sid).item_size;
-            BOOST_VERIFY((out_buff.length % item_size) == 0);
+            ASSERT((out_buff.length % item_size) == 0);
             this->post_output_buffer(sid, out_buff);
         }
 

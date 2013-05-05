@@ -10,10 +10,12 @@
     <import>import grextras</import>
     <make>grextras.SerializePort($mtu)</make>
     <param>
-        <name>MTU Bytes</name>
+        <name>MTU</name>
         <key>mtu</key>
         <value>0</value>
         <type>int</type>
+        <hide>#if $mtu() == 0 then 'part' else 'none'#</hide>
+        <option><name>Automatic</name><key>0</key></option>
     </param>
     <param>
         <name>Num Inputs</name>
