@@ -19,9 +19,16 @@ static PMCC buffer_to_pmc(const gras::SBuffer &buff)
     std::istringstream ss(s);
 
     //convert stringstream into pmc
-    boost::archive::polymorphic_text_iarchive ia(ss);
     PMCC p;
-    ia >> p;
+    try
+    {
+        boost::archive::polymorphic_text_iarchive ia(ss);
+        ia >> p;
+    }
+    catch(...)
+    {
+        std::cerr << "cannot deserialize " << "" << std::endl;
+    }
     return p;
 }
 
@@ -66,7 +73,7 @@ static void unpack_buffer(const gras::SBuffer &packet, size_t &seq, size_t &sid,
     BOOST_VERIFY(ntohl(p[pkt_words32-1]) == VEND);
 
     //set out buff
-    const size_t hdr_words32 = 4 + has_tsf? 2 : 0;
+    const size_t hdr_words32 = has_tsf? 6 : 4;
     out_buff = packet;
     out_buff.offset += hdr_words32*4;
     out_buff.length = (pkt_words32 - hdr_words32 - 1)*4;
@@ -77,7 +84,7 @@ struct DeserializePortImpl : DeserializePort
     DeserializePortImpl(void):
         gras::Block("GrExtras DeserializePort")
     {
-        
+        //NOP
     }
 
     void work(const InputItems &ins, const OutputItems &outs)

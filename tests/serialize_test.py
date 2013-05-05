@@ -36,6 +36,32 @@ class RandomStuffSource(gras.Block):
         self._tasks = self._tasks[1:]
         if not self._tasks: self.mark_done()
 
+class RandomStuffSink(gras.Block):
+    def __init__(self):
+        gras.Block.__init__(self,
+            name = "RandomStuffSink",
+            in_sig = [numpy.uint32],
+        )
+        self._results = {"buff":numpy.array([], numpy.uint32), "tag":[], "msg":[]}
+
+    def work(self, ins, outs):
+        if len(ins[0]):
+            self._results["buff"] = numpy.append(self._results["buff"], ins[0])
+            self.consume(0, len(ins[0]))
+
+        msg = self.pop_input_msg(0)
+        if msg:
+            data = msg()
+            self._results["msg"].append(data)
+
+    def propagate_tags(self, index, tag_iter):
+        for tag in tag_iter:
+            data = tag.object()
+            self._results["tag"].append(data)
+
+    def get_results(self):
+        return self._results
+
 class PktMsgSinkPrinter(gras.Block):
     def __init__(self):
         gras.Block.__init__(self,
@@ -51,6 +77,7 @@ class PktMsgSinkPrinter(gras.Block):
         #print 'pop msg', msg, type(pkt_msg)
         if not isinstance(pkt_msg, gras.PacketMsg): return
 
+        return
         b = pkt_msg.buff.get().view('>i4') #big endian words32
         print 'buffer - words32', len(b)
         for i in range(len(b)):
@@ -78,9 +105,77 @@ class test_serializer_blocks(unittest.TestCase):
         dst = PktMsgSinkPrinter()
 
         self.tb.connect(src0, (ser, 0))
-        #self.tb.connect(src1, (ser, 1))
+        self.tb.connect(src1, (ser, 1))
         self.tb.connect(ser, dst)
         self.tb.run()
+
+    def test_simple_loopback(self):
+        tasks0 = [
+            ("tag", "hello"),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 100), numpy.uint32)),
+            ("tag", 2.0 + 3j),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 23), numpy.uint32)),
+            ("msg", 16.2),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 10), numpy.uint32)),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 66), numpy.uint32)),
+            ("msg", "bye!"),
+        ]
+        tasks1 = [
+            ("tag", "hello2"),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 20), numpy.uint32)),
+            ("msg", 34.7),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 11), numpy.uint32)),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 45), numpy.uint32)),
+            ("tag", 9.0 + -1j),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 32), numpy.uint32)),
+            ("msg", "cya"),
+        ]
+
+        src0 = RandomStuffSource(tasks0)
+        src1 = RandomStuffSource(tasks1)
+        ser = grextras.SerializePort()
+        deser = grextras.DeserializePort()
+        dst0 = RandomStuffSink()
+        dst1 = RandomStuffSink()
+
+        self.tb.connect(src0, (ser, 0))
+        self.tb.connect(src1, (ser, 1))
+        self.tb.connect(ser, deser)
+        self.tb.connect((deser, 0), dst0)
+        self.tb.connect((deser, 1), dst1)
+        self.tb.run()
+
+        def get_task_list(type_name, tasks):
+            for name, data in tasks:
+                if name == type_name: yield data
+
+        def get_super_buff(tasks):
+            a = numpy.array([], numpy.uint32)
+            for b in get_task_list("buff", tasks):
+                a = numpy.append(a, b)
+            return a
+
+        def check_equal(dst, tasks, type_name):
+            print 'check_equal', type_name
+            expected = list(get_task_list(type_name, tasks))
+            result = dst.get_results()[type_name]
+            self.assertEqual(len(expected), len(result))
+            for i in range(len(expected)):
+                print 'iteration', i
+                self.assertEqual(expected[i], result[i])
+
+        check_equal(dst0, tasks0, "tag")
+        check_equal(dst1, tasks1, "tag")
+        check_equal(dst0, tasks0, "msg")
+        check_equal(dst1, tasks1, "msg")
+
+        def do_buff_check(dst, tasks):
+            expected_buff = get_super_buff(tasks)
+            result_buff = dst.get_results()["buff"]
+            self.assertTrue((expected_buff == result_buff).all())
+
+        do_buff_check(dst0, tasks0)
+        do_buff_check(dst1, tasks1)
 
 if __name__ == '__main__':
     unittest.main()
