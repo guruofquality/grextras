@@ -89,48 +89,45 @@ struct DeserializePortImpl : DeserializePort
 
     void work(const InputItems &ins, const OutputItems &outs)
     {
-        for (size_t i = 0; i < ins.size(); i++)
+        //validate the pkt message type
+        PMCC msg = pop_input_msg(0);
+        if (not msg or not msg.is<gras::PacketMsg>()) return;
+        gras::PacketMsg pkt_msg = msg.as<gras::PacketMsg>();
+
+        //TODO things wont keep pkt boundaries -- fix?
+
+        //extract info
+        size_t seq = 0;
+        size_t sid = 0;
+        bool has_tsf = false;
+        gras::item_index_t tsf = 0;
+        bool is_ext = false;
+        gras::SBuffer out_buff;
+        unpack_buffer(pkt_msg.buff, seq, sid, has_tsf, tsf, is_ext, out_buff);
+        BOOST_VERIFY(sid < outs.size());
+
+        //handle buffs
+        if (not is_ext)
         {
-            //validate the pkt message type
-            PMCC msg = pop_input_msg(i);
-            if (not msg or not msg.is<gras::PacketMsg>()) continue;
-            gras::PacketMsg pkt_msg = msg.as<gras::PacketMsg>();
+            const size_t item_size = this->output_config(sid).item_size;
+            BOOST_VERIFY((out_buff.length % item_size) == 0);
+            this->post_output_buffer(sid, out_buff);
+        }
 
-            //TODO things wont keep pkt boundaries -- fix?
+        //handle tags
+        else if (has_tsf)
+        {
+            gras::Tag tag;
+            tag.offset = tsf;
+            tag.object = buffer_to_pmc(out_buff);
+            this->post_output_tag(sid, tag);
+        }
 
-            //extract info
-            size_t seq = 0;
-            size_t sid = 0;
-            bool has_tsf = false;
-            gras::item_index_t tsf = 0;
-            bool is_ext = false;
-            gras::SBuffer out_buff;
-            unpack_buffer(pkt_msg.buff, seq, sid, has_tsf, tsf, is_ext, out_buff);
-            BOOST_VERIFY(sid < outs.size());
-
-            //handle buffs
-            if (not is_ext)
-            {
-                const size_t item_size = this->output_config(sid).item_size;
-                BOOST_VERIFY((out_buff.length % item_size) == 0);
-                this->post_output_buffer(sid, out_buff);
-            }
-
-            //handle tags
-            else if (has_tsf)
-            {
-                gras::Tag tag;
-                tag.offset = tsf;
-                tag.object = buffer_to_pmc(out_buff);
-                this->post_output_tag(sid, tag);
-            }
-
-            //handle msgs
-            else
-            {
-                PMCC msg = buffer_to_pmc(out_buff);
-                this->post_output_msg(sid, msg);
-            }
+        //handle msgs
+        else
+        {
+            PMCC msg = buffer_to_pmc(out_buff);
+            this->post_output_msg(sid, msg);
         }
     }
 };
