@@ -118,6 +118,9 @@ public:
 #define EPS 1.2e-7
 #define RNMX (1.0-EPS)
 
+#ifndef M_SQRT2
+#define M_SQRT2 1.4142135623730951
+#endif
 
 inline gr_random::gr_random (long seed)
 {
