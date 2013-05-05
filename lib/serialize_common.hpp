@@ -3,35 +3,6 @@
 #ifndef INCLUDED_GREXTRAS_SERIALIZE_COMMON_HPP
 #define INCLUDED_GREXTRAS_SERIALIZE_COMMON_HPP
 
-#include <PMC/Serialize.hpp>
-#include <gras/sbuffer.hpp>
-#include <boost/serialization/split_free.hpp>
-#include <boost/serialization/string.hpp>
-
-namespace boost { namespace serialization {
-template<class Archive>
-void save(Archive & ar, const gras::SBuffer & b, unsigned int version)
-{
-    //TODO lazyness string
-    std::string s((const char *)b.get(), b.length);
-    ar & s;
-}
-template<class Archive>
-void load(Archive & ar, gras::SBuffer & b, unsigned int version)
-{
-    //TODO lazyness string
-    std::string s;
-    ar & s;
-    gras::SBufferConfig config;
-    config.length = s.length;
-    b = gras::SBuffer(config);
-    std::memcpy(b.get(), s.c_str(), s.length());
-}
-}}
-
-PMC_SERIALIZE_EXPORT(gras::SBuffer, "PMC<gras::SBuffer>")
-
-#include <PMC/SerializeTypes.hpp>
 #include <gras/tags.hpp>
 #include <boost/cstdint.hpp>
 

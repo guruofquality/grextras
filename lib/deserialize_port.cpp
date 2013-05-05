@@ -1,12 +1,12 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#define PMC_SERIALIZE_DECLARE
 #include "serialize_common.hpp"
+#include <PMC/Serialize.hpp>
 #include <grextras/deserialize_port.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me ntohl
-#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/polymorphic_text_iarchive.hpp>
 #include <boost/assert.hpp>
 #include <sstream>
 
@@ -19,7 +19,7 @@ static PMCC buffer_to_pmc(const gras::SBuffer &buff)
     std::istringstream ss(s);
 
     //convert stringstream into pmc
-    boost::archive::text_iarchive ia(ss);
+    boost::archive::polymorphic_text_iarchive ia(ss);
     PMCC p;
     ia >> p;
     return p;

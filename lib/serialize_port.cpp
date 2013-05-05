@@ -1,12 +1,12 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#define PMC_SERIALIZE_DECLARE
 #include "serialize_common.hpp"
+#include <PMC/Serialize.hpp>
 #include <grextras/serialize_port.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me htonl
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/polymorphic_text_oarchive.hpp>
 #include <boost/assert.hpp>
 #include <sstream>
 
@@ -16,8 +16,17 @@ static gras::SBuffer pmc_to_buffer(const size_t offset_words32, const PMCC &pmc)
 {
     //serialize the pmc into a stringstream
     std::ostringstream ss;
-    boost::archive::text_oarchive oa(ss);
-    oa << pmc;
+    boost::archive::polymorphic_text_oarchive oa(ss);
+    try
+    {
+        oa << pmc;
+    }
+    catch(...)
+    {
+        std::cerr << "cannot serialize " << pmc << std::endl;
+        PMCC null_pmc;
+        oa << null_pmc; //null it is!
+    }
     const std::string s = ss.str();
     const size_t s_words32 = (s.length() + 3)/4;
 

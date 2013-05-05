@@ -51,7 +51,7 @@ GR_ADD_TEST(noise_source_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/n
 GR_ADD_TEST(datagram_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/datagram_test.py)
 GR_ADD_TEST(socket_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/socket_test.py)
 GR_ADD_TEST(packet_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/packet_test.py)
-GR_ADD_TEST(serialize_test.py ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/serialize_test.py)
+GR_ADD_TEST(serialize_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/serialize_test.py)
 
 if(OPENCL_FOUND)
 GR_ADD_TEST(opencl_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/opencl_test.py)
