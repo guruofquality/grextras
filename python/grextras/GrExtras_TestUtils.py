@@ -4,23 +4,16 @@ import gras
 import time
 
 class VectorSource(gras.Block):
-    def __init__(self, out_sig, vec, autodone=True):
+    def __init__(self, out_sig, vec):
         gras.Block.__init__(self, name='VectorSource', out_sig=[out_sig])
         self._vec = vec
-        self._autodone = autodone
 
     def work(self, ins, outs):
         num = min(len(outs[0]), len(self._vec))
         outs[0][:num] = self._vec[:num]
         self.produce(0, num)
         self._vec = self._vec[num:]
-        if not len(self._vec):
-            if self._autodone: self.mark_done()
-            #TODO auto done is a hack so we dont mark done for some of the tests
-            #so we sleep here when not marking done so we dont suck cpu
-            #Is there a better way to avoid this for a source block?
-            #Also having a more configurable done policy could help the issue.
-            else: time.sleep(0.1)
+        if not len(self._vec): self.mark_done()
 
 class VectorSink(gras.Block):
     def __init__(self, in_sig):

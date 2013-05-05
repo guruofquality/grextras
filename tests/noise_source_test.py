@@ -52,7 +52,9 @@ class test_noise_source(unittest.TestCase):
                             1.2176077365875244, 15.100193977355957)
 
         dst_data = dst.data()
-        self.assertEqual(expected_result, dst_data)
+        self.assertEqual(len(expected_result), len(dst_data))
+        for i in range(len(dst_data)):
+            self.assertAlmostEqual(expected_result[i], dst_data[i], places=3)
 
 
 if __name__ == '__main__':
