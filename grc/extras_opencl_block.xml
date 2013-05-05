@@ -9,14 +9,17 @@
     <key>extras_opencl_block</key>
     <import>import grextras</import>
     <make>grextras.OpenClBlock($dev_type)
-for i, s in enumerate($input_sizes) self.$(id).input_config(i).item_size = s
-for i, s in enumerate($output_sizes) self.$(id).output_config(i).item_size = s
+#for i, s in enumerate($input_sizes())
+self.$(id).input_config($i).item_size = $s
+#end for
+#for i, s in enumerate($output_sizes())
+self.$(id).output_config($i).item_size = $s
+#end for
 self.$(id).set_program($kernel_name, open($program_source).read(), $build_options)
 self.$(id).params().global_factor = $global_factor
 self.$(id).params().local_size = $local_size
 self.$(id).params().production_factor = $production_factor
-self.$(id).params().consumption_offset = $consumption_offset
-</make>
+self.$(id).params().consumption_offset = $consumption_offset</make>
     <param>
         <name>Device type</name>
         <key>dev_type</key>
