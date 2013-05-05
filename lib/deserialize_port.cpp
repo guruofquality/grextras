@@ -83,26 +83,16 @@ struct DeserializePortImpl : DeserializePort
 {
     DeserializePortImpl(const bool recover):
         gras::Block("GrExtras DeserializePort"),
-        _recover(recover)
+        _recover(recover),
+        _num_outs(0) //set by notify
     {
         //NOP
     }
 
-    gras::SBuffer recover_logic(const gras::SBuffer &in_buff)
-    {
-        if (not _recover) return in_buff;
-        return in_buff;
-    }
+    void work(const InputItems &, const OutputItems &);
 
-    void work(const InputItems &ins, const OutputItems &outs)
+    void handle_packet(const gras::SBuffer &in_buff)
     {
-        //validate the pkt message type
-        PMCC msg = pop_input_msg(0);
-        if (not msg or not msg.is<gras::PacketMsg>()) return;
-        gras::PacketMsg pkt_msg = msg.as<gras::PacketMsg>();
-        gras::SBuffer in_buff = recover_logic(pkt_msg.buff);
-        if (not in_buff) return; //need more
-
         //extract info
         size_t seq = 0;
         size_t sid = 0;
@@ -111,7 +101,7 @@ struct DeserializePortImpl : DeserializePort
         bool is_ext = false;
         gras::SBuffer out_buff;
         unpack_buffer(in_buff, seq, sid, has_tsf, tsf, is_ext, out_buff);
-        ASSERT(sid < outs.size());
+        ASSERT(sid < _num_outs);
 
         //handle buffs
         if (not is_ext)
@@ -138,8 +128,88 @@ struct DeserializePortImpl : DeserializePort
         }
     }
 
+    void notify_topology(const size_t, const size_t num_outputs)
+    {
+        _num_outs = num_outputs;
+    }
+
     const bool _recover;
+    size_t _num_outs;
+    gras::SBuffer _accum_buff;
 };
+
+
+static bool inspect_packet(const void *pkt, const size_t length, bool &fragment, size_t &pkt_len)
+{
+    const boost::uint32_t *vrlp_pkt = reinterpret_cast<const boost::uint32_t *>(pkt);
+    const char *p = reinterpret_cast<const char *>(pkt);
+    if ((p[0] == 'V') and (p[1] == 'R') and (p[2] == 'L') and (p[3] == 'P'))
+    {
+        ASSERT(ntohl(vrlp_pkt[0]) == VRLP);
+        const size_t pkt_words32 = ntohl(vrlp_pkt[1]) & 0xfffff;
+        pkt_len = pkt_words32*4;
+        fragment = pkt_len < length;
+        if (pkt_len > MAX_PKT_BYTES) return false; //call this BS
+        return fragment or ntohl(vrlp_pkt[pkt_words32-1]) == VEND;
+    }
+    return false;
+}
+
+void DeserializePortImpl::work(const InputItems &, const OutputItems &)
+{
+    //validate the pkt message type
+    PMCC msg = pop_input_msg(0);
+    if (not msg or not msg.is<gras::PacketMsg>()) return;
+    gras::PacketMsg pkt_msg = msg.as<gras::PacketMsg>();
+
+    //handle the packet - non recovery logic
+    if (not _recover) return this->handle_packet(pkt_msg.buff);
+
+    ////////////////////////////////////////////////////////////////
+    /////////// Recovery logic below ///////////////////////////////
+    ////////////////////////////////////////////////////////////////
+
+    //was there a buffer previously? then accumulate it
+    if (_accum_buff)
+    {
+        gras::SBufferConfig config;
+        config.length = _accum_buff.length + pkt_msg.buff.length;
+        gras::SBuffer new_buff(config);
+        std::memcpy(new_buff.get(), _accum_buff.get(), _accum_buff.length);
+        std::memcpy(new_buff.get(_accum_buff.length), pkt_msg.buff.get(), pkt_msg.buff.length);
+        _accum_buff = new_buff;
+    }
+    else
+    {
+        _accum_buff = pkt_msg.buff;
+    }
+
+    //character by character recovery search for packet header
+    while (_accum_buff.length >= MIN_PKT_BYTES)
+    {
+        bool fragment = true; size_t pkt_len = 0;
+        if (inspect_packet(_accum_buff.get(), _accum_buff.length, fragment, pkt_len))
+        {
+            if (fragment) return; //wait for more incoming buffers to accumulate
+            handle_packet(_accum_buff); //handle the packet, its good probably
+
+            //increment for the next iteration
+            ASSERT(pkt_len <= _accum_buff.length);
+            _accum_buff.offset += pkt_len;
+            _accum_buff.length -= pkt_len;
+            ASSERT(_accum_buff.length <= _accum_buff.get_actual_length());
+        }
+        else
+        {
+            //the search continues
+            _accum_buff.offset++;
+            _accum_buff.length--;
+        }
+    }
+
+    //dont keep a reference if the buffer is empty
+    if (_accum_buff.length == 0) _accum_buff.reset();
+}
 
 DeserializePort::sptr DeserializePort::make(const bool recover)
 {

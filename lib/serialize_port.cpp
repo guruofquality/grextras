@@ -13,9 +13,6 @@
 
 using namespace grextras;
 
-//needed to fit headers and footers
-const size_t PAD_BYTES = 8*4;
-
 static gras::SBuffer pmc_to_buffer(const size_t offset_words32, const PMCC &pmc)
 {
     //serialize the pmc into a stringstream
@@ -36,7 +33,7 @@ static gras::SBuffer pmc_to_buffer(const size_t offset_words32, const PMCC &pmc)
 
     //memcpy the stringstream into a buffer
     gras::SBufferConfig config;
-    config.length = s_words32*4 + PAD_BYTES; //string length + padding
+    config.length = s_words32*4 + HDR_TLR_BYTES; //string length + padding
     gras::SBuffer buff(config);
     buff.length = s_words32*4;
     buff.offset = offset_words32*4;
@@ -120,7 +117,7 @@ struct SerializePortImpl : SerializePort
                 //num words calculation
                 const size_t item_size = this->input_config(i).item_size;
                 const size_t lcm_size = boost::math::lcm<size_t>(4, item_size);
-                const size_t mtu_bytes = ((_mtu - PAD_BYTES)/lcm_size)*lcm_size;
+                const size_t mtu_bytes = ((_mtu - HDR_TLR_BYTES)/lcm_size)*lcm_size;
                 const size_t num_items = std::min<size_t>(mtu_bytes/item_size, ins[i].size());
                 const size_t num_words32 = (num_items*item_size)/4;
 
