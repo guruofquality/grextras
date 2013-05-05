@@ -148,7 +148,7 @@ static bool inspect_packet(const void *pkt, const size_t length, bool &fragment,
         ASSERT(ntohl(vrlp_pkt[0]) == VRLP);
         const size_t pkt_words32 = ntohl(vrlp_pkt[1]) & 0xfffff;
         pkt_len = pkt_words32*4;
-        fragment = pkt_len < length;
+        fragment = pkt_len > length;
         if (pkt_len > MAX_PKT_BYTES) return false; //call this BS
         return fragment or ntohl(vrlp_pkt[pkt_words32-1]) == VEND;
     }

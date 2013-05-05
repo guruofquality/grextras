@@ -7,6 +7,9 @@ import numpy
 import time
 from PMC import *
 
+########################################################################
+## source stuff from a list of msgs/tags/buffs
+########################################################################
 class RandomStuffSource(gras.Block):
     def __init__(self, tasks):
         gras.Block.__init__(self,
@@ -36,6 +39,9 @@ class RandomStuffSource(gras.Block):
         self._tasks = self._tasks[1:]
         if not self._tasks: self.mark_done()
 
+########################################################################
+## sink the received msgs/tags/buffs and store them
+########################################################################
 class RandomStuffSink(gras.Block):
     def __init__(self):
         gras.Block.__init__(self,
@@ -62,6 +68,9 @@ class RandomStuffSink(gras.Block):
     def get_results(self):
         return self._results
 
+########################################################################
+## print input messages for debug help
+########################################################################
 class PktMsgSinkPrinter(gras.Block):
     def __init__(self):
         gras.Block.__init__(self,
@@ -84,7 +93,39 @@ class PktMsgSinkPrinter(gras.Block):
             print 'b[%u] = 0x%08x'%(i, b[i])
         print '\n\n'
 
+########################################################################
+## Begin unit testing class
+########################################################################
 class test_serializer_blocks(unittest.TestCase):
+
+    def check_equal_helper(self, dst, tasks):
+
+        def get_task_list(tn, ts):
+            for name, data in ts:
+                if name == tn: yield data
+
+        def check_equal(type_name):
+            print 'check_equal', type_name
+            expected = list(get_task_list(type_name, tasks))
+            result = dst.get_results()[type_name]
+            self.assertEqual(len(expected), len(result))
+            for i in range(len(expected)):
+                print 'iteration', i
+                self.assertEqual(expected[i], result[i])
+
+        check_equal("tag")
+        check_equal("msg")
+
+        def get_super_buff(ts):
+            a = numpy.array([], numpy.uint32)
+            for b in get_task_list("buff", ts):
+                a = numpy.append(a, b)
+            return a
+
+        print 'accumulating buffers and checking equal...'
+        expected_buff = get_super_buff(tasks)
+        result_buff = dst.get_results()["buff"]
+        self.assertTrue((expected_buff == result_buff).all())
 
     def setUp(self):
         self.tb = gras.TopBlock()
@@ -102,6 +143,7 @@ class test_serializer_blocks(unittest.TestCase):
         src0 = RandomStuffSource(tasks)
         src1 = RandomStuffSource(tasks)
         ser = grextras.SerializePort()
+        ser.input_config(0).item_size = 4
         dst = PktMsgSinkPrinter()
 
         self.tb.connect(src0, (ser, 0))
@@ -134,7 +176,9 @@ class test_serializer_blocks(unittest.TestCase):
         src0 = RandomStuffSource(tasks0)
         src1 = RandomStuffSource(tasks1)
         ser = grextras.SerializePort()
+        ser.input_config(0).item_size = 4
         deser = grextras.DeserializePort()
+        deser.output_config(0).item_size = 4
         dst0 = RandomStuffSink()
         dst1 = RandomStuffSink()
 
@@ -145,37 +189,38 @@ class test_serializer_blocks(unittest.TestCase):
         self.tb.connect((deser, 1), dst1)
         self.tb.run()
 
-        def get_task_list(type_name, tasks):
-            for name, data in tasks:
-                if name == type_name: yield data
+        self.check_equal_helper(dst0, tasks0)
+        self.check_equal_helper(dst1, tasks1)
 
-        def get_super_buff(tasks):
-            a = numpy.array([], numpy.uint32)
-            for b in get_task_list("buff", tasks):
-                a = numpy.append(a, b)
-            return a
+    def test_recovery_over_stream(self):
+        tasks = [
+            ("tag", "hello"),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 100), numpy.uint32)),
+            ("tag", 2.0 + 3j),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 23), numpy.uint32)),
+            ("msg", 16.2),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 10), numpy.uint32)),
+            ("buff", numpy.array(numpy.random.randint(-300, +300, 66), numpy.uint32)),
+            ("msg", "bye!"),
+        ]
 
-        def check_equal(dst, tasks, type_name):
-            print 'check_equal', type_name
-            expected = list(get_task_list(type_name, tasks))
-            result = dst.get_results()[type_name]
-            self.assertEqual(len(expected), len(result))
-            for i in range(len(expected)):
-                print 'iteration', i
-                self.assertEqual(expected[i], result[i])
+        src = RandomStuffSource(tasks)
+        ser = grextras.SerializePort()
+        ser.input_config(0).item_size = 4
 
-        check_equal(dst0, tasks0, "tag")
-        check_equal(dst1, tasks1, "tag")
-        check_equal(dst0, tasks0, "msg")
-        check_equal(dst1, tasks1, "msg")
+        #these two slice up the datagrams
+        #can we recover from such harsh slicing?
+        d2s = grextras.Datagram2Stream(numpy.dtype(numpy.int32).itemsize)
+        s2d = grextras.Stream2Datagram(numpy.dtype(numpy.int32).itemsize, 40) #mtu 40 bytes
 
-        def do_buff_check(dst, tasks):
-            expected_buff = get_super_buff(tasks)
-            result_buff = dst.get_results()["buff"]
-            self.assertTrue((expected_buff == result_buff).all())
+        deser = grextras.DeserializePort(True) #true for recovery on
+        deser.output_config(0).item_size = 4
+        dst = RandomStuffSink()
 
-        do_buff_check(dst0, tasks0)
-        do_buff_check(dst1, tasks1)
+        self.tb.connect(src, ser, d2s, s2d, deser, dst)
+        self.tb.run()
+
+        self.check_equal_helper(dst, tasks)
 
 if __name__ == '__main__':
     unittest.main()
