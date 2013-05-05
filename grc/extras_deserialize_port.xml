@@ -8,12 +8,30 @@
     <name>Ex: Deserialize</name>
     <key>extras_deserialize_port</key>
     <import>import grextras</import>
-    <make>grextras.DeserializePort()</make>
+    <make>grextras.DeserializePort($recover)
+#for i, s in enumerate($output_sizes())
+self.$(id).output_config($i).item_size = $s
+#end for</make>
+    <param>
+        <name>Recovery</name>
+        <key>recover</key>
+        <value>True</value>
+        <type>bool</type>
+        <option><name>On</name><key>True</key></option>
+        <option><name>Off</name><key>False</key></option>
+    </param>
     <param>
         <name>Num Outputs</name>
         <key>num_outputs</key>
         <value>1</value>
         <type>int</type>
+    </param>
+    <param>
+        <name>Output sizes</name>
+        <key>output_sizes</key>
+        <value>[8]</value>
+        <type>int_vector</type>
+        <hide>part</hide>
     </param>
     <sink>
         <name>ser</name>

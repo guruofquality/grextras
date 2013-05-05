@@ -81,10 +81,17 @@ static void unpack_buffer(const gras::SBuffer &packet, size_t &seq, size_t &sid,
 
 struct DeserializePortImpl : DeserializePort
 {
-    DeserializePortImpl(void):
-        gras::Block("GrExtras DeserializePort")
+    DeserializePortImpl(const bool recover):
+        gras::Block("GrExtras DeserializePort"),
+        _recover(recover)
     {
         //NOP
+    }
+
+    gras::SBuffer recover_logic(const gras::SBuffer &in_buff)
+    {
+        if (not _recover) return in_buff;
+        return in_buff;
     }
 
     void work(const InputItems &ins, const OutputItems &outs)
@@ -93,8 +100,8 @@ struct DeserializePortImpl : DeserializePort
         PMCC msg = pop_input_msg(0);
         if (not msg or not msg.is<gras::PacketMsg>()) return;
         gras::PacketMsg pkt_msg = msg.as<gras::PacketMsg>();
-
-        //TODO things wont keep pkt boundaries -- fix?
+        gras::SBuffer in_buff = recover_logic(pkt_msg.buff);
+        if (not in_buff) return; //need more
 
         //extract info
         size_t seq = 0;
@@ -103,7 +110,7 @@ struct DeserializePortImpl : DeserializePort
         gras::item_index_t tsf = 0;
         bool is_ext = false;
         gras::SBuffer out_buff;
-        unpack_buffer(pkt_msg.buff, seq, sid, has_tsf, tsf, is_ext, out_buff);
+        unpack_buffer(in_buff, seq, sid, has_tsf, tsf, is_ext, out_buff);
         ASSERT(sid < outs.size());
 
         //handle buffs
@@ -130,9 +137,11 @@ struct DeserializePortImpl : DeserializePort
             this->post_output_msg(sid, msg);
         }
     }
+
+    const bool _recover;
 };
 
-DeserializePort::sptr DeserializePort::make(void)
+DeserializePort::sptr DeserializePort::make(const bool recover)
 {
-    return boost::make_shared<DeserializePortImpl>();
+    return boost::make_shared<DeserializePortImpl>(recover);
 }

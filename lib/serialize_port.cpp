@@ -7,6 +7,7 @@
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me htonl
 #include <boost/archive/polymorphic_text_oarchive.hpp>
+#include <boost/math/common_factor.hpp> //lcm
 #include <boost/assert.hpp>
 #include <sstream>
 
@@ -118,8 +119,9 @@ struct SerializePortImpl : SerializePort
 
                 //num words calculation
                 const size_t item_size = this->input_config(i).item_size;
-                const size_t mtu_items = (_mtu - PAD_BYTES)/item_size;
-                const size_t num_items = std::min(mtu_items, ins[i].size());
+                const size_t lcm_size = boost::math::lcm<size_t>(4, item_size);
+                const size_t mtu_bytes = ((_mtu - PAD_BYTES)/lcm_size)*lcm_size;
+                const size_t num_items = std::min<size_t>(mtu_bytes/item_size, ins[i].size());
                 const size_t num_words32 = (num_items*item_size)/4;
 
                 //pack and send output msg

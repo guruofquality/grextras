@@ -8,20 +8,29 @@
     <name>Ex: Serialize</name>
     <key>extras_serialize_port</key>
     <import>import grextras</import>
-    <make>grextras.SerializePort($mtu)</make>
+    <make>grextras.SerializePort($mtu)
+#for i, s in enumerate($input_sizes())
+self.$(id).input_config($i).item_size = $s
+#end for</make>
     <param>
         <name>MTU</name>
         <key>mtu</key>
         <value>0</value>
         <type>int</type>
-        <hide>#if $mtu() == 0 then 'part' else 'none'#</hide>
-        <option><name>Automatic</name><key>0</key></option>
+        <option><name>Default</name><key>0</key></option>
     </param>
     <param>
         <name>Num Inputs</name>
         <key>num_inputs</key>
         <value>1</value>
         <type>int</type>
+    </param>
+    <param>
+        <name>Input sizes</name>
+        <key>input_sizes</key>
+        <value>[8]</value>
+        <type>int_vector</type>
+        <hide>part</hide>
     </param>
     <sink>
         <name>in</name>

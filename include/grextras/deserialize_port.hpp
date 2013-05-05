@@ -23,8 +23,11 @@ struct GREXTRAS_API DeserializePort : virtual gras::Block
 
     /*!
      * Create a new deserialize port block.
+     * The recovery parameter allows the block
+     * to recover packet boundaries from streams or files.
+     * \param recover true to recover packet boundaries
      */
-    static sptr make(void);
+    static sptr make(const bool recover = true);
 };
 
 }
