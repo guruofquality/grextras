@@ -29,7 +29,6 @@ list(APPEND GREXTRAS_SOURCES
     uhd_status_port.cpp
     uhd_control_port.cpp
  
-    serialize_common.cpp
     serialize_port.cpp
     deserialize_port.cpp
 )
