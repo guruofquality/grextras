@@ -157,9 +157,12 @@ struct SerializePortImpl : SerializePort
         _seqs.resize(num_inputs, 0);
         for (size_t i = 0; i < num_inputs; i++)
         {
-            //set the reserve_items to zero:
+            //async mode: set the reserve_items to zero:
             //work gets called when not all inputs are fed
-            this->input_config(i).reserve_items = 0;
+            if (not _sync)
+            {
+                this->input_config(i).reserve_items = 0;
+            }
 
             //only done when all inputs are done
             this->input_config(i).force_done = false;

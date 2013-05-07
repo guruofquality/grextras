@@ -142,7 +142,7 @@ class test_serializer_blocks(unittest.TestCase):
 
         src0 = RandomStuffSource(tasks)
         src1 = RandomStuffSource(tasks)
-        ser = grextras.SerializePort()
+        ser = grextras.SerializePort(0, False) #mtu default, async ports
         ser.input_config(0).item_size = 4
         dst = PktMsgSinkPrinter()
 
@@ -176,7 +176,7 @@ class test_serializer_blocks(unittest.TestCase):
 
         src0 = RandomStuffSource(tasks0)
         src1 = RandomStuffSource(tasks1)
-        ser = grextras.SerializePort(1024, False) #mtu set, async ports
+        ser = grextras.SerializePort(0, False) #mtu default, async ports
         ser.input_config(0).item_size = 4
         deser = grextras.DeserializePort()
         deser.output_config(0).item_size = 4
