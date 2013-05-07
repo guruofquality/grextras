@@ -23,10 +23,16 @@ struct GREXTRAS_API SerializePort : virtual gras::Block
 
     /*!
      * Create a new serialize port block.
+     *
      * An MTU of zero means default ethernet payload sizes.
-     * \param mtu max output payload size
+     *
+     * The synchronous parameter means that equal amounts of items will
+     * be consumed from each port when the serialization is performed.
+     *
+     * \param mtu max output payload size in bytes
+     * \param sync true when input stream are synchronous
      */
-    static sptr make(const size_t mtu = 0);
+    static sptr make(const size_t mtu = 0, const bool sync = true);
 };
 
 }

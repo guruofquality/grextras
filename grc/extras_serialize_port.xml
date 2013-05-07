@@ -8,7 +8,7 @@
     <name>Ex: Serialize</name>
     <key>extras_serialize_port</key>
     <import>import grextras</import>
-    <make>grextras.SerializePort($mtu)
+    <make>grextras.SerializePort($mtu, $sync)
 #for i, s in enumerate($input_sizes())
 self.$(id).input_config($i).item_size = $s
 #end for</make>
@@ -18,6 +18,12 @@ self.$(id).input_config($i).item_size = $s
         <value>0</value>
         <type>int</type>
         <option><name>Default</name><key>0</key></option>
+    </param>
+    <param>
+        <name>Sync</name>
+        <key>sync</key>
+        <value>True</value>
+        <type>bool</type>
     </param>
     <param>
         <name>Num Inputs</name>
@@ -41,4 +47,7 @@ self.$(id).input_config($i).item_size = $s
         <name>ser</name>
         <type></type>
     </source>
+    <doc>
+Set sync parameter to True if all input ports share a synchronous relationship.
+    </doc>
 </block>

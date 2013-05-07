@@ -152,6 +152,7 @@ class test_serializer_blocks(unittest.TestCase):
         self.tb.run()
 
     def test_simple_loopback(self):
+        #the tasks are different, this tests the async option as well
         tasks0 = [
             ("tag", "hello"),
             ("buff", numpy.array(numpy.random.randint(-300, +300, 100), numpy.uint32)),
@@ -175,7 +176,7 @@ class test_serializer_blocks(unittest.TestCase):
 
         src0 = RandomStuffSource(tasks0)
         src1 = RandomStuffSource(tasks1)
-        ser = grextras.SerializePort()
+        ser = grextras.SerializePort(1024, False) #mtu set, async ports
         ser.input_config(0).item_size = 4
         deser = grextras.DeserializePort()
         deser.output_config(0).item_size = 4

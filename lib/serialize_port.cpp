@@ -91,9 +91,9 @@ static gras::PacketMsg serialize_buff(const size_t seq, const size_t sid, const 
 
 struct SerializePortImpl : SerializePort
 {
-    SerializePortImpl(const size_t mtu):
+    SerializePortImpl(const size_t mtu, const bool sync):
         gras::Block("GrExtras SerializePort"),
-        _mtu((mtu? mtu : 1400) & ~3)
+        _mtu((mtu? mtu : 1400) & ~3), _sync(sync)
     {
         //NOP
     }
@@ -110,7 +110,8 @@ struct SerializePortImpl : SerializePort
             {
                 this->post_output_msg(0, PMC_M(serialize_msg(_seqs[i]++, i, msg)));
             }
-            if (ins[i].size())
+            const size_t num_port_items = (_sync)? ins.min() : ins[i].size();
+            if (num_port_items)
             {
                 ASSERT((buff.get_actual_length() - buff.offset) >= _mtu);
 
@@ -118,7 +119,7 @@ struct SerializePortImpl : SerializePort
                 const size_t item_size = this->input_config(i).item_size;
                 const size_t lcm_size = boost::math::lcm<size_t>(4, item_size);
                 const size_t mtu_bytes = ((_mtu - HDR_TLR_BYTES)/lcm_size)*lcm_size;
-                const size_t num_items = std::min<size_t>(mtu_bytes/item_size, ins[i].size());
+                const size_t num_items = std::min<size_t>(mtu_bytes/item_size, num_port_items);
                 const size_t num_words32 = (num_items*item_size)/4;
 
                 //pack and send output msg
@@ -169,10 +170,11 @@ struct SerializePortImpl : SerializePort
     }
 
     const size_t _mtu;
+    const bool _sync;
     std::vector<size_t> _seqs;
 };
 
-SerializePort::sptr SerializePort::make(const size_t mtu)
+SerializePort::sptr SerializePort::make(const size_t mtu, const bool sync)
 {
-    return boost::make_shared<SerializePortImpl>(mtu);
+    return boost::make_shared<SerializePortImpl>(mtu, sync);
 }
