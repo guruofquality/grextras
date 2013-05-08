@@ -11,7 +11,7 @@
 
 namespace boost{template<class T>struct shared_ptr{T*operator->();};}
 
-%include <gras/element.i>
+%include <gras/exception.i>
 %import <gras/block.i>
 %include <grextras/config.hpp>
 %include <grextras/opencl_block.hpp>

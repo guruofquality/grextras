@@ -219,7 +219,7 @@ void digital_framer_sink_1::work(const InputItems &ins, const OutputItems &)
 
 %}
 
-%include <gras/element.i>
+%include <gras/exception.i>
 %import <gras/block.i>
 
 namespace boost{template<class T>struct shared_ptr{T*operator->();};}
