@@ -1,5 +1,7 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
+%include "GrExtras_Common.i"
+
 %{
 #include <grextras/opencl_block.hpp>
 %}
@@ -9,10 +11,6 @@
 
 %template (opencl_block_vector_of_string) std::vector<std::string>;
 
-namespace boost{template<class T>struct shared_ptr{T*operator->();};}
-
-%include <gras/exception.i>
-%import <gras/block.i>
 %include <grextras/config.hpp>
 %include <grextras/opencl_block.hpp>
 

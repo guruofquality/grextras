@@ -15,6 +15,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+%include "GrExtras_Common.i"
+
 %{
 #include <grextras/uhd_control_port.hpp>
 #include <grextras/uhd_status_port.hpp>
@@ -22,10 +24,6 @@
 
 %include <std_string.i>
 
-namespace boost{template<class T>struct shared_ptr{T*operator->();};}
-
-%include <gras/exception.i>
-%import <gras/block.i>
 %include <grextras/config.hpp>
 %include <grextras/uhd_control_port.hpp>
 %include <grextras/uhd_status_port.hpp>

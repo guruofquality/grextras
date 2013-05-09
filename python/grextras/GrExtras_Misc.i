@@ -1,5 +1,7 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
+%include "GrExtras_Common.i"
+
 %{
 #include <grextras/delay.hpp>
 #include <grextras/stream_selector.hpp>
@@ -18,11 +20,6 @@
 %include <std_vector.i>
 %template (std_vector_int) std::vector<int>;
 
-namespace boost{template<class T>struct shared_ptr{T*operator->();};}
-
-%include <gras/exception.i>
-%import <gras/block.i>
-%import <gras/hier_block.i>
 %include <grextras/config.hpp>
 %include <grextras/delay.hpp>
 %include <grextras/stream_selector.hpp>

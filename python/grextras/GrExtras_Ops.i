@@ -1,5 +1,7 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
+%include "GrExtras_Common.i"
+
 %{
 #include <grextras/add.hpp>
 #include <grextras/add_const.hpp>
@@ -12,11 +14,6 @@
 %include <stdint.i>
 %include <std_complex.i>
 
-namespace boost{template<class T>struct shared_ptr{T*operator->();};}
-
-%include <gras/exception.i>
-%import <gras/block.i>
-%import <gras/hier_block.i>
 %include <grextras/config.hpp>
 %include <grextras/add.hpp>
 %include <grextras/add_const.hpp>

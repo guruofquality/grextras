@@ -1,5 +1,7 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
+%include "GrExtras_Common.i"
+
 %{
 
 #include <gras/block.hpp>
@@ -218,11 +220,6 @@ void digital_framer_sink_1::work(const InputItems &ins, const OutputItems &)
 }
 
 %}
-
-%include <gras/exception.i>
-%import <gras/block.i>
-
-namespace boost{template<class T>struct shared_ptr{T*operator->();};}
 
 %template(grextras_Block) boost::shared_ptr<gras::Block>;
 
