@@ -63,6 +63,11 @@ if (NOT OPENCL_FOUND)
     message(WARNING "OpenCL library not found - optional for OpenCL block")
 endif()
 
+find_package(ORC)
+if (NOT ORC_FOUND)
+    message(WARNING "ORC library not found - optional for ORC block")
+endif()
+
 ########################################################################
 # Add subdirectories
 ########################################################################

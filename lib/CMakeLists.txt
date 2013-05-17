@@ -25,6 +25,7 @@ list(APPEND GREXTRAS_SOURCES
     stream_selector.cpp
 
     opencl_block.cpp
+    orc_block.cpp
 
     uhd_status_port.cpp
     uhd_control_port.cpp
@@ -85,6 +86,15 @@ if(OPENCL_FOUND)
     #the following definition is supposed to be a harmless fix
     #http://www.khronos.org/message_boards/showthread.php/7931
     add_definitions(-DCL_USE_DEPRECATED_OPENCL_1_1_APIS)
+endif()
+
+########################################################################
+# Optional ORC
+########################################################################
+if(ORC_FOUND)
+    include_directories(${ORC_INCLUDE_DIRS})
+    list(APPEND GREXTRAS_LIBRARIES ${ORC_LIBRARIES})
+    add_definitions(-DHAVE_ORC)
 endif()
 
 ########################################################################
