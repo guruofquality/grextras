@@ -35,6 +35,7 @@ list(APPEND grc_sources
     extras_query_server.xml
 
     extras_opencl_block.xml
+    extras_orc_block.xml
 )
 
 install(

@@ -10,7 +10,7 @@ using namespace grextras;
 
 OrcBlockParams::OrcBlockParams(void)
 {
-    orc_loop_factor = 1.0;
+    kernel_factor = 1.0;
     production_factor = 1.0;
     consumption_offset = 0;
 }
@@ -169,7 +169,7 @@ void OrcBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     }
 
     //execute the orc code;
-    _orc_ex.n = size_t(_params.orc_loop_factor*num_input_items);
+    _orc_ex.n = size_t(_params.kernel_factor*num_input_items);
     _orc_ex.arrays[ORC_VAR_A2] = _orc_code.get();
     _orc_ex.program = 0;
     void (*func) (OrcExecutor *);

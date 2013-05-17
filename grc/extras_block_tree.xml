@@ -1,24 +1,7 @@
 <?xml version="1.0"?>
 
 <!--
- Copyright 2011-2012 Free Software Foundation, Inc_
- 
- This file is part of GRExtras
- 
- GRExtras is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 3, or (at your option)
- any later version_
- 
- GRExtras is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE_  See the
- GNU General Public License for more details_
- 
- You should have received a copy of the GNU General Public License
- along with GRExtras; see the file COPYING_  If not, write to
- the Free Software Foundation, Inc_, 51 Franklin Street,
- Boston, MA 02110-1301, USA_
+Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 -->
 
 <!--
@@ -50,5 +33,6 @@
         <block>extras_deserialize_port</block>
         <block>extras_query_server</block>
         <block>extras_opencl_block</block>
+        <block>extras_orc_block</block>
     </cat>
 </cat>
