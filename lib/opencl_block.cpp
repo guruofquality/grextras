@@ -6,6 +6,7 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 
 using namespace grextras;
@@ -50,6 +51,7 @@ struct OpenClBlockImpl : OpenClBlock
     void set_access_mode(const std::string &direction, const std::vector<std::string> &modes);
     gras::BufferQueueSptr output_buffer_allocator(const size_t which_output, const gras::SBufferConfig &config);
     gras::BufferQueueSptr input_buffer_allocator(const size_t which_input, const gras::SBufferConfig &config);
+    void propagate_tags(const size_t i, const gras::TagIter &iter);
 
     OpenClBlockParams &params(void){return _params;}
     OpenClBlockParams _params;
@@ -66,6 +68,7 @@ struct OpenClBlockImpl : OpenClBlock
     cl::Program _cl_program;
     cl::Kernel _cl_kernel;
     cl::CommandQueue _cl_cmd_queue;
+    size_t _num_outs;
 
     std::vector<clBufferSptr> _temp_input_buffs;
     std::vector<clBufferSptr> _temp_output_buffs;
@@ -178,8 +181,25 @@ void OpenClBlockImpl::set_program(const std::string &name, const std::string &so
  **********************************************************************/
 void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_outputs)
 {
+    _num_outs = num_outputs;
     _temp_input_buffs.resize(num_inputs);
     _temp_output_buffs.resize(num_outputs);
+}
+
+void OpenClBlockImpl::propagate_tags(const size_t i, const gras::TagIter &iter)
+{
+    BOOST_FOREACH(const gras::Tag &t, iter)
+    {
+        //forward input tags to all outputs - scale the offset given _params
+        for (size_t o = 0; o < _num_outs; o++)
+        {
+            gras::Tag t_o = t;
+            t_o.offset -= this->get_consumed(i);
+            t_o.offset *= _params.production_factor;
+            t_o.offset += this->get_produced(o);
+            this->post_output_tag(o, t_o);
+        }
+    }
 }
 
 void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
