@@ -20,16 +20,6 @@ OrcBlockParams::OrcBlockParams(void)
 #include <orc/orc.h>
 #include <orc/orcparse.h>
 
-static void my_orc_programs_free(OrcProgram **programs, int num_progs)
-{
-    if (programs == NULL) return;
-    for (int i = 0; i < num_progs; i++)
-    {
-        orc_program_free(programs[i]);
-    }
-    free(programs);
-}
-
 /***********************************************************************
  * impl class definition
  **********************************************************************/
@@ -59,7 +49,8 @@ struct OrcBlockImpl : OrcBlock
     size_t _num_outs;
     OrcBlockParams _params;
     OrcExecutor _orc_ex;
-    boost::shared_ptr<OrcCode> _orc_code;
+    boost::shared_ptr<OrcExecutor> _orc_executor;
+    boost::shared_ptr<OrcProgram> _orc_program;
 };
 
 /***********************************************************************
@@ -93,54 +84,73 @@ void OrcBlockImpl::set_program(
     const std::string &source
 )
 {
-    //always orc init before using orc
+    ////////////////////////////////////////////////////////////////////
+    // always orc init before using orc
+    ////////////////////////////////////////////////////////////////////
     orc_init();
 
-    //call into the parser
+    ////////////////////////////////////////////////////////////////////
+    // call into the parser
+    ////////////////////////////////////////////////////////////////////
     OrcProgram **programs = NULL;
     char *log = NULL;
     std::cerr << "ORC Block parsing code... " << std::flush;
     const int nkerns = orc_parse_full(source.c_str(), &programs, &log);
     std::cerr << nkerns << " kernels." << std::endl;
 
-    //handle the logging result
+    ////////////////////////////////////////////////////////////////////
+    // load programs into managed memory asap
+    ////////////////////////////////////////////////////////////////////
+    std::vector<boost::shared_ptr<OrcProgram> > managed_programs(nkerns);
+    for (int i = 0; i < nkerns; i++)
+    {
+        managed_programs[i].reset(programs[i], orc_program_free);
+    }
+    free(programs);
+
+    ////////////////////////////////////////////////////////////////////
+    // handle the logging result
+    ////////////////////////////////////////////////////////////////////
     const std::string log_string(log?log:"");
     if (log != NULL) free(log);
     if (log[0] != '\0')
     {
-        my_orc_programs_free(programs, nkerns);
         throw std::runtime_error(log_string);
     }
 
-    //locate the kernel in the list via name
+    ////////////////////////////////////////////////////////////////////
+    // locate the kernel in the list via name
+    ////////////////////////////////////////////////////////////////////
     std::cerr << "ORC Block locate kernel... " << std::flush;
-    OrcProgram *p = NULL;
-    for (int i = 0; i < nkerns; i++)
+    for (size_t i = 0; i < managed_programs.size(); i++)
     {
-        if (name == programs[i]->name)
+        if (name == managed_programs[i]->name)
         {
-            p = programs[i];
+            _orc_program = managed_programs[i];
         }
     }
-    if (p == NULL)
+    if (not _orc_program)
     {
-        my_orc_programs_free(programs, nkerns);
         throw std::runtime_error("could not find kernel in source: " + name);
     }
     std::cerr << "found." << std::endl;
 
-    //compile the program
+    ////////////////////////////////////////////////////////////////////
+    // compile the program
+    ////////////////////////////////////////////////////////////////////
     std::cerr << "ORC Block compile code... " << std::flush;
-    orc_program_compile(p);
-    OrcCode *c = orc_program_take_code(p);
-    if (c == NULL)
+    const OrcCompileResult result = orc_program_compile(_orc_program.get());
+    if (not ORC_COMPILE_RESULT_IS_SUCCESSFUL(result))
     {
-        my_orc_programs_free(programs, nkerns);
-        throw std::runtime_error("failed to compile kernel source for: " + name);
+        throw std::runtime_error("failed to compile program for kernel: " + name);
     }
-    _orc_code.reset(c, orc_code_free);
     std::cerr << "complete." << std::endl;
-    my_orc_programs_free(programs, nkerns);
+
+    ////////////////////////////////////////////////////////////////////
+    // create execution unit
+    ////////////////////////////////////////////////////////////////////
+    OrcExecutor *e = orc_executor_new(_orc_program.get());
+    _orc_executor.reset(e, orc_executor_free);
 }
 
 void OrcBlockImpl::work(const InputItems &ins, const OutputItems &outs)
@@ -159,22 +169,24 @@ void OrcBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     }
 
     //load the executor with source and dest buffers
-    for (size_t i = 0; i < ins.size(); i++)
+    size_t input_index = 0, output_index = 0;
+    for (size_t i = 0; i < ORC_N_VARIABLES; i++)
     {
-        _orc_ex.arrays[ORC_VAR_S1+i] = const_cast<void *>(ins[i].cast<const void *>());
-    }
-    for (size_t i = 0; i < outs.size(); i++)
-    {
-        _orc_ex.arrays[ORC_VAR_D1+i] = outs[i].cast<void *>();
+        if (_orc_program->vars[i].vartype == ORC_VAR_TYPE_DEST) 
+        {
+            void *dst = outs[output_index++].cast<void *>();
+            orc_executor_set_array(_orc_executor.get(), i, dst);
+        }
+        if (_orc_program->vars[i].vartype == ORC_VAR_TYPE_SRC)
+        {
+            void *src = const_cast<void *>(ins[input_index++].cast<const void *>());
+            orc_executor_set_array(_orc_executor.get(), i, src);
+        }
     }
 
     //execute the orc code;
-    _orc_ex.n = size_t(_params.kernel_factor*num_input_items);
-    _orc_ex.arrays[ORC_VAR_A2] = _orc_code.get();
-    _orc_ex.program = 0;
-    void (*func) (OrcExecutor *);
-    func = _orc_code->exec;
-    func(&_orc_ex);
+    orc_executor_set_n(_orc_executor.get(), size_t(_params.kernel_factor*num_input_items));
+    orc_executor_run(_orc_executor.get());
 
     //produce consume fixed
     this->consume(num_input_items-_params.consumption_offset);
