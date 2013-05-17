@@ -19,6 +19,18 @@ struct GREXTRAS_API OrcBlockParams
     OrcBlockParams(void);
 
     /*!
+     * The ORC loop factor - a kenel execution parameter.
+     * This factor controls the size of the ORC kernel loop
+     * based on the minimum number of items at each input port.
+     * The ORC loop size value obeys the following calculation:
+     *
+     * orc_work_size = num_input_items*orc_loop_factor
+     *
+     * Default is 1.0
+     */
+    double orc_loop_factor;
+
+    /*!
      * The production factor - a production/consumption parameter.
      * This factor controls how items get produced from this block
      * based on the minimum number of items at each input port.
