@@ -184,6 +184,7 @@ void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_
     _num_outs = num_outputs;
     _temp_input_buffs.resize(num_inputs);
     _temp_output_buffs.resize(num_outputs);
+    this->input_config(0).reserve_items = _params.consumption_offset + 1;
 }
 
 void OpenClBlockImpl::propagate_tags(const size_t i, const gras::TagIter &iter)

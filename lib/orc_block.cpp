@@ -61,6 +61,7 @@ void OrcBlockImpl::notify_topology(const size_t num_inputs, const size_t num_out
     if (num_inputs > 4) throw std::runtime_error("ORC Block max inputs 4");
     if (num_outputs > 4) throw std::runtime_error("ORC Block max outputs 4");
     _num_outs = num_outputs;
+    this->input_config(0).reserve_items = _params.consumption_offset + 1;
 }
 
 void OrcBlockImpl::propagate_tags(const size_t i, const gras::TagIter &iter)
