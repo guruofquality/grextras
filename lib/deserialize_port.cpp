@@ -6,24 +6,20 @@
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me ntohl
-#include <boost/archive/polymorphic_text_iarchive.hpp>
 #include <boost/assert.hpp>
-#include <sstream>
 
 using namespace grextras;
 
 static PMCC buffer_to_pmc(const gras::SBuffer &buff)
 {
-    //convert buffer to stringstream
+    //convert buffer to string
     const std::string s((const char *)buff.get(), buff.length);
-    std::istringstream ss(s);
 
-    //convert stringstream into pmc
+    //convert string into pmc
     PMCC p;
     try
     {
-        boost::archive::polymorphic_text_iarchive ia(ss);
-        ia >> p;
+        p = PMC::deserialize(s, "TEXT");
     }
     catch(...)
     {

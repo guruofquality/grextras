@@ -6,29 +6,24 @@
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me htonl
-#include <boost/archive/polymorphic_text_oarchive.hpp>
 #include <boost/math/common_factor.hpp> //lcm
 #include <boost/assert.hpp>
-#include <sstream>
 
 using namespace grextras;
 
 static gras::SBuffer pmc_to_buffer(const size_t offset_words32, const PMCC &pmc)
 {
-    //serialize the pmc into a stringstream
-    std::ostringstream ss;
-    boost::archive::polymorphic_text_oarchive oa(ss);
+    //serialize the pmc into a string
+    std::string s;
     try
     {
-        oa << pmc;
+        s = PMC::serialize(pmc, "TEXT");
     }
     catch(...)
     {
         std::cerr << "cannot serialize " << pmc << std::endl;
-        PMCC null_pmc;
-        oa << null_pmc; //null it is!
+        s = PMC::serialize(PMC(), "TEXT"); //null it is!
     }
-    const std::string s = ss.str();
     const size_t s_words32 = (s.length() + 3)/4;
 
     //memcpy the stringstream into a buffer
