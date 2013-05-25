@@ -1,5 +1,5 @@
 ########################################################################
-# Find the library for the GNU Radio Advanced Scheduler
+# Find the library for the Polymorphic Container
 ########################################################################
 
 include(FindPkgConfig)
