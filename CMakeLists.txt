@@ -68,6 +68,17 @@ if (NOT ORC_FOUND)
     message(WARNING "ORC library not found - optional for ORC block")
 endif()
 
+find_program(LLVM_CONFIG_EXECUTABLE llvm-config DOC "llvm-config executable")
+if(LLVM_CONFIG_EXECUTABLE)
+    find_package(LLVM)
+    if(LLVM_FOUND)
+        find_package(Clang)
+    endif()
+endif()
+if (NOT CLANG_FOUND)
+    message(WARNING "Clang library not found - optional for Clang block")
+endif()
+
 ########################################################################
 # Add subdirectories
 ########################################################################
