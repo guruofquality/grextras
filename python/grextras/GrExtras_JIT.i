@@ -4,13 +4,16 @@
 
 %{
 #include <grextras/orc_block.hpp>
+#include <grextras/opencl_block.hpp>
 %}
 
 %include <std_string.i>
 %include <std_vector.i>
 
-%template (orc_block_vector_of_string) std::vector<std::string>;
+%template (jit_blocks_vector_of_string) std::vector<std::string>;
 
 %include <grextras/orc_block.hpp>
+%include <grextras/opencl_block.hpp>
 
 GREXTRAS_SWIG_FOO(OrcBlock)
+GREXTRAS_SWIG_FOO(OpenClBlock)

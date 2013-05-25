@@ -7,8 +7,7 @@ from GrExtras_Misc import *
 from GrExtras_Ops import *
 from GrExtras_Sources import *
 from GrExtras_UHDPorts import *
-from GrExtras_OpenCL import *
-from GrExtras_ORC import *
+from GrExtras_JIT import *
 
 try:
     from GrExtras_Packet import PacketFramer, PacketDeframer
