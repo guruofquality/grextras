@@ -59,7 +59,6 @@ struct OpenClBlockImpl : OpenClBlock
     std::vector<std::string> _input_access_modes;
     std::vector<std::string> _output_access_modes;
 
-    cl_device_type _cl_dev_type;
     cl::Context _cl_context;
     std::vector<cl::Platform> _cl_platforms;
     cl::Platform _cl_platform;
@@ -76,24 +75,30 @@ struct OpenClBlockImpl : OpenClBlock
     size_t _extra_cl_buffer_allocs;
 };
 
+static cl::Context make_context(const cl_device_type cl_dev_type, cl::Platform &cl_platform)
+{
+    cl_context_properties cprops[3] =
+        {CL_CONTEXT_PLATFORM, (cl_context_properties)(cl_platform)(), 0};
+
+    cl_int err = CL_SUCCESS;
+    cl::Context cl_context(
+        cl_dev_type,
+        cprops,
+        NULL,
+        NULL,
+        &err
+    );
+    checkErr(err, "cl::Context");
+    return cl_context;
+}
+
 /***********************************************************************
  * Block constructor
  **********************************************************************/
-OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type_):
+OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
     gras::Block("GrExtras OpenClBlock"),
     _extra_cl_buffer_allocs(0)
 {
-
-    /***************************************************************
-     * Determine device type
-     **************************************************************/
-    std::string dev_type = dev_type_;
-    const char *cl_dev_type_env = getenv("CL_DEVICE_TYPE");
-    if (dev_type.empty()) dev_type = (cl_dev_type_env)? cl_dev_type_env : "GPU";
-    if (dev_type == "CPU") _cl_dev_type = CL_DEVICE_TYPE_CPU;
-    else if (dev_type == "GPU") _cl_dev_type = CL_DEVICE_TYPE_GPU;
-    else throw std::runtime_error("OpenClBlock unknown device type: " + dev_type);
-
     /***************************************************************
      * Enumerate platforms
      **************************************************************/
@@ -116,18 +121,20 @@ OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type_):
      * create context
      **************************************************************/
     {
-        cl_context_properties cprops[3] =
-            {CL_CONTEXT_PLATFORM, (cl_context_properties)(_cl_platform)(), 0};
-
-        cl_int err = CL_SUCCESS;
-        _cl_context = cl::Context(
-            _cl_dev_type,
-            cprops,
-            NULL,
-            NULL,
-            &err
-        );
-        checkErr(err, "cl::Context");
+        if (dev_type.empty()) for (size_t i = 0; i < 3; i++)
+        {
+            if (i == 2) throw std::runtime_error("OpenClBlock could not make a context");
+            try
+            {
+                if (i == 0) _cl_context = make_context(CL_DEVICE_TYPE_GPU, _cl_platform);
+                if (i == 1) _cl_context = make_context(CL_DEVICE_TYPE_CPU, _cl_platform);
+            }
+            catch(...){continue;}
+            break;
+        }
+        else if (dev_type == "CPU") _cl_context = make_context(CL_DEVICE_TYPE_CPU, _cl_platform);
+        else if (dev_type == "GPU") _cl_context = make_context(CL_DEVICE_TYPE_GPU, _cl_platform);
+        else throw std::runtime_error("OpenClBlock unknown device type: " + dev_type);
     }
 
     /***************************************************************

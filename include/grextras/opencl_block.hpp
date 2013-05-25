@@ -78,7 +78,7 @@ struct GREXTRAS_API OpenClBlock : virtual gras::Block
     /*!
      * Make a new OpenClBlock.
      * If device type parameter is not specified,
-     * the CL_DEVICE_TYPE environment variable is used.
+     * the block automatically tries both types.
      * \param dev_type device type "CPU", "GPU"
      * \return a new shared ptr for the block
      */
