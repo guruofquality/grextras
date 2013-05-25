@@ -11,14 +11,6 @@
 
 %template (orc_block_vector_of_string) std::vector<std::string>;
 
-%include <grextras/config.hpp>
 %include <grextras/orc_block.hpp>
 
-%template(grextras_OrcBlock) boost::shared_ptr<grextras::OrcBlock>;
-
-%pythoncode %{
-
-OrcBlock = OrcBlock.make
-__all__ = ["OrcBlock"]
-
-%}
+GREXTRAS_SWIG_FOO(OrcBlock)

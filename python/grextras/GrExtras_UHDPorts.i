@@ -24,18 +24,8 @@
 
 %include <std_string.i>
 
-%include <grextras/config.hpp>
 %include <grextras/uhd_control_port.hpp>
 %include <grextras/uhd_status_port.hpp>
 
-%template(grextras_UHDControlPort) boost::shared_ptr<grextras::UHDControlPort>;
-%template(grextras_UHDStatusPort) boost::shared_ptr<grextras::UHDStatusPort>;
-
-%pythoncode %{
-
-UHDControlPort = UHDStatusPort.make
-UHDStatusPort = UHDStatusPort.make
-
-__all__ = ["UHDControlPort", "UHDStatusPort"]
-
-%}
+GREXTRAS_SWIG_FOO(UHDControlPort)
+GREXTRAS_SWIG_FOO(UHDStatusPort)

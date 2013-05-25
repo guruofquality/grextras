@@ -4,7 +4,6 @@
 
 %{
 
-#include <gras/block.hpp>
 #include <cstdio>
 #include <stdexcept>
 #include <string.h>

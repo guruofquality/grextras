@@ -11,14 +11,6 @@
 
 %template (opencl_block_vector_of_string) std::vector<std::string>;
 
-%include <grextras/config.hpp>
 %include <grextras/opencl_block.hpp>
 
-%template(grextras_OpenClBlock) boost::shared_ptr<grextras::OpenClBlock>;
-
-%pythoncode %{
-
-OpenClBlock = OpenClBlock.make
-__all__ = ["OpenClBlock"]
-
-%}
+GREXTRAS_SWIG_FOO(OpenClBlock)
