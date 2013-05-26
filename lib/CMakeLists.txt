@@ -26,6 +26,7 @@ list(APPEND GREXTRAS_SOURCES
 
     opencl_block.cpp
     orc_block.cpp
+    clang_block.cpp
 
     uhd_status_port.cpp
     uhd_control_port.cpp
@@ -95,6 +96,19 @@ if(ORC_FOUND)
     include_directories(${ORC_INCLUDE_DIRS})
     list(APPEND GREXTRAS_LIBRARIES ${ORC_LIBRARIES})
     add_definitions(-DHAVE_ORC)
+endif()
+
+########################################################################
+# Optional Clang
+########################################################################
+if(CLANG_FOUND)
+    add_definitions(${LLVM_CFLAGS})
+    link_directories(${LLVM_LIBRARY_DIRS})
+    include_directories(${LLVM_INCLUDE_DIRS})
+    include_directories(${CLANG_INCLUDE_DIRS})
+    list(APPEND GREXTRAS_LIBRARIES ${LLVM_MODULE_LIBS})
+    list(APPEND GREXTRAS_LIBRARIES ${LLVM_LDFLAGS})
+    list(APPEND GREXTRAS_LIBRARIES ${CLANG_LIBS})
 endif()
 
 ########################################################################

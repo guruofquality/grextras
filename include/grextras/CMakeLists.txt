@@ -25,6 +25,7 @@ install(FILES
 
     opencl_block.hpp
     orc_block.hpp
+    clang_block.hpp
 
     uhd_control_port.hpp
     uhd_status_port.hpp
