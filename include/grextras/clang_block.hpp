@@ -14,7 +14,8 @@ namespace grextras
 struct GREXTRAS_API ClangBlockParams
 {
     ClangBlockParams(void);
-
+    std::string code;
+    std::vector<std::string> flags;
     std::vector<std::string> include_dirs;
     std::vector<std::string> library_dirs;
     std::vector<std::string> libraries;
@@ -24,7 +25,7 @@ struct GREXTRAS_API ClangBlockParams
 struct ClangBlock
 {
 
-    GREXTRAS_API boost::shared_ptr<gras::Block>
+    GREXTRAS_API static boost::shared_ptr<gras::Block>
     make(const ClangBlockParams &params);
 
 };
