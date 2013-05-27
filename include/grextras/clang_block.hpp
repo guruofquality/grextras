@@ -14,6 +14,7 @@ namespace grextras
 struct GREXTRAS_API ClangBlockParams
 {
     ClangBlockParams(void);
+    std::string name;
     std::string code;
     std::vector<std::string> flags;
     std::vector<std::string> include_dirs;

@@ -12,8 +12,10 @@
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/ExecutionEngine/JIT.h>
 #include <llvm/Support/system_error.h>
+#include <llvm/Module.h>
 
 #include <boost/foreach.hpp>
+#include <boost/format.hpp>
 #include <iostream>
 #include <cstdio>
 #include <fstream>
@@ -24,9 +26,6 @@ ClangBlockParams::ClangBlockParams(void)
 {
     //NOP
 }
-
-//clang -emit-llvm -c /home/jblum/Desktop/foo.cpp -o /home/jblum/Desktop/foo.bc -I /opt/usr/gras/include/
-
 
 static std::string call_clang(const ClangBlockParams &params)
 {
@@ -39,6 +38,13 @@ static std::string call_clang(const ClangBlockParams &params)
     std::tmpnam(source_file);
     std::ofstream source_fstream(source_file);
     source_fstream << params.code;
+    //inject the c wrapper
+    source_fstream << boost::format(
+        "\n"
+        "extern \"C\" {\n"
+        "void *__%s__(void){return %s();}"
+        "}\n"
+    ) % params.name % params.name;
     source_fstream.close();
 
     //begin command setup
@@ -98,33 +104,36 @@ static std::string call_clang(const ClangBlockParams &params)
 
 boost::shared_ptr<gras::Block> ClangBlock::make(const ClangBlockParams &params)
 {
-
     const std::string bitcode = call_clang(params);
 
-    std::cout << __LINE__ << std::endl;
     llvm::InitializeNativeTarget();
-    std::cout << __LINE__ << std::endl;
     llvm::llvm_start_multithreaded();
-    std::cout << __LINE__ << std::endl;
-    llvm::LLVMContext context;
-    std::cout << __LINE__ << std::endl;
+
+    //create a memory buffer from the bitcode
+    llvm::OwningPtr<llvm::MemoryBuffer> buffer(llvm::MemoryBuffer::getMemBuffer(bitcode));
+
+    //parse the bitcode into a module
     std::string error;
-    //llvm::OwningPtr< llvm::MemoryBuffer > buffer;
+    llvm::LLVMContext context;
+    llvm::OwningPtr<llvm::Module> m(llvm::ParseBitcodeFile(buffer.get(), context, &error));
+    if (not error.empty()) throw std::runtime_error("ClangBlock: ParseBitcodeFile " + error);
+
+    //create execution engine and function
+    llvm::OwningPtr<llvm::ExecutionEngine> ee(llvm::ExecutionEngine::create(m.get()));
+    const std::string c_function_name = "__" + params.name + "__";
+    llvm::OwningPtr<llvm::Function> func(ee->FindFunctionNamed(c_function_name.c_str()));
+
+    //call into the function
+    typedef void * (*PFN)();
+    PFN pfn = reinterpret_cast<PFN>(ee->getPointerToFunction(func.get()));
     std::cout << __LINE__ << std::endl;
-    llvm::OwningPtr< llvm::MemoryBuffer> buffer(llvm::MemoryBuffer::getMemBuffer(bitcode));
-    std::cout << __LINE__ << std::endl;
-    llvm::Module *m = llvm::ParseBitcodeFile(buffer.get(), context, &error);
-    std::cout << __LINE__ << std::endl;
-    llvm::ExecutionEngine *ee = llvm::ExecutionEngine::create(m);
+    void *block = pfn();
     std::cout << __LINE__ << std::endl;
 
-    llvm::Function* func = ee->FindFunctionNamed("main");
-    std::cout << __LINE__ << std::endl;
+    std::cout << reinterpret_cast<gras::Block *>(block)->to_string() << std::endl;
+    //TODO needs to hold a container w/ this llvm containers
 
-    typedef int (*PFN)();
-    PFN pfn = reinterpret_cast<PFN>(ee->getPointerToFunction(func));
-    std::cout << pfn() << std::endl;
-    delete ee;
+    return boost::shared_ptr<gras::Block>(reinterpret_cast<gras::Block *>(block));
 }
 
 #else
