@@ -27,8 +27,11 @@ using namespace grextras;
 
 #include <uhd/usrp/multi_usrp.hpp>
 
+namespace uhd
+{
 //declare false equality operator to use tune req
 PMC_DECL_FALSE_EQUALITY(uhd::tune_request_t)
+}
 
 struct UHDControlPortImpl : public UHDControlPort
 {
