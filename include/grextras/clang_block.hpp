@@ -18,8 +18,6 @@ struct GREXTRAS_API ClangBlockParams
     std::string code;
     std::vector<std::string> flags;
     std::vector<std::string> include_dirs;
-    std::vector<std::string> library_dirs;
-    std::vector<std::string> libraries;
 
 };
 

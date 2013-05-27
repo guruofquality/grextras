@@ -2,6 +2,13 @@
 
 #include <grextras/clang_block.hpp>
 
+using namespace grextras;
+
+ClangBlockParams::ClangBlockParams(void)
+{
+    //NOP
+}
+
 #ifdef HAVE_CLANG
 
 #include <llvm/LLVMContext.h>
@@ -16,15 +23,14 @@
 
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
+#include <stdexcept>
 #include <iostream>
 #include <cstdio>
 #include <fstream>
 
-using namespace grextras;
-
-ClangBlockParams::ClangBlockParams(void)
+static std::string extern_c_fcn_name(const std::string &name)
 {
-    //NOP
+    return name + "__extern_c";
 }
 
 static std::string call_clang(const ClangBlockParams &params)
@@ -38,18 +44,19 @@ static std::string call_clang(const ClangBlockParams &params)
     std::tmpnam(source_file);
     std::ofstream source_fstream(source_file);
     source_fstream << params.code;
+
     //inject the c wrapper
     source_fstream << boost::format(
         "\n"
         "extern \"C\" {\n"
-        "void *__%s__(void){return %s();}"
+        "void *%s(void){return %s();}"
         "}\n"
-    ) % params.name % params.name;
+    ) % extern_c_fcn_name(params.name) % params.name;
     source_fstream.close();
 
     //begin command setup
     std::vector<std::string> cmd;
-    cmd.push_back("clang");
+    cmd.push_back(BOOST_STRINGIZE(CLANG_EXECUTABLE));
     cmd.push_back("-emit-llvm");
 
     //inject source
@@ -72,18 +79,8 @@ static std::string call_clang(const ClangBlockParams &params)
         cmd.push_back("-I");
         cmd.push_back(include_dir.c_str());
     }
-    BOOST_FOREACH(const std::string &library_dir, params.library_dirs)
-    {
-        cmd.push_back("-L");
-        cmd.push_back(library_dir.c_str());
-    }
-    BOOST_FOREACH(const std::string &library, params.libraries)
-    {
-        cmd.push_back("-l");
-        cmd.push_back(library.c_str());
-    }
 
-    std::cout << __LINE__ << std::endl;
+    //format command string
     std::string command;
     BOOST_FOREACH(const std::string &c, cmd)
     {
@@ -97,10 +94,22 @@ static std::string call_clang(const ClangBlockParams &params)
     }
 
     //readback bitcode for result
-    std::cout << __LINE__ << std::endl;
     std::ifstream bitcode_fstream(bitcode_file);
     return std::string((std::istreambuf_iterator<char>(bitcode_fstream)), std::istreambuf_iterator<char>());
 }
+
+struct WeakContainerClangBlock : gras::WeakContainer
+{
+    boost::shared_ptr<const void> lock(void)
+    {
+        return weak_self.lock();
+    }
+    boost::weak_ptr<const void> weak_self;
+    boost::shared_ptr<llvm::MemoryBuffer> buffer;
+    boost::shared_ptr<llvm::Module> module;
+    boost::shared_ptr<llvm::ExecutionEngine> ee;
+    boost::shared_ptr<llvm::Function> func;
+};
 
 boost::shared_ptr<gras::Block> ClangBlock::make(const ClangBlockParams &params)
 {
@@ -108,32 +117,36 @@ boost::shared_ptr<gras::Block> ClangBlock::make(const ClangBlockParams &params)
 
     llvm::InitializeNativeTarget();
     llvm::llvm_start_multithreaded();
+    llvm::LLVMContext context;
 
     //create a memory buffer from the bitcode
-    llvm::OwningPtr<llvm::MemoryBuffer> buffer(llvm::MemoryBuffer::getMemBuffer(bitcode));
+    boost::shared_ptr<llvm::MemoryBuffer> buffer(llvm::MemoryBuffer::getMemBuffer(bitcode));
 
     //parse the bitcode into a module
     std::string error;
-    llvm::LLVMContext context;
-    llvm::OwningPtr<llvm::Module> m(llvm::ParseBitcodeFile(buffer.get(), context, &error));
+    boost::shared_ptr<llvm::Module> module(llvm::ParseBitcodeFile(buffer.get(), context, &error));
     if (not error.empty()) throw std::runtime_error("ClangBlock: ParseBitcodeFile " + error);
 
     //create execution engine and function
-    llvm::OwningPtr<llvm::ExecutionEngine> ee(llvm::ExecutionEngine::create(m.get()));
-    const std::string c_function_name = "__" + params.name + "__";
-    llvm::OwningPtr<llvm::Function> func(ee->FindFunctionNamed(c_function_name.c_str()));
+    boost::shared_ptr<llvm::ExecutionEngine> ee(llvm::ExecutionEngine::create(module.get()));
+    const std::string c_function_name = extern_c_fcn_name(params.name);
+    boost::shared_ptr<llvm::Function> func(ee->FindFunctionNamed(c_function_name.c_str()));
 
     //call into the function
     typedef void * (*PFN)();
     PFN pfn = reinterpret_cast<PFN>(ee->getPointerToFunction(func.get()));
-    std::cout << __LINE__ << std::endl;
     void *block = pfn();
-    std::cout << __LINE__ << std::endl;
 
-    std::cout << reinterpret_cast<gras::Block *>(block)->to_string() << std::endl;
-    //TODO needs to hold a container w/ this llvm containers
-
-    return boost::shared_ptr<gras::Block>(reinterpret_cast<gras::Block *>(block));
+    //inject container to hold onto block and execution unit
+    boost::shared_ptr<gras::Block> block_sptr(reinterpret_cast<gras::Block *>(block));
+    WeakContainerClangBlock *weak_container = new WeakContainerClangBlock();
+    weak_container->weak_self = block_sptr;
+    weak_container->buffer = buffer;
+    weak_container->module = module;
+    weak_container->ee = ee;
+    weak_container->func = func;
+    block_sptr->set_container(weak_container);
+    return block_sptr;
 }
 
 #else
