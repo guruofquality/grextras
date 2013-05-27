@@ -23,16 +23,24 @@ ClangBlockParams::ClangBlockParams(void)
 
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
+#include <boost/thread/mutex.hpp>
 #include <stdexcept>
 #include <iostream>
 #include <cstdio>
 #include <fstream>
+#include <map>
 
+/***********************************************************************
+ * Map the C++ factory function to the generated extern C function
+ **********************************************************************/
 static std::string extern_c_fcn_name(const std::string &name)
 {
     return name + "__extern_c";
 }
 
+/***********************************************************************
+ * Helper function to call a clang compliation
+ **********************************************************************/
 static std::string call_clang(const ClangBlockParams &params)
 {
     //make up bitcode file path
@@ -98,54 +106,65 @@ static std::string call_clang(const ClangBlockParams &params)
     return std::string((std::istreambuf_iterator<char>(bitcode_fstream)), std::istreambuf_iterator<char>());
 }
 
-struct WeakContainerClangBlock : gras::WeakContainer
-{
-    boost::shared_ptr<const void> lock(void)
-    {
-        return weak_self.lock();
-    }
-    boost::weak_ptr<const void> weak_self;
-    boost::shared_ptr<llvm::MemoryBuffer> buffer;
-    boost::shared_ptr<llvm::Module> module;
-    boost::shared_ptr<llvm::ExecutionEngine> ee;
-    boost::shared_ptr<llvm::Function> func;
-};
+/***********************************************************************
+ * Map blocks allocated by LLVM to the execution engine:
+ * The special block deleter will also free the engine.
+ **********************************************************************/
+static std::map<void *, boost::shared_ptr<const void> > block_ptr_to_engine;
 
+static boost::mutex engine_map_mutex;
+
+static void delete_clang_block(void *block)
+{
+    boost::mutex::scoped_lock l(engine_map_mutex);
+    delete reinterpret_cast<gras::Block *>(block);
+    block_ptr_to_engine.at(block).reset();
+    block_ptr_to_engine.erase(block);
+}
+
+/***********************************************************************
+ * Lazy static initializer fpr LLVM context:
+ * We should only need one per process.
+ **********************************************************************/
+static llvm::LLVMContext &get_context(void)
+{
+    static llvm::LLVMContext context;
+    return context;
+}
+
+/***********************************************************************
+ * The ClangBlock factory - turn params into a shared_ptr of a block
+ **********************************************************************/
 boost::shared_ptr<gras::Block> ClangBlock::make(const ClangBlockParams &params)
 {
     const std::string bitcode = call_clang(params);
 
     llvm::InitializeNativeTarget();
     llvm::llvm_start_multithreaded();
-    llvm::LLVMContext context;
 
     //create a memory buffer from the bitcode
     boost::shared_ptr<llvm::MemoryBuffer> buffer(llvm::MemoryBuffer::getMemBuffer(bitcode));
 
     //parse the bitcode into a module
     std::string error;
-    boost::shared_ptr<llvm::Module> module(llvm::ParseBitcodeFile(buffer.get(), context, &error));
+    llvm::Module *module = llvm::ParseBitcodeFile(buffer.get(), get_context(), &error);
     if (not error.empty()) throw std::runtime_error("ClangBlock: ParseBitcodeFile " + error);
 
     //create execution engine and function
-    boost::shared_ptr<llvm::ExecutionEngine> ee(llvm::ExecutionEngine::create(module.get()));
+    boost::shared_ptr<llvm::ExecutionEngine> ee(llvm::ExecutionEngine::create(module));
     const std::string c_function_name = extern_c_fcn_name(params.name);
-    boost::shared_ptr<llvm::Function> func(ee->FindFunctionNamed(c_function_name.c_str()));
+    llvm::Function *func = ee->FindFunctionNamed(c_function_name.c_str());
 
     //call into the function
     typedef void * (*PFN)();
-    PFN pfn = reinterpret_cast<PFN>(ee->getPointerToFunction(func.get()));
+    PFN pfn = reinterpret_cast<PFN>(ee->getPointerToFunction(func));
     void *block = pfn();
 
-    //inject container to hold onto block and execution unit
-    boost::shared_ptr<gras::Block> block_sptr(reinterpret_cast<gras::Block *>(block));
-    WeakContainerClangBlock *weak_container = new WeakContainerClangBlock();
-    weak_container->weak_self = block_sptr;
-    weak_container->buffer = buffer;
-    weak_container->module = module;
-    weak_container->ee = ee;
-    weak_container->func = func;
-    block_sptr->set_container(weak_container);
+    //inject block into shared container w/ special deleter
+    boost::shared_ptr<gras::Block> block_sptr;
+    block_sptr.reset(reinterpret_cast<gras::Block *>(block), &delete_clang_block);
+    boost::mutex::scoped_lock l(engine_map_mutex);
+    block_ptr_to_engine[block] = ee;
     return block_sptr;
 }
 

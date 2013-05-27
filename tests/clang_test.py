@@ -6,6 +6,7 @@ import grextras
 import numpy
 
 SOURCE = """
+#include <boost/bind.hpp>
 #include <gras/block.hpp>
 #include <iostream>
 
@@ -16,12 +17,6 @@ struct MyAddFloat32 : gras::Block
     {
         this->input_config(0).item_size = sizeof(float);
         this->output_config(0).item_size = sizeof(float);
-    }
-
-    void notify_topology(const size_t num_ins, const size_t num_outs)
-    {
-        std::cout << "num_ins " << num_ins << std::endl;
-        std::cout << "num_outs " << num_outs << std::endl;
     }
 
     void work(const InputItems &ins, const OutputItems &outs)
@@ -68,8 +63,8 @@ class test_clang_block(unittest.TestCase):
         params.include_dirs.append('/home/jblum/src/gras/PMC/include/')
         op = grextras.ClangBlock(params)
 
-        vec0 = numpy.array(numpy.random.randint(-150, +150, 100), numpy.float32)
-        vec1 = numpy.array(numpy.random.randint(-150, +150, 100), numpy.float32)
+        vec0 = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)
+        vec1 = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)
 
         src0 = grextras.VectorSource(numpy.float32, vec0)
         src1 = grextras.VectorSource(numpy.float32, vec1)
@@ -83,7 +78,6 @@ class test_clang_block(unittest.TestCase):
         expected_result = list(vec0 + vec1)
         actual_result = list(dst.data())
 
-        print actual_result
         self.assertEqual(expected_result, actual_result)
 
 if __name__ == '__main__':

@@ -18,6 +18,7 @@ set(test_sources
 )
 
 include_directories(${GRAS_INCLUDE_DIRS})
+include_directories(${PMC_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND GR_TEST_LIBRARY_DIRS ${Boost_LIBRARY_DIRS})
