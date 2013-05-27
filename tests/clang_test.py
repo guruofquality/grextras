@@ -4,6 +4,8 @@ import unittest
 import gras
 import grextras
 import numpy
+import os
+import ctypes
 
 SOURCE = """
 #include <boost/bind.hpp>
@@ -51,16 +53,21 @@ class test_clang_block(unittest.TestCase):
         self.tb = None
 
     def test_add_float32(self):
-        import ctypes
-        ctypes.CDLL("/home/jblum/build/gras/lib/libgras.so", ctypes.RTLD_GLOBAL)
-        ctypes.CDLL("/home/jblum/build/gras/PMC/lib/libpmc.so", ctypes.RTLD_GLOBAL)
 
+        #setup clang block parameters
         params = grextras.ClangBlockParams()
         params.name = "make_add_float32"
         params.code = SOURCE
-        #params.flags.append('-stdlib=libstdc++')
-        params.include_dirs.append('/home/jblum/src/gras/include/')
-        params.include_dirs.append('/home/jblum/src/gras/PMC/include/')
+        params.flags.append('-O3')
+
+        #setup includes (set by test env var)
+        for include_dir in os.environ['CLANG_BLOCK_INCLUDE_DIRS'].split(':'):
+            params.include_dirs.append(include_dir)
+
+        #import dependency libraries (should be in path)
+        ctypes.CDLL("libgras.so", ctypes.RTLD_GLOBAL)
+        ctypes.CDLL("libpmc.so", ctypes.RTLD_GLOBAL)
+
         op = grextras.ClangBlock(params)
 
         vec0 = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)
