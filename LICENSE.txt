@@ -2,6 +2,8 @@
 ## GrExtras license info
 ########################################################################
 
+Copyright (C) 2011-2013 by Josh Blum
+
 GrExtras source shall be used only with the GNU Radio Advanced Scheduler,
 and is subject to the licensing terms of the GNU Radio Advanced Scheduler.
 https://github.com/guruofquality/gras/wiki
