@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Ex: OpenCL</name>
+    <name>Ex: OpenCL Block</name>
     <key>extras_opencl_block</key>
     <import>import grextras</import>
     <make>grextras.OpenClBlock($dev_type)

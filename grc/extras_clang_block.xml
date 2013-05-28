@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Ex: Clang</name>
+    <name>Ex: Clang Block</name>
     <key>extras_clang_block</key>
     <import>import grextras</import>
     <import>import ctypes</import>
@@ -19,8 +19,20 @@ for include in $includes:
 for library in $libraries:
     ctypes.CDLL(library, ctypes.RTLD_GLOBAL)
 self.$(id) = grextras.ClangBlock(self.$(id))
+#if $num_props() >= 1
+self.$(id).set($key1, $value1)
+#end if
+#if $num_props() >= 2
+self.$(id).set($key2, $value2)
+#end if
+#if $num_props() >= 3
+self.$(id).set($key3, $value3)
+#end if
 try: self.adopt_child("$(id)", $(id))
 except Exception as ex: print ex</make>
+    <callback>set($key1, $value1)</callback>
+    <callback>set($key2, $value2)</callback>
+    <callback>set($key3, $value3)</callback>
     <param>
         <name>Num inputs</name>
         <key>num_inputs</key>
@@ -65,6 +77,59 @@ except Exception as ex: print ex</make>
         <value>["libgras.so", "libpmc.so"]</value>
         <type>raw</type>
     </param>
+    <param>
+        <name>Num properties</name>
+        <key>num_props</key>
+        <value>0</value>
+        <type>int</type>
+        <hide>part</hide>
+        <option><name>0</name><key>0</key></option>
+        <option><name>1</name><key>1</key></option>
+        <option><name>2</name><key>2</key></option>
+        <option><name>3</name><key>3</key></option>
+    </param>
+    <param>
+        <name>Prop key1</name>
+        <key>key1</key>
+        <value>foo</value>
+        <type>string</type>
+        <hide>#if $num_props() >= 1 then 'none' else 'all'#</hide>
+    </param>
+    <param>
+        <name>Prop value1</name>
+        <key>value1</key>
+        <value>None</value>
+        <type>raw</type>
+        <hide>#if $num_props() >= 1 then 'none' else 'all'#</hide>
+    </param>
+    <param>
+        <name>Prop key2</name>
+        <key>key2</key>
+        <value>bar</value>
+        <type>string</type>
+        <hide>#if $num_props() >= 2 then 'none' else 'all'#</hide>
+    </param>
+    <param>
+        <name>Prop value2</name>
+        <key>value2</key>
+        <value>None</value>
+        <type>raw</type>
+        <hide>#if $num_props() >= 2 then 'none' else 'all'#</hide>
+    </param>
+    <param>
+        <name>Prop key3</name>
+        <key>key3</key>
+        <value>baz</value>
+        <type>string</type>
+        <hide>#if $num_props() >= 3 then 'none' else 'all'#</hide>
+    </param>
+    <param>
+        <name>Prop value3</name>
+        <key>value3</key>
+        <value>None</value>
+        <type>raw</type>
+        <hide>#if $num_props() >= 3 then 'none' else 'all'#</hide>
+    </param>
     <sink>
         <name>in</name>
         <type></type>
@@ -75,4 +140,15 @@ except Exception as ex: print ex</make>
         <type></type>
         <nports>$num_outputs</nports>
     </source>
+    <doc>
+The Clang block GRC wrapper gives a simple interface for using the Clang block with GRC. \
+Simply provide source file, factory function name, include directories, libraries, and other compiler arguments.
+
+The number of input and output ports provides GRC with information about the port availability. \
+To keep this wrapper flexible, the ports are all type agnostic at connection and generation time.
+
+The optional properties allow GRC's variable callback system to interact with registered block properties. \
+The key should match the key of a registered property, and the value should be of the expected data type. \
+See the GRAS coding guide for more information about the property interface.
+    </doc>
 </block>

@@ -15,7 +15,6 @@ ClangBlockParams::ClangBlockParams(void)
 #include <llvm/Support/TargetSelect.h>
 #include <llvm/Bitcode/ReaderWriter.h>
 #include <llvm/ExecutionEngine/ExecutionEngine.h>
-#include <llvm/ADT/OwningPtr.h>
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/ExecutionEngine/JIT.h>
 #include <llvm/Support/system_error.h>

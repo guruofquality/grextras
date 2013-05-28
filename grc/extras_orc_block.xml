@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Ex: ORC</name>
+    <name>Ex: ORC Block</name>
     <key>extras_orc_block</key>
     <import>import grextras</import>
     <make>grextras.OrcBlock()
