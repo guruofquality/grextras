@@ -22,12 +22,6 @@ struct GREXTRAS_API ClangBlockParams
     ClangBlockParams(void);
 
     /*!
-     * Code is the C++ source code.
-     * The code contains the block definition and factory function.
-     */
-    std::string code;
-
-    /*!
      * The name is the name of a factory function in the code.
      * The factory function has the following function prototype:
      *
@@ -36,6 +30,12 @@ struct GREXTRAS_API ClangBlockParams
      * In this case, name would be "example_factory_function".
      */
     std::string name;
+
+    /*!
+     * The C++ source code.
+     * The code contains the block definition and factory function.
+     */
+    std::string source;
 
     /*!
      * Flags are an optional list of compiler flags.
@@ -49,7 +49,7 @@ struct GREXTRAS_API ClangBlockParams
      * Users may leave this empty unless headers
      * are installed into non-standard directories.
      */
-    std::vector<std::string> include_dirs;
+    std::vector<std::string> includes;
 };
 
 struct ClangBlock

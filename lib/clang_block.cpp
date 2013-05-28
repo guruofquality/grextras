@@ -51,7 +51,7 @@ static std::string call_clang(const ClangBlockParams &params)
     char source_file[L_tmpnam];
     std::tmpnam(source_file);
     std::ofstream source_fstream(source_file);
-    source_fstream << params.code;
+    source_fstream << params.source;
 
     //inject the c wrapper
     source_fstream << boost::format(
@@ -82,10 +82,10 @@ static std::string call_clang(const ClangBlockParams &params)
     {
         cmd.push_back(flag.c_str());
     }
-    BOOST_FOREACH(const std::string &include_dir, params.include_dirs)
+    BOOST_FOREACH(const std::string &include, params.includes)
     {
         cmd.push_back("-I");
-        cmd.push_back(include_dir.c_str());
+        cmd.push_back(include.c_str());
     }
 
     //format command string

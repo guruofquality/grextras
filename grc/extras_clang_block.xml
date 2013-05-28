@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##Clang block:
+###################################################
+ -->
+<block>
+    <name>Ex: Clang</name>
+    <key>extras_clang_block</key>
+    <import>import grextras</import>
+    <import>import ctypes</import>
+    <make>grextras.ClangBlockParams()
+self.$(id).name = $name
+self.$(id).source = open($source).read()
+for flag in $flags:
+    self.$(id).flags.append(flag)
+for include in $includes:
+    self.$(id).includes.append(include)
+for library in $libraries:
+    ctypes.CDLL(library, ctypes.RTLD_GLOBAL)
+self.$(id) = grextras.ClangBlock(self.$(id))
+try: self.adopt_child("$(id)", $(id))
+except Exception as ex: print ex</make>
+    <param>
+        <name>Num inputs</name>
+        <key>num_inputs</key>
+        <value>2</value>
+        <type>int</type>
+        <hide>part</hide>
+    </param>
+    <param>
+        <name>Num outputs</name>
+        <key>num_outputs</key>
+        <value>1</value>
+        <type>int</type>
+        <hide>part</hide>
+    </param>
+    <param>
+        <name>Block source</name>
+        <key>source</key>
+        <value></value>
+        <type>file_open</type>
+    </param>
+    <param>
+        <name>Factory name</name>
+        <key>name</key>
+        <value>make_my_block</value>
+        <type>string</type>
+    </param>
+    <param>
+        <name>Flags</name>
+        <key>flags</key>
+        <value>["-O3"]</value>
+        <type>raw</type>
+    </param>
+    <param>
+        <name>Includes</name>
+        <key>includes</key>
+        <value>["/usr/local/include", "/usr/include"]</value>
+        <type>raw</type>
+    </param>
+    <param>
+        <name>Libraries</name>
+        <key>libraries</key>
+        <value>["libgras.so", "libpmc.so"]</value>
+        <type>raw</type>
+    </param>
+    <sink>
+        <name>in</name>
+        <type></type>
+        <nports>$num_inputs</nports>
+    </sink>
+    <source>
+        <name>out</name>
+        <type></type>
+        <nports>$num_outputs</nports>
+    </source>
+</block>

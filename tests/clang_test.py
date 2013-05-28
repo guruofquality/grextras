@@ -8,7 +8,6 @@ import os
 import ctypes
 
 ADD_F32_SOURCE = """
-#include <boost/bind.hpp>
 #include <gras/block.hpp>
 #include <iostream>
 
@@ -45,7 +44,6 @@ gras::Block *make_add_float32(void)
 """
 
 ADD_CONST_F32_SOURCE = """
-#include <boost/bind.hpp>
 #include <gras/block.hpp>
 #include <iostream>
 
@@ -108,12 +106,12 @@ class test_clang_block(unittest.TestCase):
         #setup clang block parameters
         params = grextras.ClangBlockParams()
         params.name = "make_add_float32"
-        params.code = ADD_F32_SOURCE
+        params.source = ADD_F32_SOURCE
         params.flags.append('-O3')
 
         #setup includes (set by test env var)
         for include_dir in os.environ['CLANG_BLOCK_INCLUDE_DIRS'].split(':'):
-            params.include_dirs.append(include_dir)
+            params.includes.append(include_dir)
 
         #import dependency libraries (should be in path)
         ctypes.CDLL("libgras.so", ctypes.RTLD_GLOBAL)
@@ -143,12 +141,12 @@ class test_clang_block(unittest.TestCase):
         #setup clang block parameters
         params = grextras.ClangBlockParams()
         params.name = "make_add_const_float32"
-        params.code = ADD_CONST_F32_SOURCE
+        params.source = ADD_CONST_F32_SOURCE
         params.flags.append('-O3')
 
         #setup includes (set by test env var)
         for include_dir in os.environ['CLANG_BLOCK_INCLUDE_DIRS'].split(':'):
-            params.include_dirs.append(include_dir)
+            params.includes.append(include_dir)
 
         #import dependency libraries (should be in path)
         ctypes.CDLL("libgras.so", ctypes.RTLD_GLOBAL)

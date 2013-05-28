@@ -36,6 +36,7 @@ list(APPEND grc_sources
 
     extras_opencl_block.xml
     extras_orc_block.xml
+    extras_clang_block.xml
 )
 
 install(

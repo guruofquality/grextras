@@ -11,7 +11,8 @@
     <import>import grextras</import>
     <import>from gnuradio import uhd</import>
     <make>grextras.UHDControlPort($addr)
-self.adopt_child("$(id)", $(id))</make>
+try: self.adopt_child("$(id)", $(id))
+except Exception as ex: print ex</make>
     <param>
         <name>Device Address</name>
         <key>addr</key>
