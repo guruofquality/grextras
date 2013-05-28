@@ -2,6 +2,7 @@
 
 #include <grextras/tuntap.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/format.hpp>
 #include <gras/block.hpp>
 #include <stdexcept>
 #include <iostream>

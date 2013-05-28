@@ -24,8 +24,11 @@
 
 #include <PMC/PMC.hpp>
 
+namespace uhd
+{
 //declare false equality operator to use tune req
 PMC_DECL_FALSE_EQUALITY(uhd::tune_request_t)
+}
 
 %}
 
