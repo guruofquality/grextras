@@ -20,6 +20,22 @@
 //======================================================================
 namespace boost{template<class T>struct shared_ptr{T*operator->();};}
 
+%extend boost::shared_ptr<gras::Block>
+{
+    %insert("python")
+    %{
+        def __str__(self):
+            return self.to_string()
+
+        def set(self, key, value):
+            from PMC import PMC_M
+            self._set_property(key, PMC_M(value))
+
+        def get(self, key):
+            return self._get_property(key)()
+    %}
+}
+
 //======================================================================
 //== GREXTRAS_SWIG_FOO - a simple macro to export shared ptr of class
 //== And to create a pythonic interface for the factory functions

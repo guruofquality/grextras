@@ -20,8 +20,6 @@
 GREXTRAS_SWIG_FOO(OrcBlock)
 GREXTRAS_SWIG_FOO(OpenClBlock)
 
-%template(gras_block) boost::shared_ptr<gras::Block>;
-
 %pythoncode %{
 
 #bring in the parameter structs as well

@@ -7,7 +7,7 @@ import numpy
 import os
 import ctypes
 
-SOURCE = """
+ADD_F32_SOURCE = """
 #include <boost/bind.hpp>
 #include <gras/block.hpp>
 #include <iostream>
@@ -44,6 +44,57 @@ gras::Block *make_add_float32(void)
 }
 """
 
+ADD_CONST_F32_SOURCE = """
+#include <boost/bind.hpp>
+#include <gras/block.hpp>
+#include <iostream>
+
+struct MyAddConstFloat32 : gras::Block
+{
+    MyAddConstFloat32(void):
+        gras::Block("MyAddConstFloat32")
+    {
+        this->input_config(0).item_size = sizeof(float);
+        this->output_config(0).item_size = sizeof(float);
+        this->set_value(0); //initial state
+        this->register_setter("value", &MyAddConstFloat32::set_value);
+        this->register_getter("value", &MyAddConstFloat32::get_value);
+    }
+
+    void set_value(const float &value)
+    {
+        _value = value;
+    }
+
+    float get_value(void)
+    {
+        return _value;
+    }
+
+    void work(const InputItems &ins, const OutputItems &outs)
+    {
+        const size_t n_nums = std::min(ins.min(), outs.min());
+        float *out = outs[0].cast<float *>();
+        const float *in = ins[0].cast<const float *>();
+
+        for (size_t i = 0; i < n_nums; i++)
+        {
+            out[i] = in[i] + _value;
+        }
+
+        this->consume(n_nums);
+        this->produce(n_nums);
+    }
+
+    float _value;
+};
+
+gras::Block *make_add_const_float32(void)
+{
+    return new MyAddConstFloat32();
+}
+"""
+
 class test_clang_block(unittest.TestCase):
 
     def setUp(self):
@@ -57,7 +108,7 @@ class test_clang_block(unittest.TestCase):
         #setup clang block parameters
         params = grextras.ClangBlockParams()
         params.name = "make_add_float32"
-        params.code = SOURCE
+        params.code = ADD_F32_SOURCE
         params.flags.append('-O3')
 
         #setup includes (set by test env var)
@@ -83,6 +134,40 @@ class test_clang_block(unittest.TestCase):
         self.tb.run()
 
         expected_result = list(vec0 + vec1)
+        actual_result = list(dst.data())
+
+        self.assertEqual(expected_result, actual_result)
+
+    def test_add_const_float32(self):
+
+        #setup clang block parameters
+        params = grextras.ClangBlockParams()
+        params.name = "make_add_const_float32"
+        params.code = ADD_CONST_F32_SOURCE
+        params.flags.append('-O3')
+
+        #setup includes (set by test env var)
+        for include_dir in os.environ['CLANG_BLOCK_INCLUDE_DIRS'].split(':'):
+            params.include_dirs.append(include_dir)
+
+        #import dependency libraries (should be in path)
+        ctypes.CDLL("libgras.so", ctypes.RTLD_GLOBAL)
+        ctypes.CDLL("libpmc.so", ctypes.RTLD_GLOBAL)
+
+        op = grextras.ClangBlock(params)
+        offset = 42.
+        op.set("value", ctypes.c_float(offset)) #set offset for test
+        self.assertAlmostEqual(op.get("value"), offset)
+
+        vec = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)
+
+        src = grextras.VectorSource(numpy.float32, vec)
+        dst = grextras.VectorSink(numpy.float32)
+
+        self.tb.connect(src, op, dst)
+        self.tb.run()
+
+        expected_result = list(vec + offset)
         actual_result = list(dst.data())
 
         self.assertEqual(expected_result, actual_result)
