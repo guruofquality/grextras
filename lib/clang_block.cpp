@@ -83,6 +83,8 @@ static llvm::Module *call_clang(const ClangBlockParams &params)
         args.push_back(include.c_str());
     }
 
+    //http://fdiv.net/2012/08/15/compiling-code-clang-api
+
     // The compiler invocation needs a DiagnosticsEngine so it can report problems
     clang::TextDiagnosticPrinter *DiagClient = new clang::TextDiagnosticPrinter(llvm::errs(), clang::DiagnosticOptions());
     llvm::IntrusiveRefCntPtr<clang::DiagnosticIDs> DiagID(new clang::DiagnosticIDs());
