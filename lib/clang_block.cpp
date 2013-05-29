@@ -11,6 +11,12 @@ ClangBlockParams::ClangBlockParams(void)
 
 #ifdef HAVE_CLANG
 
+#include <clang/CodeGen/CodeGenAction.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Frontend/CompilerInvocation.h>
+#include <clang/Frontend/DiagnosticOptions.h>
+#include <clang/Frontend/TextDiagnosticPrinter.h>
+
 #include <llvm/LLVMContext.h>
 #include <llvm/Support/TargetSelect.h>
 #include <llvm/Bitcode/ReaderWriter.h>
@@ -40,12 +46,8 @@ static std::string extern_c_fcn_name(const std::string &name)
 /***********************************************************************
  * Helper function to call a clang compliation
  **********************************************************************/
-static std::string call_clang(const ClangBlockParams &params)
+static llvm::Module *call_clang(const ClangBlockParams &params)
 {
-    //make up bitcode file path
-    char bitcode_file[L_tmpnam];
-    std::tmpnam(bitcode_file);
-
     //write source to tmp file
     char source_file[L_tmpnam];
     std::tmpnam(source_file);
@@ -62,47 +64,57 @@ static std::string call_clang(const ClangBlockParams &params)
     source_fstream.close();
 
     //begin command setup
-    std::vector<std::string> cmd;
-    cmd.push_back(BOOST_STRINGIZE(CLANG_EXECUTABLE));
-    cmd.push_back("-emit-llvm");
+    std::vector<const char *> args;
 
     //inject source
-    cmd.push_back("-c");
-    cmd.push_back("-x");
-    cmd.push_back("c++");
-    cmd.push_back(source_file);
-
-    //inject output
-    cmd.push_back("-o");
-    cmd.push_back(bitcode_file);
+    args.push_back("-c");
+    args.push_back("-x");
+    args.push_back("c++");
+    args.push_back(source_file);
 
     //inject args...
     BOOST_FOREACH(const std::string &flag, params.flags)
     {
-        cmd.push_back(flag.c_str());
+        args.push_back(flag.c_str());
     }
     BOOST_FOREACH(const std::string &include, params.includes)
     {
-        cmd.push_back("-I");
-        cmd.push_back(include.c_str());
+        args.push_back("-I");
+        args.push_back(include.c_str());
     }
 
-    //format command string
-    std::string command;
-    BOOST_FOREACH(const std::string &c, cmd)
-    {
-        command += c + " ";
-    }
-    std::cout << command << std::endl;
-    const int ret = system(command.c_str());
-    if (ret != 0)
-    {
-        throw std::runtime_error("ClangBlock: error system exec clang");
-    }
+    // The compiler invocation needs a DiagnosticsEngine so it can report problems
+    clang::TextDiagnosticPrinter *DiagClient = new clang::TextDiagnosticPrinter(llvm::errs(), clang::DiagnosticOptions());
+    llvm::IntrusiveRefCntPtr<clang::DiagnosticIDs> DiagID(new clang::DiagnosticIDs());
+    clang::DiagnosticsEngine Diags(DiagID, DiagClient);
 
-    //readback bitcode for result
-    std::ifstream bitcode_fstream(bitcode_file);
-    return std::string((std::istreambuf_iterator<char>(bitcode_fstream)), std::istreambuf_iterator<char>());
+    // Create the compiler invocation
+    llvm::OwningPtr<clang::CompilerInvocation> CI(new clang::CompilerInvocation);
+    clang::CompilerInvocation::CreateFromArgs(*CI, &args[0], &args[0] + args.size(), Diags);
+
+    // Print the argument list, which the compiler invocation has extended
+    printf("clang ");
+    std::vector<std::string> argsFromInvocation;
+    CI->toArgs(argsFromInvocation);
+    for (std::vector<std::string>::iterator i = argsFromInvocation.begin(); i != argsFromInvocation.end(); ++i)
+    {
+        std::cout << (*i) << " ";
+    }
+    std::cout << std::endl;
+
+    // Create the compiler instance
+    clang::CompilerInstance Clang;
+    Clang.setInvocation(CI.take());
+
+    // Get ready to report problems
+    Clang.createDiagnostics(args.size(), &args[0]);
+    if (not Clang.hasDiagnostics()) throw std::runtime_error("ClangBlock::createDiagnostics");
+
+    // Create an action and make the compiler instance carry it out
+    clang::CodeGenAction *Act = new clang::EmitLLVMOnlyAction();
+    if (not Clang.ExecuteAction(*Act)) throw std::runtime_error("ClangBlock::EmitLLVMOnlyAction");
+
+    return Act->takeModule();
 }
 
 /***********************************************************************
@@ -136,18 +148,11 @@ static llvm::LLVMContext &get_context(void)
  **********************************************************************/
 boost::shared_ptr<gras::Block> ClangBlock::make(const ClangBlockParams &params)
 {
-    const std::string bitcode = call_clang(params);
-
     llvm::InitializeNativeTarget();
     llvm::llvm_start_multithreaded();
 
-    //create a memory buffer from the bitcode
-    boost::shared_ptr<llvm::MemoryBuffer> buffer(llvm::MemoryBuffer::getMemBuffer(bitcode));
 
-    //parse the bitcode into a module
-    std::string error;
-    llvm::Module *module = llvm::ParseBitcodeFile(buffer.get(), get_context(), &error);
-    if (not error.empty()) throw std::runtime_error("ClangBlock: ParseBitcodeFile " + error);
+    llvm::Module *module = call_clang(params);
 
     //create execution engine and function
     boost::shared_ptr<llvm::ExecutionEngine> ee(llvm::ExecutionEngine::create(module));

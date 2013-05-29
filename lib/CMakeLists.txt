@@ -104,13 +104,11 @@ endif()
 if(CLANG_FOUND)
     add_definitions(${LLVM_CFLAGS})
     link_directories(${LLVM_LIBRARY_DIRS})
+    include_directories(${CLANG_INCLUDE_DIRS})
     include_directories(${LLVM_INCLUDE_DIRS})
     list(APPEND GREXTRAS_LIBRARIES ${LLVM_MODULE_LIBS})
     list(APPEND GREXTRAS_LIBRARIES ${LLVM_LDFLAGS})
-    SET_SOURCE_FILES_PROPERTIES(
-        ${CMAKE_CURRENT_SOURCE_DIR}/clang_block.cpp
-        PROPERTIES COMPILE_DEFINITIONS "CLANG_EXECUTABLE=${CLANG_EXECUTABLE}"
-    )
+    list(APPEND GREXTRAS_LIBRARIES ${CLANG_LIBS})
     add_definitions(-DHAVE_CLANG)
 endif()
 
