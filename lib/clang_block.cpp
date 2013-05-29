@@ -54,10 +54,12 @@ static std::string call_clang(const ClangBlockParams &params)
 
     //inject the c wrapper
     source_fstream << boost::format(
-        "\n"
-        "extern \"C\" {\n"
-        "void *%s(void){return %s();}"
-        "}\n"
+        "                                                               \n"
+        "extern \"C\" void *%s(void)                                    \n"
+        "{                                                              \n"
+        "    return %s();                                               \n"
+        "}                                                              \n"
+        "                                                               \n"
     ) % extern_c_fcn_name(params.name) % params.name;
     source_fstream.close();
 
@@ -93,7 +95,7 @@ static std::string call_clang(const ClangBlockParams &params)
     {
         command += c + " ";
     }
-    std::cout << command << std::endl;
+    std::cout << "  " << command << std::endl;
     const int ret = system(command.c_str());
     if (ret != 0)
     {
@@ -136,25 +138,31 @@ static llvm::LLVMContext &get_context(void)
  **********************************************************************/
 boost::shared_ptr<gras::Block> ClangBlock::make(const ClangBlockParams &params)
 {
+    std::cout << "ClangBlock: compile " << params.name << " into bitcode..." << std::endl;
     const std::string bitcode = call_clang(params);
 
     llvm::InitializeNativeTarget();
     llvm::llvm_start_multithreaded();
+    std::string error;
 
     //create a memory buffer from the bitcode
     boost::shared_ptr<llvm::MemoryBuffer> buffer(llvm::MemoryBuffer::getMemBuffer(bitcode));
 
     //parse the bitcode into a module
-    std::string error;
     llvm::Module *module = llvm::ParseBitcodeFile(buffer.get(), get_context(), &error);
     if (not error.empty()) throw std::runtime_error("ClangBlock: ParseBitcodeFile " + error);
 
-    //create execution engine and function
-    boost::shared_ptr<llvm::ExecutionEngine> ee(llvm::ExecutionEngine::create(module));
+    //create execution engine
+    boost::shared_ptr<llvm::ExecutionEngine> ee(llvm::ExecutionEngine::create(module, false, &error));
+    if (not error.empty()) throw std::runtime_error("ClangBlock: ExecutionEngine " + error);
+
+    //extract function
     const std::string c_function_name = extern_c_fcn_name(params.name);
     llvm::Function *func = ee->FindFunctionNamed(c_function_name.c_str());
+    if (not func) throw std::runtime_error("ClangBlock: FindFunctionNamed " + params.name);
 
     //call into the function
+    std::cout << "ClangBlock: execute " << params.name << " factory function..." << std::endl;
     typedef void * (*PFN)();
     PFN pfn = reinterpret_cast<PFN>(ee->getPointerToFunction(func));
     void *block = pfn();
