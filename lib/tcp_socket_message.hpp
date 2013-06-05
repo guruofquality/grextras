@@ -36,7 +36,7 @@ struct TCPSocketReceiver : gras::Block
         const gras::PacketMsg msg(b);
 
         //post the output message downstream
-        this->post_output_msg(0, PMC_M(msg));
+        this->post_output_msg(0, msg);
     }
 
     boost::shared_ptr<asio::ip::tcp::socket> socket;

@@ -103,7 +103,7 @@ struct SerializePortImpl : SerializePort
             PMCC msg = pop_input_msg(i);
             if (msg)
             {
-                this->post_output_msg(0, PMC_M(serialize_msg(_seqs[i]++, i, msg)));
+                this->post_output_msg(0, serialize_msg(_seqs[i]++, i, msg));
             }
             const size_t num_port_items = (_sync)? ins.min() : ins[i].size();
             if (num_port_items)
@@ -120,7 +120,7 @@ struct SerializePortImpl : SerializePort
                 //pack and send output msg
                 const void *ptr = ins[i].cast<const void *>();
                 this->serialize_tags(i, this->get_consumed(i) + num_items); //must occur before post
-                this->post_output_msg(0, PMC_M(serialize_buff(_seqs[i]++, i, ptr, num_words32, buff)));
+                this->post_output_msg(0, serialize_buff(_seqs[i]++, i, ptr, num_words32, buff));
                 this->consume(i, num_items);
 
                 //increment buffer for next iteration
@@ -137,7 +137,7 @@ struct SerializePortImpl : SerializePort
         {
             if (tag.offset < max_index)
             {
-                this->post_output_msg(0, PMC_M(serialize_tag(_seqs[i]++, i, tag)));
+                this->post_output_msg(0, serialize_tag(_seqs[i]++, i, tag));
             }
         }
     }

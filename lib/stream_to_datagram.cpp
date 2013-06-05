@@ -27,7 +27,7 @@ struct Stream2DatagramImpl : Stream2Datagram
         const gras::PacketMsg msg(b);
 
         //post the output message downstream
-        this->post_output_msg(0, PMC_M(msg));
+        this->post_output_msg(0, msg);
 
         //consume the number of items in b
         this->consume(0, b.length/this->input_config(0).item_size);

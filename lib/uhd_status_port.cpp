@@ -43,7 +43,7 @@ struct UHDStatusPortImpl : public UHDStatusPort
             PMCTuple<2> t;
             t[0] = PMC_M(name);
             t[1] = sensor_value;
-            this->post_output_msg(0, PMC_M(t));
+            this->post_output_msg(0, t);
         }
     }
 

@@ -169,7 +169,7 @@ void digital_framer_sink_1::work(const InputItems &ins, const OutputItems &)
         
             gras::PacketMsg msg;
             msg.info = PMC_M(d_packet_whitener_offset);
-            this->post_output_msg(0, PMC_M(msg));
+            this->post_output_msg(0, msg);
 
 	      enter_search();
 	    }

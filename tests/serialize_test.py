@@ -33,8 +33,7 @@ class RandomStuffSource(gras.Block):
             self.post_output_tag(port, tag)
 
         if task == "msg":
-            msg = PMC_M(data)
-            self.post_output_msg(port, msg)
+            self.post_output_msg(port, data)
 
         self._tasks = self._tasks[1:]
         if not self._tasks: self.mark_done()

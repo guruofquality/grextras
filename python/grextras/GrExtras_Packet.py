@@ -176,7 +176,7 @@ class _queue_to_datagram(gras.Block):
             buff.length = len(payload)
             buff.get()[:] = numpy.fromstring(payload, numpy.uint8)
 
-            self.post_output_msg(0, PMC_M(gras.PacketMsg(buff)))
+            self.post_output_msg(0, gras.PacketMsg(buff))
         else:
             print 'f',
-            self.post_output_msg(0, PMC_M(gras.PacketMsg()))
+            self.post_output_msg(0, gras.PacketMsg())
