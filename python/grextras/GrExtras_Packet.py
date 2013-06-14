@@ -1,5 +1,5 @@
 #
-# Copyright 1980-2012 Free Software Foundation, Inc.
+# Copyright 1980-2013 Free Software Foundation, Inc.
 # 
 # This file is part of GrExtras
 # 
@@ -49,17 +49,20 @@ class PacketFramer(gras.Block):
         samples_per_symbol,
         bits_per_symbol,
         access_code=None,
-        use_whitener_offset=False
+        use_whitener_offset=False,
+        trailing_bytes=64,
     ):
         """
         Create a new packet framer.
         @param access_code: AKA sync vector
         @type access_code: string of 1's and 0's between 1 and 64 long
         @param use_whitener_offset: If true, start of whitener XOR string is incremented each packet
+        @param trailing_bytes: number of bytes to trail the packet to flush through TX DSP filter
         """
 
         self._bits_per_symbol = bits_per_symbol
         self._samples_per_symbol = samples_per_symbol
+        self._trailer = numpy.array([0x55] * trailing_bytes)
 
         gras.Block.__init__(
             self,
@@ -97,14 +100,21 @@ class PacketFramer(gras.Block):
             self._whitener_offset,
         )
         #print 'len pkt', len(pkt)
+        pkt = numpy.fromstring(pkt, numpy.uint8)
+        pkt = numpy.append(pkt, self._trailer)
 
         if self._use_whitener_offset:
             self._whitener_offset = (self._whitener_offset + 1) % 16
 
         assert len(outs[0]) >= len(pkt)
-        outs[0][:len(pkt)] = numpy.fromstring(pkt, numpy.uint8)
+        outs[0][:len(pkt)] = pkt
         self.produce(0, len(pkt))
         #print 'produce', len(pkt)
+
+        #create an end of burst tag for each packet end
+        tag = gras.StreamTag(PMC_M("tx_eob"), PMC_M(True))
+        tag_offset = self.get_produced(0) + len(pkt) - 1
+        self.post_output_tag(0, gras.Tag(tag_offset, PMC_M(tag)))
 
 class PacketDeframer(gras.HierBlock):
     """
