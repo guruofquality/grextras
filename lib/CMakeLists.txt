@@ -50,14 +50,6 @@ link_directories(${GRAS_LIBRARY_DIRS})
 list(APPEND GREXTRAS_LIBRARIES ${GRAS_LIBRARIES})
 
 ########################################################################
-# Setup Boost
-########################################################################
-find_package(Boost COMPONENTS thread serialization)
-include_directories(${Boost_INCLUDE_DIRS})
-link_directories(${Boost_LIBRARY_DIRS})
-list(APPEND GREXTRAS_LIBRARIES ${Boost_LIBRARIES})
-
-########################################################################
 # Setup Volk
 ########################################################################
 if(VOLK_FOUND)
@@ -66,6 +58,14 @@ if(VOLK_FOUND)
     list(APPEND GREXTRAS_LIBRARIES ${VOLK_LIBRARIES})
     add_definitions(-DHAVE_VOLK)
 endif()
+
+########################################################################
+# Setup Boost
+########################################################################
+find_package(Boost COMPONENTS thread serialization)
+include_directories(${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIRS})
+list(APPEND GREXTRAS_LIBRARIES ${Boost_LIBRARIES})
 
 ########################################################################
 # Optional UHD
