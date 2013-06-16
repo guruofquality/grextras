@@ -132,9 +132,7 @@ class test_packet(unittest.TestCase):
 
         print "src_data", src_data
         print "dst_data", dst.data()
-        for tag in tag_sink.data():
-            print tag
-            #print st.key(), st.val()
+        print "tag_sink", tag_sink.data()
 
         n = min(map(len, (src_data, dst.data())))
         print n

@@ -3,6 +3,7 @@
 #include <grextras/burst_tagger.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
+#include <iostream>
 
 using namespace grextras;
 
@@ -35,7 +36,10 @@ struct BurstTaggerImpl : BurstTagger
             //create EOB tag
             const size_t &length = val.as<size_t>();
             gras::StreamTag st(PMC_M("tx_eob"), PMC_M(true));
-            const gras::item_index_t offset = this->get_produced(0) + length*_sps - 1;
+            gras::item_index_t offset = t.offset;
+            offset -= this->get_consumed(0);
+            offset += length*_sps;
+            offset += this->get_produced(0) - 1;
             this->post_output_tag(0, gras::Tag(offset, PMC_M(st)));
         }
 
