@@ -24,8 +24,15 @@ struct BurstTaggerImpl : BurstTagger
         //find length tag and create an EOB
         BOOST_FOREACH(gras::Tag t, this->get_input_tags(0))
         {
-            //filter out non length tags
+            //filter out tags past the available input
             if (t.offset >= this->get_consumed(0) + n) continue;
+
+            //propagate everthing
+            t.offset -= this->get_consumed(0);
+            t.offset += this->get_produced(0);
+            this->post_output_tag(0, t);
+
+            //filter out non length tags
             if (not t.object.is<gras::StreamTag>()) continue;
             PMCC key = t.object.as<gras::StreamTag>().key;
             PMCC val = t.object.as<gras::StreamTag>().val;
@@ -38,8 +45,8 @@ struct BurstTaggerImpl : BurstTagger
             gras::StreamTag st(PMC_M("tx_eob"), PMC_M(true));
             gras::item_index_t offset = t.offset;
             offset -= this->get_consumed(0);
-            offset += length*_sps;
-            offset += this->get_produced(0) - 1;
+            offset += length*_sps - 1;
+            offset += this->get_produced(0);
             this->post_output_tag(0, gras::Tag(offset, PMC_M(st)));
         }
 
@@ -49,15 +56,9 @@ struct BurstTaggerImpl : BurstTagger
         this->consume(0, n);
     }
 
-    void propagate_tags(const size_t, const gras::TagIter &iter)
+    void propagate_tags(const size_t, const gras::TagIter &)
     {
-        BOOST_FOREACH(gras::Tag t, iter)
-        {
-            t.offset -= this->get_consumed(0);
-            t.offset *= _sps;
-            t.offset += this->get_produced(0);
-            this->post_output_tag(0, t);
-        }
+        //dont propagate here
     }
 
     const size_t _sps;
