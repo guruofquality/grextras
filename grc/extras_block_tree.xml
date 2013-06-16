@@ -29,6 +29,7 @@ Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
         <block>extras_tuntap</block>
         <block>extras_packet_framer</block>
         <block>extras_packet_deframer</block>
+        <block>extras_burst_tagger</block>
         <block>extras_serialize_port</block>
         <block>extras_deserialize_port</block>
         <block>extras_query_server</block>

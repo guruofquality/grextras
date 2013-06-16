@@ -19,6 +19,7 @@
 # Boston, MA 02110-1301, USA.
 #
 
+import ctypes
 import numpy
 import gras
 import time
@@ -112,9 +113,9 @@ class PacketFramer(gras.Block):
         #print 'produce', len(pkt)
 
         #create an end of burst tag for each packet end
-        tag = gras.StreamTag(PMC_M("tx_eob"), PMC_M(True))
-        tag_offset = self.get_produced(0) + len(pkt) - 1
-        self.post_output_tag(0, gras.Tag(tag_offset, PMC_M(tag)))
+        length = ctypes.c_size_t(len(pkt))
+        tag = gras.StreamTag(PMC_M("length"), PMC_M(length))
+        self.post_output_tag(0, gras.Tag(self.get_produced(0), PMC_M(tag)))
 
 class PacketDeframer(gras.HierBlock):
     """

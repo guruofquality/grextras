@@ -4,6 +4,7 @@
 
 %{
 #include <grextras/delay.hpp>
+#include <grextras/burst_tagger.hpp>
 #include <grextras/stream_selector.hpp>
 #include <grextras/stream_to_datagram.hpp>
 #include <grextras/datagram_to_stream.hpp>
@@ -21,6 +22,7 @@
 %template (std_vector_int) std::vector<int>;
 
 %include <grextras/delay.hpp>
+%include <grextras/burst_tagger.hpp>
 %include <grextras/stream_selector.hpp>
 %include <grextras/stream_to_datagram.hpp>
 %include <grextras/datagram_to_stream.hpp>
@@ -30,6 +32,7 @@
 %include <grextras/deserialize_port.hpp>
 
 GREXTRAS_SWIG_FOO(Delay)
+GREXTRAS_SWIG_FOO(BurstTagger)
 GREXTRAS_SWIG_FOO(StreamSelector)
 GREXTRAS_SWIG_FOO(Stream2Datagram)
 GREXTRAS_SWIG_FOO(Datagram2Stream)

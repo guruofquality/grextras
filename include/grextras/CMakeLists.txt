@@ -13,6 +13,7 @@ install(FILES
     subtract.hpp
 
     delay.hpp
+    burst_tagger.hpp
     stream_selector.hpp
 
     noise_source.hpp

@@ -25,6 +25,7 @@ list(APPEND grc_sources
 
     extras_packet_framer.xml
     extras_packet_deframer.xml
+    extras_burst_tagger.xml
 
     extras_serialize_port.xml
     extras_deserialize_port.xml

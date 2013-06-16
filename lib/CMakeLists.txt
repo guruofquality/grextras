@@ -22,6 +22,7 @@ list(APPEND GREXTRAS_SOURCES
     tuntap.cpp
 
     delay.cpp
+    burst_tagger.cpp
     stream_selector.cpp
 
     opencl_block.cpp
