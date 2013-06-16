@@ -45,6 +45,17 @@ struct BurstTaggerImpl : BurstTagger
         this->consume(0, n);
     }
 
+    void propagate_tags(const size_t, const gras::TagIter &iter)
+    {
+        BOOST_FOREACH(gras::Tag t, iter)
+        {
+            t.offset -= this->get_consumed(0);
+            t.offset *= _sps;
+            t.offset += this->get_produced(0);
+            this->post_output_tag(0, t);
+        }
+    }
+
     const size_t _sps;
 };
 
