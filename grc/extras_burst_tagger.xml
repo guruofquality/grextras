@@ -5,7 +5,7 @@
 ###################################################
  -->
 <block>
-    <name>Ex: BurstTagger</name>
+    <name>Ex: Burst Tagger</name>
     <key>extras_burst_tagger</key>
     <import>import grextras</import>
     <make>grextras.BurstTagger($sps)</make>
