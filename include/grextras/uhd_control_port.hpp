@@ -37,6 +37,15 @@ namespace grextras
  * - "tx_freq" of type uhd::tune_request
  * - "rx_gain" of type double
  * - "tx_gain" of type double
+ * - "time_source" of type string
+ * - "clock_source" of type string
+ * - "time_now" of type uhd::time_spec_t
+ * - "time_pps" of type uhd::time_spec_t
+ *   (getting time pps gets the time at the last pps)
+ *   (setting time pps sets the time at the next pps)
+ *
+ * Documentation for these properties can be found
+ * by inspecting the uhd/usrp/multi_usrp.hpp header.
  */
 struct GREXTRAS_API UHDControlPort : virtual gras::Block
 {

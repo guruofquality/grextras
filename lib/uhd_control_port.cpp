@@ -49,6 +49,16 @@ struct UHDControlPortImpl : public UHDControlPort
         this->register_setter("rx_freq", &UHDControlPortImpl::set_rx_freq);
         this->register_getter("tx_freq", &UHDControlPortImpl::get_tx_freq);
         this->register_setter("tx_freq", &UHDControlPortImpl::set_tx_freq);
+
+        this->register_getter("time_source", &UHDControlPortImpl::get_time_source);
+        this->register_setter("time_source", &UHDControlPortImpl::set_time_source);
+        this->register_getter("clock_source", &UHDControlPortImpl::get_clock_source);
+        this->register_setter("clock_source", &UHDControlPortImpl::set_clock_source);
+
+        this->register_getter("time_now", &UHDControlPortImpl::get_time_now);
+        this->register_setter("time_now", &UHDControlPortImpl::set_time_now);
+        this->register_getter("time_pps", &UHDControlPortImpl::get_time_pps);
+        this->register_setter("time_pps", &UHDControlPortImpl::set_time_pps);
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -117,6 +127,58 @@ struct UHDControlPortImpl : public UHDControlPort
             _usrp->clear_command_time();
         else
             _usrp->set_command_time(time_spec);
+    }
+
+    /*******************************************************************
+     * time PPS
+     ******************************************************************/
+    uhd::time_spec_t get_time_pps(void)
+    {
+        return _usrp->get_time_last_pps(0);
+    }
+
+    void set_time_pps(const uhd::time_spec_t &time)
+    {
+        _usrp->set_time_next_pps(time, 0);
+    }
+
+    /*******************************************************************
+     * time NOW
+     ******************************************************************/
+    uhd::time_spec_t get_time_now(void)
+    {
+        return _usrp->get_time_now(0);
+    }
+
+    void set_time_now(const uhd::time_spec_t &time)
+    {
+        _usrp->set_time_now(time, 0);
+    }
+
+    /*******************************************************************
+     * time source
+     ******************************************************************/
+    std::string get_time_source(void)
+    {
+        return _usrp->get_time_source(0);
+    }
+
+    void set_time_source(const std::string &source)
+    {
+        _usrp->set_time_source(source, 0);
+    }
+
+    /*******************************************************************
+     * clock source
+     ******************************************************************/
+    std::string get_clock_source(void)
+    {
+        return _usrp->get_clock_source(0);
+    }
+
+    void set_clock_source(const std::string &source)
+    {
+        _usrp->set_clock_source(source, 0);
     }
 
     uhd::usrp::multi_usrp::sptr _usrp;
