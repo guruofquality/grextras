@@ -71,6 +71,8 @@ struct digital_framer_sink_1 : public gras::Block
   ~digital_framer_sink_1();
 
   void work(const InputItems &ins, const OutputItems &outs);
+  void propagate_tags(const size_t, const gras::TagIter &)
+    {/*DONT PROPAGATE*/}
 };
 
 inline void

@@ -8,7 +8,7 @@
     <name>Ex: Multiply Const</name>
     <key>extras_multiply_const</key>
     <import>import grextras</import>
-    <make>grextras.MultiplyConstV$(type)($value)</make>
+    <make>grextras.MultiplyConstV.$(type)($value)</make>
     <callback>set_const($value)</callback>
     <param>
         <name>IO Type</name>

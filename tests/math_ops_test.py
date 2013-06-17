@@ -182,5 +182,19 @@ class test_add_and_friends(unittest.TestCase):
         self.help_ff((src1_data, src2_data),
                       expected_result, op)
 
+    def test_make_math_const_vs(self):
+        op = grextras.AddConstV.fc32_fc32([1, 2, 4])
+        op = grextras.AddConstV.f32_f32([1, 2, 4])
+        op = grextras.AddConstV.s32_s32([1, 2, 4])
+        op = grextras.MultiplyConstV.fc32_fc32([1, 2, 4])
+        op = grextras.MultiplyConstV.f32_f32([1, 2, 4])
+        op = grextras.MultiplyConstV.s32_s32([1, 2, 4])
+
+    def test_set_math_const_vs(self):
+        op = grextras.AddConstV.fc32_fc32([1, 2, 4])
+        op.set_const([0, 5, 6])
+        op = grextras.MultiplyConstV.fc32_fc32([1, 2, 4])
+        op.set_const([0, 5, 6])
+
 if __name__ == '__main__':
     unittest.main()
