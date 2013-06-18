@@ -121,6 +121,11 @@ class PacketFramer(gras.Block):
         tag = gras.StreamTag(PMC_M("length"), PMC_M(length))
         self.post_output_tag(0, gras.Tag(self.get_produced(0), PMC_M(tag)))
 
+        #post a tag if the packet message info is provided
+        #The pkt msg info may be an tx_time StreamTag
+        if pkt_msg.info:
+            self.post_output_tag(0, gras.Tag(self.get_produced(0), pkt_msg.info))
+
 class PacketDeframer(gras.HierBlock):
     """
     Hierarchical block for demodulating and deframing packets.
