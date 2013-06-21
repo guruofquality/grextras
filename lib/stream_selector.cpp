@@ -58,9 +58,6 @@ struct StreamSelectorImpl : StreamSelector
             //set the reserve_items to zero:
             //work gets called when not all inputs are fed
             this->input_config(i).reserve_items = 0;
-
-            //only done when all inputs are done
-            this->input_config(i).force_done = false;
         }
     }
 
