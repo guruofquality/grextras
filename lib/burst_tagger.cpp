@@ -27,11 +27,6 @@ struct BurstTaggerImpl : BurstTagger
             //filter out tags past the available input
             if (t.offset >= this->get_consumed(0) + n) continue;
 
-            //propagate everthing
-            t.offset -= this->get_consumed(0);
-            t.offset += this->get_produced(0);
-            this->post_output_tag(0, t);
-
             //filter out non length tags
             if (not t.object.is<gras::StreamTag>()) continue;
             PMCC key = t.object.as<gras::StreamTag>().key;
@@ -54,11 +49,6 @@ struct BurstTaggerImpl : BurstTagger
         gras::SBuffer buffer = this->get_input_buffer(0);
         this->post_output_buffer(0, buffer);
         this->consume(0, n);
-    }
-
-    void propagate_tags(const size_t, const gras::TagIter &)
-    {
-        //dont propagate here
     }
 
     const size_t _sps;
