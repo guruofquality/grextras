@@ -50,6 +50,13 @@ namespace boost{template<class T>struct shared_ptr{T*operator->();};}
     %{
         def __str__(self):
             return self.to_string()
+
+        def set(self, key, value):
+            from PMC import PMC_M
+            self._set_property(key, PMC_M(value))
+
+        def get(self, key):
+            return self._get_property(key)()
     %}
 }
 
