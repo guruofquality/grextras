@@ -33,6 +33,9 @@ struct GREXTRAS_API TimeAlign : virtual gras::Block
      * The itemsize is the size of a sample in bytes.
      */
     static sptr make(const size_t itemsize);
+
+    //! Set the sample rate of all channels in this block
+    virtual void set_sample_rate(const double rate) = 0;
 };
 
 }
