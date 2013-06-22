@@ -1,10 +1,9 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
+#include <gras/time_tag.hpp>
 #include <grextras/time_align.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
-#include <boost/cstdint.hpp>
-#include <PMC/Containers.hpp> //tuple
 #include <stdexcept>
 
 using namespace grextras;
@@ -15,8 +14,6 @@ struct TimeAlignImpl : TimeAlign
 {
     TimeAlignImpl(const size_t itemsize):
         gras::Block("GrExtras TimeAlign"),
-        _full_secs(0),
-        _frac_secs(0),
         _alignment_state(false)
     {
         this->input_config(0).item_size = itemsize;
@@ -30,8 +27,7 @@ struct TimeAlignImpl : TimeAlign
 
     void work(const InputItems &ins, const OutputItems &outs);
 
-    int64_t _full_secs;
-    double _frac_secs;
+    gras::TimeTag _align_time;
     bool _alignment_state;
     std::vector<gras::item_index_t> _alignment_indexes;
 };
@@ -44,37 +40,33 @@ void TimeAlignImpl::work(const InputItems &ins, const OutputItems &outs)
         BOOST_FOREACH(const gras::Tag &t, this->get_input_tags(i))
         {
             if (t.offset >= this->get_consumed(i) + n) continue;
-            double full_secs;
-            int64_t frac_secs;
+            gras::TimeTag new_time;
             //extract a time tag of the expected format
             try
             {
                 const gras::StreamTag &st = t.object.as<gras::StreamTag>();
                 if (st.key.as<std::string>() != "rx_time") continue;
-                const PMCTuple<2> &tuple = st.val.as<PMCTuple<2> >();
-                full_secs = tuple[0].as<double>();
-                frac_secs = tuple[1].as<boost::int64_t>();
+                new_time = gras::TimeTag::from_pmc(st.val);
             }
             catch(const std::invalid_argument &){continue;}
 
             //inspect the time tag for <, ==, >
 
             //equal
-            if (full_secs == _full_secs and frac_secs == _frac_secs)
+            if (new_time == _align_time)
             {
                 _alignment_indexes[i] = t.offset;
             }
 
             //greater -- save this new time
-            if (full_secs > _full_secs or (full_secs == _full_secs and frac_secs > _frac_secs))
+            if (new_time > _align_time)
             {
                 _alignment_indexes[i] = t.offset;
-                _full_secs = full_secs;
-                _frac_secs = frac_secs;
+                _align_time = new_time;
             }
 
             //less -- this is an extinct time -- dump it
-            if (full_secs < _full_secs or (full_secs == _full_secs and frac_secs < _frac_secs))
+            if (new_time < _align_time)
             {
                 this->consume(i, t.offset - this->get_consumed(i) + 1);
                 return;
