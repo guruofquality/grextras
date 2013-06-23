@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+## Extras: time alignment block
+###################################################
+ -->
+<block>
+    <name>Ex: Time Align</name>
+    <key>extras_time_align</key>
+    <import>import grextras</import>
+    <make>grextras.TimeAlign($item_size)</make>
+    <param>
+        <name>Item Size</name>
+        <key>item_size</key>
+        <value>8</value>
+        <type>int</type>
+    </param>
+    <param>
+        <name>Num IOs</name>
+        <key>num_ios</key>
+        <value>2</value>
+        <type>int</type>
+    </param>
+    <sink>
+        <name>in</name>
+        <type>byte</type>
+        <vlen>$item_size</vlen>
+        <nports>$num_ios</nports>
+    </sink>
+    <source>
+        <name>out</name>
+        <type>byte</type>
+        <vlen>$item_size</vlen>
+        <nports>$num_ios</nports>
+    </source>
+</block>

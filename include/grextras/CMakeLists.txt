@@ -13,6 +13,7 @@ install(FILES
     subtract.hpp
 
     delay.hpp
+    time_align.hpp
     burst_tagger.hpp
     stream_selector.hpp
 
