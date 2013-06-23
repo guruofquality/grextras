@@ -5,6 +5,7 @@
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <stdexcept>
+#include <iostream>
 
 using namespace grextras;
 
@@ -14,7 +15,7 @@ struct TimeAlignImpl : TimeAlign
 {
     TimeAlignImpl(const size_t itemsize):
         gras::Block("GrExtras TimeAlign"),
-        _rate(1.0)
+        _rate(1e6)
     {
         this->input_config(0).item_size = itemsize;
         this->output_config(0).item_size = itemsize;

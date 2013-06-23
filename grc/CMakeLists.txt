@@ -20,6 +20,7 @@ list(APPEND grc_sources
 
     extras_delay.xml
     extras_tuntap.xml
+    extras_time_align.xml
     extras_stream_selector.xml
     extras_socket_message.xml
 

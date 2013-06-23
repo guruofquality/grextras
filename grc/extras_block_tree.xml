@@ -27,6 +27,7 @@ Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
         <block>extras_stream_selector</block>
         <block>extras_delay</block>
         <block>extras_tuntap</block>
+        <block>extras_time_align</block>
         <block>extras_packet_framer</block>
         <block>extras_packet_deframer</block>
         <block>extras_burst_tagger</block>
