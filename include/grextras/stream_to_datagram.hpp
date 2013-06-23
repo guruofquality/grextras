@@ -17,14 +17,15 @@ namespace grextras
  *
  * Each outgoing message is a gras::PacketMsg
  *
- * For each call of work(), the default behaviour is to post 
+ * For each call of work(), the default behaviour is to post
  * the entire input buffer as the value of the output tag.
  *
  * The user may override this by setting a non-zero mtu;
  * so that the work function will slice up the input buffer.
  *
- * If the input stream also contains item tags as well,
- * these tags will also be posted to the output port.
+ * Tags are saved to the pkt_msg.info as a PMCList.
+ * Each each element of the list is of type gras::Tag.
+ * The tag.offset is adjusted relative to the pkt_msg.buff.
  *
  * The implementation of this block is totally zero-copy.
  */

@@ -15,7 +15,10 @@ namespace grextras
  * The input port is a message port.
  * The output port is a stream of items.
  *
- * Each incoming message is a gras::PacketMsg
+ * Each incoming message is a gras::PacketMsg.
+ * If pkt_msg.info contains a PMCList of type gras::Tag,
+ * each tag's offset is adjusted for absolute position,
+ * and then posted into the output stream.
  * Other Input messages are dropped.
  *
  * The implementation of this block is totally zero-copy.
