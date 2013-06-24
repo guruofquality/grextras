@@ -28,7 +28,7 @@ self.$(id).set($key2, $value2)
 #if $num_props() >= 3
 self.$(id).set($key3, $value3)
 #end if
-try: self.adopt_child("$(id)", $(id))
+try: self.adopt_element("$(id)", $(id))
 except Exception as ex: print ex</make>
     <callback>set($key1, $value1)</callback>
     <callback>set($key2, $value2)</callback>
