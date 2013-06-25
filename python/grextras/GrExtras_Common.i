@@ -11,9 +11,10 @@
 //======================================================================
 %include <grextras/config.hpp>
 %include <gras/exception.i>
-%include <gras/element.i>
+%import <gras/element.i>
 %import <gras/block.i>
 %import <gras/hier_block.i>
+%import <gras/top_block.i>
 
 //======================================================================
 //== a simple definition for a boost shared pointer
