@@ -1,5 +1,7 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
+%module "grextras"
+
 %{
 #include <gras/block.hpp>
 #include <gras/hier_block.hpp>
