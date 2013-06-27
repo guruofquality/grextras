@@ -222,8 +222,6 @@ void digital_framer_sink_1::work(const InputItems &ins, const OutputItems &)
 
 %}
 
-%template(grextras_Block) boost::shared_ptr<gras::Block>;
-
 %inline %{
 
 inline boost::shared_ptr<gras::Block> make_digital_framer_sink_1(void)
