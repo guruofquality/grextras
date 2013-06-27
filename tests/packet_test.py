@@ -9,7 +9,7 @@ import time
 try:
     import gmsk
 except ImportError:
-    from gnuradio.gmsk import packet_utils
+    from gnuradio.digital import gmsk
 
 class TagSink(gras.Block):
     def __init__(self):
