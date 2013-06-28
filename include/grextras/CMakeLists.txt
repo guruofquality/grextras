@@ -35,6 +35,9 @@ install(FILES
     serialize_port.hpp
     deserialize_port.hpp
 
+    scrambler.hpp
+    descrambler.hpp
+
     DESTINATION include/grextras
     COMPONENT "extras_devel"
 )
