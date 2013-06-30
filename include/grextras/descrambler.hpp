@@ -15,9 +15,9 @@ namespace grextras
  * with programmable LFSR taps, seed value, and sync word.
  * 
  * The following properties are available through get and set:
- *  - polynomial <uint64> - LFSR polynomial taps
+ *  - polynomial <int64> - LFSR polynomial taps
  *    - Polynomial representation: x^4 + x^3 + 1 = 11001 = 0x19
- *  - seed <uint64> - LFSR initialization value
+ *  - seed <int64> - LFSR initialization value
  *  - mode <string> - "additive" or "multiplicative"
  *  - sync_word <string> - pattern of 1s and 0s
  *    - Example pattern: "100111010"

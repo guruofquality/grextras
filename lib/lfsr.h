@@ -12,7 +12,9 @@ typedef struct {
                     mask;
 } lfsr_t;
 
+static inline
 void          GLFSR_init(lfsr_t *, lfsr_data_t, lfsr_data_t);
+static inline
 unsigned char GLFSR_next(lfsr_t *);
 
 /*
@@ -62,7 +64,7 @@ static inline
 void GLFSR_init(lfsr_t *glfsr, lfsr_data_t polynom, lfsr_data_t seed_value)
 {
     lfsr_data_t seed_mask;
-    unsigned int shift = 8 * sizeof(lfsr_data) - 1;
+    unsigned int shift = 8 * sizeof(lfsr_data_t) - 1;
 
     glfsr->polynomial = polynom | 1;
     glfsr->data = seed_value;
