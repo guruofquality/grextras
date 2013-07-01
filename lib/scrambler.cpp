@@ -16,15 +16,15 @@ struct ScramblerImpl : gras::Block
         _polynom(1), _seed_value(1)
     {
         std::memset(&_lfsr, 0, sizeof(_lfsr));
-        this->register_setter("polynomial", &ScramblerImpl::set_polynomial);
+        this->register_setter("poly", &ScramblerImpl::set_poly);
         this->register_setter("seed", &ScramblerImpl::set_seed);
         this->register_setter("mode", &ScramblerImpl::set_mode);
-        this->register_setter("sync_word", &ScramblerImpl::set_sync_word);
+        this->register_setter("sync", &ScramblerImpl::set_sync);
 
         //some defaults
         this->set_mode("multiplicative");
-        this->set_sync_word("");
-        this->set_polynomial(8650753);
+        this->set_sync("");
+        this->set_poly(8650753);
     }
 
     void notify_active(void)
@@ -39,7 +39,7 @@ struct ScramblerImpl : gras::Block
         }
     }
 
-    void set_polynomial(const boost::int64_t &polynomial)
+    void set_poly(const boost::int64_t &polynomial)
     {
         _polynom = polynomial;
         GLFSR_init(&_lfsr, _polynom, _seed_value);
@@ -55,9 +55,11 @@ struct ScramblerImpl : gras::Block
         else if (mode == "multiplicative") _mode = MODE_MULT;
         else throw std::invalid_argument("Scrambler: unknown mode: " + mode);
     }
-    void set_sync_word(const std::string &sync_word)
+    void set_sync(const std::string &sync_word)
     {
         _sync_word = sync_word;
+        if (_sync_word.size() > 64) throw std::out_of_range("Scrambler: sync word max len 64 bits");
+
         _sync_bits.clear();
         for (size_t i = 0; i < _sync_word.size(); i++)
         {

@@ -15,16 +15,16 @@ namespace grextras
  * with programmable LFSR taps, seed value, and sync word.
  * 
  * The following properties are available through get and set:
- *  - polynomial <int64> - LFSR polynomial taps
+ *  - poly <int64> - LFSR polynomial taps
  *    - Polynomial representation: x^4 + x^3 + 1 = 11001 = 0x19
  *  - seed <int64> - LFSR initialization value
  *  - mode <string> - "additive" or "multiplicative"
- *  - sync_word <string> - pattern of 1s and 0s
+ *  - sync <string> - pattern of 1s and 0s
  *    - Example pattern: "100111010"
  *
- * The sync word is only used in additive mode.
- * Every length tag causes a sync word to be sent.
- * and the LFSR is reset with the seed value.
+ * When the length tag is detected,
+ * the sync word is injected into the stream,
+ * and the LFSR is reset to the seed value.
  */
 struct Scrambler
 {
