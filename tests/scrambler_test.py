@@ -19,7 +19,6 @@ class test_scramblers(unittest.TestCase):
     def test_simple_loopback(self):
         for i in range(16):
             s = grextras.Scrambler()
-            s.set("io_type", "bits")
             d = grextras.Descrambler()
 
             poly = ctypes.c_int64(1 | (1 << 14) | (1 << 15))
@@ -42,6 +41,7 @@ class test_scramblers(unittest.TestCase):
 
             self.tb.run()
             self.tb.disconnect_all()
+            self.assertNotEqual(src_data, midst.data())
             self.assertEqual(src_data, dst.data())
 
 if __name__ == '__main__':

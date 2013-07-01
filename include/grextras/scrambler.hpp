@@ -21,7 +21,6 @@ namespace grextras
  *  - mode <string> - "additive" or "multiplicative"
  *  - sync_word <string> - pattern of 1s and 0s
  *    - Example pattern: "100111010"
- *  - io_type <string> - bits or msb_bytes or lsb_bytes
  *
  * The sync word is only used in additive mode.
  * Every length tag causes a sync word to be sent.
