@@ -5,6 +5,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/foreach.hpp>
 #include <stdexcept>
+#include <iostream>
 
 using namespace grextras;
 
@@ -24,18 +25,6 @@ struct DescramblerImpl : gras::Block
         this->set_mode("multiplicative");
         this->set_sync("");
         this->set_poly(8650753);
-    }
-
-    void notify_active(void)
-    {
-        if (_sync_word.empty())
-        {
-            this->input_config(0).reserve_items = 1;
-        }
-        else
-        {
-            this->input_config(0).reserve_items = _sync_word.size();
-        }
     }
 
     void set_poly(const boost::int64_t &polynomial)
@@ -77,6 +66,9 @@ struct DescramblerImpl : gras::Block
             }
             else throw std::out_of_range("Descrambler: sync word must be 0s and 1s: " + _sync_word);
         }
+
+        if (_sync_word.empty()) this->input_config(0).reserve_items = 1;
+        else this->input_config(0).reserve_items = _sync_word.size();
     }
 
     void work(const InputItems &, const OutputItems &);
@@ -154,7 +146,13 @@ void DescramblerImpl::work(const InputItems &ins, const OutputItems &outs)
     this->produce(n);
 
     //a sync word was found? consume it
-    if (sync_word_found) this->consume(_sync_word.size());
+    if (sync_word_found)
+    {
+        this->consume(_sync_word.size());
+        std::cout << "sync_word_found\n";
+        //reset the lfsr to seed state
+        GLFSR_init(&_lfsr, _polynom, _seed_value);
+    }
 }
 
 gras::Block *Descrambler::make(void)

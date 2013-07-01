@@ -27,18 +27,6 @@ struct ScramblerImpl : gras::Block
         this->set_poly(8650753);
     }
 
-    void notify_active(void)
-    {
-        if (_sync_word.empty())
-        {
-            this->output_config(0).reserve_items = 1;
-        }
-        else
-        {
-            this->output_config(0).reserve_items = _sync_word.size() + 1;
-        }
-    }
-
     void set_poly(const boost::int64_t &polynomial)
     {
         _polynom = polynomial;
@@ -73,6 +61,9 @@ struct ScramblerImpl : gras::Block
             }
             else throw std::out_of_range("Scrambler: sync word must be 0s and 1s: " + _sync_word);
         }
+
+        if (_sync_word.empty()) this->output_config(0).reserve_items = 1;
+        else this->output_config(0).reserve_items = _sync_word.size() + 1;
     }
 
     void work(const InputItems &, const OutputItems &);
@@ -142,6 +133,9 @@ void ScramblerImpl::work(const InputItems &ins, const OutputItems &outs)
             out += _sync_word.size();
             const size_t &length = val.as<size_t>();
             n = std::min(n - _sync_word.size(), length);
+
+            //increment length tag for the sync word
+            const_cast<size_t &>(length) += _sync_word.size();
         }
         //otherwise go up to but not including length tag
         else
