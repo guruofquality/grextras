@@ -149,7 +149,6 @@ void DescramblerImpl::work(const InputItems &ins, const OutputItems &outs)
     if (sync_word_found)
     {
         this->consume(_sync_word.size());
-        std::cout << "sync_word_found\n";
         //reset the lfsr to seed state
         GLFSR_init(&_lfsr, _polynom, _seed_value);
     }

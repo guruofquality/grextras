@@ -66,6 +66,7 @@ struct ScramblerImpl : gras::Block
         else this->output_config(0).reserve_items = _sync_word.size() + 1;
     }
 
+    void propagate_tags(const size_t i, const gras::TagIter &iter);
     void work(const InputItems &, const OutputItems &);
     unsigned char additive_bit_work(const unsigned char in);
     unsigned char multiplicative_bit_work(const unsigned char in);
@@ -94,6 +95,24 @@ GRAS_FORCE_INLINE unsigned char ScramblerImpl::multiplicative_bit_work(const uns
     _lfsr.data &= ~lfsr_data_t(0x1);
     _lfsr.data |= out;
     return out;
+}
+
+void ScramblerImpl::propagate_tags(const size_t, const gras::TagIter &iter)
+{
+    BOOST_FOREACH(const gras::Tag &t, iter)
+    {
+        if (not _sync_word.empty()) try
+        {
+            //dont propagate length tags, done in work
+            PMCC key = t.object.as<gras::StreamTag>().key;
+            if (key.as<std::string>() == "length") continue;
+        }
+        catch(const std::invalid_argument &){}
+        gras::Tag t_o = t;
+        t_o.offset -= this->get_consumed(0);
+        t_o.offset += this->get_produced(0);
+        this->post_output_tag(0, t_o);
+    }
 }
 
 void ScramblerImpl::work(const InputItems &ins, const OutputItems &outs)
@@ -131,11 +150,13 @@ void ScramblerImpl::work(const InputItems &ins, const OutputItems &outs)
 
             //advance out and decrement n for work loop
             out += _sync_word.size();
-            const size_t &length = val.as<size_t>();
+            size_t length = val.as<size_t>();
             n = std::min(n - _sync_word.size(), length);
 
-            //increment length tag for the sync word
-            const_cast<size_t &>(length) += _sync_word.size();
+            //post new length that that includes sync word
+            length += _sync_word.size();
+            gras::StreamTag st(key, PMC_M<size_t>(length));
+            this->post_output_tag(0, gras::Tag(t.offset, PMC_M(st)));
         }
         //otherwise go up to but not including length tag
         else
