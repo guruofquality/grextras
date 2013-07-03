@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+## Scrambler
+###################################################
+-->
+<block>
+    <name>Ex: Scrambler</name>
+    <key>extras_scrambler</key>
+    <import>ctypes</import>
+    <import>import grextras</import>
+    <make>grextras.Scrambler()
+self.$(id).set("poly", ctypes.c_int64($poly))
+self.$(id).set("seed", ctypes.c_int64($seed))
+self.$(id).set("mode", $mode)
+self.$(id).set("sync", $sync)</make>
+    <param>
+        <name>Polynomial</name>
+        <key>poly</key>
+        <value>49153</value>
+        <type>int</type>
+    </param>
+    <param>
+        <name>Seed</name>
+        <key>seed</key>
+        <value>42</value>
+        <type>int</type>
+    </param>
+    <param>
+        <name>Mode</name>
+        <key>mode</key>
+        <value>multiplicative</value>
+        <type>string</type>
+        <option><name>Additive</name><key>additive</key></option>
+        <option><name>Multiplicative</name><key>multiplicative</key></option>
+    </param>
+    <param>
+        <name>Sync word</name>
+        <key>sync</key>
+        <value></value>
+        <type>string</type>
+    </param>
+    <sink>
+        <name>in</name>
+        <type>byte</type>
+    </sink>
+    <source>
+        <name>out</name>
+        <type>byte</type>
+    </source>
+</block>

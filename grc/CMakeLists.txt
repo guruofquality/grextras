@@ -31,6 +31,9 @@ list(APPEND grc_sources
     extras_serialize_port.xml
     extras_deserialize_port.xml
 
+    extras_scrambler.xml
+    extras_descrambler.xml
+
     extras_uhd_status_port.xml
     extras_uhd_control_port.xml
 
