@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 ###################################################
-##Serialize port
+##Serializer
 ###################################################
 -->
 <block>
-    <name>Ex: Serialize</name>
-    <key>extras_serialize_port</key>
+    <name>Ex: Serializer</name>
+    <key>extras_serializer</key>
     <import>import grextras</import>
-    <make>grextras.SerializePort($mtu, $sync)
+    <make>grextras.Serializer($mtu, $sync)
 #for i, s in enumerate($input_sizes())
 self.$(id).input_config($i).item_size = $s
 #end for</make>

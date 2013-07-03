@@ -141,7 +141,7 @@ class test_serializer_blocks(unittest.TestCase):
 
         src0 = RandomStuffSource(tasks)
         src1 = RandomStuffSource(tasks)
-        ser = grextras.SerializePort(0, False) #mtu default, async ports
+        ser = grextras.Serializer(0, False) #mtu default, async ports
         ser.input_config(0).item_size = 4
         dst = PktMsgSinkPrinter()
 
@@ -175,9 +175,9 @@ class test_serializer_blocks(unittest.TestCase):
 
         src0 = RandomStuffSource(tasks0)
         src1 = RandomStuffSource(tasks1)
-        ser = grextras.SerializePort(0, False) #mtu default, async ports
+        ser = grextras.Serializer(0, False) #mtu default, async ports
         ser.input_config(0).item_size = 4
-        deser = grextras.DeserializePort()
+        deser = grextras.Deserializer()
         deser.output_config(0).item_size = 4
         dst0 = RandomStuffSink()
         dst1 = RandomStuffSink()
@@ -205,7 +205,7 @@ class test_serializer_blocks(unittest.TestCase):
         ]
 
         src = RandomStuffSource(tasks)
-        ser = grextras.SerializePort()
+        ser = grextras.Serializer()
         ser.input_config(0).item_size = 4
 
         #these two slice up the datagrams
@@ -213,7 +213,7 @@ class test_serializer_blocks(unittest.TestCase):
         d2s = grextras.Datagram2Stream(numpy.dtype(numpy.int32).itemsize)
         s2d = grextras.Stream2Datagram(numpy.dtype(numpy.int32).itemsize, 40) #mtu 40 bytes
 
-        deser = grextras.DeserializePort(True) #true for recovery on
+        deser = grextras.Deserializer(True) #true for recovery on
         deser.output_config(0).item_size = 4
         dst = RandomStuffSink()
 

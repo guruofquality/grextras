@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 ###################################################
-##Deserialize port
+##Deserializer
 ###################################################
 -->
 <block>
-    <name>Ex: Deserialize</name>
-    <key>extras_deserialize_port</key>
+    <name>Ex: Deserializer</name>
+    <key>extras_deserializer</key>
     <import>import grextras</import>
-    <make>grextras.DeserializePort($recover)
+    <make>grextras.Deserializer($recover)
 #for i, s in enumerate($output_sizes())
 self.$(id).output_config($i).item_size = $s
 #end for</make>

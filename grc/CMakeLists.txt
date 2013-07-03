@@ -28,8 +28,8 @@ list(APPEND grc_sources
     extras_packet_deframer.xml
     extras_burst_tagger.xml
 
-    extras_serialize_port.xml
-    extras_deserialize_port.xml
+    extras_serializer.xml
+    extras_deserializer.xml
 
     extras_scrambler.xml
     extras_descrambler.xml

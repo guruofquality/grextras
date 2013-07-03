@@ -2,7 +2,7 @@
 
 #include "serialize_common.hpp"
 #include <PMC/Serialize.hpp>
-#include <grextras/serialize_port.hpp>
+#include <grextras/serializer.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me htonl
@@ -84,10 +84,10 @@ static gras::PacketMsg serialize_buff(const size_t seq, const size_t sid, const 
     return gras::PacketMsg(buff);
 }
 
-struct SerializePortImpl : SerializePort
+struct SerializerImpl : gras::Block
 {
-    SerializePortImpl(const size_t mtu, const bool sync):
-        gras::Block("GrExtras SerializePort"),
+    SerializerImpl(const size_t mtu, const bool sync):
+        gras::Block("GrExtras Serializer"),
         _mtu((mtu? mtu : 1400) & ~3), _sync(sync)
     {
         //NOP
@@ -169,7 +169,7 @@ struct SerializePortImpl : SerializePort
     std::vector<size_t> _seqs;
 };
 
-SerializePort::sptr SerializePort::make(const size_t mtu, const bool sync)
+gras::Block *Serializer::make(const size_t mtu, const bool sync)
 {
-    return boost::make_shared<SerializePortImpl>(mtu, sync);
+    return new SerializerImpl(mtu, sync);
 }

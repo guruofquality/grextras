@@ -32,8 +32,8 @@ install(FILES
     uhd_control_port.hpp
     uhd_status_port.hpp
 
-    serialize_port.hpp
-    deserialize_port.hpp
+    serializer.hpp
+    deserializer.hpp
 
     scrambler.hpp
     descrambler.hpp

@@ -13,8 +13,8 @@
 #include <grextras/tuntap.hpp>
 #include <grextras/scrambler.hpp>
 #include <grextras/descrambler.hpp>
-#include <grextras/serialize_port.hpp>
-#include <grextras/deserialize_port.hpp>
+#include <grextras/serializer.hpp>
+#include <grextras/deserializer.hpp>
 %}
 
 //used in socket message, tuptap
@@ -34,8 +34,8 @@
 %include <grextras/tuntap.hpp>
 %include <grextras/scrambler.hpp>
 %include <grextras/descrambler.hpp>
-%include <grextras/serialize_port.hpp>
-%include <grextras/deserialize_port.hpp>
+%include <grextras/serializer.hpp>
+%include <grextras/deserializer.hpp>
 
 GREXTRAS_SWIG_FOO(Delay)
 GREXTRAS_SWIG_FOO(TimeAlign)
@@ -47,5 +47,5 @@ GREXTRAS_SWIG_FOO(SocketMessage)
 GREXTRAS_SWIG_FOO(TunTap)
 GREXTRAS_SWIG_FOO(Scrambler)
 GREXTRAS_SWIG_FOO(Descrambler)
-GREXTRAS_SWIG_FOO(SerializePort)
-GREXTRAS_SWIG_FOO(DeserializePort)
+GREXTRAS_SWIG_FOO(Serializer)
+GREXTRAS_SWIG_FOO(Deserializer)

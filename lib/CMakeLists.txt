@@ -33,11 +33,11 @@ list(APPEND GREXTRAS_SOURCES
     uhd_status_port.cpp
     uhd_control_port.cpp
 
+    serializer.cpp
+    deserializer.cpp
+
     scrambler.cpp
     descrambler.cpp
- 
-    serialize_port.cpp
-    deserialize_port.cpp
 )
 
 ########################################################################

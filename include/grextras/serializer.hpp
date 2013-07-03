@@ -1,7 +1,7 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#ifndef INCLUDED_GREXTRAS_SERIALIZE_PORT_HPP
-#define INCLUDED_GREXTRAS_SERIALIZE_PORT_HPP
+#ifndef INCLUDED_GREXTRAS_SERIALIZER_HPP
+#define INCLUDED_GREXTRAS_SERIALIZER_HPP
 
 #include <grextras/config.hpp>
 #include <gras/block.hpp>
@@ -11,16 +11,14 @@ namespace grextras
 {
 
 /*!
- * The serialize port block:
+ * The serializer block:
  * This block serializes the input stream, messags, and tags;
  * and outputs the serialized data as a PacketMsg message type.
  * The packet message can be sent over a network
  * or possibly -> datagram to stream -> file sink.
  */
-struct GREXTRAS_API SerializePort : virtual gras::Block
+struct Serializer
 {
-    typedef boost::shared_ptr<SerializePort> sptr;
-
     /*!
      * Create a new serialize port block.
      *
@@ -32,10 +30,10 @@ struct GREXTRAS_API SerializePort : virtual gras::Block
      * \param mtu max output payload size in bytes
      * \param sync true when input stream are synchronous
      */
-    static sptr make(const size_t mtu = 0, const bool sync = true);
+    GREXTRAS_API static gras::Block *make(const size_t mtu = 0, const bool sync = true);
 };
 
 }
 
 
-#endif /*INCLUDED_GREXTRAS_SERIALIZE_PORT_HPP*/
+#endif /*INCLUDED_GREXTRAS_SERIALIZER_HPP*/

@@ -2,7 +2,7 @@
 
 #include "serialize_common.hpp"
 #include <PMC/Serialize.hpp>
-#include <grextras/deserialize_port.hpp>
+#include <grextras/deserializer.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me ntohl
@@ -75,10 +75,10 @@ static void unpack_buffer(const gras::SBuffer &packet, size_t &seq, size_t &sid,
     out_buff.length = (pkt_words32 - hdr_words32 - 1)*4;
 }
 
-struct DeserializePortImpl : DeserializePort
+struct DeserializerImpl : gras::Block
 {
-    DeserializePortImpl(const bool recover):
-        gras::Block("GrExtras DeserializePort"),
+    DeserializerImpl(const bool recover):
+        gras::Block("GrExtras Deserializer"),
         _recover(recover),
         _num_outs(0) //set by notify
     {
@@ -151,7 +151,7 @@ static bool inspect_packet(const void *pkt, const size_t length, bool &fragment,
     return false;
 }
 
-void DeserializePortImpl::work(const InputItems &, const OutputItems &)
+void DeserializerImpl::work(const InputItems &, const OutputItems &)
 {
     //validate the pkt message type
     PMCC msg = pop_input_msg(0);
@@ -207,7 +207,7 @@ void DeserializePortImpl::work(const InputItems &, const OutputItems &)
     if (_accum_buff.length == 0) _accum_buff.reset();
 }
 
-DeserializePort::sptr DeserializePort::make(const bool recover)
+gras::Block *Deserializer::make(const bool recover)
 {
-    return boost::make_shared<DeserializePortImpl>(recover);
+    return new DeserializerImpl(recover);
 }
