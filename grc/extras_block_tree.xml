@@ -33,6 +33,8 @@ Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
         <block>extras_burst_tagger</block>
         <block>extras_serialize_port</block>
         <block>extras_deserialize_port</block>
+        <block>extras_scrambler</block>
+        <block>extras_descrambler</block>
         <block>extras_query_server</block>
         <block>extras_opencl_block</block>
         <block>extras_orc_block</block>

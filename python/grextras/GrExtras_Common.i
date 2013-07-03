@@ -1,6 +1,7 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
 %module "grextras"
+%newobject *::make;
 
 %{
 #include <gras/block.hpp>

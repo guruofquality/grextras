@@ -11,6 +11,8 @@
 #include <grextras/datagram_to_stream.hpp>
 #include <grextras/socket_message.hpp>
 #include <grextras/tuntap.hpp>
+#include <grextras/scrambler.hpp>
+#include <grextras/descrambler.hpp>
 #include <grextras/serialize_port.hpp>
 #include <grextras/deserialize_port.hpp>
 %}
@@ -30,6 +32,8 @@
 %include <grextras/datagram_to_stream.hpp>
 %include <grextras/socket_message.hpp>
 %include <grextras/tuntap.hpp>
+%include <grextras/scrambler.hpp>
+%include <grextras/descrambler.hpp>
 %include <grextras/serialize_port.hpp>
 %include <grextras/deserialize_port.hpp>
 
@@ -41,5 +45,7 @@ GREXTRAS_SWIG_FOO(Stream2Datagram)
 GREXTRAS_SWIG_FOO(Datagram2Stream)
 GREXTRAS_SWIG_FOO(SocketMessage)
 GREXTRAS_SWIG_FOO(TunTap)
+GREXTRAS_SWIG_FOO(Scrambler)
+GREXTRAS_SWIG_FOO(Descrambler)
 GREXTRAS_SWIG_FOO(SerializePort)
 GREXTRAS_SWIG_FOO(DeserializePort)
