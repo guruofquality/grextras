@@ -5,8 +5,8 @@ import gras
 import grextras
 import numpy
 import os
-import ctypes
 import random
+import ctypes
 from PMC import *
 
 class LengthTagSource(gras.Block):
@@ -50,8 +50,8 @@ class test_scramblers(unittest.TestCase):
             s = grextras.Scrambler()
             d = grextras.Descrambler()
 
-            poly = ctypes.c_int64(1 | (1 << 14) | (1 << 15))
-            seed = ctypes.c_int64(random.randint(-1024, 1024))
+            poly = 1 | (1 << 14) | (1 << 15)
+            seed = random.randint(-1024, 1024)
             mode = random.choice(("additive", "multiplicative"))
             print poly, seed, mode
             for obj in (s, d):
@@ -73,12 +73,12 @@ class test_scramblers(unittest.TestCase):
             self.assertNotEqual(src_data, midst.data())
             self.assertEqual(src_data, dst.data())
 
-    def test_sync_word_set_not_used(self):
+    def test_sync_word_length_not_used(self):
         if 1:
             s = grextras.Scrambler()
             d = grextras.Descrambler()
-            poly = ctypes.c_int64(1 | (1 << 14) | (1 << 15))
-            seed = ctypes.c_int64(random.randint(-1024, 1024))
+            poly = 1 | (1 << 14) | (1 << 15)
+            seed = random.randint(-1024, 1024)
             mode = random.choice(("additive", "multiplicative"))
             sync = "111100111100000111"
             print poly, seed, mode
@@ -95,7 +95,7 @@ class test_scramblers(unittest.TestCase):
             self.tb.connect(src, s, d, dst)
 
             self.tb.run()
-            self.tb.disconnect_all()
+            #self.tb.disconnect_all()
             #lengths wont equal, sync word does history thing
             n = min(len(src_data), len(dst.data()))
             self.assertEqual(src_data[:n], dst.data()[:n])
@@ -104,8 +104,8 @@ class test_scramblers(unittest.TestCase):
         if 1:
             s = grextras.Scrambler()
             d = grextras.Descrambler()
-            poly = ctypes.c_int64(1 | (1 << 14) | (1 << 15))
-            seed = ctypes.c_int64(random.randint(-1024, 1024))
+            poly = 1 | (1 << 14) | (1 << 15)
+            seed = random.randint(-1024, 1024)
             mode = random.choice(("additive", "multiplicative"))
             sync = "111100111100000111"
             print poly, seed, mode
@@ -125,7 +125,7 @@ class test_scramblers(unittest.TestCase):
             self.tb.connect(src, s, d, dst)
 
             self.tb.run()
-            self.tb.disconnect_all()
+            #self.tb.disconnect_all()
             #lengths wont equal, sync word does history thing
             n = min(len(src_data), len(dst.data()))
             self.assertEqual(src_data[:n], dst.data()[:n])

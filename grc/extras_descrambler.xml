@@ -7,11 +7,10 @@
 <block>
     <name>Ex: Descrambler</name>
     <key>extras_descrambler</key>
-    <import>ctypes</import>
     <import>import grextras</import>
     <make>grextras.Descrambler()
-self.$(id).set("poly", ctypes.c_int64($poly))
-self.$(id).set("seed", ctypes.c_int64($seed))
+self.$(id).set("poly", $poly)
+self.$(id).set("seed", $seed)
 self.$(id).set("mode", $mode)
 self.$(id).set("sync", $sync)</make>
     <param>

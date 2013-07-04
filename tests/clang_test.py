@@ -154,7 +154,7 @@ class test_clang_block(unittest.TestCase):
 
         op = grextras.ClangBlock(params)
         offset = 42.
-        op.set("value", ctypes.c_float(offset)) #set offset for test
+        op.set("value", offset) #set offset for test
         self.assertAlmostEqual(op.get("value"), offset)
 
         vec = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)

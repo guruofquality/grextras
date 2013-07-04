@@ -7,11 +7,10 @@
 <block>
     <name>Ex: Scrambler</name>
     <key>extras_scrambler</key>
-    <import>ctypes</import>
     <import>import grextras</import>
     <make>grextras.Scrambler()
-self.$(id).set("poly", ctypes.c_int64($poly))
-self.$(id).set("seed", ctypes.c_int64($seed))
+self.$(id).set("poly", $poly)
+self.$(id).set("seed", $seed)
 self.$(id).set("mode", $mode)
 self.$(id).set("sync", $sync)</make>
     <param>
