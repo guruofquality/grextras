@@ -50,13 +50,23 @@ namespace boost{template<class T>struct shared_ptr{T*operator->();};}
 
 %template(grextras_ ## MyClass) boost::shared_ptr<grextras::MyClass>;
 
-%pythoncode %{
+%extend boost::shared_ptr<grextras::MyClass>
+{
+    %insert("python")
+    %{
+        def __str__(self):
+            return self.to_string()
 
-import gras
-for attr in dir(gras.Block):
-    if not hasattr(grextras_ ## MyClass, attr):
-        val = getattr(gras.Block, attr)
-        setattr(grextras_ ## MyClass, attr, val)
+        def set(self, key, value):
+            from PMC import PMC_M
+            self._set_property(key, PMC_M(value))
+
+        def get(self, key):
+            return self._get_property(key)()
+    %}
+}
+
+%pythoncode %{
 
 #remove the make_ from the factory functions, it feels more pythonic
 for attr in filter(lambda x: x.startswith('make_'), dir(MyClass)):
