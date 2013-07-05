@@ -43,9 +43,6 @@
 %include <grextras/multiply_const.hpp>
 %include <grextras/divide.hpp>
 
-%template(set_const) grextras::MultiplyConstV::set_const<std::complex<double> >;
-%template(set_const) grextras::AddConstV::set_const<std::complex<double> >;
-
 GREXTRAS_SWIG_FOO(Add)
 GREXTRAS_SWIG_FOO(AddConst)
 GREXTRAS_SWIG_FOO(AddConstV)

@@ -22,13 +22,13 @@ public:
 
     void set_const(const std::complex<double> &val)
     {
-        underlying_block->set_const(
+        underlying_block->set("const",
             std::vector<std::complex<double> >(1, val));
     }
 
     std::complex<double> get_const(void)
     {
-        return underlying_block->get_const().front();
+        return underlying_block->get<std::vector<std::complex<double> > >("const").front();
     }
 
 private:

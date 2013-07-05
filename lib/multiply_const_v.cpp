@@ -22,7 +22,9 @@ public:
         this->input_config(0).item_size = sizeof(type)*vec.size();
         this->output_config(0).item_size = sizeof(type)*vec.size();
         _val.resize(vec.size());
-        this->set_const(vec);
+        this->register_setter("const", &MultiplyConstVImpl<type>::set_const);
+        this->register_getter("const", &MultiplyConstVImpl<type>::get_const);
+        this->set("const", vec);
     }
 
     void notify_topology(const size_t num_inputs, const size_t num_outputs)
@@ -31,6 +33,16 @@ public:
         {
             this->input_config(i).inline_buffer = (i == 0);
         }
+    }
+
+    void set_const(const std::vector<type> &v)
+    {
+        _val = v;
+    }
+
+    std::vector<type> get_const(void)
+    {
+        return _val;
     }
 
     void work1(const InputItems &, const OutputItems &);
@@ -52,23 +64,6 @@ public:
 
         this->consume(n_nums);
         this->produce(n_nums);
-    }
-
-    void _set_const(const std::vector<std::complex<double> > &val)
-    {
-        _original_val.assign(val.begin(), val.end());
-
-        if (val.size() != _val.size()){
-            throw std::invalid_argument("set_const called with the wrong length");
-        }
-        for (size_t i = 0; i < val.size(); i++){
-            complex128_to_num(val[i], _val[i]);
-        }
-    }
-
-    std::vector<std::complex<double> > get_const(void)
-    {
-        return _original_val;
     }
 
 private:

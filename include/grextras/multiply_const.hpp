@@ -30,6 +30,10 @@ struct GREXTRAS_API MultiplyConst : virtual gras::HierBlock
     virtual std::complex<double> get_const(void) = 0;
 };
 
+/*!
+ * Multiply input with the specified vector.
+ * The vector can be configured with the "const" property.
+ */
 class GREXTRAS_API MultiplyConstV : virtual public gras::Block
 {
 public:
@@ -47,32 +51,8 @@ public:
     static sptr make_s32_s32(const std::vector<boost::int32_t> &vec);
     static sptr make_s16_s16(const std::vector<boost::int16_t> &vec);
     static sptr make_s8_s8(const std::vector<boost::int8_t> &vec);
-
-    //! Set the value from any vector type
-    template <typename type>
-    void set_const(const std::vector<type> &val);
-
-    //! Get the constant value as a vector of complex double
-    virtual std::vector<std::complex<double> > get_const(void) = 0;
-
-private:
-    virtual void _set_const(const std::vector<std::complex<double> > &val) = 0;
-
 };
 
-}
-
-//--- template implementation details below ---//
-
-template <typename type>
-void grextras::MultiplyConstV::set_const(const std::vector<type> &val)
-{
-    std::vector<std::complex<double> > new_val;
-    for (size_t i = 0; i < val.size(); i++)
-    {
-        new_val.push_back(num_to_complex128(val[i]));
-    }
-    return this->_set_const(new_val);
 }
 
 #endif /*INCLUDED_GREXTRAS_MULTIPLY_CONST_HPP*/

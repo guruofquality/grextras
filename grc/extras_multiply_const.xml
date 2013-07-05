@@ -9,7 +9,7 @@
     <key>extras_multiply_const</key>
     <import>import grextras</import>
     <make>grextras.MultiplyConstV.$(type)($value)</make>
-    <callback>set_const($value)</callback>
+    <callback>set("const", list($value))</callback>
     <param>
         <name>IO Type</name>
         <key>type</key>
