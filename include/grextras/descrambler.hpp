@@ -14,12 +14,12 @@ namespace grextras
  * This block performs additive or multiplicative descrambling
  * with programmable LFSR taps, seed value, and sync word.
  * 
- * The following properties are available through get and set:
- *  - poly <int64> - LFSR polynomial taps
+ * The following calls are available through the callable interface:
+ *  - set_poly <int64> - LFSR polynomial taps
  *    - Polynomial representation: x^4 + x^3 + 1 = 11001 = 0x19
- *  - seed <int64> - LFSR initialization value
- *  - mode <string> - "additive" or "multiplicative"
- *  - sync <string> - pattern of 1s and 0s
+ *  - set_seed <int64> - LFSR initialization value
+ *  - set_mode <string> - "additive" or "multiplicative"
+ *  - set_sync <string> - pattern of 1s and 0s
  *    - Example pattern: "100111010"
  *
  * When the sync word is detected,

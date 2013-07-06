@@ -19,9 +19,9 @@ public:
         this->input_config(0).item_size = sizeof(type)*vec.size();
         this->output_config(0).item_size = sizeof(type)*vec.size();
         _val.resize(vec.size());
-        this->register_setter("const", &AddConstVImpl<type>::set_const);
-        this->register_getter("const", &AddConstVImpl<type>::get_const);
-        this->set("const", vec);
+        this->register_call("set_const", &AddConstVImpl<type>::set_const);
+        this->register_call("get_const", &AddConstVImpl<type>::get_const);
+        this->set_const(vec);
     }
 
     void set_const(const std::vector<type> &v)

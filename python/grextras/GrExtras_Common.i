@@ -25,7 +25,9 @@
 namespace boost{template<class T>struct shared_ptr{T*operator->();};}
 
 %template(grextras_Block) boost::shared_ptr<gras::Block>;
-
+%pythoncode %{
+from PMC import *
+%}
 %extend boost::shared_ptr<gras::Block>
 {
     %insert("python")
@@ -33,12 +35,10 @@ namespace boost{template<class T>struct shared_ptr{T*operator->();};}
         def __str__(self):
             return self.to_string()
 
-        def set(self, key, value):
-            from PMC import PMC_M
-            self._set_property(key, PMC_M(value))
-
-        def get(self, key):
-            return self._get_property(key)()
+        def x(self, key, *args):
+            pmcargs = PMC_M(list(args))
+            pmcret = self._handle_call(key, pmcargs)
+            return pmcret()
     %}
 }
 
@@ -49,7 +49,9 @@ namespace boost{template<class T>struct shared_ptr{T*operator->();};}
 %define GREXTRAS_SWIG_FOO(MyClass)
 
 %template(grextras_ ## MyClass) boost::shared_ptr<grextras::MyClass>;
-
+%pythoncode %{
+from PMC import *
+%}
 %extend boost::shared_ptr<grextras::MyClass>
 {
     %insert("python")
@@ -57,12 +59,11 @@ namespace boost{template<class T>struct shared_ptr{T*operator->();};}
         def __str__(self):
             return self.to_string()
 
-        def set(self, key, value):
-            from PMC import PMC_M
-            self._set_property(key, PMC_M(value))
+        def x(self, key, *args):
+            pmcargs = PMC_M(list(args))
+            pmcret = self._handle_call(key, pmcargs)
+            return pmcret()
 
-        def get(self, key):
-            return self._get_property(key)()
     %}
 }
 

@@ -40,25 +40,25 @@ struct UHDControlPortImpl : public UHDControlPort
     {
         _usrp = usrp;
         //register handlers
-        this->register_setter("command_time", &UHDControlPortImpl::set_command_time);
-        this->register_getter("rx_gain", &UHDControlPortImpl::get_rx_gain);
-        this->register_setter("rx_gain", &UHDControlPortImpl::set_rx_gain);
-        this->register_getter("tx_gain", &UHDControlPortImpl::get_tx_gain);
-        this->register_setter("tx_gain", &UHDControlPortImpl::set_tx_gain);
-        this->register_getter("rx_freq", &UHDControlPortImpl::get_rx_freq);
-        this->register_setter("rx_freq", &UHDControlPortImpl::set_rx_freq);
-        this->register_getter("tx_freq", &UHDControlPortImpl::get_tx_freq);
-        this->register_setter("tx_freq", &UHDControlPortImpl::set_tx_freq);
+        this->register_call("set_command_time", &UHDControlPortImpl::set_command_time);
+        this->register_call("get_rx_gain", &UHDControlPortImpl::get_rx_gain);
+        this->register_call("set_rx_gain", &UHDControlPortImpl::set_rx_gain);
+        this->register_call("get_tx_gain", &UHDControlPortImpl::get_tx_gain);
+        this->register_call("set_tx_gain", &UHDControlPortImpl::set_tx_gain);
+        this->register_call("get_rx_freq", &UHDControlPortImpl::get_rx_freq);
+        this->register_call("set_rx_freq", &UHDControlPortImpl::set_rx_freq);
+        this->register_call("get_tx_freq", &UHDControlPortImpl::get_tx_freq);
+        this->register_call("set_tx_freq", &UHDControlPortImpl::set_tx_freq);
 
-        this->register_getter("time_source", &UHDControlPortImpl::get_time_source);
-        this->register_setter("time_source", &UHDControlPortImpl::set_time_source);
-        this->register_getter("clock_source", &UHDControlPortImpl::get_clock_source);
-        this->register_setter("clock_source", &UHDControlPortImpl::set_clock_source);
+        this->register_call("get_time_source", &UHDControlPortImpl::get_time_source);
+        this->register_call("set_time_source", &UHDControlPortImpl::set_time_source);
+        this->register_call("get_clock_source", &UHDControlPortImpl::get_clock_source);
+        this->register_call("set_clock_source", &UHDControlPortImpl::set_clock_source);
 
-        this->register_getter("time_now", &UHDControlPortImpl::get_time_now);
-        this->register_setter("time_now", &UHDControlPortImpl::set_time_now);
-        this->register_getter("time_pps", &UHDControlPortImpl::get_time_pps);
-        this->register_setter("time_pps", &UHDControlPortImpl::set_time_pps);
+        this->register_call("get_time_now", &UHDControlPortImpl::get_time_now);
+        this->register_call("set_time_now", &UHDControlPortImpl::set_time_now);
+        this->register_call("get_time_pps", &UHDControlPortImpl::get_time_pps);
+        this->register_call("set_time_pps", &UHDControlPortImpl::set_time_pps);
     }
 
     void work(const InputItems &, const OutputItems &)

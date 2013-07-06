@@ -32,7 +32,7 @@ struct GREXTRAS_API MultiplyConst : virtual gras::HierBlock
 
 /*!
  * Multiply input with the specified vector.
- * The vector can be configured with the "const" property.
+ * The vector can be configured with x("set_const", my_const).
  */
 class GREXTRAS_API MultiplyConstV : virtual public gras::Block
 {

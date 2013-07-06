@@ -192,9 +192,9 @@ class test_add_and_friends(unittest.TestCase):
 
     def test_set_math_const_vs(self):
         op = grextras.AddConstV.fc32_fc32([1, 2, 4])
-        op.set("const", [0, 5, 6])
+        op.x("set_const", [0, 5, 6])
         op = grextras.MultiplyConstV.fc32_fc32([1, 2, 4])
-        op.set("const", [0, 5, 6])
+        op.x("set_const", [0, 5, 6])
 
 if __name__ == '__main__':
     unittest.main()

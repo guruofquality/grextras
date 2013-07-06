@@ -16,10 +16,10 @@ struct ScramblerImpl : gras::Block
         _polynom(1), _seed_value(1)
     {
         std::memset(&_lfsr, 0, sizeof(_lfsr));
-        this->register_setter("poly", &ScramblerImpl::set_poly);
-        this->register_setter("seed", &ScramblerImpl::set_seed);
-        this->register_setter("mode", &ScramblerImpl::set_mode);
-        this->register_setter("sync", &ScramblerImpl::set_sync);
+        this->register_call("set_poly", &ScramblerImpl::set_poly);
+        this->register_call("set_seed", &ScramblerImpl::set_seed);
+        this->register_call("set_mode", &ScramblerImpl::set_mode);
+        this->register_call("set_sync", &ScramblerImpl::set_sync);
 
         //some defaults
         this->set_mode("multiplicative");

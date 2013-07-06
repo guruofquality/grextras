@@ -32,7 +32,7 @@ struct GREXTRAS_API AddConst : virtual gras::HierBlock
 
 /*!
  * Add input with the specified vector.
- * The vector can be configured with the "const" property.
+ * The vector can be configured with x("set_const", my_const).
  */
 class GREXTRAS_API AddConstV : virtual public gras::Block
 {
