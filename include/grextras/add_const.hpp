@@ -10,6 +10,10 @@
 namespace grextras
 {
 
+/*!
+ * Add input with the specified number.
+ * The number can be configured with set_const(new_val).
+ */
 struct GREXTRAS_API AddConst : virtual gras::HierBlock
 {
     typedef boost::shared_ptr<AddConst> sptr;
@@ -22,17 +26,11 @@ struct GREXTRAS_API AddConst : virtual gras::HierBlock
     static sptr make_s32_s32(const std::complex<double> &val = 0);
     static sptr make_s16_s16(const std::complex<double> &val = 0);
     static sptr make_s8_s8(const std::complex<double> &val = 0);
-
-    //! Set the value from any type
-    virtual void set_const(const std::complex<double> &val) = 0;
-
-    //! Get the constant value as a complex double
-    virtual std::complex<double> get_const(void) = 0;
 };
 
 /*!
  * Add input with the specified vector.
- * The vector can be configured with x("set_const", my_const).
+ * The vector can be configured with set_const(new_val).
  */
 class GREXTRAS_API AddConstV : virtual public gras::Block
 {

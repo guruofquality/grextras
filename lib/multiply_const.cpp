@@ -18,6 +18,8 @@ public:
     {
         this->connect(*this, 0, ub, 0);
         this->connect(ub, 0, *this, 0);
+        this->register_call("set_const", &MultiplyConstImpl::set_const);
+        this->register_call("get_const", &MultiplyConstImpl::get_const);
     }
 
     void set_const(const std::complex<double> &val)

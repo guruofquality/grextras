@@ -55,9 +55,9 @@ class test_scramblers(unittest.TestCase):
             mode = random.choice(("additive", "multiplicative"))
             print poly, seed, mode
             for obj in (s, d):
-                obj.x("set_poly", poly)
-                obj.x("set_seed", seed)
-                obj.x("set_mode", mode)
+                obj.set_poly(poly)
+                obj.set_seed(seed)
+                obj.set_mode(mode)
 
             nbits = random.randint(128, 4096)
             src_data = tuple(numpy.random.randint(0, 2, nbits))
@@ -83,10 +83,10 @@ class test_scramblers(unittest.TestCase):
             sync = "111100111100000111"
             print poly, seed, mode
             for obj in (s, d):
-                obj.x("set_poly", poly)
-                obj.x("set_seed", seed)
-                obj.x("set_mode", mode)
-                obj.x("set_sync", sync)
+                obj.set_poly(poly)
+                obj.set_seed(seed)
+                obj.set_mode(mode)
+                obj.set_sync(sync)
 
             nbits = random.randint(128, 4096)
             src_data = tuple(numpy.random.randint(0, 2, nbits))
@@ -110,10 +110,10 @@ class test_scramblers(unittest.TestCase):
             sync = "111100111100000111"
             print poly, seed, mode
             for obj in (s, d):
-                obj.x("set_poly", poly)
-                obj.x("set_seed", seed)
-                obj.x("set_mode", mode)
-                obj.x("set_sync", sync)
+                obj.set_poly(poly)
+                obj.set_seed(seed)
+                obj.set_mode(mode)
+                obj.set_sync(sync)
 
             src_bursts = list()
             for it in range(7):

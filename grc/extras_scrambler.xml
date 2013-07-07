@@ -9,10 +9,10 @@
     <key>extras_scrambler</key>
     <import>import grextras</import>
     <make>grextras.Scrambler()
-self.$(id).x("set_poly", $poly)
-self.$(id).x("set_seed", $seed)
-self.$(id).x("set_mode", $mode)
-self.$(id).x("set_sync", $sync)</make>
+self.$(id).set_poly($poly)
+self.$(id).set_seed($seed)
+self.$(id).set_mode($mode)
+self.$(id).set_sync($sync)</make>
     <param>
         <name>Polynomial</name>
         <key>poly</key>

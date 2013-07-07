@@ -39,6 +39,25 @@ from PMC import *
             pmcargs = PMC_M(list(args))
             pmcret = self._handle_call(key, pmcargs)
             return pmcret()
+
+        def __getattr__(self, name):
+            return lambda *args: self.x(name, *args)
+    %}
+}
+%extend boost::shared_ptr<gras::HierBlock>
+{
+    %insert("python")
+    %{
+        def __str__(self):
+            return self.to_string()
+
+        def x(self, key, *args):
+            pmcargs = PMC_M(list(args))
+            pmcret = self._handle_call(key, pmcargs)
+            return pmcret()
+
+        def __getattr__(self, name):
+            return lambda *args: self.x(name, *args)
     %}
 }
 
@@ -64,6 +83,8 @@ from PMC import *
             pmcret = self._handle_call(key, pmcargs)
             return pmcret()
 
+        def __getattr__(self, name):
+            return lambda *args: self.x(name, *args)
     %}
 }
 
