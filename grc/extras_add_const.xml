@@ -9,7 +9,7 @@
     <key>extras_add_const</key>
     <import>import grextras</import>
     <make>grextras.AddConstV.$(type)($value)</make>
-    <callback>set("const", list($value))</callback>
+    <callback>set_const(list($value))</callback>
     <param>
         <name>IO Type</name>
         <key>type</key>

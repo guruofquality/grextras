@@ -55,8 +55,8 @@ struct MyAddConstFloat32 : gras::Block
         this->input_config(0).item_size = sizeof(float);
         this->output_config(0).item_size = sizeof(float);
         this->set_value(0); //initial state
-        this->register_setter("value", &MyAddConstFloat32::set_value);
-        this->register_getter("value", &MyAddConstFloat32::get_value);
+        this->register_call("set_value", &MyAddConstFloat32::set_value);
+        this->register_call("get_value", &MyAddConstFloat32::get_value);
     }
 
     void set_value(const float &value)
@@ -154,8 +154,8 @@ class test_clang_block(unittest.TestCase):
 
         op = grextras.ClangBlock(params)
         offset = 42.
-        op.set("value", offset) #set offset for test
-        self.assertAlmostEqual(op.get("value"), offset)
+        op.set_value(offset) #set offset for test
+        self.assertAlmostEqual(op.get_value(), offset)
 
         vec = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)
 

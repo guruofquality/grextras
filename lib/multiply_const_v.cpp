@@ -22,9 +22,9 @@ public:
         this->input_config(0).item_size = sizeof(type)*vec.size();
         this->output_config(0).item_size = sizeof(type)*vec.size();
         _val.resize(vec.size());
-        this->register_setter("const", &MultiplyConstVImpl<type>::set_const);
-        this->register_getter("const", &MultiplyConstVImpl<type>::get_const);
-        this->set("const", vec);
+        this->register_call("set_const", &MultiplyConstVImpl<type>::set_const);
+        this->register_call("get_const", &MultiplyConstVImpl<type>::get_const);
+        this->set_const(vec);
     }
 
     void notify_topology(const size_t num_inputs, const size_t num_outputs)
