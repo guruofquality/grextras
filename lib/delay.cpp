@@ -12,12 +12,12 @@ struct DelayImpl : Delay
     {
         this->input_config(0).item_size = itemsize;
         this->output_config(0).item_size = itemsize;
+        this->register_call("set_delay", &DelayImpl::set_delay);
         _delay_items = 0;
     }
 
-    void set_delay(const int num_items)
+    void set_delay(const int &num_items)
     {
-        //TODO not thread safe...
         _delay_items = -num_items;
     }
 
