@@ -9,7 +9,10 @@
     <name>Ex: Add</name>
     <key>extras_add</key>
     <import>import grextras</import>
-    <make>grextras.Add.$(type)($vlen)</make>
+    <make>grextras.Add.$(type)($vlen)
+#for $i, $p in enumerate($preload())
+self.$(id).input_config($i).preload_items = $p
+#end for</make>
     <param>
         <name>IO Type</name>
         <key>type</key>
@@ -36,6 +39,13 @@
         <value>1</value>
         <type>int</type>
     </param>
+    <param>
+        <name>Preload</name>
+        <key>preload</key>
+        <value>[]</value>
+        <type>int_vector</type>
+        <hide>part</hide>
+    </param>
     <check>$num_inputs &gt; 1</check>
     <check>$vlen &gt; 0</check>
     <sink>
@@ -49,4 +59,14 @@
         <type>$(str($type).split('_')[1])</type>
         <vlen>$vlen</vlen>
     </source>
+    <doc>
+out[i] = in0[i] + in1[i] + in2[i]
+
+The math block adds an arbitrary number of input streams element by element, \
+and produces and single output stream. Elements may be single numbers, \
+or vectors of numbers, depending upon the value of the vec length parameter.
+
+The preload parameter allows users to implement feedback loops with this math block. \
+For example, to enable a feedback of 1 on the 2nd port, set preload to [0, 0, 1]. \
+    </doc>
 </block>
