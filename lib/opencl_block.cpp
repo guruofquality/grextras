@@ -25,6 +25,14 @@ OpenClBlockParams::OpenClBlockParams(void)
 
 static const size_t OPENCL_BLOCK_NUM_BUFFS = 2;
 
+//Undefine this before the hpp file includes it to address the following issue:
+//http://stackoverflow.com/questions/15456987/opencl-could-not-find-clretaindevice-in-dll
+//In the longer term, we should switch over to the C only interface, which has less problems.
+#include <CL/cl.h>
+#ifdef CL_VERSION_1_2
+#undef CL_VERSION_1_2
+#endif
+
 #include <CL/cl.hpp>
 
 static GRAS_FORCE_INLINE void checkErr(cl_int err, const char * name)
