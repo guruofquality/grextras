@@ -11,6 +11,7 @@ set(GREXTRAS_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 list(APPEND CMAKE_MODULE_PATH ${GREXTRAS_SOURCE_DIR}/cmake/Modules)
 include(CMakeDefsHelper)
+include(GRASTool)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall)

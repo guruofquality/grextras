@@ -149,3 +149,9 @@ install(
     DESTINATION lib${LIB_SUFFIX}/pkgconfig
     COMPONENT "extras_devel"
 )
+
+GRAS_TOOL(
+    SOURCES ${GREXTRAS_SOURCES}
+    TARGET extras_module
+)
+target_link_libraries(extras_module ${GREXTRAS_LIBRARIES})
