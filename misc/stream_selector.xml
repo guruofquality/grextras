@@ -7,7 +7,6 @@
 <block>
     <name>Ex: Stream Selector</name>
     <key>extras_stream_selector</key>
-    <category>Extras</category>
     <import>import gras</import>
     <make>gras.Factory.make('/extras/stream_selector', $item_size)
 self.$(id).set_paths($paths)
@@ -50,4 +49,24 @@ self.$(id).set_paths($paths)
         <vlen>$item_size</vlen>
         <nports>$num_outputs</nports>
     </source>
+    <doc>
+The stream selector block has N inputs and M outputs. \
+Any input port can be directed to any output port. \
+See the set_paths method for how this is controlled. \
+The implementation of this block is totally zero-copy. \
+Stream tags are Forwarded along with the item stream.
+
+Paths sets the path for samples for each input ports.
+
+Paths should be number of input ports in length. \
+Each element represents the destination for an input port. \
+The possible values for each element is an output port index, \
+or the value may also be: -1 to block or -2 to consume.
+
+Ex, a block with one input and two outputs:
+paths = [1] input0 -> output1, output0 nothing.
+
+Ex, a block with two inputs and one output:
+paths = [-1, 0] input0 blocks, input1 -> output0.
+    </doc>
 </block>

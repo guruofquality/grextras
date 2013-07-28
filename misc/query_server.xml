@@ -7,7 +7,6 @@
 <block>
     <name>Ex: Query Server</name>
     <key>extras_query_server</key>
-    <category>Extras</category>
     <import>import gras.query</import>
     <import>import threading</import>
     <make>self.$(id) = gras.query.http_server(($addr, $port), top_block=self, name=$name)

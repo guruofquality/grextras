@@ -18,15 +18,9 @@ GRAS_TOOL(
 # Unit tests!
 ########################################################################
 include(GrTest)
-list(APPEND GR_TEST_TARGET_DEPS extras_misc)
 include(GrPython)
 set(PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE} ${PYTHON_DASH_B})
-
-#setup path for this module
-get_target_property(module_location extras_misc LOCATION)
-string(REPLACE "$(Configuration)" ${CMAKE_BUILD_TYPE} module_location ${module_location})
-file(TO_NATIVE_PATH "${module_location}" module_location)
-list(APPEND GR_TEST_ENVIRONS "GRAS_MODULE_PATH=${module_location}")
+list(APPEND GR_TEST_ENVIRONS "GRAS_MODULE_PATH=${extras_misc_LOCATION}")
 
 #register unit tests
 GR_ADD_TEST(delay_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/delay_test.py)

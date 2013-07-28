@@ -7,7 +7,6 @@
 <block>
     <name>Ex: Time Align</name>
     <key>extras_time_align</key>
-    <category>Extras</category>
     <import>import gras</import>
     <make>gras.Factory.make('/extras/time_align', $item_size)</make>
     <param>
@@ -34,4 +33,18 @@
         <vlen>$item_size</vlen>
         <nports>$num_ios</nports>
     </source>
+    <doc>
+The time alignment block inputs asynchronous RX streams, \
+and outputs time aligned synchronous RX streams. \
+This block could be used to align multiple USRP sources.
+
+The time alignment block is meant to be robust against \
+stream restarts, packet dropouts, and stream overflows. \
+However, the alignment recovery logic of this block \
+demands that all input streams start out aligned, \
+because the logic looks for matching time tags.
+
+Time tag format: gras::StreamTag, where key is "rx_time", \
+and val is a PMCTuple2(int64 full_seconds, double frac_secs)
+    </doc>
 </block>
