@@ -7,8 +7,8 @@
 <block>
     <name>Ex: Socket Msg</name>
     <key>extras_socket_message</key>
-    <import>import grextras</import>
-    <make>grextras.SocketMessage($type, $addr, $port, $mtu)</make>
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/socket_message', $type, $addr, $port, $mtu)</make>
     <param>
         <name>Type</name>
         <key>type</key>

@@ -88,7 +88,7 @@ struct TCPSocketSender : gras::Block
 /***********************************************************************
  * TCPSocketMessage - hier block with sender and receiver
  **********************************************************************/
-struct TCPSocketMessage : SocketMessage
+struct TCPSocketMessage : gras::HierBlock
 {
     TCPSocketMessage(
         const std::string &type,

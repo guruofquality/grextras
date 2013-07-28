@@ -1,14 +1,13 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
 #include "serialize_common.hpp"
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <PMC/Serialize.hpp>
-#include <grextras/deserializer.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me ntohl
 #include <boost/assert.hpp>
-
-using namespace grextras;
 
 static PMCC buffer_to_pmc(const gras::SBuffer &buff)
 {
@@ -75,9 +74,9 @@ static void unpack_buffer(const gras::SBuffer &packet, size_t &seq, size_t &sid,
     out_buff.length = (pkt_words32 - hdr_words32 - 1)*4;
 }
 
-struct DeserializerImpl : gras::Block
+struct Deserializer : gras::Block
 {
-    DeserializerImpl(const bool recover):
+    Deserializer(const bool recover):
         gras::Block("GrExtras Deserializer"),
         _recover(recover),
         _num_outs(0) //set by notify
@@ -151,7 +150,7 @@ static bool inspect_packet(const void *pkt, const size_t length, bool &fragment,
     return false;
 }
 
-void DeserializerImpl::work(const InputItems &, const OutputItems &)
+void Deserializer::work(const InputItems &, const OutputItems &)
 {
     //validate the pkt message type
     PMCC msg = pop_input_msg(0);
@@ -207,7 +206,9 @@ void DeserializerImpl::work(const InputItems &, const OutputItems &)
     if (_accum_buff.length == 0) _accum_buff.reset();
 }
 
-gras::Block *Deserializer::make(const bool recover)
+gras::Block *make_deserializer(const bool &recover)
 {
-    return new DeserializerImpl(recover);
+    return new Deserializer(recover);
 }
+
+GRAS_REGISTER_FACTORY("/extras/deserializer", make_deserializer)

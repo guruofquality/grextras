@@ -1,13 +1,12 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/tuntap.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/format.hpp>
 #include <gras/block.hpp>
+#include <gras/hier_block.hpp>
+#include <gras/factory.hpp>
+#include <boost/format.hpp>
+#include <boost/make_shared.hpp>
 #include <stdexcept>
 #include <iostream>
-
-using namespace grextras;
 
 static const long timeout_us = 100*1000; //100ms
 
@@ -155,9 +154,9 @@ struct Filedes2Datagram : gras::Block
 /***********************************************************************
  * Hier block that combines it all
  **********************************************************************/
-struct TunTapImpl : TunTap
+struct TunTap : gras::HierBlock
 {
-    TunTapImpl(const int fd, const std::string &dev_name):
+    TunTap(const int fd, const std::string &dev_name):
         gras::HierBlock("GrExtras TunTap"),
         _fd(fd),
         _dev_name(dev_name)
@@ -179,7 +178,7 @@ struct TunTapImpl : TunTap
         this->connect(_filedes_to_datagram, 0, *this, 0);
     }
 
-    ~TunTapImpl(void)
+    ~TunTap(void)
     {
         close(_fd);
     }
@@ -199,7 +198,7 @@ private:
 /***********************************************************************
  * Factory function
  **********************************************************************/
-TunTap::sptr TunTap::make(const std::string &dev)
+gras::HierBlock *make_tuntap(const std::string &dev)
 {
     //make the TunTap
     char dev_cstr[1024] = {};
@@ -209,14 +208,16 @@ TunTap::sptr TunTap::make(const std::string &dev)
     {
         throw std::runtime_error("TunTap make: tun_alloc failed");
     }
-    return boost::make_shared<TunTapImpl>(fd, dev_cstr);
+    return new TunTap(fd, dev_cstr);
 }
 
 #else //is not a linux
 
-TunTap::sptr TunTap::make(const std::string &)
+gras::HierBlock *make_tuntap(const std::string &)
 {
     throw std::runtime_error("gr_make_TunTap: sorry, not implemented on this OS");
 }
 
 #endif //is a linux
+
+GRAS_REGISTER_FACTORY("/extras/tuntap", make_tuntap)

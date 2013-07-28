@@ -1,15 +1,13 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
 #include "serialize_common.hpp"
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <PMC/Serialize.hpp>
-#include <grextras/serializer.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 #include <boost/asio.hpp> //gets me htonl
 #include <boost/math/common_factor.hpp> //lcm
 #include <boost/assert.hpp>
-
-using namespace grextras;
 
 static gras::SBuffer pmc_to_buffer(const size_t offset_words32, const PMCC &pmc)
 {
@@ -84,9 +82,9 @@ static gras::PacketMsg serialize_buff(const size_t seq, const size_t sid, const 
     return gras::PacketMsg(buff);
 }
 
-struct SerializerImpl : gras::Block
+struct Serializer : gras::Block
 {
-    SerializerImpl(const size_t mtu, const bool sync):
+    Serializer(const size_t mtu, const bool sync):
         gras::Block("GrExtras Serializer"),
         _mtu((mtu? mtu : 1400) & ~3), _sync(sync)
     {
@@ -169,7 +167,9 @@ struct SerializerImpl : gras::Block
     std::vector<size_t> _seqs;
 };
 
-gras::Block *Serializer::make(const size_t mtu, const bool sync)
+gras::Block *make_serializer(const size_t &mtu, const bool &sync)
 {
-    return new SerializerImpl(mtu, sync);
+    return new Serializer(mtu, sync);
 }
+
+GRAS_REGISTER_FACTORY("/extras/serializer", make_serializer)

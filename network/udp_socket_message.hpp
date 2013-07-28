@@ -79,7 +79,7 @@ struct UDPSocketSender : gras::Block
 /***********************************************************************
  * UDPSocketMessage - hier block with sender and receiver
  **********************************************************************/
-struct UDPSocketMessage : SocketMessage
+struct UDPSocketMessage : gras::HierBlock
 {
     UDPSocketMessage(
         const std::string &type,

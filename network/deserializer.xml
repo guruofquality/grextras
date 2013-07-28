@@ -7,8 +7,8 @@
 <block>
     <name>Ex: Deserializer</name>
     <key>extras_deserializer</key>
-    <import>import grextras</import>
-    <make>grextras.Deserializer($recover)
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/deserializer', $recover)
 #for i, s in enumerate($output_sizes())
 self.$(id).output_config($i).item_size = $s
 #end for</make>

@@ -8,8 +8,8 @@
     <name>Ex: TUN/TAP</name>
     <key>extras_tuntap</key>
     <throttle>1</throttle>
-    <import>import grextras</import>
-    <make>grextras.TunTap($dev)</make>
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/tuntap', $dev)</make>
     <param>
         <name>Device</name>
         <key>dev</key>
