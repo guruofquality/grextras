@@ -1,18 +1,17 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/stream_selector.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <boost/foreach.hpp>
 
-using namespace grextras;
-
-struct StreamSelectorImpl : StreamSelector
+struct StreamSelector : gras::Block
 {
-    StreamSelectorImpl(const size_t itemsize):
+    StreamSelector(const size_t itemsize):
         gras::Block("GrExtras StreamSelector")
     {
         this->input_config(0).item_size = itemsize;
         this->output_config(0).item_size = itemsize;
+        this->register_call("set_paths", &StreamSelector::set_paths);
     }
 
     void work(const InputItems &ins, const OutputItems &)
@@ -69,7 +68,9 @@ struct StreamSelectorImpl : StreamSelector
     std::vector<int> _paths;
 };
 
-StreamSelector::sptr StreamSelector::make(const size_t itemsize)
+gras::Block *make_stream_selector(const size_t &itemsize)
 {
-    return boost::make_shared<StreamSelectorImpl>(itemsize);
+    return new StreamSelector(itemsize);
 }
+
+GRAS_REGISTER_FACTORY("/extras/stream_selector", make_stream_selector)

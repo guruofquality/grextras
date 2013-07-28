@@ -1,18 +1,16 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/delay.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 
-using namespace grextras;
-
-struct DelayImpl : Delay
+struct Delay : gras::Block
 {
-    DelayImpl(const size_t itemsize):
+    Delay(const size_t itemsize):
         gras::Block("GrExtras Delay")
     {
         this->input_config(0).item_size = itemsize;
         this->output_config(0).item_size = itemsize;
-        this->register_call("set_delay", &DelayImpl::set_delay);
+        this->register_call("set_delay", &Delay::set_delay);
         _delay_items = 0;
     }
 
@@ -51,7 +49,9 @@ struct DelayImpl : Delay
     int _delay_items;
 };
 
-Delay::sptr Delay::make(const size_t itemsize)
+gras::Block *make_delay(const size_t &itemsize)
 {
-    return boost::make_shared<DelayImpl>(itemsize);
+    return new Delay(itemsize);
 }
+
+GRAS_REGISTER_FACTORY("/extras/delay", make_delay)

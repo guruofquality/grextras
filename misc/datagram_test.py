@@ -2,7 +2,7 @@
 
 import unittest
 import gras
-import grextras
+import TestUtils
 import numpy
 import time
 
@@ -16,11 +16,11 @@ class test_datagram(unittest.TestCase):
 
     def test_simple_loopback(self):
         src_data = (8, 3, 32, 18, -53)
-        src = grextras.VectorSource(numpy.int32, src_data)
-        dst = grextras.VectorSink(numpy.int32)
+        src = TestUtils.VectorSource(numpy.int32, src_data)
+        dst = TestUtils.VectorSink(numpy.int32)
 
-        s2d = grextras.Stream2Datagram(numpy.dtype(numpy.float32).itemsize)
-        d2s = grextras.Datagram2Stream(numpy.dtype(numpy.float32).itemsize)
+        s2d = gras.Factory.make('/extras/stream_to_datagram', numpy.dtype(numpy.float32).itemsize, 0)
+        d2s = gras.Factory.make('/extras/datagram_to_stream', numpy.dtype(numpy.float32).itemsize)
 
         self.tb.connect(src, s2d, d2s, dst)
         self.tb.run()

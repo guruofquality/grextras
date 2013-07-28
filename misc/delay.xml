@@ -1,27 +1,29 @@
 <?xml version="1.0"?>
 <!--
 ###################################################
-## Stream to blob - blob msg output
+## Blocks delay block
 ###################################################
  -->
 <block>
-    <name>Ex: Stream2DGram</name>
-    <key>extras_stream_to_datagram</key>
-    <import>import grextras</import>
-    <make>grextras.Stream2Datagram($item_size, $mtu)</make>
+    <name>Ex: Delay</name>
+    <key>extras_delay</key>
+    <category>Extras</category>
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/delay', $item_size)
+self.$(id).set_delay($delay)
+</make>
+    <callback>self.$(id).set_delay($delay)</callback>
     <param>
-        <name>Input Item Size</name>
+        <name>Item Size</name>
         <key>item_size</key>
         <value>1</value>
         <type>int</type>
     </param>
     <param>
-        <name>MTU</name>
-        <key>mtu</key>
+        <name>Delay</name>
+        <key>delay</key>
         <value>0</value>
         <type>int</type>
-        <hide>#if $mtu() == 0 then 'part' else 'none'#</hide>
-        <option><name>Automatic</name><key>0</key></option>
     </param>
     <sink>
         <name>in</name>
@@ -30,6 +32,7 @@
     </sink>
     <source>
         <name>out</name>
-        <type></type>
+        <type>byte</type>
+        <vlen>$item_size</vlen>
     </source>
 </block>

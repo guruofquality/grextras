@@ -1,18 +1,16 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/subtract.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <stdexcept>
 #include <complex>
 #include <volk/volk.h>
-
-using namespace grextras;
 
 /***********************************************************************
  * Templated Subtractor class
  **********************************************************************/
 template <typename type>
-struct SubtractImpl : Subtract
+struct SubtractImpl : gras::Block
 {
     SubtractImpl(const size_t vlen):
         gras::Block("GrExtras Subtract"),
@@ -71,43 +69,51 @@ void SubtractImpl<type>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-Subtract::sptr Subtract::make_fc32_fc32(const size_t vlen)
+static gras::Block *extras_subtract_make_fc32_fc32(const size_t &vlen)
 {
-    return sptr(new SubtractImpl<std::complex<float> >(vlen));
+    return new SubtractImpl<std::complex<float> >(vlen);
 }
 
-Subtract::sptr Subtract::make_sc32_sc32(const size_t vlen)
+static gras::Block *extras_subtract_make_sc32_sc32(const size_t &vlen)
 {
-    return sptr(new SubtractImpl<std::complex<boost::int32_t> >(vlen));
+    return new SubtractImpl<std::complex<boost::int32_t> >(vlen);
 }
 
-Subtract::sptr Subtract::make_sc16_sc16(const size_t vlen)
+static gras::Block *extras_subtract_make_sc16_sc16(const size_t &vlen)
 {
-    return sptr(new SubtractImpl<std::complex<boost::int16_t> >(vlen));
+    return new SubtractImpl<std::complex<boost::int16_t> >(vlen);
 }
 
-Subtract::sptr Subtract::make_sc8_sc8(const size_t vlen)
+static gras::Block *extras_subtract_make_sc8_sc8(const size_t &vlen)
 {
-    return sptr(new SubtractImpl<std::complex<boost::int8_t> >(vlen));
+    return new SubtractImpl<std::complex<boost::int8_t> >(vlen);
 }
 
-Subtract::sptr Subtract::make_f32_f32(const size_t vlen)
+static gras::Block *extras_subtract_make_f32_f32(const size_t &vlen)
 {
-    return sptr(new SubtractImpl<float>(vlen));
+    return new SubtractImpl<float>(vlen);
 }
 
-Subtract::sptr Subtract::make_s32_s32(const size_t vlen)
+static gras::Block *extras_subtract_make_s32_s32(const size_t &vlen)
 {
-    return sptr(new SubtractImpl<boost::int32_t>(vlen));
+    return new SubtractImpl<boost::int32_t>(vlen);
 }
 
-Subtract::sptr Subtract::make_s16_s16(const size_t vlen)
+static gras::Block *extras_subtract_make_s16_s16(const size_t &vlen)
 {
-    return sptr(new SubtractImpl<boost::int16_t>(vlen));
+    return new SubtractImpl<boost::int16_t>(vlen);
 }
 
-Subtract::sptr Subtract::make_s8_s8(const size_t vlen)
+static gras::Block *extras_subtract_make_s8_s8(const size_t &vlen)
 {
-    return sptr(new SubtractImpl<boost::int8_t>(vlen));
+    return new SubtractImpl<boost::int8_t>(vlen);
 }
 
+GRAS_REGISTER_FACTORY("/extras/subtract_fc32_fc32", extras_subtract_make_fc32_fc32)
+GRAS_REGISTER_FACTORY("/extras/subtract_sc32_sc32", extras_subtract_make_sc32_sc32)
+GRAS_REGISTER_FACTORY("/extras/subtract_sc16_sc16", extras_subtract_make_sc16_sc16)
+GRAS_REGISTER_FACTORY("/extras/subtract_sc8_sc8", extras_subtract_make_sc8_sc8)
+GRAS_REGISTER_FACTORY("/extras/subtract_f32_f32", extras_subtract_make_f32_f32)
+GRAS_REGISTER_FACTORY("/extras/subtract_s32_sc2", extras_subtract_make_s32_s32)
+GRAS_REGISTER_FACTORY("/extras/subtract_s16_s16", extras_subtract_make_s16_s16)
+GRAS_REGISTER_FACTORY("/extras/subtract_s8_s8", extras_subtract_make_s8_s8)

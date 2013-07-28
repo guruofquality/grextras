@@ -1,19 +1,17 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
 #include <gras/time_tag.hpp>
-#include <grextras/time_align.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <boost/foreach.hpp>
 #include <stdexcept>
 #include <iostream>
 
-using namespace grextras;
-
 typedef boost::int64_t int64_t;
 
-struct TimeAlignImpl : TimeAlign
+struct TimeAlign : gras::Block
 {
-    TimeAlignImpl(const size_t itemsize):
+    TimeAlign(const size_t itemsize):
         gras::Block("GrExtras TimeAlign"),
         _rate(1e6)
     {
@@ -45,7 +43,7 @@ struct TimeAlignImpl : TimeAlign
     double _rate;
 };
 
-void TimeAlignImpl::work(const InputItems &ins, const OutputItems &outs)
+void TimeAlign::work(const InputItems &ins, const OutputItems &outs)
 {
     //search all inputs for time tags
     for (size_t i = 0; i < ins.size(); i++)
@@ -108,7 +106,9 @@ void TimeAlignImpl::work(const InputItems &ins, const OutputItems &outs)
     }
 }
 
-TimeAlign::sptr TimeAlign::make(const size_t itemsize)
+static gras::Block *make_time_align(const size_t &itemsize)
 {
-    return boost::make_shared<TimeAlignImpl>(itemsize);
+    return new TimeAlign(itemsize);
 }
+
+GRAS_REGISTER_FACTORY("/extras/time_align", make_time_align)

@@ -25,6 +25,25 @@ if(MSVC)
 endif(MSVC)
 
 ########################################################################
+# Import the GRAS Tool
+########################################################################
+if(GRAS_ROOT)
+    list(APPEND CMAKE_MODULE_PATH ${GRAS_ROOT}/share/gras/cmake/Modules)
+elseif($ENV{GRAS_ROOT})
+    list(APPEND CMAKE_MODULE_PATH $ENV{GRAS_ROOT}/share/gras/cmake/Modules)
+else(GRAS_ROOT)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/share/gras/cmake/Modules)
+endif(GRAS_ROOT)
+include(GRASTool)
+
+#gives us the test utils helper
+list(APPEND GR_TEST_PYTHON_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/python)
+
+add_subdirectory(math)
+add_subdirectory(misc)
+return()
+
+########################################################################
 # Find GrExtras build dependencies
 ########################################################################
 if(NOT DEFINED GRAS_FOUND)

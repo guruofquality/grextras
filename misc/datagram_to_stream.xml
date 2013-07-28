@@ -7,8 +7,9 @@
 <block>
     <name>Ex: DGram2Stream</name>
     <key>extras_datagram_to_stream</key>
-    <import>import grextras</import>
-    <make>grextras.Datagram2Stream($item_size)</make>
+    <category>Extras</category>
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/datagram_to_stream', $item_size)</make>
     <param>
         <name>Output Item Size</name>
         <key>item_size</key>

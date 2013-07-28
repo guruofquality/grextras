@@ -1,15 +1,13 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/stream_to_datagram.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <PMC/Containers.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/foreach.hpp>
 
-using namespace grextras;
-
-struct Stream2DatagramImpl : Stream2Datagram
+struct Stream2Datagram : gras::Block
 {
-    Stream2DatagramImpl(const size_t itemsize, const size_t mtu):
+    Stream2Datagram(const size_t itemsize, const size_t mtu):
         gras::Block("GrExtras Stream2Datagram"),
         _mtu(itemsize*(mtu/itemsize)) //ensure mtu is a multiple
     {
@@ -55,7 +53,9 @@ struct Stream2DatagramImpl : Stream2Datagram
     const size_t _mtu;
 };
 
-Stream2Datagram::sptr Stream2Datagram::make(const size_t itemsize, const size_t mtu)
+static gras::Block *make_stream_to_datagram(const size_t &itemsize, const size_t &mtu)
 {
-    return boost::make_shared<Stream2DatagramImpl>(itemsize, mtu);
+    return new Stream2Datagram(itemsize, mtu);
 }
+
+GRAS_REGISTER_FACTORY("/extras/stream_to_datagram", make_stream_to_datagram)
