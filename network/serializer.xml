@@ -48,6 +48,16 @@ self.$(id).input_config($i).item_size = $s
         <type></type>
     </source>
     <doc>
+The serializer block:
+This block serializes the input stream, messags, and tags; \
+and outputs the serialized data as a PacketMsg message type. \
+The packet message can be sent over a network \
+or possibly -> datagram to stream -> file sink.
+
+An MTU of zero means default ethernet payload sizes.
+
+The synchronous parameter means that equal amounts of items will \
+be consumed from each port when the serialization is performed. \
 Set sync parameter to True if all input ports share a synchronous relationship.
     </doc>
 </block>

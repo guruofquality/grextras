@@ -42,4 +42,14 @@ self.$(id).output_config($i).item_size = $s
         <type></type>
         <nports>$num_outputs</nports>
     </source>
+    <doc>
+The deserializer block:
+This block deserializes the input PacketMsg message type; \
+and outputs the data as stream, messags, and tags. \
+The packet message can be received from a network \
+or possibly from file source -> stream to datagram.
+
+The recovery parameter allows the block \
+to recover packet boundaries from streams or files.
+    </doc>
 </block>

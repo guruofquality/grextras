@@ -88,7 +88,9 @@ struct Serializer : gras::Block
         gras::Block("GrExtras Serializer"),
         _mtu((mtu? mtu : 1400) & ~3), _sync(sync)
     {
-        //NOP
+        //We might configure this item size in the future;
+        //however, the serializer expects multiples of word32s.
+        this->input_config(0).item_size = 4;
     }
 
     void work(const InputItems &ins, const OutputItems &)

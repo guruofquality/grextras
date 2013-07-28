@@ -27,4 +27,25 @@
         <type></type>
         <optional>1</optional>
     </source>
+    <doc>
+Tun/Tap message block: LINUX ONLY!
+
+This block provides input and output message ports \
+that connect up directly with an internal tun tap fd.
+
+Use the Universal TUN/TAP device driver to move packets to/from kernel \
+See /usr/src/linux/Documentation/networking/tuntap.txt
+
+Tuntap should not be used to create a MAC layer!
+https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_over_wireless_networks
+
+The input port is a message port. \
+Each incoming message is a gras::PacketMsg \
+Other Input messages are dropped.
+
+The output port is a message port. \
+Each outgoing message is a gras::PacketMsg
+
+the device name (depends on os, blank for automatic)
+    </doc>
 </block>

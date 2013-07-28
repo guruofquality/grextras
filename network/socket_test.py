@@ -2,7 +2,7 @@
 
 import unittest
 import gras
-import grextras
+import TestUtils
 import numpy
 import time
 
@@ -16,11 +16,11 @@ class test_socket_message(unittest.TestCase):
 
     def do_loop(self, to_socket, from_socket):
         src_data = tuple(numpy.random.randint(-1024, 1024, 10))
-        src = grextras.VectorSource(numpy.int32, src_data)
-        dst = grextras.VectorSink(numpy.int32)
+        src = TestUtils.VectorSource(numpy.int32, src_data)
+        dst = TestUtils.VectorSink(numpy.int32)
 
-        s2d = grextras.Stream2Datagram(numpy.dtype(numpy.int32).itemsize)
-        d2s = grextras.Datagram2Stream(numpy.dtype(numpy.int32).itemsize)
+        s2d = gras.Factory.make('/extras/stream_to_datagram', numpy.dtype(numpy.int32).itemsize, 0)
+        d2s = gras.Factory.make('/extras/datagram_to_stream', numpy.dtype(numpy.int32).itemsize)
 
         self.tb.connect(src, s2d, to_socket)
         self.tb.connect(from_socket, d2s, dst)
@@ -34,8 +34,8 @@ class test_socket_message(unittest.TestCase):
         self.assertEqual(src_data, dst.data())
 
     def test_udp_loopback(self):
-        udp_server = grextras.SocketMessage("UDP_SERVER", 'localhost', '34567')
-        udp_client = grextras.SocketMessage("UDP_CLIENT", 'localhost', '34567')
+        udp_server = gras.Factory.make('/extras/socket_message', "UDP_SERVER", 'localhost', '34567', 0)
+        udp_client = gras.Factory.make('/extras/socket_message', "UDP_CLIENT", 'localhost', '34567', 0)
 
         #client sends to server - must be first
         self.do_loop(udp_client, udp_server)
@@ -44,8 +44,8 @@ class test_socket_message(unittest.TestCase):
         self.do_loop(udp_server, udp_client)
 
     def test_tcp_loopback(self):
-        tcp_server = grextras.SocketMessage("TCP_SERVER", 'localhost', '34567')
-        tcp_client = grextras.SocketMessage("TCP_CLIENT", 'localhost', '34567')
+        tcp_server = gras.Factory.make('/extras/socket_message', "TCP_SERVER", 'localhost', '34567', 0)
+        tcp_client = gras.Factory.make('/extras/socket_message', "TCP_CLIENT", 'localhost', '34567', 0)
 
         #client sends to server
         self.do_loop(tcp_client, tcp_server)
@@ -55,7 +55,7 @@ class test_socket_message(unittest.TestCase):
 
         #a second client to replace the first connection
         print 'doing second client test now...'
-        tcp_client2 = grextras.SocketMessage("TCP_CLIENT", 'localhost', '34567')
+        tcp_client2 = gras.Factory.make('/extras/socket_message', "TCP_CLIENT", 'localhost', '34567', 0)
         self.do_loop(tcp_client2, tcp_server) #must be first to establish new connection
         self.do_loop(tcp_server, tcp_client2)
         print '...done second client test'

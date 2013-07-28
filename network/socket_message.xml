@@ -48,4 +48,38 @@
         <type></type>
         <optional>1</optional>
     </source>
+    <doc>
+Socket message block:
+
+This block provides input and output message ports \
+that connect up directly with an internal socket. \
+The socket can be a UDP/TCP client/server.
+
+The input port is a message port. \
+Each incoming message is a gras::PacketMsg \
+Other Input messages are dropped.
+
+The output port is a message port. \
+Each outgoing message is a gras::PacketMsg
+
+The following socket types are supported:
+
+UDP_CLIENT - a UDP socket that calls connect. \
+This socket initiates outbound communication \
+before inbound communication is possible.
+
+UDP_SERVER - a UDP socket that calls bind. \
+This socket's outbound destination is \
+the source of the last inbound packet.
+
+TCP_CLIENT - a TCP socket that calls connect. \
+This option expects the TCP server to be running.
+
+TCP_SERVER - a TCP socket thats listens and accepts. \
+This option continually listens for connections. \
+That last connection established is the one used.
+
+Possible values for the type argument are:
+"UDP_CLIENT", "UDP_SERVER", "TCP_CLIENT", "TCP_SERVER"
+    </doc>
 </block>

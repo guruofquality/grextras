@@ -20,3 +20,14 @@ GRAS_TOOL(
     COMPONENT extras
 )
 
+########################################################################
+# Unit tests!
+########################################################################
+include(GrTest)
+include(GrPython)
+set(PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE} ${PYTHON_DASH_B})
+list(APPEND GR_TEST_ENVIRONS "GRAS_MODULE_PATH=${extras_network_LOCATION}${GRAS_TOOL_PATH_SEP}${extras_misc_LOCATION}")
+
+#register unit tests
+GR_ADD_TEST(serialize_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/serialize_test.py)
+GR_ADD_TEST(socket_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/socket_test.py)
