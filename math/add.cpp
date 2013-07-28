@@ -1,22 +1,20 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/add.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <stdexcept>
 #include <complex>
 #ifdef HAVE_VOLK
 #include <volk/volk.h>
 #endif
 
-using namespace grextras;
-
 /***********************************************************************
  * Templated Adder class
  **********************************************************************/
 template <typename type>
-struct AddImpl : Add
+struct Add : gras::Block
 {
-    AddImpl(const size_t vlen):
+    Add(const size_t vlen):
         gras::Block("GrExtras Add"),
         _vlen(vlen)
     {
@@ -41,7 +39,7 @@ struct AddImpl : Add
  * Generic Adder implementation
  **********************************************************************/
 template <typename type>
-void AddImpl<type>::work(
+void Add<type>::work(
     const InputItems &ins, const OutputItems &outs
 ){
     const size_t n_nums = std::min(ins.min(), outs.min());
@@ -67,7 +65,7 @@ void AddImpl<type>::work(
  * Adder implementation with float32 - calls volk
  **********************************************************************/
 template <>
-void AddImpl<float>::work(
+void Add<float>::work(
     const InputItems &ins, const OutputItems &outs
 ){
     const size_t n_nums = std::min(ins.min(), outs.min());
@@ -89,43 +87,51 @@ void AddImpl<float>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-Add::sptr Add::make_fc32_fc32(const size_t vlen)
+static gras::Block *make_add_fc32_fc32(const size_t &vlen)
 {
-    return sptr(new AddImpl<float>(2*vlen));
+    return new Add<float>(2*vlen);
 }
 
-Add::sptr Add::make_sc32_sc32(const size_t vlen)
+static gras::Block *make_add_sc32_sc32(const size_t &vlen)
 {
-    return sptr(new AddImpl<boost::int32_t>(2*vlen));
+    return new Add<boost::int32_t>(2*vlen);
 }
 
-Add::sptr Add::make_sc16_sc16(const size_t vlen)
+static gras::Block *make_add_sc16_sc16(const size_t &vlen)
 {
-    return sptr(new AddImpl<boost::int16_t>(2*vlen));
+    return new Add<boost::int16_t>(2*vlen);
 }
 
-Add::sptr Add::make_sc8_sc8(const size_t vlen)
+static gras::Block *make_add_sc8_sc8(const size_t &vlen)
 {
-    return sptr(new AddImpl<boost::int8_t>(2*vlen));
+    return new Add<boost::int8_t>(2*vlen);
 }
 
-Add::sptr Add::make_f32_f32(const size_t vlen)
+static gras::Block *make_add_f32_f32(const size_t &vlen)
 {
-    return sptr(new AddImpl<float>(vlen));
+    return new Add<float>(vlen);
 }
 
-Add::sptr Add::make_s32_s32(const size_t vlen)
+static gras::Block *make_add_s32_s32(const size_t &vlen)
 {
-    return sptr(new AddImpl<boost::int32_t>(vlen));
+    return new Add<boost::int32_t>(vlen);
 }
 
-Add::sptr Add::make_s16_s16(const size_t vlen)
+static gras::Block *make_add_s16_s16(const size_t &vlen)
 {
-    return sptr(new AddImpl<boost::int16_t>(vlen));
+    return new Add<boost::int16_t>(vlen);
 }
 
-Add::sptr Add::make_s8_s8(const size_t vlen)
+static gras::Block *make_add_s8_s8(const size_t &vlen)
 {
-    return sptr(new AddImpl<boost::int8_t>(vlen));
+    return new Add<boost::int8_t>(vlen);
 }
 
+GRAS_REGISTER_FACTORY("/extras/add_fc32_fc32", make_add_fc32_fc32)
+GRAS_REGISTER_FACTORY("/extras/add_sc32_sc32", make_add_sc32_sc32)
+GRAS_REGISTER_FACTORY("/extras/add_sc16_sc16", make_add_sc16_sc16)
+GRAS_REGISTER_FACTORY("/extras/add_sc8_sc8", make_add_sc8_sc8)
+GRAS_REGISTER_FACTORY("/extras/add_f32_f32", make_add_f32_f32)
+GRAS_REGISTER_FACTORY("/extras/add_s32_sc2", make_add_s32_s32)
+GRAS_REGISTER_FACTORY("/extras/add_s16_s16", make_add_s16_s16)
+GRAS_REGISTER_FACTORY("/extras/add_s8_s8", make_add_s8_s8)

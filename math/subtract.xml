@@ -8,8 +8,8 @@
 <block>
     <name>Ex: Subtract</name>
     <key>extras_subtract</key>
-    <import>import grextras</import>
-    <make>grextras.Subtract.$(type)($vlen)
+    <import>import gras</import>
+    <make>gras.Factor.make('/extras/subtract_$(type)', $vlen)
 #for $i, $p in enumerate($preload())
 self.$(id).input_config($i).preload_items = $p
 #end for</make>

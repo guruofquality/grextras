@@ -1,22 +1,20 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/multiply.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <stdexcept>
 #include <complex>
 #ifdef HAVE_VOLK
 #include <volk/volk.h>
 #endif
 
-using namespace grextras;
-
 /***********************************************************************
  * Templated Multiplier class
  **********************************************************************/
 template <typename type>
-struct MultiplyImpl : Multiply
+struct Multiply : gras::Block
 {
-    MultiplyImpl(const size_t vlen):
+    Multiply(const size_t vlen):
         gras::Block("GrExtras Multiply"),
         _vlen(vlen)
     {
@@ -41,7 +39,7 @@ struct MultiplyImpl : Multiply
  * Generic Multiplier implementation
  **********************************************************************/
 template <typename type>
-void MultiplyImpl<type>::work(
+void Multiply<type>::work(
     const InputItems &ins, const OutputItems &outs
 ){
     const size_t n_nums = std::min(ins.min(), outs.min());
@@ -67,7 +65,7 @@ void MultiplyImpl<type>::work(
  * Multiplier implementation with complex complex float32 - calls volk
  **********************************************************************/
 template <>
-void MultiplyImpl<std::complex<float> >::work(
+void Multiply<std::complex<float> >::work(
     const InputItems &ins, const OutputItems &outs
 ){
     const size_t n_nums = std::min(ins.min(), outs.min());
@@ -89,7 +87,7 @@ void MultiplyImpl<std::complex<float> >::work(
  * Multiplier implementation with float32 - calls volk
  **********************************************************************/
 template <>
-void MultiplyImpl<float>::work(
+void Multiply<float>::work(
     const InputItems &ins, const OutputItems &outs
 ){
     const size_t n_nums = std::min(ins.min(), outs.min());
@@ -111,43 +109,51 @@ void MultiplyImpl<float>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-Multiply::sptr Multiply::make_fc32_fc32(const size_t vlen)
+static gras::Block *make_multiply_fc32_fc32(const size_t &vlen)
 {
-    return sptr(new MultiplyImpl<std::complex<float> >(vlen));
+    return new Multiply<std::complex<float> >(vlen);
 }
 
-Multiply::sptr Multiply::make_sc32_sc32(const size_t vlen)
+static gras::Block *make_multiply_sc32_sc32(const size_t &vlen)
 {
-    return sptr(new MultiplyImpl<std::complex<boost::int32_t> >(vlen));
+    return new Multiply<std::complex<boost::int32_t> >(vlen);
 }
 
-Multiply::sptr Multiply::make_sc16_sc16(const size_t vlen)
+static gras::Block *make_multiply_sc16_sc16(const size_t &vlen)
 {
-    return sptr(new MultiplyImpl<std::complex<boost::int16_t> >(vlen));
+    return new Multiply<std::complex<boost::int16_t> >(vlen);
 }
 
-Multiply::sptr Multiply::make_sc8_sc8(const size_t vlen)
+static gras::Block *make_multiply_sc8_sc8(const size_t &vlen)
 {
-    return sptr(new MultiplyImpl<std::complex<boost::int8_t> >(vlen));
+    return new Multiply<std::complex<boost::int8_t> >(vlen);
 }
 
-Multiply::sptr Multiply::make_f32_f32(const size_t vlen)
+static gras::Block *make_multiply_f32_f32(const size_t &vlen)
 {
-    return sptr(new MultiplyImpl<float>(vlen));
+    return new Multiply<float>(vlen);
 }
 
-Multiply::sptr Multiply::make_s32_s32(const size_t vlen)
+static gras::Block *make_multiply_s32_s32(const size_t &vlen)
 {
-    return sptr(new MultiplyImpl<boost::int32_t>(vlen));
+    return new Multiply<boost::int32_t>(vlen);
 }
 
-Multiply::sptr Multiply::make_s16_s16(const size_t vlen)
+static gras::Block *make_multiply_s16_s16(const size_t &vlen)
 {
-    return sptr(new MultiplyImpl<boost::int16_t>(vlen));
+    return new Multiply<boost::int16_t>(vlen);
 }
 
-Multiply::sptr Multiply::make_s8_s8(const size_t vlen)
+static gras::Block *make_multiply_s8_s8(const size_t &vlen)
 {
-    return sptr(new MultiplyImpl<boost::int8_t>(vlen));
+    return new Multiply<boost::int8_t>(vlen);
 }
 
+GRAS_REGISTER_FACTORY("/extras/multiply_fc32_fc32", make_multiply_fc32_fc32)
+GRAS_REGISTER_FACTORY("/extras/multiply_sc32_sc32", make_multiply_sc32_sc32)
+GRAS_REGISTER_FACTORY("/extras/multiply_sc16_sc16", make_multiply_sc16_sc16)
+GRAS_REGISTER_FACTORY("/extras/multiply_sc8_sc8", make_multiply_sc8_sc8)
+GRAS_REGISTER_FACTORY("/extras/multiply_f32_f32", make_multiply_f32_f32)
+GRAS_REGISTER_FACTORY("/extras/multiply_s32_sc2", make_multiply_s32_s32)
+GRAS_REGISTER_FACTORY("/extras/multiply_s16_s16", make_multiply_s16_s16)
+GRAS_REGISTER_FACTORY("/extras/multiply_s8_s8", make_multiply_s8_s8)

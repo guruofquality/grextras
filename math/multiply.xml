@@ -8,8 +8,8 @@
 <block>
     <name>Ex: Multiply</name>
     <key>extras_multiply</key>
-    <import>import grextras</import>
-    <make>grextras.Multiply.$(type)($vlen)
+    <import>import gras</import>
+    <make>gras.Factor.make('/extras/multiply_$(type)', $vlen)
 #for $i, $p in enumerate($preload())
 self.$(id).input_config($i).preload_items = $p
 #end for</make>

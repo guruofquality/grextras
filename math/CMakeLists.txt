@@ -20,9 +20,9 @@ endif()
 GRAS_TOOL(
     SOURCES
         subtract.cpp subtract.xml
-        #divide.cpp divide.xml
-        #add.cpp add.xml
-        #multiply.cpp multiply.xml
+        divide.cpp divide.xml
+        add.cpp add.xml
+        multiply.cpp multiply.xml
         #add_const.cpp add_const_v.cpp add_const.xml
         #multiply_const.cpp multiply_const_v.cpp multiply_const.xml
     TARGET extras_math

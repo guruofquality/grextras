@@ -8,8 +8,8 @@
 <block>
     <name>Ex: Divide</name>
     <key>extras_divide</key>
-    <import>import grextras</import>
-    <make>grextras.Divide.$(type)($vlen)
+    <import>import gras</import>
+    <make>gras.Factor.make('/extras/divide_$(type)', $vlen)
 #for $i, $p in enumerate($preload())
 self.$(id).input_config($i).preload_items = $p
 #end for</make>

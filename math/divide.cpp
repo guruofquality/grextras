@@ -1,20 +1,18 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/divide.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <stdexcept>
 #include <complex>
 #include <volk/volk.h>
-
-using namespace grextras;
 
 /***********************************************************************
  * Templated Divider class
  **********************************************************************/
 template <typename type>
-struct DivideImpl : Divide
+struct Divide : gras::Block
 {
-    DivideImpl(const size_t vlen):
+    Divide(const size_t vlen):
         gras::Block("GrExtras Divide"),
         _vlen(vlen)
     {
@@ -39,7 +37,7 @@ struct DivideImpl : Divide
  * Generic Divider implementation
  **********************************************************************/
 template <typename type>
-void DivideImpl<type>::work(
+void Divide<type>::work(
     const InputItems &ins, const OutputItems &outs
 ){
     const size_t n_nums = std::min(ins.min(), outs.min());
@@ -71,43 +69,51 @@ void DivideImpl<type>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-Divide::sptr Divide::make_fc32_fc32(const size_t vlen)
+static gras::Block *make_divide_fc32_fc32(const size_t &vlen)
 {
-    return sptr(new DivideImpl<std::complex<float> >(vlen));
+    return new Divide<std::complex<float> >(vlen);
 }
 
-Divide::sptr Divide::make_sc32_sc32(const size_t vlen)
+static gras::Block *make_divide_sc32_sc32(const size_t &vlen)
 {
-    return sptr(new DivideImpl<std::complex<boost::int32_t> >(vlen));
+    return new Divide<std::complex<boost::int32_t> >(vlen);
 }
 
-Divide::sptr Divide::make_sc16_sc16(const size_t vlen)
+static gras::Block *make_divide_sc16_sc16(const size_t &vlen)
 {
-    return sptr(new DivideImpl<std::complex<boost::int16_t> >(vlen));
+    return new Divide<std::complex<boost::int16_t> >(vlen);
 }
 
-Divide::sptr Divide::make_sc8_sc8(const size_t vlen)
+static gras::Block *make_divide_sc8_sc8(const size_t &vlen)
 {
-    return sptr(new DivideImpl<std::complex<boost::int8_t> >(vlen));
+    return new Divide<std::complex<boost::int8_t> >(vlen);
 }
 
-Divide::sptr Divide::make_f32_f32(const size_t vlen)
+static gras::Block *make_divide_f32_f32(const size_t &vlen)
 {
-    return sptr(new DivideImpl<float>(vlen));
+    return new Divide<float>(vlen);
 }
 
-Divide::sptr Divide::make_s32_s32(const size_t vlen)
+static gras::Block *make_divide_s32_s32(const size_t &vlen)
 {
-    return sptr(new DivideImpl<boost::int32_t>(vlen));
+    return new Divide<boost::int32_t>(vlen);
 }
 
-Divide::sptr Divide::make_s16_s16(const size_t vlen)
+static gras::Block *make_divide_s16_s16(const size_t &vlen)
 {
-    return sptr(new DivideImpl<boost::int16_t>(vlen));
+    return new Divide<boost::int16_t>(vlen);
 }
 
-Divide::sptr Divide::make_s8_s8(const size_t vlen)
+static gras::Block *make_divide_s8_s8(const size_t &vlen)
 {
-    return sptr(new DivideImpl<boost::int8_t>(vlen));
+    return new Divide<boost::int8_t>(vlen);
 }
 
+GRAS_REGISTER_FACTORY("/extras/divide_fc32_fc32", make_divide_fc32_fc32)
+GRAS_REGISTER_FACTORY("/extras/divide_sc32_sc32", make_divide_sc32_sc32)
+GRAS_REGISTER_FACTORY("/extras/divide_sc16_sc16", make_divide_sc16_sc16)
+GRAS_REGISTER_FACTORY("/extras/divide_sc8_sc8", make_divide_sc8_sc8)
+GRAS_REGISTER_FACTORY("/extras/divide_f32_f32", make_divide_f32_f32)
+GRAS_REGISTER_FACTORY("/extras/divide_s32_sc2", make_divide_s32_s32)
+GRAS_REGISTER_FACTORY("/extras/divide_s16_s16", make_divide_s16_s16)
+GRAS_REGISTER_FACTORY("/extras/divide_s8_s8", make_divide_s8_s8)
