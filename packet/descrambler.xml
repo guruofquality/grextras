@@ -5,10 +5,10 @@
 ###################################################
 -->
 <block>
-    <name>Ex: Scrambler</name>
-    <key>extras_scrambler</key>
-    <import>import grextras</import>
-    <make>grextras.Scrambler()
+    <name>Ex: Descrambler</name>
+    <key>extras_descrambler</key>
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/descrambler')
 self.$(id).set_poly($poly)
 self.$(id).set_seed($seed)
 self.$(id).set_mode($mode)

@@ -1,15 +1,13 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/burst_tagger.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <boost/foreach.hpp>
 #include <iostream>
 
-using namespace grextras;
-
-struct BurstTaggerImpl : BurstTagger
+struct BurstTagger : gras::Block
 {
-    BurstTaggerImpl(const size_t sps):
+    BurstTagger(const size_t sps):
         gras::Block("GrExtras BurstTagger"),
         _sps(sps)
     {
@@ -54,7 +52,9 @@ struct BurstTaggerImpl : BurstTagger
     const size_t _sps;
 };
 
-BurstTagger::sptr BurstTagger::make(const size_t sps)
+gras::Block *make_burst_tagger(const size_t &sps)
 {
-    return boost::make_shared<BurstTaggerImpl>(sps);
+    return new BurstTagger(sps);
 }
+
+GRAS_REGISTER_FACTORY("/extras/burst_tagger", make_burst_tagger)

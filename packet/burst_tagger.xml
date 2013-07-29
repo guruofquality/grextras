@@ -7,8 +7,8 @@
 <block>
     <name>Ex: Burst Tagger</name>
     <key>extras_burst_tagger</key>
-    <import>import grextras</import>
-    <make>grextras.BurstTagger($sps)</make>
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/burst_tagger', $sps)</make>
     <param>
         <name>Samples per symbol</name>
         <key>sps</key>

@@ -2,7 +2,7 @@
 
 import unittest
 import gras
-import grextras
+import TestUtils
 import numpy
 import os
 import random
@@ -47,8 +47,8 @@ class test_scramblers(unittest.TestCase):
 
     def test_simple_loopback(self):
         for i in range(16):
-            s = grextras.Scrambler()
-            d = grextras.Descrambler()
+            s = gras.Factory.make('/extras/scrambler')
+            d = gras.Factory.make('/extras/descrambler')
 
             poly = 1 | (1 << 14) | (1 << 15)
             seed = random.randint(-1024, 1024)
@@ -61,11 +61,11 @@ class test_scramblers(unittest.TestCase):
 
             nbits = random.randint(128, 4096)
             src_data = tuple(numpy.random.randint(0, 2, nbits))
-            src = grextras.VectorSource(numpy.uint8, src_data)
-            dst = grextras.VectorSink(numpy.uint8)
+            src = TestUtils.VectorSource(numpy.uint8, src_data)
+            dst = TestUtils.VectorSink(numpy.uint8)
             self.tb.connect(src, s, d, dst)
 
-            midst = grextras.VectorSink(numpy.uint8)
+            midst = TestUtils.VectorSink(numpy.uint8)
             self.tb.connect(s, midst)
 
             self.tb.run()
@@ -75,8 +75,8 @@ class test_scramblers(unittest.TestCase):
 
     def test_sync_word_length_not_used(self):
         if 1:
-            s = grextras.Scrambler()
-            d = grextras.Descrambler()
+            s = gras.Factory.make('/extras/scrambler')
+            d = gras.Factory.make('/extras/descrambler')
             poly = 1 | (1 << 14) | (1 << 15)
             seed = random.randint(-1024, 1024)
             mode = random.choice(("additive", "multiplicative"))
@@ -90,8 +90,8 @@ class test_scramblers(unittest.TestCase):
 
             nbits = random.randint(128, 4096)
             src_data = tuple(numpy.random.randint(0, 2, nbits))
-            src = grextras.VectorSource(numpy.uint8, src_data)
-            dst = grextras.VectorSink(numpy.uint8)
+            src = TestUtils.VectorSource(numpy.uint8, src_data)
+            dst = TestUtils.VectorSink(numpy.uint8)
             self.tb.connect(src, s, d, dst)
 
             self.tb.run()
@@ -102,8 +102,8 @@ class test_scramblers(unittest.TestCase):
 
     def test_sync_word(self):
         if 1:
-            s = grextras.Scrambler()
-            d = grextras.Descrambler()
+            s = gras.Factory.make('/extras/scrambler')
+            d = gras.Factory.make('/extras/descrambler')
             poly = 1 | (1 << 14) | (1 << 15)
             seed = random.randint(-1024, 1024)
             mode = random.choice(("additive", "multiplicative"))
@@ -121,7 +121,7 @@ class test_scramblers(unittest.TestCase):
             src_data = tuple(numpy.concatenate(src_bursts))
 
             src = LengthTagSource(src_bursts)
-            dst = grextras.VectorSink(numpy.uint8)
+            dst = TestUtils.VectorSink(numpy.uint8)
             self.tb.connect(src, s, d, dst)
 
             self.tb.run()

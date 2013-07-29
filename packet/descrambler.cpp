@@ -1,25 +1,24 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
 #include "lfsr.h"
-#include <grextras/descrambler.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/foreach.hpp>
 #include <stdexcept>
 #include <iostream>
 
-using namespace grextras;
-
-struct DescramblerImpl : gras::Block
+struct Descrambler : gras::Block
 {
-    DescramblerImpl(void):
+    Descrambler(void):
         gras::Block("GrExtras Scrambler"),
         _polynom(1), _seed_value(1)
     {
         std::memset(&_lfsr, 0, sizeof(_lfsr));
-        this->register_call("set_poly", &DescramblerImpl::set_poly);
-        this->register_call("set_seed", &DescramblerImpl::set_seed);
-        this->register_call("set_mode", &DescramblerImpl::set_mode);
-        this->register_call("set_sync", &DescramblerImpl::set_sync);
+        this->register_call("set_poly", &Descrambler::set_poly);
+        this->register_call("set_seed", &Descrambler::set_seed);
+        this->register_call("set_mode", &Descrambler::set_mode);
+        this->register_call("set_sync", &Descrambler::set_sync);
 
         //some defaults
         this->set_mode("multiplicative");
@@ -85,14 +84,14 @@ struct DescramblerImpl : gras::Block
     long _count_down_to_sync_word;
 };
 
-GRAS_FORCE_INLINE unsigned char DescramblerImpl::additive_bit_work(const unsigned char in)
+GRAS_FORCE_INLINE unsigned char Descrambler::additive_bit_work(const unsigned char in)
 {
     const unsigned char ret = GLFSR_next(&_lfsr);
     const unsigned char out = in ^ ret;
     return out;
 }
 
-GRAS_FORCE_INLINE unsigned char DescramblerImpl::multiplicative_bit_work(const unsigned char in)
+GRAS_FORCE_INLINE unsigned char Descrambler::multiplicative_bit_work(const unsigned char in)
 {
     const unsigned char ret = GLFSR_next(&_lfsr);
     const unsigned char out = in ^ ret;
@@ -102,7 +101,7 @@ GRAS_FORCE_INLINE unsigned char DescramblerImpl::multiplicative_bit_work(const u
     return out;
 }
 
-void DescramblerImpl::work(const InputItems &ins, const OutputItems &outs)
+void Descrambler::work(const InputItems &ins, const OutputItems &outs)
 {
     size_t n = std::min(ins.min(), outs.min());
     const unsigned char *in = ins[0].cast<const unsigned char *>();
@@ -154,7 +153,9 @@ void DescramblerImpl::work(const InputItems &ins, const OutputItems &outs)
     }
 }
 
-gras::Block *Descrambler::make(void)
+gras::Block *make_descrambler(void)
 {
-    return new DescramblerImpl();
+    return new Descrambler();
 }
+
+GRAS_REGISTER_FACTORY("/extras/descrambler", make_descrambler)

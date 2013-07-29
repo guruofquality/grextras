@@ -7,8 +7,8 @@
 <block>
     <name>Ex: Packet Framer</name>
     <key>extras_packet_framer</key>
-    <import>import grextras</import>
-    <make>grextras.PacketFramer(
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/packet_framer',
     samples_per_symbol=$samples_per_symbol,
     bits_per_symbol=$bits_per_symbol,
     access_code=$access_code,

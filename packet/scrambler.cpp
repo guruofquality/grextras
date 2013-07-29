@@ -1,25 +1,24 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
 #include "lfsr.h"
-#include <grextras/scrambler.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/foreach.hpp>
 #include <stdexcept>
 #include <iostream>
 
-using namespace grextras;
-
-struct ScramblerImpl : gras::Block
+struct Scrambler : gras::Block
 {
-    ScramblerImpl(void):
+    Scrambler(void):
         gras::Block("GrExtras Scrambler"),
         _polynom(1), _seed_value(1)
     {
         std::memset(&_lfsr, 0, sizeof(_lfsr));
-        this->register_call("set_poly", &ScramblerImpl::set_poly);
-        this->register_call("set_seed", &ScramblerImpl::set_seed);
-        this->register_call("set_mode", &ScramblerImpl::set_mode);
-        this->register_call("set_sync", &ScramblerImpl::set_sync);
+        this->register_call("set_poly", &Scrambler::set_poly);
+        this->register_call("set_seed", &Scrambler::set_seed);
+        this->register_call("set_mode", &Scrambler::set_mode);
+        this->register_call("set_sync", &Scrambler::set_sync);
 
         //some defaults
         this->set_mode("multiplicative");
@@ -80,14 +79,14 @@ struct ScramblerImpl : gras::Block
     long _count_down_to_sync_word;
 };
 
-GRAS_FORCE_INLINE unsigned char ScramblerImpl::additive_bit_work(const unsigned char in)
+GRAS_FORCE_INLINE unsigned char Scrambler::additive_bit_work(const unsigned char in)
 {
     const unsigned char ret = GLFSR_next(&_lfsr);
     const unsigned char out = in ^ ret;
     return out;
 }
 
-GRAS_FORCE_INLINE unsigned char ScramblerImpl::multiplicative_bit_work(const unsigned char in)
+GRAS_FORCE_INLINE unsigned char Scrambler::multiplicative_bit_work(const unsigned char in)
 {
     const unsigned char ret = GLFSR_next(&_lfsr);
     const unsigned char out = in ^ ret;
@@ -97,7 +96,7 @@ GRAS_FORCE_INLINE unsigned char ScramblerImpl::multiplicative_bit_work(const uns
     return out;
 }
 
-void ScramblerImpl::propagate_tags(const size_t, const gras::TagIter &iter)
+void Scrambler::propagate_tags(const size_t, const gras::TagIter &iter)
 {
     BOOST_FOREACH(const gras::Tag &t, iter)
     {
@@ -115,7 +114,7 @@ void ScramblerImpl::propagate_tags(const size_t, const gras::TagIter &iter)
     }
 }
 
-void ScramblerImpl::work(const InputItems &ins, const OutputItems &outs)
+void Scrambler::work(const InputItems &ins, const OutputItems &outs)
 {
     size_t n = std::min(ins.min(), outs.min());
     const unsigned char *in = ins[0].cast<const unsigned char *>();
@@ -186,7 +185,9 @@ void ScramblerImpl::work(const InputItems &ins, const OutputItems &outs)
     this->produce(n);
 }
 
-gras::Block *Scrambler::make(void)
+gras::Block *make_scrambler(void)
 {
-    return new ScramblerImpl();
+    return new Scrambler();
 }
+
+GRAS_REGISTER_FACTORY("/extras/scrambler", make_scrambler)
