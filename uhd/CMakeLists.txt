@@ -25,3 +25,18 @@ GRAS_TOOL(
     DIRECTORY extras
     COMPONENT extras
 )
+
+########################################################################
+# setup SWIG build
+########################################################################
+if(UHD_FOUND)
+    list(APPEND GRAS_SWIG_TOOL_INCLUDES ${UHD_INCLUDE_DIRS})
+    list(APPEND GRAS_SWIG_TOOL_LIBRARIES ${UHD_LIBRARIES})
+    list(APPEND CMAKE_SWIG_FLAGS "-DHAVE_UHD")
+endif()
+GRAS_SWIG_TOOL(
+    SOURCE UHDTypes.i
+    TARGET extras_uhd_types
+    DIRECTORY extras
+    COMPONENT extras
+)
