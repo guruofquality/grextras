@@ -1,9 +1,28 @@
-// Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
+/*
+# Copyright 1980-2013 Free Software Foundation, Inc.
+# Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
+# 
+# This file is part of GrExtras
+# 
+# GrExtras is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+# 
+# GrExtras is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with GrExtras; see the file COPYING.  If not, write to
+# the Free Software Foundation, Inc., 51 Franklin Street,
+# Boston, MA 02110-1301, USA.
+#
+*/
 
-%include "GrExtras_Common.i"
-
-%{
-
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <cstdio>
 #include <stdexcept>
 #include <string.h>
@@ -220,13 +239,9 @@ void digital_framer_sink_1::work(const InputItems &ins, const OutputItems &)
   return;
 }
 
-%}
-
-%inline %{
-
-inline boost::shared_ptr<gras::Block> make_digital_framer_sink_1(void)
+static gras::Block *make_digital_framer_sink_1(void)
 {
-    return boost::shared_ptr<gras::Block>(new digital_framer_sink_1());
+    return new digital_framer_sink_1();
 }
 
-%}
+GRAS_REGISTER_FACTORY("/extras/framer_sink_1", make_digital_framer_sink_1)

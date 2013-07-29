@@ -185,7 +185,7 @@ void Scrambler::work(const InputItems &ins, const OutputItems &outs)
     this->produce(n);
 }
 
-gras::Block *make_scrambler(void)
+static gras::Block *make_scrambler(void)
 {
     return new Scrambler();
 }

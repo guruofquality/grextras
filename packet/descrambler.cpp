@@ -153,7 +153,7 @@ void Descrambler::work(const InputItems &ins, const OutputItems &outs)
     }
 }
 
-gras::Block *make_descrambler(void)
+static gras::Block *make_descrambler(void)
 {
     return new Descrambler();
 }

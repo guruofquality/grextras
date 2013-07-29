@@ -2,7 +2,7 @@
 
 import unittest
 import gras
-import grextras
+import TestUtils
 import numpy
 import time
 
@@ -35,21 +35,21 @@ class test_packet(unittest.TestCase):
         self.tb = None
 
     def test_simple_loopback(self):
-        framer = grextras.PacketFramer(
+        framer = gras.Factory.make('/extras/packet_framer',
             samples_per_symbol = 2,
             bits_per_symbol = 1,
         )
-        deframer = grextras.PacketDeframer()
+        deframer = gras.Factory.make('/extras/packet_deframer')
 
         src_data = tuple(numpy.random.randint(-1024, 1024, 11)) #40 bytes + padding
-        src = grextras.VectorSource(numpy.int32, src_data)
-        dst = grextras.VectorSink(numpy.int32)
+        src = TestUtils.VectorSource(numpy.int32, src_data)
+        dst = TestUtils.VectorSink(numpy.int32)
 
         from gnuradio import gr
         unpack = gr.packed_to_unpacked_bb(1, gr.GR_MSB_FIRST)
 
-        s2d = grextras.Stream2Datagram(numpy.dtype(numpy.int32).itemsize, 40) #mtu 40 bytes
-        d2s = grextras.Datagram2Stream(numpy.dtype(numpy.int32).itemsize)
+        s2d = gras.Factory.make('/extras/stream_to_datagram', numpy.dtype(numpy.int32).itemsize, 40) #mtu 40 bytes
+        d2s = gras.Factory.make('/extras/datagram_to_stream', numpy.dtype(numpy.int32).itemsize)
 
         self.tb.connect(src, s2d, framer, unpack, deframer, d2s, dst)
 
@@ -89,29 +89,29 @@ class test_packet(unittest.TestCase):
             log=False,
         )
 
-        framer = grextras.PacketFramer(
+        framer = gras.Factory.make('/extras/packet_framer',
             samples_per_symbol = sps,
             bits_per_symbol = 1,
         )
 
-        burst_tagger = grextras.BurstTagger(sps)
+        burst_tagger = gras.Factory.make('/extras/burst_tagger', sps)
 
-        deframer = grextras.PacketDeframer()
+        deframer = gras.Factory.make('/extras/packet_deframer')
 
         src_data = tuple(numpy.random.randint(-1024, 1024, 11)) #40 bytes + padding
-        src = grextras.VectorSource(numpy.int32, src_data)
-        dst = grextras.VectorSink(numpy.int32)
+        src = TestUtils.VectorSource(numpy.int32, src_data)
+        dst = TestUtils.VectorSink(numpy.int32)
 
-        s2d = grextras.Stream2Datagram(numpy.dtype(numpy.int32).itemsize, 40) #mtu 40 bytes
-        d2s = grextras.Datagram2Stream(numpy.dtype(numpy.int32).itemsize)
+        s2d = gras.Factory.make('/extras/stream_to_datagram', numpy.dtype(numpy.int32).itemsize, 40) #mtu 40 bytes
+        d2s = gras.Factory.make('/extras/datagram_to_stream', numpy.dtype(numpy.int32).itemsize)
 
-        delay = grextras.Delay(numpy.dtype(numpy.complex64).itemsize)
+        delay = gras.Factory.make('/extras/delay', numpy.dtype(numpy.complex64).itemsize)
         delay.set_delay(73) #sample delay
 
         #inject noise into the system
-        noise = grextras.NoiseSource.fc32()
+        noise = gras.Factory.make('/extras/noise_source_fc32', -1)
         noise.set_amplitude(0.05)
-        add = grextras.Add.fc32_fc32()
+        add = gras.Factory.make('/extras/add_fc32_fc32')
         self.tb.connect(noise, (add, 1))
 
         self.tb.connect(src, s2d, framer, mod, burst_tagger, delay, add, demod, deframer, d2s, dst)

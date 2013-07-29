@@ -36,7 +36,7 @@ if(UHD_FOUND)
 endif()
 GRAS_SWIG_TOOL(
     SOURCE UHDTypes.i
-    TARGET extras_uhd_types
+    TARGET UHDTypes
     DIRECTORY extras
     COMPONENT extras
 )
