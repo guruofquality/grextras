@@ -23,4 +23,16 @@
         <name>out</name>
         <type>complex</type>
     </source>
+    <doc>
+The burst tagger interpolates an end of burst tag \
+onto a stream from a discontinous stream of samples.
+
+A length tag embedded into the input sample stream \
+tells the burst tagger block where to place the EOB tag.
+
+This block is meant to be used after a modulator block:
+packet_framer -> modulator -> burst_tagger -> USRP Sink
+
+The sps param is the modulator's samples per symbol.
+    </doc>
 </block>
