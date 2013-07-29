@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##UHD control port
+###################################################
+ -->
+<block>
+    <name>UHD: Control Port</name>
+    <key>extras_uhd_control_port</key>
+    <category>UHD</category>
+    <import>import gras</import>
+    <import>from gnuradio import uhd</import>
+    <make>gras.Factory.make('/extras/uhd_control_port', $addr)
+try: self.adopt_element("$(id)", $(id))
+except Exception as ex: print ex</make>
+    <param>
+        <name>Device Address</name>
+        <key>addr</key>
+        <value>addr=192.168.10.2</value>
+        <type>string</type>
+    </param>
+    <doc>
+The UHD control port block gives property tree access to a USRP object. \
+This allows other user blocks to programmatically access USRP properties, \
+through the GRAS properties interface and element tree API.
+
+Available properties:
+- "command_time" of type uhd::time_spec_t
+  (note, set to time_spec_t(0.0) to clear command time)
+- "rx_freq" of type uhd::tune_request
+- "tx_freq" of type uhd::tune_request
+- "rx_gain" of type double
+- "tx_gain" of type double
+- "time_source" of type string
+- "clock_source" of type string
+- "time_now" of type uhd::time_spec_t
+- "time_pps" of type uhd::time_spec_t
+  (getting time pps gets the time at the last pps)
+  (setting time pps sets the time at the next pps)
+
+Documentation for these properties can be found \
+by inspecting the uhd/usrp/multi_usrp.hpp header.
+
+The device address represents a device on your system. \
+To be portable, the addr is in the comma delimited format.
+Ex: make("addr=192.168.10.2") 
+http://files.ettus.com/uhd_docs/manual/html/identification.html
+    </doc>
+</block>

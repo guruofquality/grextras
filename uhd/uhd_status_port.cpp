@@ -15,24 +15,23 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <grextras/uhd_status_port.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <boost/lexical_cast.hpp>
 #include <PMC/Containers.hpp>
 #include <stdexcept>
-
-using namespace grextras;
 
 #ifdef HAVE_UHD
 
 #include <uhd/usrp/multi_usrp.hpp>
 
-struct UHDStatusPortImpl : public UHDStatusPort
+struct UHDStatusPort : gras::Block
 {
-    UHDStatusPortImpl(uhd::usrp::multi_usrp::sptr usrp):
+    UHDStatusPort(uhd::usrp::multi_usrp::sptr usrp):
         gras::Block("GrExtras UHDStatusPort")
     {
         _usrp = usrp;
+        this->register_call("add_sensor", &UHDStatusPort::add_sensor);
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -85,17 +84,19 @@ struct UHDStatusPortImpl : public UHDStatusPort
     std::vector<std::string> _sensors;
 };
 
-UHDStatusPort::sptr UHDStatusPort::make(const std::string &addr)
+gras::Block *make_uhd_status_port(const std::string &addr)
 {
     uhd::usrp::multi_usrp::sptr u = uhd::usrp::multi_usrp::make(addr);
-    return boost::make_shared<UHDStatusPortImpl>(u);
+    return new UHDStatusPort(u);
 }
 
 #else //HAVE_UHD
 
-UHDStatusPort::sptr UHDStatusPort::make(const std::string &)
+gras::Block *make_uhd_status_port(const std::string &)
 {
     throw std::runtime_error("UHDStatusPort::make - GrExtras not build with UHD support");
 }
 
 #endif //HAVE_UHD
+
+GRAS_REGISTER_FACTORY("/extras/uhd_status_port", make_uhd_status_port)

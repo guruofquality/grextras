@@ -15,13 +15,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <grextras/uhd_control_port.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <boost/lexical_cast.hpp>
 #include <PMC/Containers.hpp>
 #include <stdexcept>
-
-using namespace grextras;
 
 #ifdef HAVE_UHD
 
@@ -33,32 +31,32 @@ namespace uhd
 PMC_DECL_FALSE_EQUALITY(uhd::tune_request_t)
 }
 
-struct UHDControlPortImpl : public UHDControlPort
+struct UHDControlPort : gras::Block
 {
-    UHDControlPortImpl(uhd::usrp::multi_usrp::sptr usrp):
+    UHDControlPort(uhd::usrp::multi_usrp::sptr usrp):
         gras::Block("GrExtras UHDControlPort")
     {
         _usrp = usrp;
         //register handlers
-        this->register_call("set_command_time", &UHDControlPortImpl::set_command_time);
-        this->register_call("get_rx_gain", &UHDControlPortImpl::get_rx_gain);
-        this->register_call("set_rx_gain", &UHDControlPortImpl::set_rx_gain);
-        this->register_call("get_tx_gain", &UHDControlPortImpl::get_tx_gain);
-        this->register_call("set_tx_gain", &UHDControlPortImpl::set_tx_gain);
-        this->register_call("get_rx_freq", &UHDControlPortImpl::get_rx_freq);
-        this->register_call("set_rx_freq", &UHDControlPortImpl::set_rx_freq);
-        this->register_call("get_tx_freq", &UHDControlPortImpl::get_tx_freq);
-        this->register_call("set_tx_freq", &UHDControlPortImpl::set_tx_freq);
+        this->register_call("set_command_time", &UHDControlPort::set_command_time);
+        this->register_call("get_rx_gain", &UHDControlPort::get_rx_gain);
+        this->register_call("set_rx_gain", &UHDControlPort::set_rx_gain);
+        this->register_call("get_tx_gain", &UHDControlPort::get_tx_gain);
+        this->register_call("set_tx_gain", &UHDControlPort::set_tx_gain);
+        this->register_call("get_rx_freq", &UHDControlPort::get_rx_freq);
+        this->register_call("set_rx_freq", &UHDControlPort::set_rx_freq);
+        this->register_call("get_tx_freq", &UHDControlPort::get_tx_freq);
+        this->register_call("set_tx_freq", &UHDControlPort::set_tx_freq);
 
-        this->register_call("get_time_source", &UHDControlPortImpl::get_time_source);
-        this->register_call("set_time_source", &UHDControlPortImpl::set_time_source);
-        this->register_call("get_clock_source", &UHDControlPortImpl::get_clock_source);
-        this->register_call("set_clock_source", &UHDControlPortImpl::set_clock_source);
+        this->register_call("get_time_source", &UHDControlPort::get_time_source);
+        this->register_call("set_time_source", &UHDControlPort::set_time_source);
+        this->register_call("get_clock_source", &UHDControlPort::get_clock_source);
+        this->register_call("set_clock_source", &UHDControlPort::set_clock_source);
 
-        this->register_call("get_time_now", &UHDControlPortImpl::get_time_now);
-        this->register_call("set_time_now", &UHDControlPortImpl::set_time_now);
-        this->register_call("get_time_pps", &UHDControlPortImpl::get_time_pps);
-        this->register_call("set_time_pps", &UHDControlPortImpl::set_time_pps);
+        this->register_call("get_time_now", &UHDControlPort::get_time_now);
+        this->register_call("set_time_now", &UHDControlPort::set_time_now);
+        this->register_call("get_time_pps", &UHDControlPort::get_time_pps);
+        this->register_call("set_time_pps", &UHDControlPort::set_time_pps);
     }
 
     void work(const InputItems &, const OutputItems &)
@@ -184,17 +182,19 @@ struct UHDControlPortImpl : public UHDControlPort
     uhd::usrp::multi_usrp::sptr _usrp;
 };
 
-UHDControlPort::sptr UHDControlPort::make(const std::string &addr)
+gras::Block *make_uhd_control_port(const std::string &addr)
 {
     uhd::usrp::multi_usrp::sptr u = uhd::usrp::multi_usrp::make(addr);
-    return boost::make_shared<UHDControlPortImpl>(u);
+    return new UHDControlPort(u);
 }
 
 #else //HAVE_UHD
 
-UHDControlPort::sptr UHDControlPort::make(const std::string &)
+gras::Block *make_uhd_control_port(const std::string &)
 {
     throw std::runtime_error("UHDControlPort::make - GrExtras not build with UHD support");
 }
 
 #endif //HAVE_UHD
+
+GRAS_REGISTER_FACTORY("/extras/uhd_control_port", make_uhd_control_port)

@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+###################################################
+##UHD status port
+###################################################
+ -->
+<block>
+    <name>UHD: Status Port</name>
+    <key>extras_uhd_status_port</key>
+    <category>UHD</category>
+    <import>import gras</import>
+    <import>from gnuradio import uhd</import>
+    <make>gras.Factory.make('/extras/uhd_status_port', $addr)
+#for $sensor in $sensors
+self.$(id).add_sensor($sensor)
+#end for</make>
+    <param>
+        <name>Device Address</name>
+        <key>addr</key>
+        <value>addr=192.168.10.2</value>
+        <type>string</type>
+    </param>
+    <param>
+        <name>Sensors List</name>
+        <key>sensors</key>
+        <value>['MB0:ref_locked', 'RX0:lo_locked']</value>
+        <type>raw</type>
+    </param>
+    <source>
+        <name>out</name>
+        <type></type>
+    </source>
+    <doc>
+The UHD status port provides asynchronous status data about a USRP device. \
+This block has one output port that produces message. \
+The format of the messages is independent from UHD types. \
+The following information is provided by a message:
+
+The message will be a PMCTuple2
+The element0 = name of a sensor
+The element1 = value of a sensor
+
+These values are polled from get_sensor(). \
+The value can be a string, bool, signed, or double. \
+This block will not automatically poll the sensors. \
+Sensors have to be explicitly enabled via add_sensor().
+
+The device address represents a device on your system. \
+To be portable, the addr is in the comma delimited format.
+Ex: make("addr=192.168.10.2") 
+http://files.ettus.com/uhd_docs/manual/html/identification.html
+
+Documentation for add sensor:
+Adds to the list of sensors to query. \
+See the special formatting below for sensor names. \
+When the formatting with the : is not used, \
+a motherboard sensor for mboard 0 is assumed.
+
+For a motherboard sensor use the format: \
+MB[n]:[name], where n is the mboard number. \
+Example: ref_locked on mboard 0: MB0:ref_locked
+
+For a RX channel sensor use the format: \
+RX[ch]:[name], where ch is the channel number. \
+Example: lo_locked on channel 0: RX0:lo_locked
+
+For a TX channel sensor use the format: \
+TX[ch]:[name], where ch is the channel number. \
+Example: lo_locked on channel 0: TX0:lo_locked
+    </doc>
+</block>

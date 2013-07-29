@@ -36,6 +36,8 @@ else(GRAS_ROOT)
 endif(GRAS_ROOT)
 include(GRASTool)
 
+find_package(Boost COMPONENTS)
+
 #gives us the test utils helper
 list(APPEND GR_TEST_PYTHON_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/python)
 
@@ -43,6 +45,7 @@ add_subdirectory(math)
 add_subdirectory(misc)
 add_subdirectory(network)
 add_subdirectory(sources)
+add_subdirectory(uhd)
 
 GRAS_TOOL(
     SOURCES block_tree.xml
