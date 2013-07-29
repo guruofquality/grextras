@@ -1,5 +1,6 @@
 #
 # Copyright 2007-2012 Free Software Foundation, Inc.
+# Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 #
 # This file is part of GrExtras
 #
@@ -21,7 +22,7 @@
 
 import unittest
 import gras
-import grextras
+import TestUtils
 import numpy
 
 class test_noise_source(unittest.TestCase):
@@ -33,12 +34,12 @@ class test_noise_source(unittest.TestCase):
         self.tb = None
 
     def test_float32(self):
-        op = grextras.NoiseSource.f32(0)
+        op = gras.Factory.make('/extras/noise_source_f32', 0)
         op.set_waveform("GAUSSIAN")
         op.set_amplitude(10)
 
-        head = grextras.Head(numpy.float32, 12)
-        dst = grextras.VectorSink(numpy.float32)
+        head = TestUtils.Head(numpy.float32, 12)
+        dst = TestUtils.VectorSink(numpy.float32)
 
         self.tb.connect(op, head, dst)
         self.tb.run()

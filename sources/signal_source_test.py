@@ -1,5 +1,6 @@
 #
 # Copyright 2004-2012 Free Software Foundation, Inc.
+# Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 #
 # This file is part of GrExtras
 #
@@ -21,7 +22,7 @@
 
 import unittest
 import gras
-import grextras
+import TestUtils
 import numpy
 
 class test_signal_source(unittest.TestCase):
@@ -34,12 +35,12 @@ class test_signal_source(unittest.TestCase):
 
     def test_signal_source_f32(self):
         expected_result = (1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5)
-        src1 = grextras.SignalSource.f32()
-        src1.set_frequency(1e6, 0)
+        src1 = gras.Factory.make('/extras/signal_source_f32')
+        src1.set_frequency(0)
         src1.set_waveform("CONST")
         src1.set_amplitude(1.5)
-        op = grextras.Head(numpy.float32, 10)
-        dst1 = grextras.VectorSink(numpy.float32)
+        op = TestUtils.Head(numpy.float32, 10)
+        dst1 = TestUtils.VectorSink(numpy.float32)
         self.tb.connect(src1, op, dst1)
         self.tb.run()
         dst_data = dst1.data()

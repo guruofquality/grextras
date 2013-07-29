@@ -1,13 +1,12 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/noise_source.hpp>
-#include <boost/make_shared.hpp>
+#include "sources_common.hpp"
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include "noise_source_random.hpp"
 #include <stdexcept>
 #include <cmath>
 #include <boost/math/special_functions/round.hpp>
-
-using namespace grextras;
 
 static const size_t wave_table_size = 4096;
 
@@ -15,9 +14,9 @@ static const size_t wave_table_size = 4096;
  * Generic add const implementation
  **********************************************************************/
 template <typename type>
-class NoiseSourceImpl : public NoiseSource{
-public:
-    NoiseSourceImpl(const long seed):
+struct NoiseSource : gras::Block
+{
+    NoiseSource(const long seed):
         gras::Block("GrExtras Noise Source"),
         _index(0),
         _table(wave_table_size),
@@ -27,6 +26,14 @@ public:
     {
         this->output_config(0).item_size = sizeof(type);
         this->update_table();
+        this->register_call("set_waveform", &NoiseSource::set_waveform);
+        this->register_call("get_waveform", &NoiseSource::get_waveform);
+        this->register_call("set_offset", &NoiseSource::set_offset);
+        this->register_call("get_offset", &NoiseSource::get_offset);
+        this->register_call("set_amplitude", &NoiseSource::set_amplitude);
+        this->register_call("get_amplitude", &NoiseSource::get_amplitude);
+        this->register_call("set_factor", &NoiseSource::set_factor);
+        this->register_call("get_factor", &NoiseSource::get_factor);
     }
 
     void work(const InputItems &, const OutputItems &outs)
@@ -136,42 +143,18 @@ public:
 /***********************************************************************
  * factory function
  **********************************************************************/
-NoiseSource::sptr NoiseSource::make_fc32(const long seed)
-{
-    return sptr(new NoiseSourceImpl<std::complex<float> >(seed));
-}
+#define make_factory_function(suffix, type) \
+static gras::Block *make_noise_source_ ## suffix(const long &seed) \
+{ \
+    return new NoiseSource<type>(seed); \
+} \
+GRAS_REGISTER_FACTORY("/extras/noise_source_" #suffix, make_noise_source_ ## suffix)
 
-NoiseSource::sptr NoiseSource::make_sc32(const long seed)
-{
-    return sptr(new NoiseSourceImpl<std::complex<boost::int32_t> >(seed));
-}
-
-NoiseSource::sptr NoiseSource::make_sc16(const long seed)
-{
-    return sptr(new NoiseSourceImpl<std::complex<boost::int16_t> >(seed));
-}
-
-NoiseSource::sptr NoiseSource::make_sc8(const long seed)
-{
-    return sptr(new NoiseSourceImpl<std::complex<boost::int8_t> >(seed));
-}
-
-NoiseSource::sptr NoiseSource::make_f32(const long seed)
-{
-    return sptr(new NoiseSourceImpl<float>(seed));
-}
-
-NoiseSource::sptr NoiseSource::make_s32(const long seed)
-{
-    return sptr(new NoiseSourceImpl<boost::int32_t>(seed));
-}
-
-NoiseSource::sptr NoiseSource::make_s16(const long seed)
-{
-    return sptr(new NoiseSourceImpl<boost::int16_t>(seed));
-}
-
-NoiseSource::sptr NoiseSource::make_s8(const long seed)
-{
-    return sptr(new NoiseSourceImpl<boost::int8_t>(seed));
-}
+make_factory_function(fc32, std::complex<float>)
+make_factory_function(sc32, std::complex<boost::int32_t>)
+make_factory_function(sc16, std::complex<boost::int16_t>)
+make_factory_function(sc8, std::complex<boost::int8_t>)
+make_factory_function(f32, float)
+make_factory_function(s32, boost::int32_t)
+make_factory_function(s16, boost::int16_t)
+make_factory_function(s8, boost::int8_t)

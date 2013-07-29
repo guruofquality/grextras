@@ -1,12 +1,11 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/signal_source.hpp>
-#include <boost/make_shared.hpp>
+#include "sources_common.hpp"
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <stdexcept>
 #include <cmath>
 #include <boost/math/special_functions/round.hpp>
-
-using namespace grextras;
 
 static const size_t wave_table_size = 4096;
 
@@ -14,9 +13,9 @@ static const size_t wave_table_size = 4096;
  * Generic add const implementation
  **********************************************************************/
 template <typename type>
-struct SignalSourceImpl : public SignalSource
+struct SignalSource : gras::Block
 {
-    SignalSourceImpl(void):
+    SignalSource(void):
         gras::Block("GrExtras SignalSource"),
         _index(0), _step(0),
         _table(wave_table_size),
@@ -25,6 +24,14 @@ struct SignalSourceImpl : public SignalSource
     {
         this->output_config(0).item_size = sizeof(type);
         this->update_table();
+        this->register_call("set_waveform", &SignalSource::set_waveform);
+        this->register_call("get_waveform", &SignalSource::get_waveform);
+        this->register_call("set_offset", &SignalSource::set_offset);
+        this->register_call("get_offset", &SignalSource::get_offset);
+        this->register_call("set_amplitude", &SignalSource::set_amplitude);
+        this->register_call("get_amplitude", &SignalSource::get_amplitude);
+        this->register_call("set_frequency", &SignalSource::set_frequency);
+        this->register_call("get_frequency", &SignalSource::get_frequency);
     }
 
     void work(const InputItems &, const OutputItems &outs)
@@ -71,7 +78,7 @@ struct SignalSourceImpl : public SignalSource
         return _scalar;
     }
 
-    void set_frequency(const double freq)
+    void set_frequency(const double &freq)
     {
         _step = boost::math::iround(freq*_table.size());
     }
@@ -126,7 +133,6 @@ struct SignalSourceImpl : public SignalSource
         complex128_to_num(_scalar * val + _offset, _table[index]);
     }
 
-
     size_t _index;
     size_t _step;
     std::vector<type> _table;
@@ -137,42 +143,18 @@ struct SignalSourceImpl : public SignalSource
 /***********************************************************************
  * factory function
  **********************************************************************/
-SignalSource::sptr SignalSource::make_fc32(void)
-{
-    return sptr(new SignalSourceImpl<std::complex<float> >());
-}
+#define make_factory_function(suffix, type) \
+static gras::Block *make_signal_source_ ## suffix(void) \
+{ \
+    return new SignalSource<type>(); \
+} \
+GRAS_REGISTER_FACTORY("/extras/signal_source_" #suffix, make_signal_source_ ## suffix)
 
-SignalSource::sptr SignalSource::make_sc32(void)
-{
-    return sptr(new SignalSourceImpl<std::complex<boost::int32_t> >());
-}
-
-SignalSource::sptr SignalSource::make_sc16(void)
-{
-    return sptr(new SignalSourceImpl<std::complex<boost::int16_t> >());
-}
-
-SignalSource::sptr SignalSource::make_sc8(void)
-{
-    return sptr(new SignalSourceImpl<std::complex<boost::int8_t> >());
-}
-
-SignalSource::sptr SignalSource::make_f32(void)
-{
-    return sptr(new SignalSourceImpl<float>());
-}
-
-SignalSource::sptr SignalSource::make_s32(void)
-{
-    return sptr(new SignalSourceImpl<boost::int32_t>());
-}
-
-SignalSource::sptr SignalSource::make_s16(void)
-{
-    return sptr(new SignalSourceImpl<boost::int16_t>());
-}
-
-SignalSource::sptr SignalSource::make_s8(void)
-{
-    return sptr(new SignalSourceImpl<boost::int8_t>());
-}
+make_factory_function(fc32, std::complex<float>)
+make_factory_function(sc32, std::complex<boost::int32_t>)
+make_factory_function(sc16, std::complex<boost::int16_t>)
+make_factory_function(sc8, std::complex<boost::int8_t>)
+make_factory_function(f32, float)
+make_factory_function(s32, boost::int32_t)
+make_factory_function(s16, boost::int16_t)
+make_factory_function(s8, boost::int8_t)

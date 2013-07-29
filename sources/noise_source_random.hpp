@@ -4,6 +4,7 @@
 #ifndef INCLUDED_GREXTRAS_NOISE_SOURCE_RANDOM_HPP
 #define INCLUDED_GREXTRAS_NOISE_SOURCE_RANDOM_HPP
 
+#include <complex>
 
 /* -*- c++ -*- */
 /*

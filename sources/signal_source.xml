@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
 <!--
 ###################################################
-##Noise source block
+##Signal source block
 ###################################################
  -->
 <block>
-    <name>Ex: Noise Source</name>
-    <key>extras_noise_source</key>
-    <import>import grextras</import>
-    <make>grextras.NoiseSource.$(type)($seed)
+    <name>Ex: Signal Source</name>
+    <key>extras_signal_source</key>
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/signal_source_$(type))
 self.$(id).set_waveform($wave)
 self.$(id).set_offset($off)
 self.$(id).set_amplitude($scalar)
-self.$(id).set_factor($factor)</make>
+self.$(id).set_frequency($wave_freq/$samp_rate)</make>
     <callback>set_waveform($wave)</callback>
     <callback>set_offset($off)</callback>
     <callback>set_amplitude($scalar)</callback>
-    <callback>set_factor($factor)</callback>
+    <callback>set_frequency($wave_freq/$samp_rate)</callback>
     <param>
         <name>Output Type</name>
         <key>type</key>
@@ -34,18 +34,24 @@ self.$(id).set_factor($factor)</make>
     <param>
         <name>Waveform</name>
         <key>wave</key>
-        <value>GAUSSIAN</value>
+        <value>COSINE</value>
         <type>string</type>
-        <option><name>Uniform</name><key>UNIFORM</key></option>
-        <option><name>Gaussian</name><key>GAUSSIAN</key></option>
-        <option><name>Laplacian</name><key>LAPLACIAN</key></option>
-        <option><name>Impulse</name><key>IMPLUSE</key></option>
+        <option><name>Constant</name><key>CONST</key></option>
+        <option><name>Cosine</name><key>COSINE</key></option>
+        <option><name>Ramp</name><key>RAMP</key></option>
+        <option><name>Square</name><key>SQUARE</key></option>
     </param>
     <param>
-        <name>Seed</name>
-        <key>seed</key>
-        <value>-42</value>
-        <type>int</type>
+        <name>Sample Rate (Sps)</name>
+        <key>samp_rate</key>
+        <value>samp_rate</value>
+        <type>real</type>
+    </param>
+    <param>
+        <name>Wave Freq (Hz)</name>
+        <key>wave_freq</key>
+        <value>1000</value>
+        <type>real</type>
     </param>
     <param>
         <name>Offset</name>
@@ -58,13 +64,6 @@ self.$(id).set_factor($factor)</make>
         <key>scalar</key>
         <value>1.0</value>
         <type>complex</type>
-    </param>
-    <param>
-        <name>Factor</name>
-        <key>factor</key>
-        <value>9.0</value>
-        <type>real</type>
-        <hide>'part'</hide>
     </param>
     <source>
         <name>out</name>

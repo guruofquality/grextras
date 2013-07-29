@@ -42,6 +42,7 @@ list(APPEND GR_TEST_PYTHON_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/python)
 add_subdirectory(math)
 add_subdirectory(misc)
 add_subdirectory(network)
+add_subdirectory(sources)
 
 GRAS_TOOL(
     SOURCES block_tree.xml
