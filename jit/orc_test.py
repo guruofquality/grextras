@@ -2,7 +2,7 @@
 
 import unittest
 import gras
-import grextras
+import TestUtils
 import numpy
 
 SOURCE = """
@@ -27,17 +27,15 @@ class test_orc_block(unittest.TestCase):
         self.tb = None
 
     def test_add_float32(self):
-        op = grextras.OrcBlock()
+        op = gras.Factory.make('/extras/orc_block')
         op.set_program("volk_32f_x2_add_32f_a_orc_impl", SOURCE)
-        op.input_config(0).item_size = 4
-        op.output_config(0).item_size = 4
 
         vec0 = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)
         vec1 = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)
 
-        src0 = grextras.VectorSource(numpy.float32, vec0)
-        src1 = grextras.VectorSource(numpy.float32, vec1)
-        dst = grextras.VectorSink(numpy.float32)
+        src0 = TestUtils.VectorSource(numpy.float32, vec0)
+        src1 = TestUtils.VectorSource(numpy.float32, vec1)
+        dst = TestUtils.VectorSink(numpy.float32)
 
         self.tb.connect(src0, (op, 0))
         self.tb.connect(src1, (op, 1))
@@ -50,15 +48,13 @@ class test_orc_block(unittest.TestCase):
         self.assertEqual(expected_result, actual_result)
 
     def test_sqrt_float32(self):
-        op = grextras.OrcBlock()
+        op = gras.Factory.make('/extras/orc_block')
         op.set_program("volk_32f_sqrt_32f_a_orc_impl", SOURCE)
-        op.input_config(0).item_size = 4
-        op.output_config(0).item_size = 4
 
         vec = numpy.array(numpy.random.randint(10, +150, 10000), numpy.float32)
 
-        src = grextras.VectorSource(numpy.float32, vec)
-        dst = grextras.VectorSink(numpy.float32)
+        src = TestUtils.VectorSource(numpy.float32, vec)
+        dst = TestUtils.VectorSink(numpy.float32)
 
         self.tb.connect(src, op, dst)
         self.tb.run()

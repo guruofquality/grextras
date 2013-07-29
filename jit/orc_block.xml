@@ -7,18 +7,12 @@
 <block>
     <name>Ex: ORC Block</name>
     <key>extras_orc_block</key>
-    <import>import grextras</import>
-    <make>grextras.OrcBlock()
-#for i, s in enumerate($input_sizes())
-self.$(id).input_config($i).item_size = $s
-#end for
-#for i, s in enumerate($output_sizes())
-self.$(id).output_config($i).item_size = $s
-#end for
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/orc_block')
 self.$(id).set_program($kernel_name, open($program_source).read())
-self.$(id).params().kernel_factor = $kernel_factor
-self.$(id).params().production_factor = $production_factor
-self.$(id).params().consumption_offset = $consumption_offset</make>
+self.$(id).set_kernel_factor($kernel_factor)
+self.$(id).set_production_factor($production_factor)
+self.$(id).set_consumption_offset($consumption_offset)</make>
     <param>
         <name>Num inputs</name>
         <key>num_inputs</key>
@@ -27,23 +21,11 @@ self.$(id).params().consumption_offset = $consumption_offset</make>
         <hide>part</hide>
     </param>
     <param>
-        <name>Input sizes</name>
-        <key>input_sizes</key>
-        <value>[8, 8]</value>
-        <type>int_vector</type>
-    </param>
-    <param>
         <name>Num outputs</name>
         <key>num_outputs</key>
         <value>1</value>
         <type>int</type>
         <hide>part</hide>
-    </param>
-    <param>
-        <name>Output sizes</name>
-        <key>output_sizes</key>
-        <value>[8]</value>
-        <type>int_vector</type>
     </param>
     <param>
         <name>Program source</name>
@@ -89,6 +71,39 @@ self.$(id).params().consumption_offset = $consumption_offset</make>
         <nports>$num_outputs</nports>
     </source>
     <doc>
-See parameter documentation in grextras/orc_block.hpp
+ORC JIT block:
+The ORC block takes ORC SIMD code, compiles it at runtime, \
+and executes it in the work function of the block.
+
+Program source sets the source code to be run by this block. \
+The source code is an ORC program in text format. \
+The kernel name sets the name of a kernel in the source.
+
+The kernel factor - a kenel execution parameter. \
+This factor controls the size of the ORC kernel loop \
+based on the minimum number of items at each input port. \
+The number of iterations obeys the following calculation:
+
+kernel_iterations = num_input_items*kernel_factor
+
+Default is 1.0
+
+The production factor - a production/consumption parameter. \
+This factor controls how items get produced from this block \
+based on the minimum number of items at each input port. \
+The production value obeys the following calculation:
+
+items_produced = num_input_items*production_factor
+
+Default is 1.0
+
+The consumption offset - a production/consumption parameter. \
+This value controls how items get consumed from this block \
+based on the minimum number of items at each input port. \
+The consumption value obeys the following calculation:
+
+items_consumed = num_input_items-consumption_offset
+
+Default is 0
     </doc>
 </block>

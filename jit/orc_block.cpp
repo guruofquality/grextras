@@ -1,19 +1,10 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/orc_block.hpp>
-#include <boost/make_shared.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <stdexcept>
 #include <iostream>
 #include <boost/foreach.hpp>
-
-using namespace grextras;
-
-OrcBlockParams::OrcBlockParams(void)
-{
-    kernel_factor = 1.0;
-    production_factor = 1.0;
-    consumption_offset = 0;
-}
 
 #ifdef HAVE_ORC
 
@@ -23,22 +14,36 @@ OrcBlockParams::OrcBlockParams(void)
 /***********************************************************************
  * impl class definition
  **********************************************************************/
-struct OrcBlockImpl : OrcBlock
+struct OrcBlock : gras::Block
 {
-    OrcBlockImpl(void):
+    OrcBlock(void):
         gras::Block("GrExtras OrcBlock")
     {
-        //NULL
+        _kernel_factor = 1.0;
+        _production_factor = 1.0;
+        _consumption_offset = 0;
+        this->register_call("set_program", &OrcBlock::set_program);
+        this->register_call("set_kernel_factor", &OrcBlock::set_kernel_factor);
+        this->register_call("set_production_factor", &OrcBlock::set_production_factor);
+        this->register_call("set_consumption_offset", &OrcBlock::set_consumption_offset);
     }
 
-    ~OrcBlockImpl(void)
+    ~OrcBlock(void)
     {
         //NULL
     }
 
-    OrcBlockParams &params(void)
+    void set_kernel_factor(const double &factor)
     {
-        return _params;
+        _kernel_factor = factor;
+    }
+    void set_production_factor(const double &factor)
+    {
+        _production_factor = factor;
+    }
+    void set_consumption_offset(const size_t &offset)
+    {
+        _consumption_offset = offset;
     }
 
     void set_program(const std::string &name, const std::string &source);
@@ -47,24 +52,26 @@ struct OrcBlockImpl : OrcBlock
     void propagate_tags(const size_t i, const gras::TagIter &iter);
 
     size_t _num_outs;
-    OrcBlockParams _params;
     OrcExecutor _orc_ex;
     boost::shared_ptr<OrcExecutor> _orc_executor;
     boost::shared_ptr<OrcProgram> _orc_program;
+    double _kernel_factor;
+    double _production_factor;
+    size_t _consumption_offset;
 };
 
 /***********************************************************************
  * Scheduler work hooks
  **********************************************************************/
-void OrcBlockImpl::notify_topology(const size_t num_inputs, const size_t num_outputs)
+void OrcBlock::notify_topology(const size_t num_inputs, const size_t num_outputs)
 {
     if (num_inputs > 4) throw std::runtime_error("ORC Block max inputs 4");
     if (num_outputs > 4) throw std::runtime_error("ORC Block max outputs 4");
     _num_outs = num_outputs;
-    this->input_config(0).reserve_items = _params.consumption_offset + 1;
+    this->input_config(0).reserve_items = _consumption_offset + 1;
 }
 
-void OrcBlockImpl::propagate_tags(const size_t i, const gras::TagIter &iter)
+void OrcBlock::propagate_tags(const size_t i, const gras::TagIter &iter)
 {
     BOOST_FOREACH(const gras::Tag &t, iter)
     {
@@ -73,14 +80,14 @@ void OrcBlockImpl::propagate_tags(const size_t i, const gras::TagIter &iter)
         {
             gras::Tag t_o = t;
             t_o.offset -= this->get_consumed(i);
-            t_o.offset *= _params.production_factor;
+            t_o.offset *= _production_factor;
             t_o.offset += this->get_produced(o);
             this->post_output_tag(o, t_o);
         }
     }
 }
 
-void OrcBlockImpl::set_program(
+void OrcBlock::set_program(
     const std::string &name,
     const std::string &source
 )
@@ -152,21 +159,37 @@ void OrcBlockImpl::set_program(
     ////////////////////////////////////////////////////////////////////
     OrcExecutor *e = orc_executor_new(_orc_program.get());
     _orc_executor.reset(e, orc_executor_free);
+
+    ////////////////////////////////////////////////////////////////////
+    // determine input and output item sizes
+    ////////////////////////////////////////////////////////////////////
+    size_t input_index = 0, output_index = 0;
+    for (size_t i = 0; i < ORC_N_VARIABLES; i++)
+    {
+        if (_orc_program->vars[i].vartype == ORC_VAR_TYPE_DEST) 
+        {
+            this->output_config(output_index++).item_size = _orc_program->vars[i].size;
+        }
+        if (_orc_program->vars[i].vartype == ORC_VAR_TYPE_SRC)
+        {
+            this->input_config(input_index++).item_size = _orc_program->vars[i].size;
+        }
+    }
 }
 
-void OrcBlockImpl::work(const InputItems &ins, const OutputItems &outs)
+void OrcBlock::work(const InputItems &ins, const OutputItems &outs)
 {
     //calculate production/consumption params
     size_t num_input_items, num_output_items;
-    if (_params.production_factor > 1.0)
+    if (_production_factor > 1.0)
     {
-        num_output_items = std::min(size_t(ins.min()*_params.production_factor), outs.min());
-        num_input_items = size_t(num_output_items/_params.production_factor);
+        num_output_items = std::min(size_t(ins.min()*_production_factor), outs.min());
+        num_input_items = size_t(num_output_items/_production_factor);
     }
     else
     {
-        num_input_items = std::min(size_t(outs.min()/_params.production_factor), ins.min());
-        num_output_items = size_t(num_input_items*_params.production_factor);
+        num_input_items = std::min(size_t(outs.min()/_production_factor), ins.min());
+        num_output_items = size_t(num_input_items*_production_factor);
     }
 
     //load the executor with source and dest buffers
@@ -186,27 +209,29 @@ void OrcBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     }
 
     //execute the orc code;
-    orc_executor_set_n(_orc_executor.get(), size_t(_params.kernel_factor*num_input_items));
+    orc_executor_set_n(_orc_executor.get(), size_t(_kernel_factor*num_input_items));
     orc_executor_run(_orc_executor.get());
 
     //produce consume fixed
-    this->consume(num_input_items-_params.consumption_offset);
+    this->consume(num_input_items-_consumption_offset);
     this->produce(num_output_items);
 }
 
 /***********************************************************************
  * Block factor function
  **********************************************************************/
-OrcBlock::sptr OrcBlock::make(void)
+gras::Block *make_orc_block(void)
 {
-    return boost::make_shared<OrcBlockImpl>();
+    return new OrcBlock();
 }
 
 #else //HAVE_ORC
 
-OrcBlock::sptr OrcBlock::make(void)
+gras::Block *make_orc_block(void)
 {
     throw std::runtime_error("OrcBlock::make sorry, built without ORC support");
 }
 
 #endif //HAVE_ORC
+
+GRAS_REGISTER_FACTORY("/extras/orc_block", make_orc_block)

@@ -47,6 +47,7 @@ add_subdirectory(network)
 add_subdirectory(sources)
 add_subdirectory(uhd)
 add_subdirectory(packet)
+add_subdirectory(jit)
 
 GRAS_TOOL(
     SOURCES block_tree.xml
