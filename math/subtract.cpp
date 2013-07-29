@@ -4,7 +4,7 @@
 #include <gras/factory.hpp>
 #include <stdexcept>
 #include <complex>
-#include <volk/volk.h>
+#include <boost/cstdint.hpp>
 
 /***********************************************************************
  * Templated Subtractor class
@@ -18,6 +18,16 @@ struct Subtract : gras::Block
     {
         this->input_config(0).item_size = sizeof(type)*_vlen;
         this->output_config(0).item_size = sizeof(type)*_vlen;
+        this->register_call("set_preload", &Subtract::set_preload);
+    }
+
+    void set_preload(const std::vector<size_t> &preload)
+    {
+        for (size_t i = 0; i < preload.size(); i++)
+        {
+            this->input_config(i).preload_items = preload[i];
+        }
+        this->commit_config();
     }
 
     void notify_topology(const size_t num_inputs, const size_t num_outputs)
@@ -69,51 +79,23 @@ void Subtract<type>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-static gras::Block *make_subtract_fc32_fc32(const size_t &vlen)
-{
-    return new Subtract<std::complex<float> >(vlen);
-}
+#define make_factory_function(suffix, type) \
+static gras::Block *make_subtract_v_ ## suffix(const size_t &vlen) \
+{ \
+    return new Subtract<type>(vlen); \
+} \
+GRAS_REGISTER_FACTORY("/extras/subtract_v_" #suffix, make_subtract_v_ ## suffix) \
+static gras::Block *make_subtract_ ## suffix(void) \
+{ \
+    return new Subtract<type>(1); \
+} \
+GRAS_REGISTER_FACTORY("/extras/subtract_" #suffix, make_subtract_ ## suffix)
 
-static gras::Block *make_subtract_sc32_sc32(const size_t &vlen)
-{
-    return new Subtract<std::complex<boost::int32_t> >(vlen);
-}
-
-static gras::Block *make_subtract_sc16_sc16(const size_t &vlen)
-{
-    return new Subtract<std::complex<boost::int16_t> >(vlen);
-}
-
-static gras::Block *make_subtract_sc8_sc8(const size_t &vlen)
-{
-    return new Subtract<std::complex<boost::int8_t> >(vlen);
-}
-
-static gras::Block *make_subtract_f32_f32(const size_t &vlen)
-{
-    return new Subtract<float>(vlen);
-}
-
-static gras::Block *make_subtract_s32_s32(const size_t &vlen)
-{
-    return new Subtract<boost::int32_t>(vlen);
-}
-
-static gras::Block *make_subtract_s16_s16(const size_t &vlen)
-{
-    return new Subtract<boost::int16_t>(vlen);
-}
-
-static gras::Block *make_subtract_s8_s8(const size_t &vlen)
-{
-    return new Subtract<boost::int8_t>(vlen);
-}
-
-GRAS_REGISTER_FACTORY("/extras/subtract_fc32_fc32", make_subtract_fc32_fc32)
-GRAS_REGISTER_FACTORY("/extras/subtract_sc32_sc32", make_subtract_sc32_sc32)
-GRAS_REGISTER_FACTORY("/extras/subtract_sc16_sc16", make_subtract_sc16_sc16)
-GRAS_REGISTER_FACTORY("/extras/subtract_sc8_sc8", make_subtract_sc8_sc8)
-GRAS_REGISTER_FACTORY("/extras/subtract_f32_f32", make_subtract_f32_f32)
-GRAS_REGISTER_FACTORY("/extras/subtract_s32_sc2", make_subtract_s32_s32)
-GRAS_REGISTER_FACTORY("/extras/subtract_s16_s16", make_subtract_s16_s16)
-GRAS_REGISTER_FACTORY("/extras/subtract_s8_s8", make_subtract_s8_s8)
+make_factory_function(fc32_fc32, std::complex<float>)
+make_factory_function(sc32_sc32, std::complex<boost::int32_t>)
+make_factory_function(sc16_sc16, std::complex<boost::int16_t>)
+make_factory_function(sc8_sc8, std::complex<boost::int8_t>)
+make_factory_function(f32_f32, float)
+make_factory_function(s32_s32, boost::int32_t)
+make_factory_function(s16_s16, boost::int16_t)
+make_factory_function(s8_s8, boost::int8_t)

@@ -9,9 +9,9 @@
     <name>Ex: Divide</name>
     <key>extras_divide</key>
     <import>import gras</import>
-    <make>gras.Factor.make('/extras/divide_$(type)', $vlen)
-#for $i, $p in enumerate($preload())
-self.$(id).input_config($i).preload_items = $p
+    <make>gras.Factor.make('/extras/divide_v_$(type)', $vlen)
+#if $preload()
+self.$(id).set_preload($preload)
 #end for</make>
     <param>
         <name>IO Type</name>

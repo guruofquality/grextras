@@ -9,9 +9,9 @@
     <name>Ex: Add</name>
     <key>extras_add</key>
     <import>import gras</import>
-    <make>gras.Factor.make('/extras/add_$(type)', $vlen)
-#for $i, $p in enumerate($preload())
-self.$(id).input_config($i).preload_items = $p
+    <make>gras.Factor.make('/extras/add_v_$(type)', $vlen)
+#if $preload()
+self.$(id).set_preload($preload)
 #end for</make>
     <param>
         <name>IO Type</name>

@@ -7,8 +7,8 @@
 <block>
     <name>Ex: Multiply Const</name>
     <key>extras_multiply_const</key>
-    <import>import grextras</import>
-    <make>grextras.MultiplyConstV.$(type)($value)</make>
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/multiply_const_v_$(type)', $value)</make>
     <callback>set_const($value)</callback>
     <param>
         <name>IO Type</name>
@@ -47,4 +47,7 @@
         <type>$(str($type).split('_')[1])</type>
         <vlen>$vlen</vlen>
     </source>
+    <doc>
+out[i] = in[i] * value
+    </doc>
 </block>

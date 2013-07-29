@@ -4,7 +4,7 @@
 #include <gras/factory.hpp>
 #include <stdexcept>
 #include <complex>
-#include <volk/volk.h>
+#include <boost/cstdint.hpp>
 
 /***********************************************************************
  * Templated Divider class
@@ -18,6 +18,16 @@ struct Divide : gras::Block
     {
         this->input_config(0).item_size = sizeof(type)*_vlen;
         this->output_config(0).item_size = sizeof(type)*_vlen;
+        this->register_call("set_preload", &Divide::set_preload);
+    }
+
+    void set_preload(const std::vector<size_t> &preload)
+    {
+        for (size_t i = 0; i < preload.size(); i++)
+        {
+            this->input_config(i).preload_items = preload[i];
+        }
+        this->commit_config();
     }
 
     void notify_topology(const size_t num_inputs, const size_t num_outputs)
@@ -69,51 +79,23 @@ void Divide<type>::work(
 /***********************************************************************
  * factory function
  **********************************************************************/
-static gras::Block *make_divide_fc32_fc32(const size_t &vlen)
-{
-    return new Divide<std::complex<float> >(vlen);
-}
+#define make_factory_function(suffix, type) \
+static gras::Block *make_divide_v_ ## suffix(const size_t &vlen) \
+{ \
+    return new Divide<type>(vlen); \
+} \
+GRAS_REGISTER_FACTORY("/extras/divide_v_" #suffix, make_divide_v_ ## suffix) \
+static gras::Block *make_divide_ ## suffix(void) \
+{ \
+    return new Divide<type>(1); \
+} \
+GRAS_REGISTER_FACTORY("/extras/divide_" #suffix, make_divide_ ## suffix)
 
-static gras::Block *make_divide_sc32_sc32(const size_t &vlen)
-{
-    return new Divide<std::complex<boost::int32_t> >(vlen);
-}
-
-static gras::Block *make_divide_sc16_sc16(const size_t &vlen)
-{
-    return new Divide<std::complex<boost::int16_t> >(vlen);
-}
-
-static gras::Block *make_divide_sc8_sc8(const size_t &vlen)
-{
-    return new Divide<std::complex<boost::int8_t> >(vlen);
-}
-
-static gras::Block *make_divide_f32_f32(const size_t &vlen)
-{
-    return new Divide<float>(vlen);
-}
-
-static gras::Block *make_divide_s32_s32(const size_t &vlen)
-{
-    return new Divide<boost::int32_t>(vlen);
-}
-
-static gras::Block *make_divide_s16_s16(const size_t &vlen)
-{
-    return new Divide<boost::int16_t>(vlen);
-}
-
-static gras::Block *make_divide_s8_s8(const size_t &vlen)
-{
-    return new Divide<boost::int8_t>(vlen);
-}
-
-GRAS_REGISTER_FACTORY("/extras/divide_fc32_fc32", make_divide_fc32_fc32)
-GRAS_REGISTER_FACTORY("/extras/divide_sc32_sc32", make_divide_sc32_sc32)
-GRAS_REGISTER_FACTORY("/extras/divide_sc16_sc16", make_divide_sc16_sc16)
-GRAS_REGISTER_FACTORY("/extras/divide_sc8_sc8", make_divide_sc8_sc8)
-GRAS_REGISTER_FACTORY("/extras/divide_f32_f32", make_divide_f32_f32)
-GRAS_REGISTER_FACTORY("/extras/divide_s32_sc2", make_divide_s32_s32)
-GRAS_REGISTER_FACTORY("/extras/divide_s16_s16", make_divide_s16_s16)
-GRAS_REGISTER_FACTORY("/extras/divide_s8_s8", make_divide_s8_s8)
+make_factory_function(fc32_fc32, std::complex<float>)
+make_factory_function(sc32_sc32, std::complex<boost::int32_t>)
+make_factory_function(sc16_sc16, std::complex<boost::int16_t>)
+make_factory_function(sc8_sc8, std::complex<boost::int8_t>)
+make_factory_function(f32_f32, float)
+make_factory_function(s32_s32, boost::int32_t)
+make_factory_function(s16_s16, boost::int16_t)
+make_factory_function(s8_s8, boost::int8_t)
