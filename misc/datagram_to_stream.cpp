@@ -44,9 +44,4 @@ struct Datagram2Stream : gras::Block
     }
 };
 
-gras::Block *make_datagram_to_stream(const size_t &itemsize)
-{
-    return new Datagram2Stream(itemsize);
-}
-
-GRAS_REGISTER_FACTORY("/extras/datagram_to_stream", make_datagram_to_stream)
+GRAS_REGISTER_FACTORY1("/extras/datagram_to_stream", Datagram2Stream, size_t)

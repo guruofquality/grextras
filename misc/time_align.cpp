@@ -106,9 +106,4 @@ void TimeAlign::work(const InputItems &ins, const OutputItems &outs)
     }
 }
 
-static gras::Block *make_time_align(const size_t &itemsize)
-{
-    return new TimeAlign(itemsize);
-}
-
-GRAS_REGISTER_FACTORY("/extras/time_align", make_time_align)
+GRAS_REGISTER_FACTORY1("/extras/time_align", TimeAlign, size_t)

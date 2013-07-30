@@ -239,9 +239,4 @@ void digital_framer_sink_1::work(const InputItems &ins, const OutputItems &)
   return;
 }
 
-static gras::Block *make_digital_framer_sink_1(void)
-{
-    return new digital_framer_sink_1();
-}
-
-GRAS_REGISTER_FACTORY("/extras/framer_sink_1", make_digital_framer_sink_1)
+GRAS_REGISTER_FACTORY0("/extras/framer_sink_1", digital_framer_sink_1)

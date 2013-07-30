@@ -47,8 +47,8 @@ class test_scramblers(unittest.TestCase):
 
     def test_simple_loopback(self):
         for i in range(16):
-            s = gras.Factory.make('/extras/scrambler')
-            d = gras.Factory.make('/extras/descrambler')
+            s = gras.make('/extras/scrambler')
+            d = gras.make('/extras/descrambler')
 
             poly = 1 | (1 << 14) | (1 << 15)
             seed = random.randint(-1024, 1024)
@@ -75,8 +75,8 @@ class test_scramblers(unittest.TestCase):
 
     def test_sync_word_length_not_used(self):
         if 1:
-            s = gras.Factory.make('/extras/scrambler')
-            d = gras.Factory.make('/extras/descrambler')
+            s = gras.make('/extras/scrambler')
+            d = gras.make('/extras/descrambler')
             poly = 1 | (1 << 14) | (1 << 15)
             seed = random.randint(-1024, 1024)
             mode = random.choice(("additive", "multiplicative"))
@@ -102,8 +102,8 @@ class test_scramblers(unittest.TestCase):
 
     def test_sync_word(self):
         if 1:
-            s = gras.Factory.make('/extras/scrambler')
-            d = gras.Factory.make('/extras/descrambler')
+            s = gras.make('/extras/scrambler')
+            d = gras.make('/extras/descrambler')
             poly = 1 | (1 << 14) | (1 << 15)
             seed = random.randint(-1024, 1024)
             mode = random.choice(("additive", "multiplicative"))

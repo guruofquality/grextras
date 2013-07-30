@@ -27,7 +27,7 @@ class test_orc_block(unittest.TestCase):
         self.tb = None
 
     def test_add_float32(self):
-        op = gras.Factory.make('/extras/orc_block')
+        op = gras.make('/extras/orc_block')
         op.set_program("volk_32f_x2_add_32f_a_orc_impl", SOURCE)
 
         vec0 = numpy.array(numpy.random.randint(-150, +150, 10000), numpy.float32)
@@ -48,7 +48,7 @@ class test_orc_block(unittest.TestCase):
         self.assertEqual(expected_result, actual_result)
 
     def test_sqrt_float32(self):
-        op = gras.Factory.make('/extras/orc_block')
+        op = gras.make('/extras/orc_block')
         op.set_program("volk_32f_sqrt_32f_a_orc_impl", SOURCE)
 
         vec = numpy.array(numpy.random.randint(10, +150, 10000), numpy.float32)

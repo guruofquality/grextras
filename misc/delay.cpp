@@ -49,9 +49,4 @@ struct Delay : gras::Block
     int _delay_items;
 };
 
-gras::Block *make_delay(const size_t &itemsize)
-{
-    return new Delay(itemsize);
-}
-
-GRAS_REGISTER_FACTORY("/extras/delay", make_delay)
+GRAS_REGISTER_FACTORY1("/extras/delay", Delay, size_t)

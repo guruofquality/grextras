@@ -10,7 +10,7 @@
     <category>UHD</category>
     <import>import gras</import>
     <import>from gnuradio import uhd</import>
-    <make>gras.Factory.make('/extras/uhd_status_port', $addr)
+    <make>gras.make('/extras/uhd_status_port', $addr)
 #for $sensor in $sensors
 self.$(id).add_sensor($sensor)
 #end for</make>

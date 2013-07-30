@@ -8,7 +8,7 @@
     <name>Ex: Descrambler</name>
     <key>extras_descrambler</key>
     <import>import gras</import>
-    <make>gras.Factory.make('/extras/descrambler')
+    <make>gras.make('/extras/descrambler')
 self.$(id).set_poly($poly)
 self.$(id).set_seed($seed)
 self.$(id).set_mode($mode)

@@ -9,7 +9,7 @@ import time
 class test_stream_selector(unittest.TestCase):
 
     def test_stream_selector_simple(self):
-        ss = gras.Factory.make('/extras/stream_selector', numpy.dtype(numpy.float32).itemsize)
+        ss = gras.make('/extras/stream_selector', numpy.dtype(numpy.float32).itemsize)
         ss.set_paths([1, 0]) #in[0] -> out[1], in[1] -> out[0]
 
         src0 = TestUtils.VectorSource(numpy.float32, [1, 2, 3, 4])

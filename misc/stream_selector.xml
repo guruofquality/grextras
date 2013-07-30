@@ -8,7 +8,7 @@
     <name>Ex: Stream Selector</name>
     <key>extras_stream_selector</key>
     <import>import gras</import>
-    <make>gras.Factory.make('/extras/stream_selector', $item_size)
+    <make>gras.make('/extras/stream_selector', $item_size)
 self.$(id).set_paths($paths)
 </make>
     <callback>self.$(id).set_paths($paths)</callback>

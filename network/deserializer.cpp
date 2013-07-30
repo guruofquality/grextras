@@ -206,9 +206,4 @@ void Deserializer::work(const InputItems &, const OutputItems &)
     if (_accum_buff.length == 0) _accum_buff.reset();
 }
 
-gras::Block *make_deserializer(const bool &recover)
-{
-    return new Deserializer(recover);
-}
-
-GRAS_REGISTER_FACTORY("/extras/deserializer", make_deserializer)
+GRAS_REGISTER_FACTORY1("/extras/deserializer", Deserializer, bool)

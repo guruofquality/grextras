@@ -153,9 +153,4 @@ void Descrambler::work(const InputItems &ins, const OutputItems &outs)
     }
 }
 
-static gras::Block *make_descrambler(void)
-{
-    return new Descrambler();
-}
-
-GRAS_REGISTER_FACTORY("/extras/descrambler", make_descrambler)
+GRAS_REGISTER_FACTORY0("/extras/descrambler", Descrambler)

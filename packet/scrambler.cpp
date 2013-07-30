@@ -185,9 +185,4 @@ void Scrambler::work(const InputItems &ins, const OutputItems &outs)
     this->produce(n);
 }
 
-static gras::Block *make_scrambler(void)
-{
-    return new Scrambler();
-}
-
-GRAS_REGISTER_FACTORY("/extras/scrambler", make_scrambler)
+GRAS_REGISTER_FACTORY0("/extras/scrambler", Scrambler)

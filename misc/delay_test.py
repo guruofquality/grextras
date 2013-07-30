@@ -13,7 +13,7 @@ class test_delay(unittest.TestCase):
             expected_result = tuple([0]*delay + src_data)
 
             src = TestUtils.VectorSource(numpy.float32, src_data)
-            op = gras.Factory.make('/extras/delay', numpy.dtype(numpy.float32).itemsize)
+            op = gras.make('/extras/delay', numpy.dtype(numpy.float32).itemsize)
             op.set_delay(delay)
             dst = TestUtils.VectorSink(numpy.float32)
 

@@ -8,7 +8,7 @@
     <name>Ex: ORC Block</name>
     <key>extras_orc_block</key>
     <import>import gras</import>
-    <make>gras.Factory.make('/extras/orc_block')
+    <make>gras.make('/extras/orc_block')
 self.$(id).set_program($kernel_name, open($program_source).read())
 self.$(id).set_kernel_factor($kernel_factor)
 self.$(id).set_production_factor($production_factor)

@@ -64,7 +64,7 @@ class PacketDeframer(gras.HierBlock):
         except ImportError:
             import gnuradio.digital as gr_digital
         self.correlator = gr_digital.correlate_access_code_bb(access_code, threshold)
-        self.framer_sink = gras.Factory.make('/extras/framer_sink_1')
+        self.framer_sink = gras.make('/extras/framer_sink_1')
         self._queue_to_datagram = _queue_to_datagram()
         self.connect(self, self.correlator, self.framer_sink, self._queue_to_datagram, self)
 
@@ -117,4 +117,4 @@ class _queue_to_datagram(gras.Block):
             print 'f',
             self.post_output_msg(0, gras.PacketMsg())
 
-gras.Factory.register_make("/extras/packet_deframer", PacketDeframer)
+gras.register_make("/extras/packet_deframer", PacketDeframer)

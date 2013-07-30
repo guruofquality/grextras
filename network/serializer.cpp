@@ -169,9 +169,4 @@ struct Serializer : gras::Block
     std::vector<size_t> _seqs;
 };
 
-gras::Block *make_serializer(const size_t &mtu, const bool &sync)
-{
-    return new Serializer(mtu, sync);
-}
-
-GRAS_REGISTER_FACTORY("/extras/serializer", make_serializer)
+GRAS_REGISTER_FACTORY2("/extras/serializer", Serializer, size_t, bool)

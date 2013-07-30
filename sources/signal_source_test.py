@@ -35,7 +35,7 @@ class test_signal_source(unittest.TestCase):
 
     def test_signal_source_f32(self):
         expected_result = (1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5)
-        src1 = gras.Factory.make('/extras/signal_source_f32')
+        src1 = gras.make('/extras/signal_source_f32')
         src1.set_frequency(0)
         src1.set_waveform("CONST")
         src1.set_amplitude(1.5)

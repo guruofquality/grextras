@@ -8,7 +8,7 @@
     <name>Ex: Noise Source</name>
     <key>extras_noise_source</key>
     <import>import gras</import>
-    <make>gras.Factory.make('/extras/noise_source_$(type)', $seed)
+    <make>gras.make('/extras/noise_source_$(type)', $seed)
 self.$(id).set_waveform($wave)
 self.$(id).set_offset($off)
 self.$(id).set_amplitude($scalar)

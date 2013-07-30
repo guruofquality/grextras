@@ -10,7 +10,7 @@
     <category>UHD</category>
     <import>import gras</import>
     <import>from gnuradio import uhd</import>
-    <make>gras.Factory.make('/extras/uhd_control_port', $addr)
+    <make>gras.make('/extras/uhd_control_port', $addr)
 try: self.adopt_element("$(id)", $(id))
 except Exception as ex: print ex</make>
     <param>

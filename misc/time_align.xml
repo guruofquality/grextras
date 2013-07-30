@@ -8,7 +8,7 @@
     <name>Ex: Time Align</name>
     <key>extras_time_align</key>
     <import>import gras</import>
-    <make>gras.Factory.make('/extras/time_align', $item_size)</make>
+    <make>gras.make('/extras/time_align', $item_size)</make>
     <param>
         <name>Item Size</name>
         <key>item_size</key>

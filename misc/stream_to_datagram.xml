@@ -8,7 +8,7 @@
     <name>Ex: Stream2DGram</name>
     <key>extras_stream_to_datagram</key>
     <import>import gras</import>
-    <make>gras.Factory.make('/extras/stream_to_datagram', $item_size, $mtu)</make>
+    <make>gras.make('/extras/stream_to_datagram', $item_size, $mtu)</make>
     <param>
         <name>Input Item Size</name>
         <key>item_size</key>

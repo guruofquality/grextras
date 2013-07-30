@@ -8,7 +8,7 @@
     <name>Ex: Signal Source</name>
     <key>extras_signal_source</key>
     <import>import gras</import>
-    <make>gras.Factory.make('/extras/signal_source_$(type))
+    <make>gras.make('/extras/signal_source_$(type))
 self.$(id).set_waveform($wave)
 self.$(id).set_offset($off)
 self.$(id).set_amplitude($scalar)

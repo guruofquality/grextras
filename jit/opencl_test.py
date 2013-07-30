@@ -36,7 +36,7 @@ class test_opencl_block(unittest.TestCase):
         self.tb = None
 
     def test_add_float32(self):
-        op = gras.Factory.make('/extras/opencl_block', "")
+        op = gras.make('/extras/opencl_block', "")
         op.set_program("add_2x_float32", vector_add_gpu_SOURCE, "")
         op.set_input_size(0, 4)
         op.set_output_size(0, 4)
@@ -59,7 +59,7 @@ class test_opencl_block(unittest.TestCase):
         self.assertEqual(expected_result, actual_result)
 
     def test_add_complex64(self):
-        op = gras.Factory.make('/extras/opencl_block', "")
+        op = gras.make('/extras/opencl_block', "")
         op.set_program("add_2x_complex64", vector_add_gpu_SOURCE, "")
         op.set_input_size(0, 8)
         op.set_output_size(0, 8)

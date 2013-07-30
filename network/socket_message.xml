@@ -8,7 +8,7 @@
     <name>Ex: Socket Msg</name>
     <key>extras_socket_message</key>
     <import>import gras</import>
-    <make>gras.Factory.make('/extras/socket_message', $type, $addr, $port, $mtu)</make>
+    <make>gras.make('/extras/socket_message', $type, $addr, $port, $mtu)</make>
     <param>
         <name>Type</name>
         <key>type</key>
