@@ -54,7 +54,7 @@ struct TCPSocketSender : gras::Block
         //NOP
     }
 
-    void work(const InputItems &ins, const OutputItems &)
+    void work(const InputItems &, const OutputItems &)
     {
         if (not socket) this->waiter();
 

@@ -33,7 +33,7 @@ struct Add : gras::Block
         this->commit_config();
     }
 
-    void notify_topology(const size_t num_inputs, const size_t num_outputs)
+    void notify_topology(const size_t num_inputs, const size_t)
     {
         for (size_t i = 0; i < num_inputs; i++)
         {

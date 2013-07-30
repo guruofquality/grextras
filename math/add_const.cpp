@@ -52,7 +52,7 @@ struct AddConst : gras::Block
         return this->get_const_v().front();
     }
 
-    void notify_topology(const size_t num_inputs, const size_t num_outputs)
+    void notify_topology(const size_t num_inputs, const size_t)
     {
         for (size_t i = 0; i < num_inputs; i++)
         {

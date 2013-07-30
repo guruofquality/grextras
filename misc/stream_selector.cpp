@@ -49,7 +49,7 @@ struct StreamSelector : gras::Block
         }
     }
 
-    void notify_topology(const size_t num_inputs, const size_t num_outputs)
+    void notify_topology(const size_t num_inputs, const size_t)
     {
         _paths.resize(num_inputs, -1);
         for (size_t i = 0; i < num_inputs; i++)

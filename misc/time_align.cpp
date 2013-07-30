@@ -19,7 +19,7 @@ struct TimeAlign : gras::Block
         this->output_config(0).item_size = itemsize;
     }
 
-    void notify_topology(const size_t num_inputs, const size_t num_outputs)
+    void notify_topology(const size_t num_inputs, const size_t)
     {
         _alignment_times.resize(num_inputs);
         _alignment_offsets.resize(num_inputs, 0);
@@ -43,7 +43,7 @@ struct TimeAlign : gras::Block
     double _rate;
 };
 
-void TimeAlign::work(const InputItems &ins, const OutputItems &outs)
+void TimeAlign::work(const InputItems &ins, const OutputItems &)
 {
     //search all inputs for time tags
     for (size_t i = 0; i < ins.size(); i++)

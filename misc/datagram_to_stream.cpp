@@ -15,7 +15,7 @@ struct Datagram2Stream : gras::Block
         this->output_config(0).item_size = itemsize;
     }
 
-    void work(const InputItems &ins, const OutputItems &)
+    void work(const InputItems &, const OutputItems &)
     {
         //read the input message, and post
         const PMCC msg = this->pop_input_msg(0);
