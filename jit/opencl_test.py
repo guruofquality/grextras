@@ -2,7 +2,7 @@
 
 import unittest
 import gras
-import TestUtils
+from gras import TestUtils
 import numpy
 
 vector_add_gpu_SOURCE = """

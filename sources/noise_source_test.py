@@ -22,7 +22,7 @@
 
 import unittest
 import gras
-import TestUtils
+from gras import TestUtils
 import numpy
 
 class test_noise_source(unittest.TestCase):

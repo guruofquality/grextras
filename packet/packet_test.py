@@ -2,7 +2,7 @@
 
 import unittest
 import gras
-import TestUtils
+from gras import TestUtils
 import numpy
 import time
 

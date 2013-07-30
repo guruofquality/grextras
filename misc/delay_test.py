@@ -3,7 +3,7 @@
 import unittest
 import gras
 import numpy
-import TestUtils
+from gras import TestUtils
 
 class test_delay(unittest.TestCase):
 
