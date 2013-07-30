@@ -26,12 +26,6 @@ import gras
 import time
 from PMC import *
 from math import pi
-try:
-    import digital_swig as gr_digital
-    import packet_utils
-except ImportError:
-    from gnuradio.digital import packet_utils
-    import gnuradio.digital as gr_digital
 
 class PacketFramer(gras.Block):
     """
@@ -76,9 +70,15 @@ class PacketFramer(gras.Block):
         self._use_whitener_offset = use_whitener_offset
         self._whitener_offset = 0
 
+        try:
+            import packet_utils
+        except ImportError:
+            from gnuradio.digital import packet_utils
+        self.packet_utils = packet_utils
+
         if not access_code:
-            access_code = packet_utils.default_access_code
-        if not packet_utils.is_1_0_string(access_code):
+            access_code = self.packet_utils.default_access_code
+        if not self.packet_utils.is_1_0_string(access_code):
             raise ValueError, "Invalid access_code %r. Must be string of 1's and 0's" % (access_code,)
         self._access_code = access_code
 
@@ -90,7 +90,7 @@ class PacketFramer(gras.Block):
         #print 'pop msg', msg, type(pkt_msg)
         if not isinstance(pkt_msg, gras.PacketMsg): return
 
-        pkt = packet_utils.make_packet(
+        pkt = self.packet_utils.make_packet(
             pkt_msg.buff.get().tostring(),
             self._samples_per_symbol,
             self._bits_per_symbol,

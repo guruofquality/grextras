@@ -26,12 +26,6 @@ import gras
 import time
 from PMC import *
 from math import pi
-try:
-    import digital_swig as gr_digital
-    import packet_utils
-except ImportError:
-    from gnuradio.digital import packet_utils
-    import gnuradio.digital as gr_digital
 
 class PacketDeframer(gras.HierBlock):
     """
@@ -52,6 +46,11 @@ class PacketDeframer(gras.HierBlock):
 
         gras.HierBlock.__init__(self, "PacketDeframer")
 
+        try:
+            import packet_utils
+        except ImportError:
+            from gnuradio.digital import packet_utils
+
         if not access_code:
             access_code = packet_utils.default_access_code
         if not packet_utils.is_1_0_string(access_code):
@@ -60,6 +59,10 @@ class PacketDeframer(gras.HierBlock):
         if threshold == -1:
             threshold = 12              # FIXME raise exception
 
+        try:
+            import digital_swig as gr_digital
+        except ImportError:
+            import gnuradio.digital as gr_digital
         self.correlator = gr_digital.correlate_access_code_bb(access_code, threshold)
         self.framer_sink = gras.Factory.make('/extras/framer_sink_1')
         self._queue_to_datagram = _queue_to_datagram()
@@ -83,6 +86,12 @@ class _queue_to_datagram(gras.Block):
         #set the output reserve to the max expected pkt size
         self.output_config(0).reserve_items = 4096
 
+        try:
+            import packet_utils
+        except ImportError:
+            from gnuradio.digital import packet_utils
+        self.packet_utils = packet_utils
+
     def work(self, ins, outs):
         assert (len(ins[0]) == 0)
 
@@ -93,7 +102,7 @@ class _queue_to_datagram(gras.Block):
         whitener = pkt_msg.info()
         assert (isinstance(whitener, int))
 
-        ok, payload = packet_utils.unmake_packet(pkt_msg.buff.get().tostring(), whitener)
+        ok, payload = self.packet_utils.unmake_packet(pkt_msg.buff.get().tostring(), whitener)
         if ok:
             payload = numpy.fromstring(payload, numpy.uint8)
 
