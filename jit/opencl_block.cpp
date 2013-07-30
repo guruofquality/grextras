@@ -1,6 +1,7 @@
 // Copyright (C) by Josh Blum. See LICENSE.txt for licensing information.
 
-#include <grextras/opencl_block.hpp>
+#include <gras/block.hpp>
+#include <gras/factory.hpp>
 #include <stdexcept>
 #include <boost/format.hpp>
 #include <iostream>
@@ -8,16 +9,6 @@
 #include <vector>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
-
-using namespace grextras;
-
-OpenClBlockParams::OpenClBlockParams(void)
-{
-    global_factor = 1.0;
-    local_size = 1;
-    production_factor = 1.0;
-    consumption_offset = 0;
-}
 
 #ifdef HAVE_OPENCL
 
@@ -49,10 +40,11 @@ static GRAS_FORCE_INLINE void checkErr(cl_int err, const char * name)
 /***********************************************************************
  * impl class definition
  **********************************************************************/
-struct OpenClBlockImpl : OpenClBlock
+struct OpenClBlock : gras::Block
 {
-    OpenClBlockImpl(const std::string &dev_type);
-    ~OpenClBlockImpl(void);
+    OpenClBlock(const std::string &dev_type);
+    ~OpenClBlock(void);
+
     void set_program(const std::string &name, const std::string &source, const std::string &options);
     void notify_topology(const size_t num_inputs, const size_t num_outputs);
     void work(const InputItems &ins, const OutputItems &outs);
@@ -60,9 +52,6 @@ struct OpenClBlockImpl : OpenClBlock
     gras::BufferQueueSptr output_buffer_allocator(const size_t which_output, const gras::SBufferConfig &config);
     gras::BufferQueueSptr input_buffer_allocator(const size_t which_input, const gras::SBufferConfig &config);
     void propagate_tags(const size_t i, const gras::TagIter &iter);
-
-    OpenClBlockParams &params(void){return _params;}
-    OpenClBlockParams _params;
 
     std::vector<std::string> _input_access_modes;
     std::vector<std::string> _output_access_modes;
@@ -81,6 +70,39 @@ struct OpenClBlockImpl : OpenClBlock
     std::vector<clBufferSptr> _temp_output_buffs;
 
     size_t _extra_cl_buffer_allocs;
+
+    //------------------------------------------------------------------
+    //-- work related params
+    //------------------------------------------------------------------
+    void set_global_factor(const double &factor)
+    {
+        _global_factor = factor;
+    }
+    void set_local_size(const double &size)
+    {
+        _local_size = size;
+    }
+    void set_production_factor(const double &factor)
+    {
+        _production_factor = factor;
+    }
+    void set_consumption_offset(const size_t &offset)
+    {
+        _consumption_offset = offset;
+    }
+    void set_input_size(const size_t &i, const size_t &size)
+    {
+        this->input_config(i).item_size = size;
+    }
+    void set_output_size(const size_t &i, const size_t &size)
+    {
+        this->output_config(i).item_size = size;
+    }
+
+    double _global_factor;
+    double _local_size;
+    double _production_factor;
+    double _consumption_offset;
 };
 
 static cl::Context make_context(const cl_device_type cl_dev_type, cl::Platform &cl_platform)
@@ -103,10 +125,26 @@ static cl::Context make_context(const cl_device_type cl_dev_type, cl::Platform &
 /***********************************************************************
  * Block constructor
  **********************************************************************/
-OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
+OpenClBlock::OpenClBlock(const std::string &dev_type):
     gras::Block("GrExtras OpenClBlock"),
     _extra_cl_buffer_allocs(0)
 {
+
+    /***************************************************************
+     * Register calls
+     **************************************************************/
+    _global_factor = 1.0;
+    _local_size = 1;
+    _production_factor = 1.0;
+    _consumption_offset = 0;
+    this->register_call("set_program", &OpenClBlock::set_program);
+    this->register_call("set_global_factor", &OpenClBlock::set_global_factor);
+    this->register_call("set_local_size", &OpenClBlock::set_local_size);
+    this->register_call("set_production_factor", &OpenClBlock::set_production_factor);
+    this->register_call("set_consumption_offset", &OpenClBlock::set_consumption_offset);
+    this->register_call("set_input_size", &OpenClBlock::set_input_size);
+    this->register_call("set_output_size", &OpenClBlock::set_output_size);
+
     /***************************************************************
      * Enumerate platforms
      **************************************************************/
@@ -166,7 +204,7 @@ OpenClBlockImpl::OpenClBlockImpl(const std::string &dev_type):
     }
 }
 
-OpenClBlockImpl::~OpenClBlockImpl(void)
+OpenClBlock::~OpenClBlock(void)
 {
     _temp_input_buffs.clear();
     _temp_output_buffs.clear();
@@ -179,7 +217,7 @@ OpenClBlockImpl::~OpenClBlockImpl(void)
 /***********************************************************************
  * Program creation + compilation
  **********************************************************************/
-void OpenClBlockImpl::set_program(const std::string &name, const std::string &source, const std::string &options)
+void OpenClBlock::set_program(const std::string &name, const std::string &source, const std::string &options)
 {
     cl::Program::Sources cl_source(1,
         std::make_pair(source.c_str(), source.length()+1));
@@ -194,15 +232,15 @@ void OpenClBlockImpl::set_program(const std::string &name, const std::string &so
 /***********************************************************************
  * Scheduler work hooks
  **********************************************************************/
-void OpenClBlockImpl::notify_topology(const size_t num_inputs, const size_t num_outputs)
+void OpenClBlock::notify_topology(const size_t num_inputs, const size_t num_outputs)
 {
     _num_outs = num_outputs;
     _temp_input_buffs.resize(num_inputs);
     _temp_output_buffs.resize(num_outputs);
-    this->input_config(0).reserve_items = _params.consumption_offset + 1;
+    this->input_config(0).reserve_items = _consumption_offset + 1;
 }
 
-void OpenClBlockImpl::propagate_tags(const size_t i, const gras::TagIter &iter)
+void OpenClBlock::propagate_tags(const size_t i, const gras::TagIter &iter)
 {
     BOOST_FOREACH(const gras::Tag &t, iter)
     {
@@ -211,14 +249,14 @@ void OpenClBlockImpl::propagate_tags(const size_t i, const gras::TagIter &iter)
         {
             gras::Tag t_o = t;
             t_o.offset -= this->get_consumed(i);
-            t_o.offset *= _params.production_factor;
+            t_o.offset *= _production_factor;
             t_o.offset += this->get_produced(o);
             this->post_output_tag(o, t_o);
         }
     }
 }
 
-void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
+void OpenClBlock::work(const InputItems &ins, const OutputItems &outs)
 {
     cl_int err = CL_SUCCESS;
     size_t arg_index = 0;
@@ -226,7 +264,7 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     //pre-work input buffers
     for (size_t i = 0; i < ins.size(); i++)
     {
-        if (ins[i].size() <= _params.consumption_offset)
+        if (ins[i].size() <= _consumption_offset)
         {
             this->mark_input_fail(i);
             return;
@@ -256,20 +294,20 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
 
     //calculate production/consumption params
     size_t num_input_items, num_output_items;
-    if (_params.production_factor > 1.0)
+    if (_production_factor > 1.0)
     {
-        num_output_items = std::min(size_t(ins.min()*_params.production_factor), outs.min());
-        num_input_items = size_t(num_output_items/_params.production_factor);
+        num_output_items = std::min(size_t(ins.min()*_production_factor), outs.min());
+        num_input_items = size_t(num_output_items/_production_factor);
     }
     else
     {
-        num_input_items = std::min(size_t(outs.min()/_params.production_factor), ins.min());
-        num_output_items = size_t(num_input_items*_params.production_factor);
+        num_input_items = std::min(size_t(outs.min()/_production_factor), ins.min());
+        num_output_items = size_t(num_input_items*_production_factor);
     }
 
     //calculate kernel execution params
-    const size_t global = size_t(_params.global_factor*num_input_items);
-    const size_t local = _params.local_size;
+    const size_t global = size_t(_global_factor*num_input_items);
+    const size_t local = _local_size;
 
     //enqueue work
     err = _cl_cmd_queue.enqueueNDRangeKernel(
@@ -285,14 +323,14 @@ void OpenClBlockImpl::work(const InputItems &ins, const OutputItems &outs)
     checkErr(err, "cmd queue kernel finish");
 
     //produce consume fixed
-    this->consume(num_input_items-_params.consumption_offset);
+    this->consume(num_input_items-_consumption_offset);
     this->produce(num_output_items);
 }
 
 /***********************************************************************
  * Buffering and access modes
  **********************************************************************/
-void OpenClBlockImpl::set_access_mode(const std::string &direction, const std::vector<std::string> &modes)
+void OpenClBlock::set_access_mode(const std::string &direction, const std::vector<std::string> &modes)
 {
     if (direction == "INPUT") _input_access_modes = modes;
     else if (direction == "OUTPUT") _output_access_modes = modes;
@@ -321,7 +359,7 @@ static std::string my_vec_get(const std::vector<std::string> &v, const size_t in
     return v.back();
 }
 
-gras::BufferQueueSptr OpenClBlockImpl::output_buffer_allocator(
+gras::BufferQueueSptr OpenClBlock::output_buffer_allocator(
     const size_t which_output, const gras::SBufferConfig &config
 ){
     const std::string access_mode = my_vec_get(_output_access_modes, which_output, "WO");
@@ -330,7 +368,7 @@ gras::BufferQueueSptr OpenClBlockImpl::output_buffer_allocator(
         config, OPENCL_BLOCK_NUM_BUFFS, _cl_context, _cl_cmd_queue, flags, CL_MAP_READ));
 }
 
-gras::BufferQueueSptr OpenClBlockImpl::input_buffer_allocator(
+gras::BufferQueueSptr OpenClBlock::input_buffer_allocator(
     const size_t which_input, const gras::SBufferConfig &config
 ){
     const std::string access_mode = my_vec_get(_input_access_modes, which_input, "RO");
@@ -342,16 +380,18 @@ gras::BufferQueueSptr OpenClBlockImpl::input_buffer_allocator(
 /***********************************************************************
  * Block factor function
  **********************************************************************/
-OpenClBlock::sptr OpenClBlock::make(const std::string &dev_type)
+static gras::Block *make_opencl_block(const std::string &dev_type)
 {
-    return boost::make_shared<OpenClBlockImpl>(dev_type);
+    return new OpenClBlock(dev_type);
 }
 
 #else //HAVE_OPENCL
 
-OpenClBlock::sptr OpenClBlock::make(const std::string &)
+static gras::Block *make_opencl_block(const std::string &)
 {
     throw std::runtime_error("OpenClBlock::make sorry, built without Open CL support");
 }
 
 #endif //HAVE_OPENCL
+
+GRAS_REGISTER_FACTORY("/extras/opencl_block", make_opencl_block)

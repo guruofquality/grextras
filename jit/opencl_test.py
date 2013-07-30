@@ -2,7 +2,7 @@
 
 import unittest
 import gras
-import grextras
+import TestUtils
 import numpy
 
 vector_add_gpu_SOURCE = """
@@ -36,17 +36,17 @@ class test_opencl_block(unittest.TestCase):
         self.tb = None
 
     def test_add_float32(self):
-        op = grextras.OpenClBlock()
-        op.set_program("add_2x_float32", vector_add_gpu_SOURCE)
-        op.input_config(0).item_size = 4
-        op.output_config(0).item_size = 4
+        op = gras.Factory.make('/extras/opencl_block', "")
+        op.set_program("add_2x_float32", vector_add_gpu_SOURCE, "")
+        op.set_input_size(0, 4)
+        op.set_output_size(0, 4)
 
         vec0 = numpy.array(numpy.random.randint(-150, +150, 1e6), numpy.float32)
         vec1 = numpy.array(numpy.random.randint(-150, +150, 1e6), numpy.float32)
 
-        src0 = grextras.VectorSource(numpy.float32, vec0)
-        src1 = grextras.VectorSource(numpy.float32, vec1)
-        dst = grextras.VectorSink(numpy.float32)
+        src0 = TestUtils.VectorSource(numpy.float32, vec0)
+        src1 = TestUtils.VectorSource(numpy.float32, vec1)
+        dst = TestUtils.VectorSink(numpy.float32)
 
         self.tb.connect(src0, (op, 0))
         self.tb.connect(src1, (op, 1))
@@ -59,17 +59,17 @@ class test_opencl_block(unittest.TestCase):
         self.assertEqual(expected_result, actual_result)
 
     def test_add_complex64(self):
-        op = grextras.OpenClBlock()
-        op.set_program("add_2x_complex64", vector_add_gpu_SOURCE)
-        op.input_config(0).item_size = 8
-        op.output_config(0).item_size = 8
+        op = gras.Factory.make('/extras/opencl_block', "")
+        op.set_program("add_2x_complex64", vector_add_gpu_SOURCE, "")
+        op.set_input_size(0, 8)
+        op.set_output_size(0, 8)
 
         vec0 = numpy.array(numpy.random.randint(-150, +150, 1e6), numpy.complex64)
         vec1 = numpy.array(numpy.random.randint(-150, +150, 1e6), numpy.complex64)
 
-        src0 = grextras.VectorSource(numpy.complex64, vec0)
-        src1 = grextras.VectorSource(numpy.complex64, vec1)
-        dst = grextras.VectorSink(numpy.complex64)
+        src0 = TestUtils.VectorSource(numpy.complex64, vec0)
+        src1 = TestUtils.VectorSource(numpy.complex64, vec1)
+        dst = TestUtils.VectorSink(numpy.complex64)
 
         self.tb.connect(src0, (op, 0))
         self.tb.connect(src1, (op, 1))

@@ -69,7 +69,7 @@ list(APPEND GRAS_TOOL_LIBRARIES ${Boost_LIBRARIES})
 GRAS_TOOL(
     SOURCES
         orc_block.cpp orc_block.xml
-        #opencl_block.cpp opencl_block.xml
+        opencl_block.cpp opencl_block.xml
         #clang_block.cpp clang_block.xml
     TARGET extras_jit
     DIRECTORY extras

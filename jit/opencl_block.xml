@@ -7,24 +7,25 @@
 <block>
     <name>Ex: OpenCL Block</name>
     <key>extras_opencl_block</key>
-    <import>import grextras</import>
-    <make>grextras.OpenClBlock($dev_type)
+    <import>import gras</import>
+    <make>gras.Factory.make('/extras/opencl_block', $dev_type)
 #for i, s in enumerate($input_sizes())
-self.$(id).input_config($i).item_size = $s
+self.$(id).set_input_size($i, $s)
 #end for
 #for i, s in enumerate($output_sizes())
-self.$(id).output_config($i).item_size = $s
+self.$(id).set_output_size($i, $s)
 #end for
 self.$(id).set_program($kernel_name, open($program_source).read(), $build_options)
-self.$(id).params().global_factor = $global_factor
-self.$(id).params().local_size = $local_size
-self.$(id).params().production_factor = $production_factor
-self.$(id).params().consumption_offset = $consumption_offset</make>
+self.$(id).set_global_factor = $global_factor
+self.$(id).set_local_size = $local_size
+self.$(id).set_production_factor = $production_factor
+self.$(id).set_consumption_offset = $consumption_offset</make>
     <param>
         <name>Device type</name>
         <key>dev_type</key>
-        <value>GPU</value>
+        <value></value>
         <type>string</type>
+        <option><name>Auto</name><key></key></option>
         <option><name>GPU</name><key>GPU</key></option>
         <option><name>CPU</name><key>CPU</key></option>
     </param>
@@ -112,6 +113,47 @@ self.$(id).params().consumption_offset = $consumption_offset</make>
         <nports>$num_outputs</nports>
     </source>
     <doc>
-See parameter documentation in grextras/opencl_block.hpp
+The OpenCL Block creates a wrapper for using Open CL \
+within the GRAS buffering framework for maximum efficiency. \
+GRAS buffers are flexible, memory can be allocated such that \
+it can be used effectivly with upstream and downstream blocks.
+
+If device type parameter is not specified, \
+the block automatically tries both types. \
+The device type can be "CPU" or "GPU".
+
+The global size factor - a kenel execution parameter. \
+This factor controls how get_global_size() is calculated \
+based on the minimum number of items at each input port. \
+The global size value obeys the following calculation:
+ 
+get_global_size() = num_input_items*global_size_factor
+
+Default is 1.0
+
+Local size - a kernel execution parameter. \
+Local size controls the local work size dimension. \
+The kernel will be called with this many work groups: \
+get_global_size()/get_local_size()
+
+Default is 1
+
+The production factor - a production/consumption parameter. \
+This factor controls how items get produced from this block \
+based on the minimum number of items at each input port. \
+The production value obeys the following calculation:
+
+items_produced = num_input_items*production_factor
+
+Default is 1.0
+
+The consumption offset - a production/consumption parameter. \
+This value controls how items get consumed from this block \
+based on the minimum number of items at each input port. \
+The consumption value obeys the following calculation:
+
+items_consumed = num_input_items-consumption_offset
+
+Default is 0
     </doc>
 </block>
