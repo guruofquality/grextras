@@ -42,13 +42,3 @@ add_subdirectory(sources)
 add_subdirectory(uhd)
 add_subdirectory(packet)
 add_subdirectory(jit)
-
-########################################################################
-# GRC block tree for all xml files in this project
-########################################################################
-GRAS_TOOL(
-    SOURCES block_tree.xml
-    TARGET extras_block_tree
-    DIRECTORY extras
-    COMPONENT extras
-)

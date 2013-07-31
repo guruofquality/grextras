@@ -9,6 +9,7 @@ GRAS_TOOL(
         time_align.cpp time_align.xml
         delay.cpp delay.xml
         query_server.xml
+        block_tree.xml
     TARGET extras_misc
     DIRECTORY extras
     COMPONENT extras
