@@ -117,4 +117,4 @@ class _queue_to_datagram(gras.Block):
             print 'f',
             self.post_output_msg(0, gras.PacketMsg())
 
-gras.register_make("/extras/packet_deframer", PacketDeframer)
+gras.register_factory("/extras/packet_deframer", PacketDeframer)
