@@ -7,32 +7,24 @@
 <block>
     <name>Ex: Clang Block</name>
     <key>extras_clang_block</key>
-    <import>import grextras</import>
-    <import>import ctypes</import>
-    <make>grextras.ClangBlockParams()
-self.$(id).name = $name
+    <import>import gras</import>
+    <make>gras.jit_factory(open($source).read(), $flags)
+self.$(id) = gras.make($path, *$args)
 self.$(id).source = open($source).read()
-for flag in $flags:
-    self.$(id).flags.append(flag)
-for include in $includes:
-    self.$(id).includes.append(include)
-for library in $libraries:
-    ctypes.CDLL(library, ctypes.RTLD_GLOBAL)
-self.$(id) = grextras.ClangBlock(self.$(id))
-#if $num_props() >= 1
-self.$(id).set($key1, $value1)
+#if $num_setters() >= 1
+self.$(id).$(name1)($value1)
 #end if
-#if $num_props() >= 2
-self.$(id).set($key2, $value2)
+#if $num_setters() >= 2
+self.$(id).$(name2)($value2)
 #end if
-#if $num_props() >= 3
-self.$(id).set($key3, $value3)
+#if $num_setters() >= 3
+self.$(id).$(name3)($value3)
 #end if
 try: self.adopt_element("$(id)", $(id))
 except Exception as ex: print ex</make>
-    <callback>set($key1, $value1)</callback>
-    <callback>set($key2, $value2)</callback>
-    <callback>set($key3, $value3)</callback>
+    <callback>$(name1)($value1)</callback>
+    <callback>$(name2)($value2)</callback>
+    <callback>$(name3)($value3)</callback>
     <param>
         <name>Num inputs</name>
         <key>num_inputs</key>
@@ -54,9 +46,9 @@ except Exception as ex: print ex</make>
         <type>file_open</type>
     </param>
     <param>
-        <name>Factory name</name>
-        <key>name</key>
-        <value>make_my_block</value>
+        <name>Factory path</name>
+        <key>path</key>
+        <value>/project/my_block</value>
         <type>string</type>
     </param>
     <param>
@@ -66,20 +58,20 @@ except Exception as ex: print ex</make>
         <type>raw</type>
     </param>
     <param>
-        <name>Includes</name>
-        <key>includes</key>
-        <value>["/usr/local/include", "/usr/include"]</value>
-        <type>raw</type>
-    </param>
-    <param>
         <name>Libraries</name>
         <key>libraries</key>
-        <value>["libgras.so", "libpmc.so"]</value>
+        <value>[]</value>
         <type>raw</type>
     </param>
     <param>
-        <name>Num properties</name>
-        <key>num_props</key>
+        <name>Constructor Args</name>
+        <key>args</key>
+        <value>[]</value>
+        <type>raw</type>
+    </param>
+    <param>
+        <name>Num setters</name>
+        <key>num_setters</key>
         <value>0</value>
         <type>int</type>
         <hide>part</hide>
@@ -89,46 +81,46 @@ except Exception as ex: print ex</make>
         <option><name>3</name><key>3</key></option>
     </param>
     <param>
-        <name>Prop key1</name>
-        <key>key1</key>
+        <name>Setter name1</name>
+        <key>name1</key>
         <value>foo</value>
         <type>string</type>
-        <hide>#if $num_props() >= 1 then 'none' else 'all'#</hide>
+        <hide>#if $num_setters() >= 1 then 'none' else 'all'#</hide>
     </param>
     <param>
-        <name>Prop value1</name>
+        <name>Setter value1</name>
         <key>value1</key>
         <value>None</value>
         <type>raw</type>
-        <hide>#if $num_props() >= 1 then 'none' else 'all'#</hide>
+        <hide>#if $num_setters() >= 1 then 'none' else 'all'#</hide>
     </param>
     <param>
-        <name>Prop key2</name>
-        <key>key2</key>
+        <name>Setter name2</name>
+        <key>name2</key>
         <value>bar</value>
         <type>string</type>
-        <hide>#if $num_props() >= 2 then 'none' else 'all'#</hide>
+        <hide>#if $num_setters() >= 2 then 'none' else 'all'#</hide>
     </param>
     <param>
-        <name>Prop value2</name>
+        <name>Setter value2</name>
         <key>value2</key>
         <value>None</value>
         <type>raw</type>
-        <hide>#if $num_props() >= 2 then 'none' else 'all'#</hide>
+        <hide>#if $num_setters() >= 2 then 'none' else 'all'#</hide>
     </param>
     <param>
-        <name>Prop key3</name>
-        <key>key3</key>
+        <name>Setter name3</name>
+        <key>name3</key>
         <value>baz</value>
         <type>string</type>
-        <hide>#if $num_props() >= 3 then 'none' else 'all'#</hide>
+        <hide>#if $num_setters() >= 3 then 'none' else 'all'#</hide>
     </param>
     <param>
-        <name>Prop value3</name>
+        <name>Setter value3</name>
         <key>value3</key>
         <value>None</value>
         <type>raw</type>
-        <hide>#if $num_props() >= 3 then 'none' else 'all'#</hide>
+        <hide>#if $num_setters() >= 3 then 'none' else 'all'#</hide>
     </param>
     <sink>
         <name>in</name>
@@ -141,14 +133,14 @@ except Exception as ex: print ex</make>
         <nports>$num_outputs</nports>
     </source>
     <doc>
-The Clang block GRC wrapper gives a simple interface for using the Clang block with GRC. \
-Simply provide source file, factory function name, include directories, libraries, and other compiler arguments.
+The Clang block GRC wrapper gives a simple interface for using the GRAS JIT Factory. \
+Simply provide source file, block path, constructor arguments, and optional compiler arguments.
 
 The number of input and output ports provides GRC with information about the port availability. \
 To keep this wrapper flexible, the ports are all type agnostic at connection and generation time.
 
-The optional properties allow GRC's variable callback system to interact with registered block properties. \
-The key should match the key of a registered property, and the value should be of the expected data type. \
-See the GRAS coding guide for more information about the property interface.
+The optional setters allow GRC's variable callback system to interact with registered block properties. \
+The name should match the name of a registered call, and the value should be of the expected data type. \
+See the GRAS coding guide for more information about the callable interface.
     </doc>
 </block>
