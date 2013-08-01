@@ -17,18 +17,15 @@ GRAS_TOOL(
 ########################################################################
 # Unit tests!
 ########################################################################
-include(GrTest)
-include(GrPython)
-set(PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE} ${PYTHON_DASH_B})
-list(APPEND GR_TEST_ENVIRONS "GRAS_MODULE_PATH=${GRAS_TOOL_MODULE_PATH}")
+include(GRASTest)
 
 list(APPEND GRAS_PYTHON_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/packet_framer.py
     ${CMAKE_CURRENT_SOURCE_DIR}/packet_deframer.py
 )
-string(REPLACE ";" "${GRAS_TOOL_PATH_SEP}" GRAS_PYTHON_PATH "${GRAS_PYTHON_PATH}")
-list(APPEND GR_TEST_ENVIRONS "GRAS_PYTHON_PATH=${GRAS_PYTHON_PATH}")
+string(REPLACE ";" "${ENV_VAR_PATH_SEP}" GRAS_PYTHON_PATH "${GRAS_PYTHON_PATH}")
+list(APPEND GRAS_TEST_ENVIRONS "GRAS_PYTHON_PATH=${GRAS_PYTHON_PATH}")
 
 #register unit tests
-GR_ADD_TEST(packet_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/packet_test.py)
-GR_ADD_TEST(scrambler_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scrambler_test.py)
+GRAS_ADD_TEST(packet_test ${GRAS_TEST_PYEXE} ${CMAKE_CURRENT_SOURCE_DIR}/packet_test.py)
+GRAS_ADD_TEST(scrambler_test ${GRAS_TEST_PYEXE} ${CMAKE_CURRENT_SOURCE_DIR}/scrambler_test.py)

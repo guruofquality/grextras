@@ -79,20 +79,17 @@ GRAS_TOOL(
 ########################################################################
 # Unit tests!
 ########################################################################
-include(GrTest)
-include(GrPython)
-set(PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE} ${PYTHON_DASH_B})
-list(APPEND GR_TEST_ENVIRONS "GRAS_MODULE_PATH=${GRAS_TOOL_MODULE_PATH}")
+include(GRASTest)
 
 #register unit tests
 if(ORC_FOUND)
-GR_ADD_TEST(orc_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/orc_test.py)
+GRAS_ADD_TEST(orc_test ${GRAS_TEST_PYEXE} ${CMAKE_CURRENT_SOURCE_DIR}/orc_test.py)
 endif()
 
 if(OPENCL_FOUND)
-GR_ADD_TEST(opencl_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/opencl_test.py)
+GRAS_ADD_TEST(opencl_test ${GRAS_TEST_PYEXE} ${CMAKE_CURRENT_SOURCE_DIR}/opencl_test.py)
 endif()
 
 if(CLANG_FOUND)
-GR_ADD_TEST(clang_test ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/clang_test.py)
+GRAS_ADD_TEST(clang_test ${GRAS_TEST_PYEXE} ${CMAKE_CURRENT_SOURCE_DIR}/clang_test.py)
 endif()

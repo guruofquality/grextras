@@ -29,6 +29,7 @@ GRAS_TOOL(
 ########################################################################
 # setup SWIG build
 ########################################################################
+include(GRASSwig)
 if(UHD_FOUND)
     list(APPEND GRAS_SWIG_TOOL_INCLUDES ${UHD_INCLUDE_DIRS})
     list(APPEND GRAS_SWIG_TOOL_LIBRARIES ${UHD_LIBRARIES})
