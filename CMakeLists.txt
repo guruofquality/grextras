@@ -1,7 +1,7 @@
 ########################################################################
 # Project setup
 ########################################################################
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 project(grextras CXX C)
 enable_testing()
 
@@ -24,12 +24,13 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 # Import the GRAS Tool
 ########################################################################
 if(GRAS_ROOT)
-    list(APPEND CMAKE_MODULE_PATH ${GRAS_ROOT}/share/gras/cmake/Modules)
+    #GRAS_ROOT already set
 elseif($ENV{GRAS_ROOT})
-    list(APPEND CMAKE_MODULE_PATH $ENV{GRAS_ROOT}/share/gras/cmake/Modules)
+    set(GRAS_ROOT $ENV{GRAS_ROOT})
 else(GRAS_ROOT)
-    list(APPEND CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/share/gras/cmake/Modules)
+    set(GRAS_ROOT ${CMAKE_INSTALL_PREFIX})
 endif(GRAS_ROOT)
+list(APPEND CMAKE_MODULE_PATH ${GRAS_ROOT}/share/gras/cmake/Modules)
 include(GRASTool)
 
 ########################################################################
