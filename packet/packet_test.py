@@ -6,7 +6,11 @@ from gras import TestUtils
 import numpy
 import time
 
-import gmsk
+try:
+    import gmsk
+except ImportError:
+    from gnuradio.digital import gmsk
+
 class TagSink(gras.Block):
     def __init__(self):
         gras.Block.__init__(self,
