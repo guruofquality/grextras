@@ -12,11 +12,11 @@
 self.$(id).set_waveform($wave)
 self.$(id).set_offset($off)
 self.$(id).set_amplitude($scalar)
-self.$(id).set_frequency($wave_freq/$samp_rate)</make>
+self.$(id).set_frequency($wave_freq/float($samp_rate))</make>
     <callback>set_waveform($wave)</callback>
     <callback>set_offset($off)</callback>
     <callback>set_amplitude($scalar)</callback>
-    <callback>set_frequency($wave_freq/$samp_rate)</callback>
+    <callback>set_frequency($wave_freq/float($samp_rate))</callback>
     <param>
         <name>Output Type</name>
         <key>type</key>

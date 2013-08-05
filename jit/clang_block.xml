@@ -8,23 +8,31 @@
     <name>Ex: Clang Block</name>
     <key>extras_clang_block</key>
     <import>import gras</import>
-    <make>gras.jit_factory(open($source).read(), $flags)
-self.$(id) = gras.make($path, *$args)
-self.$(id).source = open($source).read()
+    <import>import ctypes</import>
+    <make>None
+#for $library in $libraries()
+ctypes.CDLL(ctypes.util.find_library("$library"), ctypes.RTLD_GLOBAL)
+#end for
+gras.jit_factory(open($source).read(), $flags)
+self.$(id) = gras.make($path#slurp
+#for $arg in $args()
+, $arg#slurp
+#end for
+)
 #if $num_setters() >= 1
-self.$(id).$(name1)($value1)
+self.$(id).$(name1())($value1)
 #end if
 #if $num_setters() >= 2
-self.$(id).$(name2)($value2)
+self.$(id).$(name2())($value2)
 #end if
 #if $num_setters() >= 3
-self.$(id).$(name3)($value3)
+self.$(id).$(name3())($value3)
 #end if
-try: self.adopt_element("$(id)", $(id))
+try: self.adopt_element("$(id)", self.$(id))
 except Exception as ex: print ex</make>
-    <callback>$(name1)($value1)</callback>
-    <callback>$(name2)($value2)</callback>
-    <callback>$(name3)($value3)</callback>
+    <callback>$(name1())($value1)</callback>
+    <callback>$(name2())($value2)</callback>
+    <callback>$(name3())($value3)</callback>
     <param>
         <name>Num inputs</name>
         <key>num_inputs</key>
@@ -62,12 +70,14 @@ except Exception as ex: print ex</make>
         <key>libraries</key>
         <value>[]</value>
         <type>raw</type>
+        <hide>#if $libraries() then 'none' else 'part'#</hide>
     </param>
     <param>
         <name>Constructor Args</name>
         <key>args</key>
         <value>[]</value>
         <type>raw</type>
+        <hide>#if $args() then 'none' else 'part'#</hide>
     </param>
     <param>
         <name>Num setters</name>
@@ -83,7 +93,7 @@ except Exception as ex: print ex</make>
     <param>
         <name>Setter name1</name>
         <key>name1</key>
-        <value>foo</value>
+        <value>set_foo</value>
         <type>string</type>
         <hide>#if $num_setters() >= 1 then 'none' else 'all'#</hide>
     </param>
@@ -97,7 +107,7 @@ except Exception as ex: print ex</make>
     <param>
         <name>Setter name2</name>
         <key>name2</key>
-        <value>bar</value>
+        <value>set_bar</value>
         <type>string</type>
         <hide>#if $num_setters() >= 2 then 'none' else 'all'#</hide>
     </param>
@@ -111,7 +121,7 @@ except Exception as ex: print ex</make>
     <param>
         <name>Setter name3</name>
         <key>name3</key>
-        <value>baz</value>
+        <value>set_baz</value>
         <type>string</type>
         <hide>#if $num_setters() >= 3 then 'none' else 'all'#</hide>
     </param>
@@ -139,8 +149,20 @@ Simply provide source file, block path, constructor arguments, and optional comp
 The number of input and output ports provides GRC with information about the port availability. \
 To keep this wrapper flexible, the ports are all type agnostic at connection and generation time.
 
-The optional setters allow GRC's variable callback system to interact with registered block properties. \
+The optional setters allow GRC's variable callback system to interact with registered block methods. \
 The name should match the name of a registered call, and the value should be of the expected data type. \
-See the GRAS coding guide for more information about the callable interface.
+See the GRAS coding guide for more information about the method registration interface.
+
+The factory path is the path that the user registered their block into the factory with. \
+Example: GRAS_REGISTER_FACTORY1("/tests/my_add_f32", MyAddFloat32, size_t)
+
+The constructor arguments are a list of arguments passed to the block factory creation. \
+The data types should be the same types expected for the registered constructor.
+
+The list of flags can be anything the compiler accepts. \
+Users may use this to pass "-I/include/dirs" for external dependencies.
+
+The list of libraries are dependency libraries needed by the block. \
+If your block depends on libfoo, then add "libfoo" to the list.
     </doc>
 </block>
